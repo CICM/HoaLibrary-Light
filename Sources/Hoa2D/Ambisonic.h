@@ -18,18 +18,19 @@ namespace Hoa2D
     class Ambisonic
     {
     protected:
-        unsigned long	m_order;
-        unsigned long	m_number_of_harmonics;
+        const unsigned long	m_order;
+        const unsigned long	m_number_of_harmonics;
     
     public:
         //! The ambisonic constructor.
         /** The ambisonic constructor allocates and initializes the generale member values depending of a decomposition order.
          @param     order	The order, must be at least 1.
          */
-        Ambisonic(unsigned long order) noexcept
+        Ambisonic(unsigned long order) noexcept :
+        m_order(order),
+        m_number_of_harmonics(order * 2 + 1)
         {
-            m_order					= order;
-            m_number_of_harmonics	= m_order * 2 + 1;
+            ;
         }
         
         //! The ambisonic destructor.
