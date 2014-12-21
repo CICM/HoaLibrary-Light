@@ -26,7 +26,7 @@ namespace Hoa
 	 @param     value   The value to convert.
 	 @return    The function return value in a string format.
      */
-    inline std::string int_to_string(int aValue)
+    inline std::string num_to_string(int aValue)
     {
         char number[256];
         sprintf(number, "%i", aValue);
@@ -39,7 +39,7 @@ namespace Hoa
 	 @param     value   The value to convert.
 	 @return    The function return value in a string format.
      */
-    inline std::string long_to_string(long aValue)
+    inline std::string num_to_string(long aValue)
     {
         char number[256];
         sprintf(number, "%ld", aValue);
@@ -52,10 +52,10 @@ namespace Hoa
 	 @param     value   The value to convert.
 	 @return    The function return value in a string format.
      */
-    inline std::string ulong_to_string(unsigned long aValue)
+    inline std::string num_to_string(unsigned long aValue)
     {
         char number[256];
-        sprintf(number, "%ld", aValue);
+        sprintf(number, "%lu", aValue);
         return number;
     }
 

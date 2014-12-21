@@ -42,12 +42,12 @@ namespace Hoa3D
         //! Retrieve the decomposition order.
         /** Retrieve the decomposition order of an ambisonic class.
          */
-        inline unsigned int getDecompositionOrder() const {return m_order;};
+        inline unsigned long getDecompositionOrder() const {return m_order;};
         
         //! Retrieve the number of harmonics.
         /** Retrieve the number of harmonics of an ambisonic class.
          */
-        inline unsigned int getNumberOfHarmonics() const {return m_number_of_harmonics;};
+        inline unsigned long getNumberOfHarmonics() const {return m_number_of_harmonics;};
         
         //! Retrieve the order of an harmonic.
         /** The order of an harmonic is in the range -degree to degree. The harmonics are sorted by their bands, from 0 to the decomposition order. In each band contains 2 * band + 1 harmonics, sorted by their arguments in the range -band to band. The harmonic input and output arrays in process method of ambisonic classes must have this configuration.
@@ -59,7 +59,7 @@ namespace Hoa3D
             @see       getHarmonicDegree()
             @see       getHarmonicName()
          */
-        inline int getHarmonicOrder(const unsigned int index) const
+        inline long getHarmonicOrder(const unsigned int index) const
         {
             assert(index < m_number_of_harmonics);
             return m_harmonics_orders[index];
@@ -75,7 +75,7 @@ namespace Hoa3D
             @see       getHarmonicOrder()
             @see       getHarmonicName()
          */
-        inline unsigned int getHarmonicDegree(const unsigned int index) const
+        inline unsigned long getHarmonicDegree(const unsigned int index) const
         {
             assert(index < m_number_of_harmonics);
             return m_harmonics_degrees[index];
@@ -92,7 +92,7 @@ namespace Hoa3D
          @see       getHarmonicOrder()
          @see       getHarmonicName()
          */
-        inline unsigned int getHarmonicIndex(const unsigned int degree, const int order) const
+        inline unsigned long getHarmonicIndex(const unsigned int degree, const int order) const
         {
             assert(degree <= m_order);
             return degree * degree + degree + order;
@@ -106,10 +106,10 @@ namespace Hoa3D
             @see       getHarmonicDegree()
             @see       getHarmonicOrder()
          */
-        inline std::string getHarmonicName(const unsigned int index) const
+        inline std::string getHarmonicName(const unsigned long index) const
         {
             assert(index < m_number_of_harmonics);
-            return "Harmonic " + int_to_string(getHarmonicDegree(index)) + " " + int_to_string(getHarmonicOrder(index));
+            return "Harmonic " + num_to_string(getHarmonicDegree(index)) + " " + num_to_string(getHarmonicOrder(index));
         };
     };
 }

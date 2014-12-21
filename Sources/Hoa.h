@@ -14,6 +14,7 @@ namespace Hoa{};
 #include "HoaUtils.h"
 
 using namespace Hoa;
+using namespace std;
 
 #endif
 

@@ -23,7 +23,7 @@ namespace Hoa2D
         
     private:
         
-        unsigned int			m_number_of_sources;
+        unsigned long   m_number_of_sources;
         double*					m_gains;
 		bool*					m_muted;
         int						m_first_source;
@@ -42,7 +42,7 @@ namespace Hoa2D
             @param     order            The order.
             @param     numberOfSources	The number of sources.
          */
-        Map(unsigned int order, unsigned int numberOfSources);
+        Map(unsigned long order, unsigned long numberOfSources);
         
         //! The map destructor.
         /**	The map destructor free the memory and deallocate the member classes.
@@ -54,10 +54,10 @@ namespace Hoa2D
          
             @return The number of sources.
          */
-        unsigned int getNumberOfSources() const
+        unsigned long getNumberOfSources() const noexcept
         {
             return m_number_of_sources;
-        };
+        }
         
         //! This method set the angle of azimuth of a source.
         /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 Pi to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is Pi/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield. The index must be between 0 and the number of sources - 1.
@@ -91,9 +91,8 @@ namespace Hoa2D
             @param     index	The index of the source.
             @return The azimuth of the source if the source exists, otherwise the function generates an error.
          */
-        double getAzimuth(const unsigned int index) const
+        inline double getAzimuth(const unsigned long index) const noexcept
         {
-            assert(index < m_number_of_sources);
             return m_azimuth[index];
         }
 		
@@ -103,7 +102,7 @@ namespace Hoa2D
             @param     index	The index of the source.
             @return The radius of the source if the source exists, otherwise the function generates an error.
          */
-        double getRadius(const unsigned int index) const
+        inline double getRadius(const unsigned int index) const noexcept
         {
             assert(index < m_number_of_sources);
             if(m_wide[index] / ((double)(NUMBEROFLINEARPOINTS - 1) * m_number_of_harmonics) < 1)
@@ -119,7 +118,7 @@ namespace Hoa2D
             @return    The mute state of the source if the source exists, otherwise the function generates an error.
             @see       setMute()
          */
-        bool getMute(const unsigned int index) const
+        inline bool getMute(const unsigned int index) const noexcept
         {
             assert(index < m_number_of_sources);
             return m_muted[index];

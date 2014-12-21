@@ -8,10 +8,8 @@
 
 namespace Hoa2D
 {
-    Map::Map(unsigned int order, unsigned int numberOfSources) : Ambisonic(order)
+    Map::Map(unsigned long order, unsigned long numberOfSources) : Ambisonic(order)
     {
-        assert(numberOfSources > 0);
-        
         m_number_of_sources = numberOfSources;
         m_gains             = new double[m_number_of_sources];
 		m_muted				= new bool[m_number_of_sources];
@@ -24,11 +22,11 @@ namespace Hoa2D
         
         double weight_order = log((double)(m_order + 1));
         
-        for(unsigned int j = 0; j < NUMBEROFLINEARPOINTS; j++)
+        for(unsigned long j = 0; j < NUMBEROFLINEARPOINTS; j++)
         {
             m_wide_matrix[j * m_number_of_harmonics] = (1. - ((double)j / (double)(NUMBEROFLINEARPOINTS-1))) * weight_order + 1.;
         }
-        for(unsigned int i = 1; i < m_number_of_harmonics; i++)
+        for(unsigned long i = 1; i < m_number_of_harmonics; i++)
         {
             double minus =  clip_min(log((double)getHarmonicDegree(i)), 0.);
             minus = -minus;

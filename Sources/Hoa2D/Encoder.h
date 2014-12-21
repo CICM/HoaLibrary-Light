@@ -25,7 +25,6 @@ namespace Hoa2D
         
         //! The encoder constructor.
         /**	The encoder constructor allocates and initialize the member values to computes spherical harmonics coefficients depending of a decomposition order. The order must be at least 1.
-         
             @param     order	The order.
          */
         Encoder(unsigned long order) : Ambisonic(order)
@@ -38,19 +37,18 @@ namespace Hoa2D
          */
         ~Encoder()
         {
-            
+            ;
         }
         
         //! This method set the angle of azimuth.
         /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 Pi to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is Pi/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
-         
             @param     azimuth	The azimuth.
          */
-        inline void setAzimuth(const double azimuth)
+        inline void setAzimuth(const double azimuth) noexcept
         {
             m_azimuth = wrap_twopi(azimuth);
-            m_cosx    = cos(m_azimuth);
-            m_sinx    = sin(m_azimuth);
+            m_cosx    = std::cos(m_azimuth);
+            m_sinx    = std::sin(m_azimuth);
         }
         
         //! Get the azimuth angle
@@ -58,7 +56,7 @@ namespace Hoa2D
 		 
             @return     The azimuth.
          */
-        inline double getAzimuth() const
+        inline double getAzimuth() const noexcept
         {
             return m_azimuth;
         }
@@ -69,7 +67,21 @@ namespace Hoa2D
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        void process(const float input, float* outputs);
+        inline void process(const float input, float* outputs) const noexcept
+        {
+            float cos_x = m_cosx;
+            float sin_x = m_sinx;
+            float tcos_x = cos_x;
+            outputs[0] = input;
+            for(unsigned long i = 1; i < m_number_of_harmonics; i += 2)
+            {
+                outputs[i] = input * sin_x;
+                outputs[i+1] = input * cos_x;
+                cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
+                sin_x = tcos_x * m_sinx + sin_x * m_cosx; // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
+                tcos_x = cos_x;
+            }
+        }
         
         //! This method performs the encoding with double precision.
         /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -77,7 +89,21 @@ namespace Hoa2D
             @param     input	The input sample.
             @param     outputs The output array.
          */
-        void process(const double input, double* outputs);
+        inline void process(const double input, double* outputs) const noexcept
+        {
+            double cos_x = m_cosx;
+            double sin_x = m_sinx;
+            double tcos_x = cos_x;
+            outputs[0] = input;
+            for(unsigned long i = 1; i < m_number_of_harmonics; i += 2)
+            {
+                outputs[i] = input * sin_x;
+                outputs[i+1] = input * cos_x;
+                cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
+                sin_x = tcos_x * m_sinx + sin_x * m_cosx; // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
+                tcos_x = cos_x;
+            }
+        }
     };
 }
 

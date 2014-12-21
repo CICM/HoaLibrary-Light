@@ -249,10 +249,10 @@ namespace Hoa3D
          @param     index	The global index of a channel.
          @return    The name of the channel
          */
-		inline std::string getChannelName(unsigned int index)
+		inline std::string getChannelName(unsigned long index)
         {
             assert(index < m_number_of_channels);
-            return "Channel " + int_to_string(index + 1) + " " + int_to_string((int)getChannelAzimuth(index)) + " " + int_to_string((int)getChannelElevation(index));
+            return "Channel " + num_to_string(index + 1) + " " + num_to_string((int)getChannelAzimuth(index)) + " " + num_to_string((int)getChannelElevation(index));
         };
         
     };

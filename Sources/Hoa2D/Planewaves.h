@@ -121,10 +121,10 @@ namespace Hoa2D
             @see getChannelAbscissa
             @see getChannelOrdinate
          */
-		inline std::string getChannelName(unsigned int index)
+		inline std::string getChannelName(unsigned long index)
         {
             assert(index < m_number_of_channels);
-            return "Channel " + int_to_string(index + 1) + " : " + int_to_string((int)(getChannelAzimuth(index) / HOA_2PI * 360.)) + "°";
+            return "Channel " + num_to_string(index + 1) + " : " + num_to_string((int)(getChannelAzimuth(index) / HOA_2PI * 360.)) + "°";
         };
     };
 	

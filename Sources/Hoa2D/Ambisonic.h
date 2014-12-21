@@ -26,7 +26,7 @@ namespace Hoa2D
         /** The ambisonic constructor allocates and initializes the generale member values depending of a decomposition order.
          @param     order	The order, must be at least 1.
          */
-        Ambisonic(unsigned long order)
+        Ambisonic(unsigned long order) noexcept
         {
             m_order					= order;
             m_number_of_harmonics	= m_order * 2 + 1;
@@ -45,7 +45,7 @@ namespace Hoa2D
             
             @return The order.
          */
-        inline unsigned long getDecompositionOrder() const
+        inline unsigned long getDecompositionOrder() const noexcept
         {
             return m_order;
         }
@@ -55,7 +55,7 @@ namespace Hoa2D
          
             @return The number of harmonics.
          */
-        unsigned long getNumberOfHarmonics() const
+        unsigned long getNumberOfHarmonics() const noexcept
         {
             return m_number_of_harmonics;
         }
@@ -68,7 +68,7 @@ namespace Hoa2D
             @see       getHarmonicDegree()
             @see       getHarmonicName()
          */
-        long getHarmonicOrder(unsigned long index) const
+        long getHarmonicOrder(unsigned long index) const noexcept
         {
             if(index % 2)
             {
@@ -88,7 +88,7 @@ namespace Hoa2D
             @see       getHarmonicOrder()
             @see       getHarmonicName()
          */
-        unsigned long getHarmonicDegree(unsigned long index) const
+        unsigned long getHarmonicDegree(unsigned long index) const noexcept
         {
             if(index % 2)
             {
@@ -108,7 +108,7 @@ namespace Hoa2D
          @see       getHarmonicOrder()
          @see       getHarmonicName()
          */
-        inline unsigned long getHarmonicIndex(long order) const
+        inline unsigned long getHarmonicIndex(long order) const noexcept
         {
             if(order < 0)
             {
@@ -129,9 +129,9 @@ namespace Hoa2D
             @see       getHarmonicDegree()
             @see       getHarmonicOrder()
          */
-        std::string getHarmonicName(unsigned long index) const
+        string getHarmonicName(unsigned long index) const noexcept
         {
-            return "Harmonic " + ulong_to_string(getHarmonicDegree(index)) + " " + long_to_string(getHarmonicOrder(index));
+            return "Harmonic " + num_to_string(getHarmonicDegree(index)) + " " + num_to_string(getHarmonicOrder(index));
         }
     };
 }
