@@ -18,28 +18,34 @@ namespace Hoa2D
     class Ambisonic
     {
     protected:
-        unsigned int	m_order;
-        unsigned int	m_number_of_harmonics;
-        long*           m_harmonics_orders;
+        unsigned long	m_order;
+        unsigned long	m_number_of_harmonics;
     
-public:
+    public:
         //! The ambisonic constructor.
         /** The ambisonic constructor allocates and initializes the generale member values depending of a decomposition order.
          @param     order	The order, must be at least 1.
          */
-        Ambisonic(unsigned int order);
+        Ambisonic(unsigned long order)
+        {
+            m_order					= order;
+            m_number_of_harmonics	= m_order * 2 + 1;
+        }
         
         //! The ambisonic destructor.
         /** The ambisonic destructor.
          */
-        ~Ambisonic();
+        ~Ambisonic()
+        {
+            ;
+        }
         
         //! Retrieve the decomposition order.
         /** Retrieve the decomposition order.
             
             @return The order.
          */
-        unsigned int getDecompositionOrder() const
+        inline unsigned long getDecompositionOrder() const
         {
             return m_order;
         }
@@ -49,7 +55,7 @@ public:
          
             @return The number of harmonics.
          */
-        unsigned int getNumberOfHarmonics() const
+        unsigned long getNumberOfHarmonics() const
         {
             return m_number_of_harmonics;
         }
@@ -62,13 +68,19 @@ public:
             @see       getHarmonicDegree()
             @see       getHarmonicName()
          */
-        long getHarmonicOrder(unsigned int index) const
+        long getHarmonicOrder(unsigned long index) const
         {
-            assert(index < m_number_of_harmonics);
-            return m_harmonics_orders[index];
+            if(index % 2)
+            {
+                return index / 2;
+            }
+            else
+            {
+                return -(index + 1) / 2;
+            }
         }
         
-        //! Retrieve the order of an harmonic.
+        //! Retrieve the degree of an harmonic.
         /** The orders of the harmonics are in the range 0 to the decomposition order. Each order contains 2 harmonics with the orders -order and order. For the first orders, the harmonics arrangement is h[0] h[-1] h[1] h[-2] h[2] h[-3] h[3], etc. with h[order].
          
             @param     index	The index of an harmonic.
@@ -76,10 +88,16 @@ public:
             @see       getHarmonicOrder()
             @see       getHarmonicName()
          */
-        long getHarmonicDegree(unsigned int index) const
+        unsigned long getHarmonicDegree(unsigned long index) const
         {
-            assert(index < m_number_of_harmonics);
-            return abs(m_harmonics_orders[index]);
+            if(index % 2)
+            {
+                return index / 2;
+            }
+            else
+            {
+                return (index + 1) / 2;
+            }
         }
         
         //! Retrieve the index of an harmonic.
@@ -90,13 +108,16 @@ public:
          @see       getHarmonicOrder()
          @see       getHarmonicName()
          */
-        inline unsigned int getHarmonicIndex(const int harmOrder) const
+        inline unsigned long getHarmonicIndex(long order) const
         {
-            assert(abs(harmOrder) <= getDecompositionOrder());
-            if(harmOrder < 0)
-                return -harmOrder * 2 - 1;
+            if(order < 0)
+            {
+                return -order * 2 - 1;
+            }
             else
-                return harmOrder * 2;
+            {
+                return order * 2;
+            }
         };
         
         //! Retrieve a name for an harmonic.
@@ -108,10 +129,9 @@ public:
             @see       getHarmonicDegree()
             @see       getHarmonicOrder()
          */
-        std::string getHarmonicName(unsigned int index) const
+        std::string getHarmonicName(unsigned long index) const
         {
-            assert(index < m_number_of_harmonics);
-            return "Harmonic " + int_to_string(getHarmonicOrder(index));
+            return "Harmonic " + ulong_to_string(getHarmonicDegree(index)) + " " + long_to_string(getHarmonicOrder(index));
         }
     };
 }

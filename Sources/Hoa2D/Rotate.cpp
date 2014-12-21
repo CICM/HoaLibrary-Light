@@ -8,16 +8,16 @@
 
 namespace Hoa2D
 {
-    Rotate::Rotate(unsigned int order) : Ambisonic(order)
+    Rotate::Rotate(unsigned long order) : Ambisonic(order)
     {
         setYaw(0.);
     }
 	
 	void Rotate::setYaw(const double value)
     {
-		m_yaw =	wrap_twopi(value);
-		m_cosx    = cos(m_yaw);
-        m_sinx    = sin(m_yaw);
+		m_yaw     =	wrap_twopi(value);
+		m_cosx    = std::cos(m_yaw);
+        m_sinx    = std::sin(m_yaw);
     }
     
     void Rotate::process(const float* inputs, float* outputs)
@@ -27,7 +27,7 @@ namespace Hoa2D
         float tcos_x = cos_x;
         float sig;
         outputs[0] = inputs[0];
-        for(int i = 2; i < m_number_of_harmonics; i += 2)
+        for(unsigned long i = 2; i < m_number_of_harmonics; i += 2)
         {
             sig = inputs[i-1];
             outputs[i-1] = sin_x * inputs[i] + cos_x * sig;
@@ -45,7 +45,7 @@ namespace Hoa2D
         double tcos_x = cos_x;
         double sig;
         outputs[0] = inputs[0];
-        for(int i = 2; i < m_number_of_harmonics; i += 2)
+        for(unsigned long i = 2; i < m_number_of_harmonics; i += 2)
         {
             sig = inputs[i-1];
             outputs[i-1] = sin_x * inputs[i] + cos_x * sig;

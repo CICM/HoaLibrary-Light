@@ -8,7 +8,7 @@
 
 namespace Hoa2D
 {
-    Wider::Wider(unsigned int order) : Ambisonic(order)
+    Wider::Wider(unsigned long order) : Ambisonic(order)
     {
         m_wide              = NUMBEROFLINEARPOINTS - 1;
         m_wide_matrix       = new double[NUMBEROFLINEARPOINTS * m_number_of_harmonics];
@@ -37,11 +37,6 @@ namespace Hoa2D
                 m_wide_matrix[j * m_number_of_harmonics + i] = new_weight * weight;
             }
         }
-    }
-    
-    void Wider::setWideningValue(const double value)
-    {
-         m_wide = clip_minmax(value, 0., 1.) * (double)(NUMBEROFLINEARPOINTS - 1);
     }
     
     void Wider::process(const float* inputs, float* outputs)

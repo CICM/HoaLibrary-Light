@@ -7,6 +7,7 @@
 #ifndef __DEF_HOA_DEFS__
 #define __DEF_HOA_DEFS__
 
+/*
 #include <iostream>
 #include <vector>
 #include <map>
@@ -14,10 +15,27 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <math.h>
+#include <cmath>
 #include <string>
 #include <assert.h>
 #include <algorithm>
+*/
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <cwchar>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <cstring>
+#include <algorithm>
+#include <memory>
+#include <cmath>
+#include <vector>
+#include <map>
+#include <list>
+#include <set>
+#include <deque>
 
 #ifdef __APPLE__
 

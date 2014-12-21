@@ -32,6 +32,32 @@ namespace Hoa
         sprintf(number, "%i", aValue);
         return number;
     }
+    
+    //! The int to string conversion
+    /** The function converts a integer to a string.
+     
+	 @param     value   The value to convert.
+	 @return    The function return value in a string format.
+     */
+    inline std::string long_to_string(long aValue)
+    {
+        char number[256];
+        sprintf(number, "%ld", aValue);
+        return number;
+    }
+    
+    //! The int to string conversion
+    /** The function converts a integer to a string.
+     
+	 @param     value   The value to convert.
+	 @return    The function return value in a string format.
+     */
+    inline std::string ulong_to_string(unsigned long aValue)
+    {
+        char number[256];
+        sprintf(number, "%ld", aValue);
+        return number;
+    }
 
 	class BinauralFilter
     {

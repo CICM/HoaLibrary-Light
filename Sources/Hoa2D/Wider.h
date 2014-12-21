@@ -17,7 +17,7 @@ namespace Hoa2D
     class Wider : public Ambisonic
     {
     private:
-        
+        double  m_factor;
         long            m_wide;
         double*         m_wide_matrix;
         
@@ -28,7 +28,7 @@ namespace Hoa2D
          
             @param     order	The order.
          */
-        Wider(unsigned int order);
+        Wider(unsigned long order);
         
         //! The wider destructor.
         /**	The wider destructor free the memory.
@@ -40,7 +40,10 @@ namespace Hoa2D
          
             @param     value The widening value.
          */
-        void setWideningValue(const double value);
+        inline void setWideningValue(const double value)
+        {
+            m_wide = clip_minmax(value, 0., 1.) * (double)(NUMBEROFLINEARPOINTS - 1);
+        }
         
         //! This method retreive the widening value.
         /**	The method returns the widening value.

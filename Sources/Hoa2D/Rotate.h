@@ -29,7 +29,7 @@ namespace Hoa2D
          
             @param     order	The order.
          */
-        Rotate(unsigned int order);
+        Rotate(unsigned long order);
         
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
@@ -48,7 +48,10 @@ namespace Hoa2D
 		 
             @return     The yaw value.
          */
-        inline double getYaw() const {return m_yaw;};
+        inline double getYaw() const
+        {
+            return m_yaw;
+        };
         
         //! This method performs the rotation with single precision.
         /**	You should use this method for in-place or not-in-place processing and performs the rotation sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.

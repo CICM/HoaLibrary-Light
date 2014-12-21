@@ -16,9 +16,7 @@ namespace Hoa2D
      */
     class Encoder : public Ambisonic
     {
-        
     private:
-        
         double  m_azimuth;
         double  m_cosx;
         double  m_sinx;
@@ -30,33 +28,40 @@ namespace Hoa2D
          
             @param     order	The order.
          */
-        Encoder(unsigned int order);
+        Encoder(unsigned long order) : Ambisonic(order)
+        {
+            setAzimuth(0.);
+        }
         
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        ~Encoder();
+        ~Encoder()
+        {
+            
+        }
         
         //! This method set the angle of azimuth.
         /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 Pi to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is Pi/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
          
             @param     azimuth	The azimuth.
          */
-        void setAzimuth(const double azimuth);
-        
-        //! This method performs the encoding with single precision.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         
-            @param     input	The input sample.
-            @param     outputs The output array.
-         */
+        inline void setAzimuth(const double azimuth)
+        {
+            m_azimuth = wrap_twopi(azimuth);
+            m_cosx    = cos(m_azimuth);
+            m_sinx    = sin(m_azimuth);
+        }
         
         //! Get the azimuth angle
         /** The method returns the last angle of encoding between 0 and 2π.
 		 
             @return     The azimuth.
          */
-        inline double getAzimuth() const {return m_azimuth;};
+        inline double getAzimuth() const
+        {
+            return m_azimuth;
+        }
         
         //! This method performs the encoding with single precision.
         /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
