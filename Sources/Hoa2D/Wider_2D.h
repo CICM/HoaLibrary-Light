@@ -7,7 +7,7 @@
 #ifndef DEF_HOA_2D_WIDER
 #define DEF_HOA_2D_WIDER
 
-#include "Ambisonic.h"
+#include "Ambisonic_2D.h"
 
 namespace Hoa2D
 {
@@ -47,7 +47,7 @@ namespace Hoa2D
          */
         inline void setWideningValue(const double value) noexcept
         {
-            m_factor = clip_minmax(value, 0., 1.) * HOA_PI;
+            m_factor = (1. - clip_minmax(value, 0., 1.)) * HOA_PI;
             m_gain   = (std::sin(clip_minmax((m_factor - 0.5f) * HOA_PI, -HOA_PI2, HOA_PI2)) + 1.) * 0.5;
         }
         
@@ -69,10 +69,10 @@ namespace Hoa2D
          */
         inline void process(const float* inputs, float* outputs) const noexcept
         {
-            outputs[0] = inputs[0] * (m_gain * m_order + 1.f);
+            outputs[0] = inputs[0] * (m_gain * m_order_of_decomposition + 1.f);
             for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
             {
-                const float factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order - j) + 1.f);
+                const float factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
                 outputs[i-1]        = inputs[i-1] * factor;
                 outputs[i]          = inputs[i] * factor;
             }
@@ -86,10 +86,10 @@ namespace Hoa2D
          */
         inline void process(const double* inputs, double* outputs) const noexcept
         {
-            outputs[0] = inputs[0] * (m_gain * m_order + 1.f);
+            outputs[0] = inputs[0] * (m_gain * m_order_of_decomposition + 1.f);
             for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
             {
-                const double factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.) * 0.5 * (m_gain * (m_order - j) + 1.);
+                const double factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.) * 0.5 * (m_gain * (m_order_of_decomposition - j) + 1.);
                 outputs[i-1]        = inputs[i-1] * factor;
                 outputs[i]          = inputs[i] * factor;
             }

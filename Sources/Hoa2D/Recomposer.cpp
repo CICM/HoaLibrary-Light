@@ -18,8 +18,8 @@ namespace Hoa2D
         m_widers                    = new Wider*[m_number_of_channels];
         for(unsigned int i = 0; i < m_number_of_channels; i++)
         {
-            m_encoders[i]   = new Encoder(m_order);
-            m_widers[i]     = new Wider(m_order);
+            m_encoders[i]   = new Encoder(m_order_of_decomposition);
+            m_widers[i]     = new Wider(m_order_of_decomposition);
             m_encoders[i]->setAzimuth((double)i / (double)m_number_of_channels * HOA_2PI);
             m_widers[i]->setWideningValue(1.);
         }

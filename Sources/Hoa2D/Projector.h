@@ -7,9 +7,9 @@
 #ifndef DEF_HOA_2D_PROJECTOR
 #define DEF_HOA_2D_PROJECTOR
 
-#include "Ambisonic.h"
+#include "Ambisonic_2D.h"
 #include "Planewaves.h"
-#include "Encoder.h"
+#include "Encoder_2D.h"
 
 namespace Hoa2D
 {

@@ -54,7 +54,7 @@
 #endif
 
 #ifdef PD_DEBUG
-#include "../ThirdParty/PureData/Sources/cicm_wrapper.h"
+#include "../../CicmWrapper/Sources/cicm_wrapper.h"
 #endif
 #ifdef MAX_DEBUG
 #include <ext.h>

@@ -28,15 +28,15 @@ namespace Hoa3D
         {
             for(unsigned int i = 0; i < m_number_of_harmonics; i++)
             {
-                m_harmonics[i] = cos(fabs((double)getHarmonicDegree(i)) * HOA_PI / (2 * m_order + 2));;
+                m_harmonics[i] = cos(fabs((double)getHarmonicDegree(i)) * HOA_PI / (2 * m_order_of_decomposition + 2));;
             }
         }
         else
         {
-            long double gain = ((m_order + 1) * (m_order + 1)) / (2 * m_order + 1);
+            long double gain = ((m_order_of_decomposition + 1) * (m_order_of_decomposition + 1)) / (2 * m_order_of_decomposition + 1);
             for(unsigned int i = 0; i < m_number_of_harmonics; i++)
             {
-                m_harmonics[i] = (long double)((long double)factorial(m_order) * (long double)factorial(m_order + 1.)) / (long double)((long double)factorial(m_order + getHarmonicDegree(i) + 1.) * (long double)factorial(m_order - fabs((double)getHarmonicDegree(i)))) * gain;
+                m_harmonics[i] = (long double)((long double)factorial(m_order_of_decomposition) * (long double)factorial(m_order_of_decomposition + 1.)) / (long double)((long double)factorial(m_order_of_decomposition + getHarmonicDegree(i) + 1.) * (long double)factorial(m_order_of_decomposition - fabs((double)getHarmonicDegree(i)))) * gain;
             }
         }
     }

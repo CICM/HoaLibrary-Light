@@ -4,36 +4,33 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#include "Decoder.h"
+#include "Decoder_2D.h"
 
 namespace Hoa2D
 {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Decoder Regular //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    DecoderRegular::DecoderRegular(unsigned int order, unsigned int numberOfChannels) : Ambisonic(order), Planewaves(numberOfChannels)
+    DecoderRegular::DecoderRegular(unsigned int order, unsigned int numberOfChannels) : Encoder(order), Planewaves(numberOfChannels)
     {
-        assert(numberOfChannels >= m_number_of_harmonics);
-
-        m_harmonics_vector          = new double[m_number_of_harmonics];
         m_decoder_matrix_double     = new double[m_number_of_channels * m_number_of_harmonics];
         m_decoder_matrix_float      = new float[m_number_of_channels * m_number_of_harmonics];
-        m_encoder                   = new Encoder(m_order);
         setChannelsOffset(0.);
     }
 
     void DecoderRegular::setChannelsOffset(double offset)
 	{
         m_offset = wrap_twopi(offset);
+        double harmonics[m_number_of_harmonics];
         for(unsigned int i = 0; i < m_number_of_channels; i++)
         {
-            m_encoder->setAzimuth(m_channels_azimuth[i] + m_offset);
-            m_encoder->process(1., m_harmonics_vector);
+            Encoder::setAzimuth(m_channels_azimuth[i] + m_offset);
+            Encoder::process(1., harmonics);
 
-            m_decoder_matrix_float[i * m_number_of_harmonics] = m_decoder_matrix_double[i * m_number_of_harmonics] = 0.5 / (double)(m_order + 1.);
-            for(unsigned int j = 1; j < m_number_of_harmonics; j++)
+            m_decoder_matrix_float[i * m_number_of_harmonics] = m_decoder_matrix_double[i * m_number_of_harmonics] = 0.5 / (double)(m_order_of_decomposition + 1.);
+            for(unsigned long j = 1; j < m_number_of_harmonics; j++)
             {
-                m_decoder_matrix_float[i * m_number_of_harmonics + j] = m_decoder_matrix_double[i * m_number_of_harmonics + j] = m_harmonics_vector[j] / (double)(m_order + 1.);
+                m_decoder_matrix_float[i * m_number_of_harmonics + j] = m_decoder_matrix_double[i * m_number_of_harmonics + j] = harmonics[j] / (double)(m_order_of_decomposition + 1.);
             }
         }
 	}
@@ -52,8 +49,6 @@ namespace Hoa2D
 	{
 		delete [] m_decoder_matrix_double;
         delete [] m_decoder_matrix_float;
-        delete [] m_harmonics_vector;
-        delete m_encoder;
 	}
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -64,7 +59,7 @@ namespace Hoa2D
         m_harmonics_vector          = new double[m_number_of_harmonics];
         m_decoder_matrix            = new double[m_number_of_channels * m_number_of_harmonics];
         m_decoder_matrix_float      = new float[m_number_of_channels * m_number_of_harmonics];
-        m_encoder                   = new Encoder(m_order);
+        m_encoder                   = new Encoder(m_order_of_decomposition);
         m_nearest_channel[0]        = NULL;
         m_nearest_channel[1]        = NULL;
         
@@ -135,10 +130,10 @@ namespace Hoa2D
                 m_encoder->setAzimuth(angle + m_offset);
                 m_encoder->process(1., m_harmonics_vector);
 
-                m_decoder_matrix[0] += (0.5 / (double)(m_order + 1.));
+                m_decoder_matrix[0] += (0.5 / (double)(m_order_of_decomposition + 1.));
                 for(unsigned int j = 1; j < m_number_of_harmonics; j++)
                 {
-                    m_decoder_matrix[j] += (m_harmonics_vector[j] / (double)(m_order + 1.));
+                    m_decoder_matrix[j] += (m_harmonics_vector[j] / (double)(m_order_of_decomposition + 1.));
                 }
             }
             for(unsigned int i = 0; i < m_number_of_harmonics; i++)
@@ -155,16 +150,16 @@ namespace Hoa2D
                 m_encoder->setAzimuth(angle + m_offset);
                 m_encoder->process(1., m_harmonics_vector);
 
-                m_decoder_matrix[0] += (0.5 / (double)(m_order + 1.));
-                m_decoder_matrix[m_number_of_harmonics] += (0.5 / (double)(m_order + 1.));
+                m_decoder_matrix[0] += (0.5 / (double)(m_order_of_decomposition + 1.));
+                m_decoder_matrix[m_number_of_harmonics] += (0.5 / (double)(m_order_of_decomposition + 1.));
 
                 factor_index1 = fabs(cos(distance_radian(angle, m_channels_azimuth[0]) / HOA_PI * HOA_PI2));
                 factor_index2 = fabs(cos(distance_radian(angle, m_channels_azimuth[1]) / HOA_PI * HOA_PI2));
                 for(unsigned int j = 1; j < m_number_of_harmonics; j++)
                 {
-                    m_decoder_matrix[j] += (m_harmonics_vector[j] / (double)(m_order + 1.)) * factor_index1;
+                    m_decoder_matrix[j] += (m_harmonics_vector[j] / (double)(m_order_of_decomposition + 1.)) * factor_index1;
 
-                    m_decoder_matrix[m_number_of_harmonics + j] += (m_harmonics_vector[j] / (double)(m_order + 1.)) * factor_index2;
+                    m_decoder_matrix[m_number_of_harmonics + j] += (m_harmonics_vector[j] / (double)(m_order_of_decomposition + 1.)) * factor_index2;
                 }
             }
 
@@ -221,12 +216,12 @@ namespace Hoa2D
                 m_encoder->setAzimuth(angle + m_offset);
                 m_encoder->process(1., m_harmonics_vector);
                 
-                m_decoder_matrix[channel_index1 * m_number_of_harmonics] += (0.5 / (double)(m_order + 1.)) * factor_index1;
-                m_decoder_matrix[channel_index2 * m_number_of_harmonics] += (0.5 / (double)(m_order + 1.)) * factor_index2;
+                m_decoder_matrix[channel_index1 * m_number_of_harmonics] += (0.5 / (double)(m_order_of_decomposition + 1.)) * factor_index1;
+                m_decoder_matrix[channel_index2 * m_number_of_harmonics] += (0.5 / (double)(m_order_of_decomposition + 1.)) * factor_index2;
                 for(unsigned int j = 1; j < m_number_of_harmonics; j++)
                 {
-                    m_decoder_matrix[channel_index1 * m_number_of_harmonics + j] += (m_harmonics_vector[j] / (double)(m_order + 1.)) * factor_index1;
-                    m_decoder_matrix[channel_index2 * m_number_of_harmonics + j] += (m_harmonics_vector[j] / (double)(m_order + 1.)) * factor_index2;
+                    m_decoder_matrix[channel_index1 * m_number_of_harmonics + j] += (m_harmonics_vector[j] / (double)(m_order_of_decomposition + 1.)) * factor_index1;
+                    m_decoder_matrix[channel_index2 * m_number_of_harmonics + j] += (m_harmonics_vector[j] / (double)(m_order_of_decomposition + 1.)) * factor_index2;
                 }
             }
 
@@ -265,7 +260,7 @@ namespace Hoa2D
     {
         m_channels_azimuth[0] = HOA_PI2;
         m_channels_azimuth[1] = HOA_PI + HOA_PI2;
-        m_decoder = new DecoderRegular(m_order, m_order * 2 + 2);
+        m_decoder = new DecoderRegular(m_order_of_decomposition, m_order_of_decomposition * 2 + 2);
         for(int i = 0; i < m_decoder->getNumberOfChannels(); i++)
         {
             double angle = m_decoder->getChannelAzimuth(i);
@@ -348,9 +343,9 @@ namespace Hoa2D
     DecoderMulti::DecoderMulti(unsigned int order) : Ambisonic(order), Planewaves(order * 2 + 2)
     {
         m_mode = Regular;
-        m_decoder_regular   = new DecoderRegular(m_order, m_order * 2 + 2);
-        m_decoder_irregular = new DecoderIrregular(m_order, m_order * 2 + 2);
-        m_decoder_binaural  = new DecoderBinaural(m_order);
+        m_decoder_regular   = new DecoderRegular(m_order_of_decomposition, m_order_of_decomposition * 2 + 2);
+        m_decoder_irregular = new DecoderIrregular(m_order_of_decomposition, m_order_of_decomposition * 2 + 2);
+        m_decoder_binaural  = new DecoderBinaural(m_order_of_decomposition);
     }
 
     void DecoderMulti::setDecodingMode(Mode mode)
@@ -365,12 +360,12 @@ namespace Hoa2D
             if(m_mode == Regular && numberOfChannels >= m_decoder_regular->getNumberOfHarmonics())
             {
                 delete m_decoder_regular;
-                m_decoder_regular = new DecoderRegular(m_order, numberOfChannels);
+                m_decoder_regular = new DecoderRegular(m_order_of_decomposition, numberOfChannels);
             }
             else if(m_mode == Irregular)
             {
                 delete m_decoder_irregular;
-                m_decoder_irregular = new DecoderIrregular(m_order, numberOfChannels);
+                m_decoder_irregular = new DecoderIrregular(m_order_of_decomposition, numberOfChannels);
             }
         }
     }

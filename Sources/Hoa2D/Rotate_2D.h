@@ -7,7 +7,7 @@
 #ifndef DEF_HOA_2D_ROTATE
 #define DEF_HOA_2D_ROTATE
 
-#include "Ambisonic.h"
+#include "Ambisonic_2D.h"
 
 namespace Hoa2D
 {

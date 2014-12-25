@@ -19,11 +19,11 @@ namespace Hoa2D
     {
 	protected:
         
-		unsigned int    m_number_of_channels;
+		unsigned long    m_number_of_channels;
         double*         m_channels_azimuth;
         
         //! Set the azimuth of a channel.
-        /** Set the azimuth of a channel. The azimuth is in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The maximum index must be the number of channel - 1.
+        /** Set the azimuth of a channel. The azimuth is in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The maximum index must be the number of channel - 1.
          
             @param     index		The index of the channel.
             @param     azimuth		The azimuth.
@@ -31,7 +31,7 @@ namespace Hoa2D
 		void setChannelAzimuth(unsigned int index, double azimuth);
 		
         //! Set the azimtuh of all the channels.
-        /** Set the azimtuh of all the channels. It is more efficient to set all the channels azimuths at the same time because even if only one channel has changed, all the decoding matrix have to be recomputed. The azimuths are in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
+        /** Set the azimtuh of all the channels. It is more efficient to set all the channels azimuths at the same time because even if only one channel has changed, all the decoding matrix have to be recomputed. The azimuths are in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
          
             @param     azimuths		The azimuths array.
          
@@ -57,13 +57,13 @@ namespace Hoa2D
             
             @return The number of channels.
          */
-		inline unsigned int getNumberOfChannels() const
+		inline unsigned long getNumberOfChannels() const
         {
             return m_number_of_channels;
         }
         
         //! Retrieve the azimuth of a channel.
-        /** Retrieve the azimuth of a channel. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and Pi is at the back of the sound field. The maximum index must be the number of channels - 1.
+        /** Retrieve the azimuth of a channel. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of channels - 1.
          
             @param      index   The index of the channel.
             @return     The azimuth of the channel if the channel exists, otherwise the function generates an error.

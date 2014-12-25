@@ -15,12 +15,13 @@
  */
 namespace Hoa2D{};
 
-#include "Encoder.h"
-#include "Rotate.h"
-#include "Optim.h"
-#include "Decoder.h"
-#include "Wider.h"
-#include "Map.h"
+#include "Encoder_2D.h"
+#include "Wider_2D.h"
+#include "Map_2D.h"
+#include "Optim_2D.h"
+#include "Rotate_2D.h"
+#include "Decoder_2D.h"
+
 #include "Projector.h"
 #include "Vector.h"
 #include "Scope.h"

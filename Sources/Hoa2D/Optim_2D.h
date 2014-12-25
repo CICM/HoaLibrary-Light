@@ -7,7 +7,7 @@
 #ifndef DEF_HOA_2D_OPTIM
 #define DEF_HOA_2D_OPTIM
 
-#include "Ambisonic.h"
+#include "Ambisonic_2D.h"
 
 namespace Hoa2D
 {
@@ -77,15 +77,15 @@ namespace Hoa2D
             {
                 for(unsigned long i = 0; i < m_number_of_harmonics; i++)
                 {
-                    m_harmonics[i] = std::cos(fabs((double)getHarmonicDegree(i)) * HOA_PI / (double)(2. * m_order + 2));
+                    m_harmonics[i] = std::cos(fabs((double)getHarmonicDegree(i)) * HOA_PI / (double)(2. * m_order_of_decomposition + 2));
                 }
             }
             else
             {
                 for(unsigned long i = 0; i < m_number_of_harmonics; i++)
                 {
-                    const long double temp1 = (long double)factorial(m_order) / (long double)factorial(m_order + getHarmonicDegree(i) + 1.);
-                    const long double temp2 = (long double)factorial(m_order + 1.) / (long double)factorial(m_order - fabs((double)getHarmonicDegree(i)));
+                    const long double temp1 = (long double)factorial(m_order_of_decomposition) / (long double)factorial(m_order_of_decomposition + getHarmonicDegree(i) + 1.);
+                    const long double temp2 = (long double)factorial(m_order_of_decomposition + 1.) / (long double)factorial(m_order_of_decomposition - fabs((double)getHarmonicDegree(i)));
                     m_harmonics[i] = temp1 * temp2;
                 }
             }

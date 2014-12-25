@@ -7,7 +7,7 @@
 #ifndef DEF_HOA_2D_ENCODER
 #define DEF_HOA_2D_ENCODER
 
-#include "Ambisonic.h"
+#include "Ambisonic_2D.h"
 
 namespace Hoa2D
 {
@@ -41,7 +41,7 @@ namespace Hoa2D
         }
         
         //! This method set the angle of azimuth.
-        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 Pi to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is Pi/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
+        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
             @param     azimuth	The azimuth.
          */
         inline void setAzimuth(const double azimuth) noexcept
@@ -51,9 +51,8 @@ namespace Hoa2D
             m_sinx    = std::sin(m_azimuth);
         }
         
-        //! Get the azimuth angle
-        /** The method returns the last angle of encoding between 0 and 2π.
-		 
+        //! Get the azimuth angle.
+        /** The method returns the azimuth between 0 and 2π.
             @return     The azimuth.
          */
         inline double getAzimuth() const noexcept
@@ -69,17 +68,17 @@ namespace Hoa2D
          */
         inline void process(const float input, float* outputs) const noexcept
         {
-            float cos_x = m_cosx;
-            float sin_x = m_sinx;
-            float tcos_x = cos_x;
-            outputs[0] = input;
-            for(unsigned long i = 1; i < m_number_of_harmonics; i += 2)
+            float cos_x = m_cosx, tcos_x = m_cosx, sin_x = m_sinx;
+            outputs[0]  = input;                            // Hamonic [0,0]
+            outputs[1]  = input * cos_x;                    // Hamonic [1,-1]
+            outputs[2]  = input * sin_x;                    // Hamonic [1,1]
+            for(unsigned long i = 3; i < m_number_of_harmonics; i += 2)
             {
-                outputs[i] = input * sin_x;
-                outputs[i+1] = input * cos_x;
-                cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
-                sin_x = tcos_x * m_sinx + sin_x * m_cosx; // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
-                tcos_x = cos_x;
+                cos_x   = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
+                sin_x   = tcos_x * m_sinx + sin_x * m_cosx; // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
+                tcos_x  = cos_x;
+                outputs[i]  = input * sin_x;                // Hamonic [l,-l]
+                outputs[i+1]= input * cos_x;                // Hamonic [l,l]
             }
         }
         
@@ -91,17 +90,17 @@ namespace Hoa2D
          */
         inline void process(const double input, double* outputs) const noexcept
         {
-            double cos_x = m_cosx;
-            double sin_x = m_sinx;
-            double tcos_x = cos_x;
-            outputs[0] = input;
-            for(unsigned long i = 1; i < m_number_of_harmonics; i += 2)
+            double cos_x = m_cosx, tcos_x = m_cosx, sin_x = m_sinx;
+            outputs[0]  = input;                            // Hamonic [0,0]
+            outputs[1]  = input * cos_x;                    // Hamonic [1,-1]
+            outputs[2]  = input * sin_x;                    // Hamonic [1,1]
+            for(unsigned long i = 3; i < m_number_of_harmonics; i += 2)
             {
-                outputs[i] = input * sin_x;
-                outputs[i+1] = input * cos_x;
-                cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
-                sin_x = tcos_x * m_sinx + sin_x * m_cosx; // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
-                tcos_x = cos_x;
+                cos_x   = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
+                sin_x   = tcos_x * m_sinx + sin_x * m_cosx; // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
+                tcos_x  = cos_x;
+                outputs[i]  = input * sin_x;                // Hamonic [l,-l]
+                outputs[i+1]= input * cos_x;                // Hamonic [l,l]
             }
         }
     };

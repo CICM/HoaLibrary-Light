@@ -7,26 +7,22 @@
 #ifndef DEF_HOA_2D_DECODER
 #define DEF_HOA_2D_DECODER
 
-#include "Ambisonic.h"
+#include "Ambisonic_2D.h"
 #include "Planewaves.h"
-#include "Encoder.h"
-#include "Rotate.h"
+#include "Encoder_2D.h"
+#include "Rotate_2D.h"
 
 namespace Hoa2D
 {
     //! The ambisonic regular decoder.
     /** The regular decoder should be used to decode an ambisonic sound field for a set a channels at equal distances on a circle depending on a decomposition order. The number of channels must be at least the number of harmonics. Note that you can only change the offset of the channels.
      */
-    class DecoderRegular : public Ambisonic, public Planewaves
+    class DecoderRegular : public Encoder, public Planewaves
     {
-        
     private:
         double          m_offset;
         double*         m_decoder_matrix_double;
         float*          m_decoder_matrix_float;
-		double*         m_harmonics_vector;
-        Encoder*        m_encoder;
-        
     public:
         
         //! The regular decoder constructor.
@@ -138,7 +134,7 @@ namespace Hoa2D
         }
         
         //! Set the azimuth of a channel.
-        /** Set the azimuth of a channel. The azimuth is in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The maximum index must be the number of channel - 1.
+        /** Set the azimuth of a channel. The azimuth is in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The maximum index must be the number of channel - 1.
          
             @param     index		The index of the channel.
             @param     azimuth		The azimuth.
@@ -148,7 +144,7 @@ namespace Hoa2D
         void setChannelAzimuth(unsigned int index, double azimuth);
         
         //! Set the azimtuh of all the channels.
-        /** Set the azimtuh of all the channels. It is more efficient to set all the channels azimuths at the same time because even if only one channel has changed, all the decoding matrix have to be recomputed. The azimuths are in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
+        /** Set the azimtuh of all the channels. It is more efficient to set all the channels azimuths at the same time because even if only one channel has changed, all the decoding matrix have to be recomputed. The azimuths are in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
         
             @param     azimuths		The azimuths array.
          
@@ -380,7 +376,7 @@ namespace Hoa2D
         }
         
         //! Set the azimuth of a channel for the irregular decoding mode.
-        /** Set the azimuth of a channel for the irregular decoding mode. The azimuth is in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The maximum index must be the number of channel - 1.
+        /** Set the azimuth of a channel for the irregular decoding mode. The azimuth is in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The maximum index must be the number of channel - 1.
          
             @param     index		The index of the channel.
             @param     azimuth		The azimuth.
@@ -390,7 +386,7 @@ namespace Hoa2D
         void setChannelAzimuth(unsigned int index, double azimuth);
         
         //! Set the azimtuh of all the channels for the irregular decoding mode.
-        /** Set the azimtuh of all the channels for the irregular decoding mode. It is more efficient to set all the channels azimuths at the same time because even if only one channel has changed, all the decoding matrix have to be recomputed. The azimuths are in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
+        /** Set the azimtuh of all the channels for the irregular decoding mode. It is more efficient to set all the channels azimuths at the same time because even if only one channel has changed, all the decoding matrix have to be recomputed. The azimuths are in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
          
             @param     azimuths		The azimuths array.
          
@@ -427,7 +423,7 @@ namespace Hoa2D
         };
         
         //! Retrieve the azimuth of a channel.
-        /** Retrieve the azimuth of a channel. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and Pi is at the back of the sound field. The maximum index must be the number of channels - 1.
+        /** Retrieve the azimuth of a channel. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of channels - 1.
          
             @param      index   The index of the channel.
             @return     The azimuth of the channel if the channel exists, otherwise the function generates an error.

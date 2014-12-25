@@ -29,7 +29,6 @@ namespace Hoa3D
 		/**	The decoder constructor.
          @param     order					The order, must be at least 1.
 		 @param     numberOfChannels	The number of channels, must be at least (order + 1)^2.
-		 @param     shape					Is a sphere or a half sphere.
          */
 		DecoderRegular(unsigned int order, unsigned int numberOfChannels);
 		
@@ -45,7 +44,7 @@ namespace Hoa3D
 		void	setChannelPosition(unsigned int index, double azimuth, double elevation);
         
         //! Set the position of the channels.
-        /** Set the position of the channels with polar coordinates. The azimtuh is in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The elevation is in radian between -1/2 Pi and 1/2 Pi, -1/2 Pi the the bottom of the sound field, 0 is the center of the sound field and 1/2 Pi is the top of the sound field. The maximum index must be the number of channels - 1.
+        /** Set the position of the channels with polar coordinates. The azimtuh is in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The elevation is in radian between -1/2 π and 1/2 π, -1/2 π the the bottom of the sound field, 0 is the center of the sound field and 1/2 π is the top of the sound field. The maximum index must be the number of channels - 1.
          
          @param     azimuths		The azimuths.
          @param     elevations	The elevations.
@@ -266,7 +265,7 @@ namespace Hoa3D
         void setChannelPosition(unsigned int index, double azimuth, double elevation);
         
         //! Set the position of the channels.
-        /** Set the position of the channels with polar coordinates. The azimtuh is in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The elevation is in radian between -1/2 Pi and 1/2 Pi, -1/2 Pi the the bottom of the sound field, 0 is the center of the sound field and 1/2 Pi is the top of the sound field. The maximum index must be the number of channels - 1.
+        /** Set the position of the channels with polar coordinates. The azimtuh is in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The elevation is in radian between -1/2 π and 1/2 π, -1/2 π the the bottom of the sound field, 0 is the center of the sound field and 1/2 π is the top of the sound field. The maximum index must be the number of channels - 1.
          
          @param     azimuths		The azimuths.
          @param     elevations	The elevations.
@@ -350,7 +349,7 @@ namespace Hoa3D
         };
         
         //! Retrieve the azimuth of a channel.
-        /** Retrieve the azimuth of a channel. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and Pi is at the back of the sound field. The maximum index must be the number of channels - 1.
+        /** Retrieve the azimuth of a channel. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of channels - 1.
          
          @param      index   The index of the channel.
          @return     The azimuth of the channel if the channel exists, otherwise the function generates an error.
@@ -368,7 +367,7 @@ namespace Hoa3D
         }
         
         //! Retrieve the elevation of a channel.
-        /** Retrieve the elevation of a channel. The elevation is in radian between -1/2 Pi and 1/2 Pi, -1/2 Pi the the bottom of the sound field, 0 is the center of the sound field and 1/2 Pi is the top of the sound field. The maximum index must be the number of channels - 1.
+        /** Retrieve the elevation of a channel. The elevation is in radian between -1/2 π and 1/2 π, -1/2 π the the bottom of the sound field, 0 is the center of the sound field and 1/2 π is the top of the sound field. The maximum index must be the number of channels - 1.
          
          @param      index   The index of the channel.
          @return     The elevation of the channel.

@@ -45,7 +45,7 @@ namespace Hoa3D
         ~Planewaves();
 		
         //! Set the position of a channel.
-        /** Set the position of a channel with polar coordinates. The azimtuh is in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The elevation is in radian between -1/2 Pi and 1/2 Pi, -1/2 Pi the the bottom of the sound field, 0 is the center of the sound field and 1/2 Pi is the top of the sound field. The maximum index must be the number of channels - 1.
+        /** Set the position of a channel with polar coordinates. The azimtuh is in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The elevation is in radian between -1/2 π and 1/2 π, -1/2 π the the bottom of the sound field, 0 is the center of the sound field and 1/2 π is the top of the sound field. The maximum index must be the number of channels - 1.
          
             @param     index		The index of the channel.
             @param     azimuth		The azimuth.
@@ -54,7 +54,7 @@ namespace Hoa3D
 		void setChannelPosition(unsigned int index, double azimuth, double elevation);
 
 		//! Set the position of the channels.
-        /** Set the position of the channels with polar coordinates. The azimtuh is in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The elevation is in radian between -1/2 Pi and 1/2 Pi, -1/2 Pi the the bottom of the sound field, 0 is the center of the sound field and 1/2 Pi is the top of the sound field. The maximum index must be the number of channels - 1.
+        /** Set the position of the channels with polar coordinates. The azimtuh is in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The elevation is in radian between -1/2 π and 1/2 π, -1/2 π the the bottom of the sound field, 0 is the center of the sound field and 1/2 π is the top of the sound field. The maximum index must be the number of channels - 1.
          
             @param     azimuths		The azimuths.
             @param     elevations	The elevations.
@@ -108,7 +108,7 @@ namespace Hoa3D
 		inline unsigned int getNumberOfChannels() const {return m_number_of_channels;}
         
         //! Retrieve the azimuth of a channel.
-        /** Retrieve the azimuth of a channel. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and Pi is at the back of the sound field. The maximum index must be the number of channels - 1.
+        /** Retrieve the azimuth of a channel. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of channels - 1.
          
             @param      index   The index of the channel.
             @return     The azimuth of the channel.
@@ -121,7 +121,7 @@ namespace Hoa3D
         }
 		
         //! Retrieve the elevation of a channel.
-		/** Retrieve the elevation of a channel. The elevation is in radian between -1/2 Pi and 1/2 Pi, -1/2 Pi the the bottom of the sound field, 0 is the center of the sound field and 1/2 Pi is the top of the sound field. The maximum index must be the number of channels - 1.
+		/** Retrieve the elevation of a channel. The elevation is in radian between -1/2 π and 1/2 π, -1/2 π the the bottom of the sound field, 0 is the center of the sound field and 1/2 π is the top of the sound field. The maximum index must be the number of channels - 1.
          
             @param      index   The index of the channel.
             @return     The elevation of the channel.
@@ -134,7 +134,7 @@ namespace Hoa3D
         }
         
         //! Retrieve the azimuth of a channel with the zyx rotation.
-        /** Retrieve the azimuth of a channel with the zyx rotation. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and Pi is at the back of the sound field. The maximum index must be the number of channels - 1.
+        /** Retrieve the azimuth of a channel with the zyx rotation. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of channels - 1.
          
          @param      index   The index of the channel.
          @return     The azimuth of the channel.
@@ -147,7 +147,7 @@ namespace Hoa3D
         }
 		
         //! Retrieve the elevation of a channel with the zyx rotation.
-		/** Retrieve the elevation of a channel with the zyx rotation. The elevation is in radian between -1/2 Pi and 1/2 Pi, -1/2 Pi the the bottom of the sound field, 0 is the center of the sound field and 1/2 Pi is the top of the sound field. The maximum index must be the number of channels - 1.
+		/** Retrieve the elevation of a channel with the zyx rotation. The elevation is in radian between -1/2 π and 1/2 π, -1/2 π the the bottom of the sound field, 0 is the center of the sound field and 1/2 π is the top of the sound field. The maximum index must be the number of channels - 1.
          
          @param      index   The index of the channel.
          @return     The elevation of the channel.
@@ -316,7 +316,7 @@ namespace Hoa3D
 			elevations[0] = elevations[1] = elevations[2] = elevations[3] = elev;
             elevations[4] = elevations[5] = elevations[6] = elevations[7] = -elev;
         }
-        else if(numberOfPoints == 9) // Not regular : Hexahedron or cube with 1 at PI/2 elevation
+        else if(numberOfPoints == 9) // Not regular : Hexahedron or cube with 1 at π/2 elevation
         {
             azimuths[0] = azimuths[4] = HOA_PI4;
             azimuths[1] = azimuths[5] = HOA_PI4 + HOA_PI2;
@@ -327,7 +327,7 @@ namespace Hoa3D
             elevations[8] = HOA_PI2;
             azimuths[8] = 0;
         }
-        else if(numberOfPoints == 10) // Not regular : Hexahedron or cube with 1 at PI/2 elevation and 1 at -Pi/2 elevation
+        else if(numberOfPoints == 10) // Not regular : Hexahedron or cube with 1 at π/2 elevation and 1 at -π/2 elevation
         {
             azimuths[0] = azimuths[4] = HOA_PI4;
             azimuths[1] = azimuths[5] = HOA_PI4 + HOA_PI2;
@@ -339,7 +339,7 @@ namespace Hoa3D
             elevations[9] = -HOA_PI2;
             azimuths[9] = azimuths[8] = 0;
         }
-        else if(numberOfPoints == 11) // Not regular : Hexahedron or cube with 1 at PI/2 elevation and 1 at -Pi/2 elevation
+        else if(numberOfPoints == 11) // Not regular : Hexahedron or cube with 1 at π/2 elevation and 1 at -π/2 elevation
         {
             azimuths[0] = azimuths[4] = HOA_PI4;
             azimuths[1] = azimuths[5] = HOA_PI4 + HOA_PI2;

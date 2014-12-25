@@ -58,7 +58,7 @@ namespace Hoa3D
         tcos_x = cos_x = m_cos_yaw;
         sin_x = m_sin_yaw;
         // Perform Yaw Rotation
-        for(unsigned int i = 1; i <= m_order; i++)
+        for(unsigned int i = 1; i <= m_order_of_decomposition; i++)
 		{
             for(unsigned int j = (i + 1) * (i + 1) - 1, k = i; j < m_number_of_harmonics; k++, j += k * 2 + 1)
             {
@@ -77,7 +77,7 @@ namespace Hoa3D
         int numberOfHarmonics;
         
         outputs[0] = inputs[0];
-        for(unsigned int i = 1, j = 1; i < m_order; i++)
+        for(unsigned int i = 1, j = 1; i < m_order_of_decomposition; i++)
         {
             numberOfHarmonics = i * 2 + 1;
             

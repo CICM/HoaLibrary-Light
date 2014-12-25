@@ -16,17 +16,17 @@ namespace Hoa2D
         double*         m_harmonics_vector;
         Encoder*        m_encoder;
         m_harmonics_vector          = new double[m_number_of_harmonics];
-        m_encoder                   = new Encoder(m_order);
+        m_encoder                   = new Encoder(m_order_of_decomposition);
         for(unsigned int i = 0; i < m_number_of_channels; i++)
         {
             m_channels_azimuth[i] = (double)i / (double)m_number_of_channels * HOA_2PI;
             m_encoder->setAzimuth(m_channels_azimuth[i]);
             m_encoder->process(1., m_harmonics_vector);
             
-            m_projector_matrix_float[i * m_number_of_harmonics] = m_projector_matrix_double[i * m_number_of_harmonics] = 0.5 / (double)(m_order + 1.);
+            m_projector_matrix_float[i * m_number_of_harmonics] = m_projector_matrix_double[i * m_number_of_harmonics] = 0.5 / (double)(m_order_of_decomposition + 1.);
             for(unsigned int j = 1; j < m_number_of_harmonics; j++)
             {
-                m_projector_matrix_float[i * m_number_of_harmonics + j] = m_projector_matrix_double[i * m_number_of_harmonics + j] = m_harmonics_vector[j] / (double)(m_order + 1.);
+                m_projector_matrix_float[i * m_number_of_harmonics + j] = m_projector_matrix_double[i * m_number_of_harmonics + j] = m_harmonics_vector[j] / (double)(m_order_of_decomposition + 1.);
             }
         }
         delete [] m_harmonics_vector;

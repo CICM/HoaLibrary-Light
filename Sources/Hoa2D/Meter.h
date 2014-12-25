@@ -41,7 +41,7 @@ namespace Hoa2D
         ~Meter();
 
         //! Set the azimuth of a given channel.
-        /** Set the azimuth of a given channel. The azimuth is in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field.
+        /** Set the azimuth of a given channel. The azimuth is in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field.
          *
          * @param     index		The index of the channel.
          * @param     azimuth		The azimuth.
@@ -50,7 +50,7 @@ namespace Hoa2D
 		void setChannelAzimuth(unsigned int index, double azimuth);
 		
 		//! Set the azimtuh of all the channels.
-        /** Set the azimtuh of all the channels. The azimuths are in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
+        /** Set the azimtuh of all the channels. The azimuths are in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
          
 		 @param     azimuths		The azimuths array.
          

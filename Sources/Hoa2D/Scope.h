@@ -7,8 +7,8 @@
 #ifndef DEF_HOA_2D_SCOPE
 #define DEF_HOA_2D_SCOPE
 
-#include "Ambisonic.h"
-#include "Decoder.h"
+#include "Ambisonic_2D.h"
+#include "Decoder_2D.h"
 
 namespace Hoa2D
 {

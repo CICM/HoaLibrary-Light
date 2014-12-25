@@ -18,7 +18,7 @@ namespace Hoa3D
             m_wide_matrix[j]    = new double[m_number_of_harmonics];
         }
         
-        double weight_order = log((double)(m_order + 1) * (m_order + 1));
+        double weight_order = log((double)(m_order_of_decomposition + 1) * (m_order_of_decomposition + 1));
         
         for(int j = 0; j < NUMBEROFLINEARPOINTS; j++)
         {

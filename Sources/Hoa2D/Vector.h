@@ -58,7 +58,7 @@ namespace Hoa2D
         }
         
         //! Set the azimtuh of a channel.
-        /** Set the azimtuh of a channel. The azimtuh is in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The maximum index must be the number of channel - 1.
+        /** Set the azimtuh of a channel. The azimtuh is in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The maximum index must be the number of channel - 1.
          
             @param     index		The index of the channel.
             @param     azimuth		The azimuth.
@@ -66,7 +66,7 @@ namespace Hoa2D
 		void setChannelAzimuth(unsigned int index, double azimuth);
 		
 		//! Set the azimtuh of all the channels.
-        /** Set the azimtuh of all the channels. The azimuths are in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
+        /** Set the azimtuh of all the channels. The azimuths are in radian between 0 and 2 π, O is the front of the soundfield and π is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
          
 		 @param     azimuths		The azimuths array.
          

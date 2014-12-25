@@ -7,9 +7,9 @@
 #ifndef DEF_HOA_2D_MAP
 #define DEF_HOA_2D_MAP
 
-#include "Ambisonic.h"
-#include "Encoder.h"
-#include "Wider.h"
+#include "Ambisonic_2D.h"
+#include "Encoder_2D.h"
+#include "Wider_2D.h"
 
 namespace Hoa2D
 {
@@ -51,7 +51,7 @@ namespace Hoa2D
         }
         
         //! This method set the angle of azimuth.
-        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 Pi to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is Pi/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
+        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
          @param     azimuth	The azimuth.
          */
         inline void setAzimuth(const double azimuth) noexcept
@@ -71,7 +71,7 @@ namespace Hoa2D
             m_radius = clip_min(radius, 0.);
             if(m_radius < 1.)
             {
-                m_factor = clip_minmax(m_radius, 0., 1.) * HOA_PI;
+                m_factor = (1. - clip_minmax(radius, 0., 1.)) * HOA_PI;;
                 m_gain   = (std::sin(clip_minmax((m_factor - 0.5f) * HOA_PI, -HOA_PI2, HOA_PI2)) + 1.) * 0.5;
             }
             else
@@ -131,10 +131,10 @@ namespace Hoa2D
                 float cos_x = m_cosx;
                 float sin_x = m_sinx;
                 float tcos_x = cos_x;
-                outputs[0] = input * (m_gain * m_order + 1.f);
+                outputs[0] = input * (m_gain * m_order_of_decomposition + 1.f);
                 for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
                 {
-                    const float factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order - j) + 1.f);
+                    const float factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
                     outputs[i-1]    = input * sin_x * factor;
                     outputs[i]      = input * cos_x * factor;
                     cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
@@ -163,10 +163,10 @@ namespace Hoa2D
                 double cos_x = m_cosx;
                 double sin_x = m_sinx;
                 double tcos_x = cos_x;
-                outputs[0] = input * (m_gain * m_order + 1.f);
+                outputs[0] = input * (m_gain * m_order_of_decomposition + 1.f);
                 for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
                 {
-                    const double factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order - j) + 1.f);
+                    const double factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
                     outputs[i-1]    = input * sin_x * factor;
                     outputs[i]      = input * cos_x * factor;
                     cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
@@ -195,10 +195,10 @@ namespace Hoa2D
                 float cos_x = m_cosx;
                 float sin_x = m_sinx;
                 float tcos_x = cos_x;
-                outputs[0] = input * (m_gain * m_order + 1.f);
+                outputs[0] = input * (m_gain * m_order_of_decomposition + 1.f);
                 for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
                 {
-                    const float factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order - j) + 1.f);
+                    const float factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
                     outputs[i-1]    += input * sin_x * factor;
                     outputs[i]      += input * cos_x * factor;
                     cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
@@ -220,10 +220,10 @@ namespace Hoa2D
                 double cos_x = m_cosx;
                 double sin_x = m_sinx;
                 double tcos_x = cos_x;
-                outputs[0] = input * (m_gain * m_order + 1.f);
+                outputs[0] = input * (m_gain * m_order_of_decomposition + 1.f);
                 for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
                 {
-                    const double factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order - j) + 1.f);
+                    const double factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
                     outputs[i-1]    += input * sin_x * factor;
                     outputs[i]      += input * cos_x * factor;
                     cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
@@ -284,7 +284,7 @@ namespace Hoa2D
         }
         
         //! This method set the angle of azimuth of a source.
-        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 Pi to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is Pi/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield. The index must be between 0 and the number of sources - 1.
+        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield. The index must be between 0 and the number of sources - 1.
          
             @param     index	The index of the source.
             @param     azimuth	The azimuth.

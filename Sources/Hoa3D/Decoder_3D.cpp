@@ -13,7 +13,7 @@ namespace Hoa3D
         m_harmonics_vector          = new double[m_number_of_harmonics];
         m_decoder_matrix            = new double[m_number_of_channels * m_number_of_harmonics];
         m_decoder_matrix_float      = new float[m_number_of_channels * m_number_of_harmonics];
-        m_encoder                   = new Encoder(m_order);
+        m_encoder                   = new Encoder(m_order_of_decomposition);
         setChannelsPosition(m_channels_azimuth, m_channels_elevation);
 	}
 	
@@ -23,7 +23,7 @@ namespace Hoa3D
         
         m_encoder->setAzimuth(m_channels_rotated_azimuth[index]);
         m_encoder->setElevation(m_channels_rotated_elevation[index]);
-        m_encoder->process(12.5 / (double)((m_order+1.)*(m_order+1.)), m_harmonics_vector);
+        m_encoder->process(12.5 / (double)((m_order_of_decomposition+1.)*(m_order_of_decomposition+1.)), m_harmonics_vector);
         
         for(unsigned int j = 0; j < m_number_of_harmonics; j++)
         {
@@ -69,14 +69,14 @@ namespace Hoa3D
     {
         m_channels_azimuth[0] = HOA_PI2;
         m_channels_azimuth[1] = HOA_PI + HOA_PI2;
-        if(m_order == 1)
-            m_decoder = new DecoderRegular(m_order, 8);
-        else if(m_order == 2)
-            m_decoder = new DecoderRegular(m_order, 12);
-        else if(m_order == 3)
-            m_decoder = new DecoderRegular(m_order, 20);
+        if(m_order_of_decomposition == 1)
+            m_decoder = new DecoderRegular(m_order_of_decomposition, 8);
+        else if(m_order_of_decomposition == 2)
+            m_decoder = new DecoderRegular(m_order_of_decomposition, 12);
+        else if(m_order_of_decomposition == 3)
+            m_decoder = new DecoderRegular(m_order_of_decomposition, 20);
         else
-            m_decoder = new DecoderRegular(m_order, (m_order + 1) * (m_order + 1));
+            m_decoder = new DecoderRegular(m_order_of_decomposition, (m_order_of_decomposition + 1) * (m_order_of_decomposition + 1));
         
         for(int i = 0; i < m_decoder->getNumberOfChannels(); i++)
         {
@@ -156,15 +156,15 @@ namespace Hoa3D
     DecoderMulti::DecoderMulti(unsigned int order) : Ambisonic(order)
     {
         m_mode = Regular;
-        m_decoder_regular   = new DecoderRegular(m_order, (m_order + 1) * (m_order + 1));
-        m_decoder_binaural  = new DecoderBinaural(m_order);
+        m_decoder_regular   = new DecoderRegular(m_order_of_decomposition, (m_order_of_decomposition + 1) * (m_order_of_decomposition + 1));
+        m_decoder_binaural  = new DecoderBinaural(m_order_of_decomposition);
     }
 	
 	DecoderMulti::DecoderMulti(unsigned int order, unsigned int numberOfChannels) : Ambisonic(order)
     {
         m_mode = Regular;
-        m_decoder_regular   = new DecoderRegular(m_order, numberOfChannels);
-        m_decoder_binaural  = new DecoderBinaural(m_order);
+        m_decoder_regular   = new DecoderRegular(m_order_of_decomposition, numberOfChannels);
+        m_decoder_binaural  = new DecoderBinaural(m_order_of_decomposition);
     }
     
     void DecoderMulti::setDecodingMode(Mode mode)
@@ -179,7 +179,7 @@ namespace Hoa3D
             if(m_mode == Regular)
             {
                 delete m_decoder_regular;
-                m_decoder_regular = new DecoderRegular(m_order, numberOfChannels);
+                m_decoder_regular = new DecoderRegular(m_order_of_decomposition, numberOfChannels);
             }
         }
     }

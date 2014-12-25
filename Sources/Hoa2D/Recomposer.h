@@ -7,10 +7,10 @@
 #ifndef DEF_HOA_2D_RECOMPOSER
 #define DEF_HOA_2D_RECOMPOSER
 
-#include "Ambisonic.h"
+#include "Ambisonic_2D.h"
 #include "Planewaves.h"
-#include "Encoder.h"
-#include "Wider.h"
+#include "Encoder_2D.h"
+#include "Wider_2D.h"
 
 namespace Hoa2D
 {
@@ -44,7 +44,7 @@ namespace Hoa2D
 		~Recomposer();
         
         //! This method set the angle of azimuth of a channel.
-        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 Pi to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is Pi/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield. The index must be between 0 and the number of channel - 1.
+        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield. The index must be between 0 and the number of channel - 1.
          
             @param     index	The index of the source.
             @param     azimuth	The azimuth.

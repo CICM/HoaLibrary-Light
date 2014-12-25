@@ -198,14 +198,25 @@ namespace Hoa
         {
 			return pow((double)-1.0, (double)m) * pow((double)(1. - x * x), (double)(0.5 * m)) * double_factorial(2. * m - 1);
 		}
+        // Calculus = pow((double)-1.0, (double)m) * pow((double)(1. - x * x), (double)(0.5 * m))
+        // Normalization = val / double_factorial(2. * m - 1)
 		else if(l == m + 1)
         {
 			return x * associated_legendre(m, m, x) * (2 * m + 1);
 		}
+        // Calculus = x * associated_legendre(m, m, x)
+        // Normalization = val / double_factorial(2. * m) * (2 * m + 1);
         else
         {
             return ((double)(2 * l - 1) * x *  associated_legendre(l - 1, m, x) - (double)(l + m - 1.) * associated_legendre(l - 2, m, x)) / (double)(l - m);
+            // (l == m + 2) -> ((2 * (m + 2) - 1) * x * associated_legendre(m + 1, m, x) - (2 * m + 1) * associated_legendre(m, m, x)) / 
         }
+        // Real Calculus
+        // A = (2 * l - 1) * x *  associated_legendre(l - 1, m, x) [ (2 * (l - 1) - 1) * (2 * (l - 1) + 1) ]
+        // B = (l + m - 1.) * associated_legendre(l - 2, m, x) [ (2 * (l - 1) - 1) * (2 * (l - 1) - 1) * (l + m - 1.) ]
+        
+        // Calculus = associated_legendre(l - 1, m, x) - associated_legendre(l - 2, m, x)
+        // Normalization C = val * (l - m);
 	}
 
     //! The legendre normalization
@@ -246,30 +257,6 @@ namespace Hoa
 	 return 1.;
 	 }*/
 
-    //! The azimuth part of the spherical harmonics function
-    /**	The function computes the azimuth coefficient of the spherical harmonic \f$[l, m]\f$ for an angle \f$\phi\f$ in radian :\n
-	 if \f$ m \geq 0\f$
-	 \f[Y_{azimuth}(l, m, \phi) = cos(m \times \phi)\f]
-	 else
-	 \f[Y_{azimuth}(l, m, \phi) = sin(-m \times \phi)\f]
-	 with \f$0 \leq l\f$ and \f$-l \leq m \leq +l\f$
-
-	 @param     l    The band of the spherical harmonic.
-	 @param     m    The argument of the spherical harmonic.
-	 @param     phi  The azimuth.
-	 @return    The function return the azimuth coefficient for phi of the spherical harmonic of band l and argument m.
-
-	 @see    spherical_harmonics_elevation
-	 @see    spherical_harmonics
-     */
-    inline double spherical_harmonics_azimuth(const int l, const int m, const double phi)
-	{
-        if(m >= 0)
-            return cos((double)m * phi);
-        else
-            return sin((double)-m * phi);
-    }
-
     //! The elevation part of the spherical harmonics function
     /**	The function computes the elevation coefficient of the the spherical harmonic \f$[l, m]\f$  for an angle \f$\theta\f$ in radian. It uses the associated Legendre polynomial and applies the Legendre normalization :
 	 \f[Y_{elevation}(l, m, \theta) = N(l, m) \times P(l, m, cos(/theta)\f]
@@ -288,24 +275,6 @@ namespace Hoa
     inline double spherical_harmonics_elevation(const int l, const int m, const double theta)
 	{
         return associated_legendre(l, m, cos(theta)) * legendre_normalization(l, m);
-    }
-
-    //! The spherical harmonics function
-    /** The function computes the spherical harmonics coefficient for the angles \f$\phi\f$ and \f$\theta\f$ in radian.
-	 \f[Y(l, m, \phi, \theta) = Y_{azimuth}(l, m, \phi) \times Y_{elevation}(l, m, \theta)\f]
-
-	 @param     l        The band of the spherical harmonic.
-	 @param     m        The argument of the spherical harmonic.
-	 @param     phi      The azimuth.
-	 @param     theta    The elevation.
-	 @return    The function return the coefficient for phi and theta for the spherical harmonics of band l and argument m.
-
-	 @see    spherical_harmonics_azimuth
-	 @see    spherical_harmonics_elevation
-     */
-    inline double spherical_harmonics(const int l, const int m, const double phi, const double theta)
-	{
-        return spherical_harmonics_elevation(l, m, theta) * spherical_harmonics_azimuth(l, m, phi);
     }
 
     //! The wrapping function
