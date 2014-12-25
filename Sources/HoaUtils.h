@@ -284,7 +284,7 @@ namespace Hoa
             m_lenght_back   = 0.4;
             m_height        = 0.4;
             azimuth = wrap_twopi(azimuth);
-            elevation = clip_minmax(elevation, -HOA_PI2, HOA_PI2);
+            elevation = clip(elevation, -HOA_PI2, HOA_PI2);
             
             float gain1 = (fabs(cos((azimuth - HOA_PI2) * 0.5)) + 0.1) / 1.1;
             float gain2 = cos(fabs(elevation) * 0.5);

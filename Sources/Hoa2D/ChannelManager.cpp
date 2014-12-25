@@ -23,7 +23,7 @@ namespace Hoa2D
 	
 	void ChannelManager::setNumberOfChannels(unsigned int number_of_channels)
 	{
-		number_of_channels = clip_min(number_of_channels, 3);
+		number_of_channels = max(number_of_channels, (unsigned int)3);
 		
 		if(m_channels.size() > number_of_channels)
 		{
@@ -173,7 +173,7 @@ namespace Hoa2D
 	
 	void ChannelManager::setFisheyeStepWithDelta(const int index, double delta)
 	{
-		m_fisheyeStep = clip_minmax(m_fisheyeStep + delta, 0, 1);
+		m_fisheyeStep = clip(m_fisheyeStep + delta, 0., 1.);
 		setFisheyeStepDirect(index, m_fisheyeStep);
 	}
 	
@@ -182,7 +182,7 @@ namespace Hoa2D
 		if (!isInside(index, -2, m_channels.size()))
 			return;
 				
-		m_fisheyeStep = clip_minmax(fisheyeStep, 0, 1);
+		m_fisheyeStep = clip(fisheyeStep, 0., 1.);
 		
 		if (index == -2)
 		{

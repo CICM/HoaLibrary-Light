@@ -199,7 +199,7 @@ namespace Hoa3D
             if(m_channels_peaks[index] == 0.)
                 return -91;
             else
-                return clip_min(20. * log10(m_channels_peaks[index]), -90.);
+                return max(20. * log10(m_channels_peaks[index]), -90.);
         }
        
         //! This method performs the widening with single precision.

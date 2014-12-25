@@ -48,7 +48,7 @@ namespace HoaCommon
 
 	void SourcesManager::setZoom(double aZoom)
 	{
-		m_zoom = clip_minmax(aZoom, 1. / m_maximum_radius, 1.);
+		m_zoom = clip(aZoom, 1. / m_maximum_radius, 1.);
 	}
 
 	double SourcesManager::getZoom()

@@ -19,7 +19,7 @@ namespace Hoa2D
     {
 	protected:
         
-		unsigned long    m_number_of_channels;
+		unsigned long   m_number_of_channels;
         double*         m_channels_azimuth;
         
         //! Set the azimuth of a channel.

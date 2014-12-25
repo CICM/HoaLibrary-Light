@@ -55,7 +55,7 @@ namespace Hoa3D
         else
         {
             m_gains[index] = 1.;
-            m_widers[index]->setWideningValue(Hoa::clip_min(radius, 0.));
+            m_widers[index]->setWideningValue(max(radius, 0.));
         }
     }
     

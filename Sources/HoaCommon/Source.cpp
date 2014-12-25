@@ -51,7 +51,7 @@ namespace HoaCommon
 			if(radius < -m_maximum_radius || radius > m_maximum_radius)
 				return;
 		}
-		m_radius = clip_min(radius, 0.);
+		m_radius = max(radius, 0.);
 	}
 	
 	void Source::setAzimuth(double azimuth)
@@ -116,10 +116,10 @@ namespace HoaCommon
 	
 	void Source::setColor(double red, double green, double blue, double alpha)
 	{
-		m_color[0]	=  clip_minmax(red, 0., 1.);
-		m_color[1]	=  clip_minmax(green, 0., 1.);
-		m_color[2]	=  clip_minmax(blue, 0., 1.);
-		m_color[3]	=  clip_minmax(alpha, 0., 1.);
+		m_color[0]	=  clip(red, 0., 1.);
+		m_color[1]	=  clip(green, 0., 1.);
+		m_color[2]	=  clip(blue, 0., 1.);
+		m_color[3]	=  clip(alpha, 0., 1.);
 	}
 	
 	void Source::setDescription(std::string description)

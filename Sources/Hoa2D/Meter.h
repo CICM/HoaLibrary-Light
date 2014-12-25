@@ -7,7 +7,7 @@
 #ifndef DEF_HOA_2D_Meter
 #define DEF_HOA_2D_Meter
 
-#include "Planewaves.h"
+#include "Planewaves_2D.h"
 #include "Vector.h"
 
 namespace Hoa2D

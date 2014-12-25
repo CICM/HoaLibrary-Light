@@ -7,75 +7,10 @@
 #ifndef DEF_HOA_2D_DECODER
 #define DEF_HOA_2D_DECODER
 
-#include "Ambisonic_2D.h"
-#include "Planewaves.h"
-#include "Encoder_2D.h"
-#include "Rotate_2D.h"
+#include "DecoderRegular_2D.h"
 
 namespace Hoa2D
 {
-    //! The ambisonic regular decoder.
-    /** The regular decoder should be used to decode an ambisonic sound field for a set a channels at equal distances on a circle depending on a decomposition order. The number of channels must be at least the number of harmonics. Note that you can only change the offset of the channels.
-     */
-    class DecoderRegular : public Encoder, public Planewaves
-    {
-    private:
-        double          m_offset;
-        double*         m_decoder_matrix_double;
-        float*          m_decoder_matrix_float;
-    public:
-        
-        //! The regular decoder constructor.
-        /**	The regular decoder constructor allocates and initialize the member values to the decoding matrix depending of a decomposition order and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
-         
-            @param     order				The order
-            @param     numberOfChannels     The number of channels.
-         */
-		DecoderRegular(unsigned int order, unsigned int numberOfChannels);
-		
-        //! The regular decoder destructor.
-        /**	The regular decoder destructor free the memory.
-         */
-		~DecoderRegular();
-        
-        //! Set the offset of the channels.
-		/**	Set the azimuth offset of the channels in radian.
-         
-            @param     offset		An azimuth value.
-         */
-		void setChannelsOffset(double offset);
-        
-        //! Get the offset of the channels.
-        /**	Retreive the azimuth offset of the channels in radian.
-         
-            @return    The offset of the channels.
-         */
-		double getChannelsOffset() const
-        {
-            return m_offset;
-        }
-				
-        //! This method performs the regular decoding with single precision.
-		/**	You should use this method for in-place or not-in-place processing and performs the regular decoding sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
-         
-            @param     input	The input sample.
-            @param     outputs The output array that contains samples destinated to channels.
-         */
-		void process(const float* input, float* output);
-		
-        //! This method performs the regular decoding with double precision.
-		/**	You should use this method for in-place or not-in-place processing and performs the regular decoding sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
-         
-            @param     input	The input sample.
-            @param     outputs The output array that contains samples destinated to channels.
-         */
-		void process(const double* input, double* output);
-    };
-    
-    
-    
-    
-    
     //! The ambisonic irregular decoder.
     /** The irregular decoder should be used to decode an ambisonic sound field for a set a channels not equally spaced on a  circle, like stereo or 5.1, depending on a decomposition order. The number of channels must be at least 1.
      */
@@ -86,7 +21,7 @@ namespace Hoa2D
         double*         m_decoder_matrix;
         float*          m_decoder_matrix_float;
 		double*         m_harmonics_vector;
-        Encoder*        m_encoder;
+        Encoder<float>* m_encoder;
         double          m_offset;
         unsigned int    m_number_of_virtual_channels;
         unsigned int*   m_nearest_channel[2];

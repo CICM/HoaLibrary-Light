@@ -8,7 +8,7 @@
 #define DEF_HOA_2D_PROJECTOR
 
 #include "Ambisonic_2D.h"
-#include "Planewaves.h"
+#include "Planewaves_2D.h"
 #include "Encoder_2D.h"
 
 namespace Hoa2D

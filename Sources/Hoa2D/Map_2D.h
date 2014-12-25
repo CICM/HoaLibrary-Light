@@ -15,18 +15,18 @@ namespace Hoa2D
 {
     //! The ambisonic encoder with distance compensation.
     /** The map is a Encoder with distance compensation. It uses intances of the Wider class to decrease the directionnality of sources by simulating fractionnal orders when the sources are inside the ambisonic circle and a simple diminution of the gain when the sources get away from the ambisonic circle.
-     
      @see Encoder
+     @see Wider
      */
-    class MapUnique : public Ambisonic
+    template <typename Type> class MapUnique : public Ambisonic
     {
     private:
-        double  m_azimuth;
-        double  m_cosx;
-        double  m_sinx;
-        double  m_factor;
-        double  m_gain;
-        double  m_radius;
+        Type    m_azimuth;
+        Type    m_cosx;
+        Type    m_sinx;
+        Type    m_factor;
+        Type    m_gain;
+        Type    m_radius;
         bool    m_muted;
         
     public:
@@ -54,7 +54,7 @@ namespace Hoa2D
         /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
          @param     azimuth	The azimuth.
          */
-        inline void setAzimuth(const double azimuth) noexcept
+        inline void setAzimuth(const Type azimuth) noexcept
         {
             m_azimuth = wrap_twopi(azimuth);
             m_cosx    = std::cos(m_azimuth);
@@ -66,18 +66,18 @@ namespace Hoa2D
          @param     radius   The radius.
          @see       setAzimuth()
          */
-        inline void setRadius(const double radius) noexcept
+        inline void setRadius(const Type radius) noexcept
         {
-            m_radius = clip_min(radius, 0.);
+            m_radius = max(radius, (Type)0.);
             if(m_radius < 1.)
             {
-                m_factor = (1. - clip_minmax(radius, 0., 1.)) * HOA_PI;;
-                m_gain   = (std::sin(clip_minmax((m_factor - 0.5f) * HOA_PI, -HOA_PI2, HOA_PI2)) + 1.) * 0.5;
+                m_factor = (1. - clip(radius, 0., 1.)) * HOA_PI;;
+                m_gain   = (std::sin(clip((m_factor - 0.5f) * HOA_PI, -HOA_PI2, HOA_PI2)) + 1.) * 0.5;
             }
             else
             {
                 m_factor = HOA_PI;
-                m_gain   = (std::sin(clip_minmax((m_factor - 0.5f) * HOA_PI, -HOA_PI2, HOA_PI2)) + 1.) * 0.5 / radius;
+                m_gain   = (std::sin(clip((m_factor - 0.5f) * HOA_PI, -HOA_PI2, HOA_PI2)) + 1.) * 0.5 / radius;
             }
         }
         
@@ -94,7 +94,7 @@ namespace Hoa2D
         /** The method returns the last angle of encoding between 0 and 2π.
          @return     The azimuth.
          */
-        inline double getAzimuth() const noexcept
+        inline Type getAzimuth() const noexcept
         {
             return m_azimuth;
         }
@@ -104,7 +104,7 @@ namespace Hoa2D
          @param     index	The index of the source.
          @return The radius of the source if the source exists, otherwise the function generates an error.
          */
-        inline double getRadius() const noexcept
+        inline Type getRadius() const noexcept
         {
             return m_radius;
         }
@@ -112,7 +112,6 @@ namespace Hoa2D
 		//! This method retrieve the mute or unmute state of a source.
         /**	Get the Mute state of a source.
          @return    The mute state of the source.
-         @see       setMute()
          */
         inline bool getMute() const noexcept
         {
@@ -124,17 +123,17 @@ namespace Hoa2D
          @param     input  The input.
          @param     outputs The outputs array.
          */
-        inline void process(const float input, float* outputs) const noexcept
+        inline void process(const Type input, Type* outputs) const noexcept
         {
             if(!m_muted)
             {
-                float cos_x = m_cosx;
-                float sin_x = m_sinx;
-                float tcos_x = cos_x;
+                Type cos_x = m_cosx;
+                Type sin_x = m_sinx;
+                Type tcos_x = cos_x;
                 outputs[0] = input * (m_gain * m_order_of_decomposition + 1.f);
                 for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
                 {
-                    const float factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
+                    const Type factor  = (std::cos(min(m_factor * j, (Type)HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
                     outputs[i-1]    = input * sin_x * factor;
                     outputs[i]      = input * cos_x * factor;
                     cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
@@ -151,79 +150,22 @@ namespace Hoa2D
             }
         }
         
-        //! This method performs the encoding with distance compensation with double precision.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding with distance compensation sample by sample. The input contains the samples of the source. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         @param     input  The input.
-         @param     outputs The outputs array.
-         */
-        inline void process(const double input, double* outputs) const noexcept
-        {
-            if(!m_muted)
-            {
-                double cos_x = m_cosx;
-                double sin_x = m_sinx;
-                double tcos_x = cos_x;
-                outputs[0] = input * (m_gain * m_order_of_decomposition + 1.f);
-                for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
-                {
-                    const double factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
-                    outputs[i-1]    = input * sin_x * factor;
-                    outputs[i]      = input * cos_x * factor;
-                    cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
-                    sin_x = tcos_x * m_sinx + sin_x * m_cosx; // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
-                    tcos_x = cos_x;
-                }
-            }
-            else
-            {
-                for(unsigned long i = 0; i < m_number_of_harmonics; i++)
-                {
-                    outputs[i] = 0.;
-                }
-            }
-        }
-        
         //! This method performs the encoding with distance compensation with single precision.
         /**	You should use this method for in-place or not-in-place processing and performs the encoding with distance compensation sample by sample. The input contains the samples of the source. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     input  The input.
          @param     outputs The outputs array.
          */
-        inline void processAdd(const float input, float* outputs) noexcept
+        inline void processAdd(const Type input, Type* outputs) noexcept
         {
             if(!m_muted)
             {
-                float cos_x = m_cosx;
-                float sin_x = m_sinx;
-                float tcos_x = cos_x;
+                Type cos_x = m_cosx;
+                Type sin_x = m_sinx;
+                Type tcos_x = cos_x;
                 outputs[0] = input * (m_gain * m_order_of_decomposition + 1.f);
                 for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
                 {
-                    const float factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
-                    outputs[i-1]    += input * sin_x * factor;
-                    outputs[i]      += input * cos_x * factor;
-                    cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
-                    sin_x = tcos_x * m_sinx + sin_x * m_cosx; // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
-                    tcos_x = cos_x;
-                }
-            }
-        }
-        
-        //! This method performs the encoding with distance compensation with double precision.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding with distance compensation sample by sample. The input contains the samples of the source. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         @param     input  The input.
-         @param     outputs The outputs array.
-         */
-        inline void processAdd(const double input, double* outputs) noexcept
-        {
-            if(!m_muted)
-            {
-                double cos_x = m_cosx;
-                double sin_x = m_sinx;
-                double tcos_x = cos_x;
-                outputs[0] = input * (m_gain * m_order_of_decomposition + 1.f);
-                for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
-                {
-                    const double factor  = (std::cos(clip_max(m_factor * j, HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
+                    const Type factor  = (std::cos(min(m_factor * j, (Type)HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
                     outputs[i-1]    += input * sin_x * factor;
                     outputs[i]      += input * cos_x * factor;
                     cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
@@ -239,11 +181,11 @@ namespace Hoa2D
      
         @see Encoder
      */
-    class Map : public Ambisonic
+    template <typename Type> class Map : public Ambisonic
     {
     private:
         const unsigned long m_number_of_sources;
-        vector<MapUnique*>  m_maps;
+        vector<MapUnique<Type>*>  m_maps;
     public:
         
         //! The map constructor.
@@ -257,7 +199,7 @@ namespace Hoa2D
         {
             for(unsigned long i = 0; i < m_number_of_sources; i++)
             {
-                m_maps.push_back(new MapUnique(order));
+                m_maps.push_back(new MapUnique<Type>(order));
             }
         }
         
@@ -290,7 +232,7 @@ namespace Hoa2D
             @param     azimuth	The azimuth.
             @see       setRadius()
          */
-        inline void setAzimuth(const unsigned long index, const double azimuth) noexcept
+        inline void setAzimuth(const unsigned long index, const Type azimuth) noexcept
         {
             m_maps[index]->setAzimuth(azimuth);
         }
@@ -302,7 +244,7 @@ namespace Hoa2D
             @param     radius   The radius.
             @see       setAzimuth()
          */
-        inline void setRadius(const unsigned long index, const double radius) noexcept
+        inline void setRadius(const unsigned long index, const Type radius) noexcept
         {
             m_maps[index]->setRadius(radius);
         }
@@ -324,7 +266,7 @@ namespace Hoa2D
             @param     index	The index of the source.
             @return The azimuth of the source if the source exists, otherwise the function generates an error.
          */
-        inline double getAzimuth(const unsigned long index) const noexcept
+        inline Type getAzimuth(const unsigned long index) const noexcept
         {
             return m_maps[index]->getAzimuth();
         }
@@ -335,7 +277,7 @@ namespace Hoa2D
             @param     index	The index of the source.
             @return The radius of the source if the source exists, otherwise the function generates an error.
          */
-        inline double getRadius(const unsigned long index) const noexcept
+        inline Type getRadius(const unsigned long index) const noexcept
         {
             return m_maps[index]->getRadius();
         }
@@ -353,28 +295,12 @@ namespace Hoa2D
         }
 		
         
-        //! This method performs the encoding with distance compensation with single precision.
+        //! This method performs the encoding with distance compensation.
         /**	You should use this method for in-place or not-in-place processing and performs the encoding with distance compensation sample by sample. The inputs array contains the samples of the sources and the minimum size sould be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         
          @param     inputs  The inputs array.
          @param     outputs The outputs array.
          */
-        inline void process(const float* inputs, float* outputs) noexcept
-        {
-            m_maps[0]->process(inputs[0], outputs);
-            for(unsigned long i = 1; i < m_number_of_sources; i++)
-            {
-                m_maps[i]->processAdd(inputs[i], outputs);
-            }
-        }
-        
-        //! This method performs the encoding with distance compensation with double precision.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding with distance compensation sample by sample. The inputs array contains the samples of the sources and the minimum size sould be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         
-            @param     inputs  The inputs array.
-            @param     outputs The outputs array.
-         */
-        inline void process(const double* inputs, double* outputs) noexcept
+        inline void process(const Type* inputs, Type* outputs) noexcept
         {
             m_maps[0]->process(inputs[0], outputs);
             for(unsigned long i = 1; i < m_number_of_sources; i++)

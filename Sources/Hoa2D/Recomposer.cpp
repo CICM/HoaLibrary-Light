@@ -14,12 +14,12 @@ namespace Hoa2D
         m_harmonics_double          = new double[m_number_of_harmonics];
         m_recomposer_matrix_float   = new float[m_number_of_harmonics * m_number_of_channels];
         m_recomposer_matrix_double  = new double[m_number_of_harmonics * m_number_of_channels];
-        m_encoders                  = new Encoder*[m_number_of_channels];
-        m_widers                    = new Wider*[m_number_of_channels];
+        m_encoders                  = new Encoder<float>*[m_number_of_channels];
+        m_widers                    = new Wider<float>*[m_number_of_channels];
         for(unsigned int i = 0; i < m_number_of_channels; i++)
         {
-            m_encoders[i]   = new Encoder(m_order_of_decomposition);
-            m_widers[i]     = new Wider(m_order_of_decomposition);
+            m_encoders[i]   = new Encoder<float>(m_order_of_decomposition);
+            m_widers[i]     = new Wider<float>(m_order_of_decomposition);
             m_encoders[i]->setAzimuth((double)i / (double)m_number_of_channels * HOA_2PI);
             m_widers[i]->setWideningValue(1.);
         }
@@ -27,7 +27,7 @@ namespace Hoa2D
         for(unsigned int i = 0; i < m_number_of_channels; i++)
         {
             m_encoders[0]->setAzimuth(m_channels_azimuth[i]);
-            m_encoders[0]->process(1., m_harmonics_double);
+            //m_encoders[0]->process(1., m_harmonics_double);
             for(unsigned int j = 0; j < m_number_of_harmonics; j++)
             {
                 m_recomposer_matrix_float[j * m_number_of_channels + i] = m_recomposer_matrix_double[j * m_number_of_channels + i] = m_harmonics_double[j];
@@ -49,7 +49,7 @@ namespace Hoa2D
     
     void Recomposer::setFisheye(const double fisheye)
     {
-        double factor = 1. - clip_minmax(fisheye, 0., 1.);
+        double factor = 1. - clip(fisheye, 0., 1.);
         for(unsigned int i = 0; i < m_number_of_channels; i++)
         {
             double azimuth = (double)i / (double)m_number_of_channels * HOA_2PI;
@@ -83,10 +83,10 @@ namespace Hoa2D
 	
 	void Recomposer::processFisheye(const double* inputs, double* outputs)
 	{
-		m_encoders[0]->process(inputs[0], outputs);
+		//m_encoders[0]->process(inputs[0], outputs);
         for(unsigned int i = 1; i < m_number_of_channels; i++)
         {
-            m_encoders[i]->process(inputs[i], m_harmonics_double);
+            //m_encoders[i]->process(inputs[i], m_harmonics_double);
             cblas_daxpy(m_number_of_harmonics, 1., m_harmonics_double, 1, outputs, 1);
         }
 	}
@@ -105,12 +105,12 @@ namespace Hoa2D
 	
 	void Recomposer::processFree(const double* inputs, double* outputs)
 	{
-		m_encoders[0]->process(inputs[0], m_harmonics_double);
-        m_widers[0]->process(m_harmonics_double, outputs);
+		//m_encoders[0]->process(inputs[0], m_harmonics_double);
+        //m_widers[0]->process(m_harmonics_double, outputs);
         for(unsigned int i = 1; i < m_number_of_channels; i++)
         {
-            m_encoders[i]->process(inputs[i], m_harmonics_double);
-            m_widers[i]->process(m_harmonics_double, m_harmonics_double);
+            //m_encoders[i]->process(inputs[i], m_harmonics_double);
+            //m_widers[i]->process(m_harmonics_double, m_harmonics_double);
             cblas_daxpy(m_number_of_harmonics, 1., m_harmonics_double, 1, outputs, 1);
         }
 	}

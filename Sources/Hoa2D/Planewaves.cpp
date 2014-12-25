@@ -4,7 +4,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#include "Planewaves.h"
+#include "Planewaves_2D.h"
 
 namespace Hoa2D
 {

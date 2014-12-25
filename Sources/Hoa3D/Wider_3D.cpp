@@ -26,10 +26,10 @@ namespace Hoa3D
         }
         for(unsigned int i = 1; i < m_number_of_harmonics; i++)
         {
-            double minus =  clip_min(log((double)getHarmonicDegree(i)), 0.);
+            double minus =  max(log((double)getHarmonicDegree(i)), 0.);
             minus = -minus;
             
-            double dot	= clip_min(log((double)getHarmonicDegree(i) + 1.), 0.);
+            double dot	= max(log((double)getHarmonicDegree(i) + 1.), 0.);
             dot += minus;
             dot  = 1. / dot;
             
@@ -38,7 +38,7 @@ namespace Hoa3D
                 double weight = (1. - ((double)j / (double)(NUMBEROFLINEARPOINTS-1))) * weight_order + 1.;
                 double scale = ((double)j / (double)(NUMBEROFLINEARPOINTS-1)) * weight_order;
                 double new_weight = (minus + scale) * dot;
-                new_weight = clip_minmax(new_weight, 0., 1.);
+                new_weight = clip(new_weight, 0., 1.);
                 m_wide_matrix[j][i] = new_weight * weight;
             }
         }
@@ -46,7 +46,7 @@ namespace Hoa3D
     
     void Wider::setWideningValue(const double value)
     {
-         m_wide = clip_minmax(value, 0., 1.) * (double)(NUMBEROFLINEARPOINTS - 1);
+         m_wide = clip(value, 0., 1.) * (double)(NUMBEROFLINEARPOINTS - 1);
     }
     
     void Wider::process(const float* inputs, float* outputs)

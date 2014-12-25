@@ -7,7 +7,7 @@
 #ifndef DEF_HOA_3D_VECTOR
 #define DEF_HOA_3D_VECTOR
 
-#include "Planewaves.h"
+#include "Planewaves_2D.h"
 
 namespace Hoa2D
 {

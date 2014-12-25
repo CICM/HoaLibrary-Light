@@ -48,7 +48,7 @@ namespace Hoa2D
 			
 			void setAzimuth(const double angle) { m_azimuth = wrap_twopi(angle); }
 			void rotateAzimuth(const double deltaAzimuth) { m_azimuth = wrap_twopi(m_azimuth + deltaAzimuth); }
-			void setWideningValue(const double widerValue) { m_wideningValue = clip_minmax(widerValue, 0, 1); }
+			void setWideningValue(const double widerValue) { m_wideningValue = clip(widerValue, 0., 1.); }
 			void setFisheyeStartAzimuth() { m_fisheyeStartAzimuth = m_azimuth; }
 			void setFisheyeStartAzimuth(const double radian) { m_fisheyeStartAzimuth = wrap_twopi(radian); }
 			void setFisheyeEndAngle() { m_fisheyeEndAzimuth = m_azimuth; }

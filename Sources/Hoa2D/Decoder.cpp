@@ -9,49 +9,6 @@
 namespace Hoa2D
 {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Decoder Regular //
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    DecoderRegular::DecoderRegular(unsigned int order, unsigned int numberOfChannels) : Encoder(order), Planewaves(numberOfChannels)
-    {
-        m_decoder_matrix_double     = new double[m_number_of_channels * m_number_of_harmonics];
-        m_decoder_matrix_float      = new float[m_number_of_channels * m_number_of_harmonics];
-        setChannelsOffset(0.);
-    }
-
-    void DecoderRegular::setChannelsOffset(double offset)
-	{
-        m_offset = wrap_twopi(offset);
-        double harmonics[m_number_of_harmonics];
-        for(unsigned int i = 0; i < m_number_of_channels; i++)
-        {
-            Encoder::setAzimuth(m_channels_azimuth[i] + m_offset);
-            Encoder::process(1., harmonics);
-
-            m_decoder_matrix_float[i * m_number_of_harmonics] = m_decoder_matrix_double[i * m_number_of_harmonics] = 0.5 / (double)(m_order_of_decomposition + 1.);
-            for(unsigned long j = 1; j < m_number_of_harmonics; j++)
-            {
-                m_decoder_matrix_float[i * m_number_of_harmonics + j] = m_decoder_matrix_double[i * m_number_of_harmonics + j] = harmonics[j] / (double)(m_order_of_decomposition + 1.);
-            }
-        }
-	}
-
-    void DecoderRegular::process(const float* input, float* output)
-	{
-		cblas_sgemv(CblasRowMajor, CblasNoTrans, m_number_of_channels, m_number_of_harmonics, 1.f, m_decoder_matrix_float, m_number_of_harmonics, (float *)input, 1, 0.f, output, 1);
-	}
-
-	void DecoderRegular::process(const double* input, double* output)
-	{
-		cblas_dgemv(CblasRowMajor, CblasNoTrans, m_number_of_channels, m_number_of_harmonics, 1.f, m_decoder_matrix_double, m_number_of_harmonics, (double *)input, 1, 0.f, output, 1);
-	}
-
-	DecoderRegular::~DecoderRegular()
-	{
-		delete [] m_decoder_matrix_double;
-        delete [] m_decoder_matrix_float;
-	}
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Decoder Irregular //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     DecoderIrregular::DecoderIrregular(unsigned int order, unsigned int numberOfChannels) : Ambisonic(order), Planewaves(numberOfChannels)
@@ -59,7 +16,7 @@ namespace Hoa2D
         m_harmonics_vector          = new double[m_number_of_harmonics];
         m_decoder_matrix            = new double[m_number_of_channels * m_number_of_harmonics];
         m_decoder_matrix_float      = new float[m_number_of_channels * m_number_of_harmonics];
-        m_encoder                   = new Encoder(m_order_of_decomposition);
+        m_encoder                   = new Encoder<float>(m_order_of_decomposition);
         m_nearest_channel[0]        = NULL;
         m_nearest_channel[1]        = NULL;
         
@@ -128,7 +85,7 @@ namespace Hoa2D
             {
                 double angle = (double)i / (double)m_number_of_virtual_channels * HOA_2PI;
                 m_encoder->setAzimuth(angle + m_offset);
-                m_encoder->process(1., m_harmonics_vector);
+                //m_encoder->process(1., m_harmonics_vector);
 
                 m_decoder_matrix[0] += (0.5 / (double)(m_order_of_decomposition + 1.));
                 for(unsigned int j = 1; j < m_number_of_harmonics; j++)
@@ -148,7 +105,7 @@ namespace Hoa2D
                 double factor_index1 = 0, factor_index2 = 0;
                 double angle = (double)i / (double)m_number_of_virtual_channels * HOA_2PI;
                 m_encoder->setAzimuth(angle + m_offset);
-                m_encoder->process(1., m_harmonics_vector);
+                //m_encoder->process(1., m_harmonics_vector);
 
                 m_decoder_matrix[0] += (0.5 / (double)(m_order_of_decomposition + 1.));
                 m_decoder_matrix[m_number_of_harmonics] += (0.5 / (double)(m_order_of_decomposition + 1.));
@@ -214,7 +171,7 @@ namespace Hoa2D
                 
                 // Get the harmonics coefficients for the virtual channel
                 m_encoder->setAzimuth(angle + m_offset);
-                m_encoder->process(1., m_harmonics_vector);
+                //m_encoder->process(1., m_harmonics_vector);
                 
                 m_decoder_matrix[channel_index1 * m_number_of_harmonics] += (0.5 / (double)(m_order_of_decomposition + 1.)) * factor_index1;
                 m_decoder_matrix[channel_index2 * m_number_of_harmonics] += (0.5 / (double)(m_order_of_decomposition + 1.)) * factor_index2;

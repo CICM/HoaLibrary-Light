@@ -8,7 +8,7 @@
 #define DEF_HOA_2D_RECOMPOSER
 
 #include "Ambisonic_2D.h"
-#include "Planewaves.h"
+#include "Planewaves_2D.h"
 #include "Encoder_2D.h"
 #include "Wider_2D.h"
 
@@ -23,8 +23,8 @@ namespace Hoa2D
     private:
 		double*     m_harmonics_double;
         float*      m_harmonics_float;
-        Encoder**   m_encoders;
-        Wider**     m_widers;
+        Encoder<float>**   m_encoders;
+        Wider<float>**     m_widers;
         double*     m_recomposer_matrix_double;
         float*      m_recomposer_matrix_float;
         

@@ -17,6 +17,7 @@
 #include <math.h>
 #include <string>
 #include <assert.h>
+#include <limits.h>
 #include <string.h>
 
 #ifdef _WINDOWS
@@ -36,40 +37,6 @@ static inline double round(double val)
 */
 namespace Hoa
 {
-	//! The minimum function
-    /** This function returns the minimum value between two values
-
-	 @param     v1   The first value.
-	 @param     v2   The low boundary.
-	 @return    The minimum value.
-
-	 @see    max
-     */
-	inline double min(const double v1, const double v2)
-	{
-		if (v1 <= v2)
-			return v1; 
-		else
-			return v2;
-	}
-
-	//! The maximum function
-    /** This function returns the maximum value between two values
-
-	 @param     v1   The first value.
-	 @param     v2   The low boundary.
-	 @return    The maximum value.
-
-	 @see    min
-     */
-	inline double max(const double v1, const double v2)
-	{
-		if (v1 >= v2)
-			return v1;
-		else
-			return v2;
-	}
-
 	//! The clipping function
     /** The function clips a number between boundaries. \n
 	 If \f$x < min\f$, \f$f(x) = min\f$ else if \f$x > max\f$, \f$f(x) = max\f$ else \f$f(x) = x\f$.
@@ -79,55 +46,12 @@ namespace Hoa
 	 @param     max     The high boundary.
 	 @return    The function return the clipped value.
 
-	 @see    clip_min
+	 @see    max
 	 @see    clip_max
      */
-    inline double clip_minmax(const double value, const double min, const double max)
+    template <typename Type, typename Type1, typename Type2> Type clip(const Type& n, const Type1& lower, const Type2& upper)
     {
-        if(value < min)
-            return min;
-        else if(value > max)
-            return max;
-        else
-            return value;
-    }
-
-    //! The minimum clipping function
-    /** The function clips a number at a minimum value. \n
-	 If \f$x < min\f$, \f$f(x) = min\f$ else \f$f(x) = x\f$.
-
-	 @param     value   The value to clip.
-	 @param     low     The low boundary.
-	 @return    The function return the clipped value.
-
-	 @see    clip_minmax
-	 @see    clip_max
-     */
-    inline double clip_min(const double value, const double low)
-    {
-        if(value < low)
-            return low;
-        else
-            return value;
-    }
-
-    //! The maximum clipping function
-    /** The function clips a number at a maximum value. \n
-	 If \f$x > max\f$, \f$f(x) = max\f$ else \f$f(x) = x\f$.
-
-	 @param     value   The value to clip.
-	 @param     high    The high boundary.
-	 @return    The function return the clipped value.
-
-        @see    clip_minmax
-        @see    clip_min
-     */
-    inline double clip_max(const double value, const double high)
-    {
-        if(value > high)
-            return high;
-        else
-            return value;
+        return std::max((Type)lower, std::min(n, (Type)upper));
     }
 
 	//! The factorial
@@ -497,8 +421,8 @@ namespace Hoa
         double minRad, maxRad;
         angle1 = wrap_twopi(angle1);
         angle2 = wrap_twopi(angle2);
-        minRad = min(angle1, angle2);
-        maxRad = max(angle1, angle2);
+        minRad = std::min(angle1, angle2);
+        maxRad = std::max(angle1, angle2);
 
         if (maxRad - minRad <= HOA_PI)
             return maxRad - minRad;
@@ -586,7 +510,7 @@ namespace Hoa
 	inline void vector_clip_minmax(unsigned int size, double *vec, double min, double max)
 	{
 		for (unsigned i=0; i < size; i++)
-			vec[i] = clip_minmax(vec[i], min, max);
+			vec[i] = clip(vec[i], min, max);
 	}
 
     inline void vector_sort(unsigned int size, double* vector)
