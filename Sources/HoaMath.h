@@ -7,35 +7,13 @@
 #ifndef __DEF_HOA_MATHS__
 #define __DEF_HOA_MATHS__
 
-#include <iostream>
-#include <vector>
-#include <map>
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <math.h>
-#include <string>
-#include <assert.h>
-#include <limits.h>
-#include <string.h>
-
-#ifdef _WINDOWS
-static inline double round(double val)
-{    
-    return floor(val + 0.5);
-}
-
-#undef min
-#undef max
-
-#endif
+#include "HoaDefs.hpp"
 
 //! The high order ambisonic namespace.
 /**
  This namespace have all the standard methods and functions necessary for ambisonic processing.
 */
-namespace Hoa
+namespace hoa
 {
 	//! The clipping function
     /** The function clips a number between boundaries. \n
@@ -49,9 +27,71 @@ namespace Hoa
 	 @see    max
 	 @see    clip_max
      */
-    template <typename Type, typename Type1, typename Type2> Type clip(const Type& n, const Type1& lower, const Type2& upper)
+    template <typename T, typename T1, typename T2> T clip(const T& n, const T1& lower, const T2& upper)
     {
-        return std::max((Type)lower, std::min(n, (Type)upper));
+        return std::max((T)lower, std::min(n, (T)upper));
+    }
+    
+    inline void matrix_vector_mul(const unsigned long vectorsize, const unsigned long outputsize, const double* vector, const double* matrix, double* outputs)
+    {
+        cblas_dgemv(CblasRowMajor, CblasNoTrans, (const int)outputsize, (const int)vectorsize, 1., matrix, (const int)vectorsize, vector, 1, 0., outputs, 1);
+    }
+    
+    inline void matrix_vector_mul(const unsigned long vectorsize, const unsigned long outputsize, const float* vector, const float* matrix, float* outputs)
+    {
+        cblas_sgemv(CblasRowMajor, CblasNoTrans, (const int)outputsize, (const int)vectorsize, 1.f, matrix, (const int)vectorsize, vector, 1, 0.f, outputs, 1);
+    }
+    
+    inline double vector_max(const unsigned long vectorsize, const double* vector)
+    {
+#ifdef __APPLE_
+        double result;
+        vDSP_maxvD(vector, 1, &result, vectorsize);
+        return result;
+#else
+        return vector[cblas_idamax((const int)vectorsize, vector, 1)];
+#endif
+    }
+    
+    inline float vector_max(const unsigned long vectorsize, const float* vector)
+    {
+#ifdef __APPLE_
+        double result;
+        vDSP_maxv(vector, 1, &result, vectorsize);
+        return result;
+#else
+        return vector[cblas_isamax((const int)vectorsize, vector, 1)];
+#endif
+    }
+    
+    inline double vector_sum(const unsigned long vectorsize, const double* vector)
+    {
+        return cblas_dasum(vectorsize, vector, 1);
+    }
+    
+    inline float vector_sum(const unsigned long vectorsize, const float* vector)
+    {
+        return cblas_sasum(vectorsize, vector, 1);
+    }
+    
+    inline void vector_scale(const unsigned long vectorsize, const double value, double* vector)
+    {
+        cblas_dscal((const int)vectorsize, value, vector, 1.);
+    }
+    
+    inline void vector_scale(const unsigned long vectorsize, const float value, float* vector)
+    {
+        cblas_sscal((const int)vectorsize, value, vector, 1.);
+    }
+    
+    inline double vectors_dot_product(const unsigned long vectorsize, const double* vector1, const double* vector2)
+    {
+        return cblas_ddot(vectorsize, vector1, 1, vector2, 1);
+    }
+    
+    inline float vectors_dot_product(const unsigned long vectorsize, const float* vector1, const float* vector2)
+    {
+        return cblas_sdot(vectorsize, vector1, 1, vector2, 1);
     }
 
 	//! The factorial
@@ -73,74 +113,6 @@ namespace Hoa
 			result *= n;
 
 		return result;
-	}
-
-    //! The double factorial
-    /**	The function computes the double factorial, the product of all the odd integers up to some odd positive integer :\n
-	 \f[n!! = n \times (n - 2) \times (n - 4) \times {...} \f]
-
-	 @param     n     The interger.
-	 @return    The function return the double factorial of n.
-
-	 @see    factorial
-     */
-    inline long double double_factorial(long n)
-	{
-		if (n == 0 || n == -1) {
-			return 1;
-		}
-
-		long result = n;
-		while ((n -= 2) > 0) {
-			result *= n;
-		}
-
-		return result;
-	}
-
-    //! The associated Legendre polynomials
-    /**	The function computes the associated Legendre polynomial \f$P(l, m)\f$ that is a part of the formula that compute the spherical harmonic coefficient where l is the band and the m is the argument of a spherical harmonic and x is the cosinus of the elevation. It uses three recurrence formulas :
-        \f[P(l, l)(x) = (-1)^l \times (2l - 1)!! \times (1 - x^2)^{0.5l}\f]
-        \f[P(l + 1, l)(x) = x \times (2l + 1) \times P(l, l)\f]
-        \f[P(l + 1, m)(x) = \frac{(2l + 1) \times x \times P(m, l) - (l + m) \times P(m, l - 1)}{(l - m + 1)}\f]
-        with \f$0 \leq l\f$ and \f$-l \leq m \leq +l\f$
-
-	 @param     l   The degree of the spherical harmonic.
-	 @param     m	The order of the spherical harmonic.
-	 @param     x    The cosinus of the elevation.
-	 @return    The function return the associated Legendre polynomial of x for l and m.
-
-	 @see    legendre_normalization
-	 @see    spherical_harmonics
-     */
-	inline double associated_legendre(int l, int m, const double x)
-	{
-        l = abs(l);
-        m = abs(m);
-
-		if(l == m)
-        {
-			return pow((double)-1.0, (double)m) * pow((double)(1. - x * x), (double)(0.5 * m)) * double_factorial(2. * m - 1);
-		}
-        // Calculus = pow((double)-1.0, (double)m) * pow((double)(1. - x * x), (double)(0.5 * m))
-        // Normalization = val / double_factorial(2. * m - 1)
-		else if(l == m + 1)
-        {
-			return x * associated_legendre(m, m, x) * (2 * m + 1);
-		}
-        // Calculus = x * associated_legendre(m, m, x)
-        // Normalization = val / double_factorial(2. * m) * (2 * m + 1);
-        else
-        {
-            return ((double)(2 * l - 1) * x *  associated_legendre(l - 1, m, x) - (double)(l + m - 1.) * associated_legendre(l - 2, m, x)) / (double)(l - m);
-            // (l == m + 2) -> ((2 * (m + 2) - 1) * x * associated_legendre(m + 1, m, x) - (2 * m + 1) * associated_legendre(m, m, x)) / 
-        }
-        // Real Calculus
-        // A = (2 * l - 1) * x *  associated_legendre(l - 1, m, x) [ (2 * (l - 1) - 1) * (2 * (l - 1) + 1) ]
-        // B = (l + m - 1.) * associated_legendre(l - 2, m, x) [ (2 * (l - 1) - 1) * (2 * (l - 1) - 1) * (l + m - 1.) ]
-        
-        // Calculus = associated_legendre(l - 1, m, x) - associated_legendre(l - 2, m, x)
-        // Normalization C = val * (l - m);
 	}
 
     //! The legendre normalization
@@ -166,41 +138,28 @@ namespace Hoa
             return sqrt((2. * l + 1.) / (4. * HOA_PI) * (long double)factorial(l - abs(m)) / (long double)factorial(l + abs(m))) * sqrt(2.);
 	}
 
-    /*
-	 inline double hoa_normalization(int l, int m)
-	 {
-	 l = abs(l);
-	 m = abs(m);
-	 if(m == l || m == 0)
-	 return 1. / double_factorial(2. * m - 1);
-	 else if(l == m + 1)
-	 return 1. / associated_legendre(l, m , cos(HOA_PI / 4.));
-	 else if(l == m + 2)
-	 return 1. / associated_legendre(l, m , cos(HOA_PI / 2.));
-	 else
-	 return 1.;
-	 }*/
 
-    //! The elevation part of the spherical harmonics function
-    /**	The function computes the elevation coefficient of the the spherical harmonic \f$[l, m]\f$  for an angle \f$\theta\f$ in radian. It uses the associated Legendre polynomial and applies the Legendre normalization :
-	 \f[Y_{elevation}(l, m, \theta) = N(l, m) \times P(l, m, cos(/theta)\f]
-	 with \f$0 \leq l\f$, \f$-l \leq m \leq +l\f$ and \f$N\f$ the normalization and \f$P\f$ the associated Legendre polynomial.
-
-	 @param     l        The band of the spherical harmonic.
-	 @param     m        The argument of the spherical harmonic.
-	 @param     theta    The elevation.
-	 @return    The function return the elevation coefficient for theta of the spherical harmonic of band l and argument m.
-
-	 @see    legendre_normalization
-	 @see    associated_legendre
-	 @see    spherical_harmonics_azimuth
-	 @see    spherical_harmonics
+    //! The wrapping function over \f$2\pi\f$
+    /** The function wraps a number between \f$0\f$ and \f$2\pi\f$.
+     
+     @param     value   The value to wrap.
+     @return    The function return the wrapped value.
      */
-    inline double spherical_harmonics_elevation(const int l, const int m, const double theta)
-	{
-        return associated_legendre(l, m, cos(theta)) * legendre_normalization(l, m);
+    template<typename T> inline T wrap_twopi(const T value)
+    {
+        T new_value = value;
+        while(new_value < 0.)
+        {
+            new_value += HOA_2PI;
+        }
+        while(new_value >= HOA_2PI)
+        {
+            new_value -= HOA_2PI;
+        }
+        return new_value;
     }
-
+    
+    
     //! The wrapping function
     /** The function wraps a number between boundarys.
 
@@ -211,45 +170,34 @@ namespace Hoa
 
 	 @see    wrap_twopi
      */
-    inline double wrap(double value, const double low, const double high)
+    template<typename T> inline T wrap(const T value, const T low, const T high)
     {
-        double increment = high - low;
-        while(value < low)
+        const T increment = high - low;
+        T new_value = value;
+        while(new_value < low)
         {
-            value += increment;
+            new_value += increment;
         }
-
-        while(value > high)
+        while(new_value > high)
         {
-            value -= increment;
-        }
-
-        return value;
-    }
-
-    //! The wrapping function over \f$2\pi\f$
-    /** The function wraps a number between \f$0\f$ and \f$2\pi\f$.
-
-	 @param     value   The value to wrap.
-	 @return    The function return the wrapped value.
-
-	 @see    wrap, wrap_360
-     */
-    inline double wrap_twopi(const double value)
-    {
-        double new_value = value;
-        while(new_value < 0.)
-        {
-            new_value += HOA_2PI;
-        }
-
-        while(new_value >= HOA_2PI)
-        {
-            new_value -= HOA_2PI;
+            new_value -= increment;
         }
         return new_value;
     }
-
+    
+    inline unsigned long wrap_ptr(long index, const unsigned long size)
+    {
+        while(index < 0)
+        {
+            index += size;
+        }
+        while(index >= size)
+        {
+            index -= size;
+        }
+        return index;
+    }
+    
 	//! The wrapping function in degrees.
     /** The function wraps a number between \f$0\f$ and \f$360°\f$.
 
@@ -374,7 +322,7 @@ namespace Hoa
     {
         return acos(sin(elevation1) * sin(elevation2) + cos(elevation1) * cos(elevation2) * cos(azimuth1 - azimuth2));
     }
-
+    /*
 	inline double spherical_azimuth_interpolation(const double azimuth1, const double elevation1, const double azimuth2, const double elevation2, double mu)
 	{
 		double distance;
@@ -428,69 +376,14 @@ namespace Hoa
             return maxRad - minRad;
         else
             return HOA_2PI - (maxRad - minRad);
-    }
+    }*/
 
-	inline double radToDeg(const double radian)
-    {
-        return radian * 360. / HOA_2PI;
-    }
-
-    inline double degToRad(const double degree)
-    {
-        return degree / 360. * HOA_2PI;
-    }
-
-	inline long mstosamps(const double ms, const double samplerate = 44100.)
-    {
-        return (long)(samplerate * ms * 0.001);
-    }
-
-    inline double sampstoms(const double s, const double samplerate=44100.)
-    {
-        return 1000. * s / samplerate;
-    }
-
-    inline double atodb(const double amp)
-    {
-        return (amp <= 0.) ? -999.f : (20. * log10(amp));
-    }
-
-    inline double dbtoa(const double dB)
-    {
-        return pow(10., dB * 0.05);
-    }
-
-	inline double safediv(const double num, const double denom)
-    {
-        return denom == 0. ? 0. : num/denom;
-    }
-
-	inline double scale(const double in, const double inlow, const double inhigh, const double outlow, const double outhigh, const double power)
-    {
-        double value;
-        double inscale = safediv(1., inhigh - inlow);
-        double outdiff = outhigh - outlow;
-
-        value = (in - inlow) * inscale;
-        if (value > 0.0)
-            value = pow(value, power);
-        else if (value < 0.0)
-            value = -pow(-value, power);
-        value = (value * outdiff) + outlow;
-
-        return value;
-    }
-
-    inline double scale(const double in, const double inlow, const double inhigh, const double outlow, const double outhigh)
-    {
-        return ( (in - inlow) * safediv(1., inhigh - inlow) * (outhigh - outlow) ) + outlow;
-    }
 
 	inline bool isInside(const double val, const double v1, const double v2)
 	{
         return (v1 <= v2) ? (val >= v1 && val <= v2) : (val >= v2 && val <= v1);
 	}
-
+/*
 	inline bool isInsideRad(const double radian, const double loRad, const double hiRad)
 	{
         return isInside(wrap_twopi(radian-loRad), 0, wrap_twopi(hiRad-loRad));
@@ -500,7 +393,7 @@ namespace Hoa
 	{
         return isInside(wrap_360(degree-loDeg), 0, wrap_360(hiDeg-loDeg));
 	}
-
+*/
 	inline void vector_add(unsigned int size, double *vec, double inc)
 	{
 		for (unsigned int i=0; i < size; i++)
@@ -556,7 +449,7 @@ namespace Hoa
             delete [] temp;
         }
 	}
-
+    /*
 	inline void vector_sort_coordinates(unsigned int size, double* azimuths, double* elevations, double azymuth, double elevation)
 	{
         double* abs	= new double[size];
@@ -685,7 +578,7 @@ namespace Hoa
             delete [] temp;
 			delete [] temp2;
         }
-	}
+	}*/
 }
 
 #endif

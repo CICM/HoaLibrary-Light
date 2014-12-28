@@ -7,7 +7,7 @@
 #ifndef __DEF_HOA_LIBRARY_COMMON__
 #define __DEF_HOA_LIBRARY_COMMON__
 
-#include "../Hoa.h"
+#include "../Hoa.hpp"
 
 //! The 3D high order ambisonic namespace.
 /**
@@ -15,12 +15,11 @@
  */
 namespace HoaCommon{};
 
-
-//#include "Converter.h"
 #include "Source.h"
 #include "SourcesGroup.h"
 #include "SourcesManager.h"
 
+using namespace hoa;
 #endif
 
 

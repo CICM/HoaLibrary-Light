@@ -7,27 +7,25 @@
 #ifndef DEF_HOA_2D_MAP
 #define DEF_HOA_2D_MAP
 
-#include "Ambisonic_2D.h"
-#include "Encoder_2D.h"
 #include "Wider_2D.h"
 
-namespace Hoa2D
+namespace hoa
 {
     //! The ambisonic encoder with distance compensation.
     /** The map is a Encoder with distance compensation. It uses intances of the Wider class to decrease the directionnality of sources by simulating fractionnal orders when the sources are inside the ambisonic circle and a simple diminution of the gain when the sources get away from the ambisonic circle.
      @see Encoder
      @see Wider
      */
-    template <typename Type> class MapUnique : public Ambisonic
+    template <typename T> class MapUnique : public Ambisonic2D<T>
     {
     private:
-        Type    m_azimuth;
-        Type    m_cosx;
-        Type    m_sinx;
-        Type    m_factor;
-        Type    m_gain;
-        Type    m_radius;
-        bool    m_muted;
+        T    m_azimuth;
+        T    m_cosx;
+        T    m_sinx;
+        T    m_factor;
+        T    m_gain;
+        T    m_radius;
+        bool m_muted;
         
     public:
         
@@ -35,7 +33,7 @@ namespace Hoa2D
         /**	The map constructor allocates and initialize the member values and classes depending of a decomposition order. The order must be at least 1.
          @param     order            The order.
          */
-        MapUnique(unsigned long order) noexcept : Ambisonic(order)
+        MapUnique(unsigned long order) noexcept : Ambisonic2D<T>(order)
         {
             setMute(0);
             setAzimuth(0.);
@@ -54,7 +52,7 @@ namespace Hoa2D
         /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
          @param     azimuth	The azimuth.
          */
-        inline void setAzimuth(const Type azimuth) noexcept
+        inline void setAzimuth(const T azimuth) noexcept
         {
             m_azimuth = wrap_twopi(azimuth);
             m_cosx    = std::cos(m_azimuth);
@@ -66,18 +64,18 @@ namespace Hoa2D
          @param     radius   The radius.
          @see       setAzimuth()
          */
-        inline void setRadius(const Type radius) noexcept
+        inline void setRadius(const T radius) noexcept
         {
-            m_radius = max(radius, (Type)0.);
+            m_radius = max(radius, (T)0.);
             if(m_radius < 1.)
             {
-                m_factor = (1. - clip(radius, 0., 1.)) * HOA_PI;;
-                m_gain   = (std::sin(clip((m_factor - 0.5f) * HOA_PI, -HOA_PI2, HOA_PI2)) + 1.) * 0.5;
+                m_factor = (1. - clip(radius, 0., 1.)) * HOA_PI;
+                m_gain   = (sin(m_factor - HOA_PI2) + 1.) * 0.5;
             }
             else
             {
-                m_factor = HOA_PI;
-                m_gain   = (std::sin(clip((m_factor - 0.5f) * HOA_PI, -HOA_PI2, HOA_PI2)) + 1.) * 0.5 / radius;
+                m_factor = 0;
+                m_gain   = 0;
             }
         }
         
@@ -94,7 +92,7 @@ namespace Hoa2D
         /** The method returns the last angle of encoding between 0 and 2π.
          @return     The azimuth.
          */
-        inline Type getAzimuth() const noexcept
+        inline T getAzimuth() const noexcept
         {
             return m_azimuth;
         }
@@ -104,7 +102,7 @@ namespace Hoa2D
          @param     index	The index of the source.
          @return The radius of the source if the source exists, otherwise the function generates an error.
          */
-        inline Type getRadius() const noexcept
+        inline T getRadius() const noexcept
         {
             return m_radius;
         }
@@ -123,27 +121,33 @@ namespace Hoa2D
          @param     input  The input.
          @param     outputs The outputs array.
          */
-        inline void process(const Type input, Type* outputs) const noexcept
+        inline void process(const T* inputs, T* outputs) const noexcept
         {
             if(!m_muted)
             {
-                Type cos_x = m_cosx;
-                Type sin_x = m_sinx;
-                Type tcos_x = cos_x;
-                outputs[0] = input * (m_gain * m_order_of_decomposition + 1.f);
-                for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
+                T cos_x = m_cosx;
+                T sin_x = m_sinx;
+                T tcos_x = cos_x;
+                const T gain1   = (m_gain * Ambisonic<T>::m_order_of_decomposition + 1.f);
+                const T factor1 = (cos(clip(m_factor, 0., HOA_PI)) + 1.f) *
+                0.5f * (m_gain * (Ambisonic<T>::m_order_of_decomposition - 1) + 1.f);
+                (*outputs++) = (*inputs) * gain1;                           // Hamonic [0,0]
+                (*outputs++) = (*inputs) * sin_x * factor1;                 // Hamonic [1,-1]
+                (*outputs++) = (*inputs) * cos_x * factor1;                 // Hamonic [1,1]
+                for(unsigned long i = 2; i <= Ambisonic<T>::m_order_of_decomposition; i++)
                 {
-                    const Type factor  = (std::cos(min(m_factor * j, (Type)HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
-                    outputs[i-1]    = input * sin_x * factor;
-                    outputs[i]      = input * cos_x * factor;
-                    cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
-                    sin_x = tcos_x * m_sinx + sin_x * m_cosx; // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
-                    tcos_x = cos_x;
+                    const T factor  = (cos(clip(m_factor * i, 0., HOA_PI)) + 1.f) *
+                    0.5f * (m_gain * (Ambisonic<T>::m_order_of_decomposition - i) + 1.f);
+                    cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
+                    sin_x   = tcos_x * m_sinx + sin_x * m_cosx;
+                    tcos_x  = cos_x;
+                    (*outputs++)    = (*inputs) * sin_x * factor;
+                    (*outputs++)    = (*inputs) * cos_x * factor;
                 }
             }
             else
             {
-                for(unsigned long i = 0; i < m_number_of_harmonics; i++)
+                for(unsigned long i = 0; i < Ambisonic<T>::m_number_of_harmonics; i++)
                 {
                     outputs[i] = 0.f;
                 }
@@ -155,22 +159,28 @@ namespace Hoa2D
          @param     input  The input.
          @param     outputs The outputs array.
          */
-        inline void processAdd(const Type input, Type* outputs) noexcept
+        inline void processAdd(const T* inputs, T* outputs) const noexcept
         {
             if(!m_muted)
             {
-                Type cos_x = m_cosx;
-                Type sin_x = m_sinx;
-                Type tcos_x = cos_x;
-                outputs[0] = input * (m_gain * m_order_of_decomposition + 1.f);
-                for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
+                T cos_x = m_cosx;
+                T sin_x = m_sinx;
+                T tcos_x = cos_x;
+                const T gain1   = (m_gain * Ambisonic<T>::m_order_of_decomposition + 1.f);
+                const T factor1 = (cos(clip(m_factor, 0., HOA_PI)) + 1.f) *
+                0.5f * (m_gain * (Ambisonic<T>::m_order_of_decomposition - 1) + 1.f);
+                (*outputs++) += (*inputs) * gain1;                           // Hamonic [0,0]
+                (*outputs++) += (*inputs) * sin_x * factor1;                 // Hamonic [1,-1]
+                (*outputs++) += (*inputs) * cos_x * factor1;                 // Hamonic [1,1]
+                for(unsigned long i = 2; i <= Ambisonic<T>::m_order_of_decomposition; i++)
                 {
-                    const Type factor  = (std::cos(min(m_factor * j, (Type)HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
-                    outputs[i-1]    += input * sin_x * factor;
-                    outputs[i]      += input * cos_x * factor;
-                    cos_x = tcos_x * m_cosx - sin_x * m_sinx; // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
-                    sin_x = tcos_x * m_sinx + sin_x * m_cosx; // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
-                    tcos_x = cos_x;
+                    const T factor  = (cos(clip(m_factor * i, 0., HOA_PI)) + 1.f) *
+                    0.5f * (m_gain * (Ambisonic<T>::m_order_of_decomposition - i) + 1.f);
+                    cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
+                    sin_x   = tcos_x * m_sinx + sin_x * m_cosx;
+                    tcos_x  = cos_x;
+                    (*outputs++)    += (*inputs) * sin_x * factor;
+                    (*outputs++)    += (*inputs) * cos_x * factor;
                 }
             }
         }
@@ -181,11 +191,11 @@ namespace Hoa2D
      
         @see Encoder
      */
-    template <typename Type> class Map : public Ambisonic
+    template <typename T> class Map : public Ambisonic2D<T>
     {
     private:
         const unsigned long m_number_of_sources;
-        vector<MapUnique<Type>*>  m_maps;
+        vector<unique_ptr<MapUnique<T>>>  m_maps;
     public:
         
         //! The map constructor.
@@ -194,12 +204,12 @@ namespace Hoa2D
             @param     order            The order.
             @param     numberOfSources	The number of sources.
          */
-        Map(unsigned long order, unsigned long numberOfSources) noexcept : Ambisonic(order),
+        Map(unsigned long order, unsigned long numberOfSources) noexcept : Ambisonic2D<T>(order),
         m_number_of_sources(numberOfSources)
         {
             for(unsigned long i = 0; i < m_number_of_sources; i++)
             {
-                m_maps.push_back(new MapUnique<Type>(order));
+                m_maps.push_back(unique_ptr<MapUnique<T>>(new MapUnique<T>(order)));
             }
         }
         
@@ -208,10 +218,6 @@ namespace Hoa2D
          */
         ~Map()
         {
-            for(unsigned long i = 0; i < m_number_of_sources; i++)
-            {
-                delete m_maps[i];
-            }
             m_maps.clear();
         }
         
@@ -232,7 +238,7 @@ namespace Hoa2D
             @param     azimuth	The azimuth.
             @see       setRadius()
          */
-        inline void setAzimuth(const unsigned long index, const Type azimuth) noexcept
+        inline void setAzimuth(const unsigned long index, const T azimuth) noexcept
         {
             m_maps[index]->setAzimuth(azimuth);
         }
@@ -244,7 +250,7 @@ namespace Hoa2D
             @param     radius   The radius.
             @see       setAzimuth()
          */
-        inline void setRadius(const unsigned long index, const Type radius) noexcept
+        inline void setRadius(const unsigned long index, const T radius) noexcept
         {
             m_maps[index]->setRadius(radius);
         }
@@ -266,7 +272,7 @@ namespace Hoa2D
             @param     index	The index of the source.
             @return The azimuth of the source if the source exists, otherwise the function generates an error.
          */
-        inline Type getAzimuth(const unsigned long index) const noexcept
+        inline T getAzimuth(const unsigned long index) const noexcept
         {
             return m_maps[index]->getAzimuth();
         }
@@ -277,7 +283,7 @@ namespace Hoa2D
             @param     index	The index of the source.
             @return The radius of the source if the source exists, otherwise the function generates an error.
          */
-        inline Type getRadius(const unsigned long index) const noexcept
+        inline T getRadius(const unsigned long index) const noexcept
         {
             return m_maps[index]->getRadius();
         }
@@ -300,12 +306,12 @@ namespace Hoa2D
          @param     inputs  The inputs array.
          @param     outputs The outputs array.
          */
-        inline void process(const Type* inputs, Type* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) const noexcept
         {
-            m_maps[0]->process(inputs[0], outputs);
+            m_maps[0]->process(inputs, outputs);
             for(unsigned long i = 1; i < m_number_of_sources; i++)
             {
-                m_maps[i]->processAdd(inputs[i], outputs);
+                m_maps[i]->processAdd(inputs++, outputs);
             }
         }
     };

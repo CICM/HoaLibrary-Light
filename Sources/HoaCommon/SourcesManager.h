@@ -7,7 +7,7 @@
 #ifndef DEF_SOURCESMANAGER
 #define DEF_SOURCESMANAGER
 
-#include "../Hoa.h"
+#include "../Hoa.hpp"
 #include "Source.h"
 #include "SourcesGroup.h"
 

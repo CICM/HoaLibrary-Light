@@ -7,7 +7,7 @@
 #ifndef __DEF_HOA_LIBRARY_3D__
 #define __DEF_HOA_LIBRARY_3D__
 
-#include "../Hoa.h"
+#include "../Hoa.hpp"
 
 //! The 3D high order ambisonic namespace.
 /**

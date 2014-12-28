@@ -4,7 +4,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#include "Decoder_2D.h"
+#include "DecoderIrregular_2D.hpp"
 
 namespace Hoa2D
 {
@@ -212,7 +212,7 @@ namespace Hoa2D
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Decoder Binaural //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /*
     DecoderBinaural::DecoderBinaural(unsigned int order) : Ambisonic(order), Planewaves(2)
     {
         m_channels_azimuth[0] = HOA_PI2;
@@ -258,8 +258,8 @@ namespace Hoa2D
             m_filters_right[i].setSampleRate(sampleRate);
         }
         */
-    }
-
+    //}
+    /*
     void DecoderBinaural::process(const float* inputs, float* outputs)
 	{
         outputs[0] = 0.f;
@@ -296,7 +296,7 @@ namespace Hoa2D
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Decoder Multi //
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    
     DecoderMulti::DecoderMulti(unsigned int order) : Ambisonic(order), Planewaves(order * 2 + 2)
     {
         m_mode = Regular;
@@ -371,6 +371,6 @@ namespace Hoa2D
         delete m_decoder_regular;
         delete m_decoder_irregular;
         delete m_decoder_binaural;
-	}
+	}*/
 }
 

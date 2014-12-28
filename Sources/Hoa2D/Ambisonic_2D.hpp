@@ -7,22 +7,22 @@
 #ifndef DEF_HOA_2D_AMBISONIC
 #define DEF_HOA_2D_AMBISONIC
 
-#include "../Hoa.h"
+#include "../Hoa.hpp"
 
-namespace Hoa2D
+namespace hoa
 {
     //! The 2D ambisonic class.
     /**
      Most of the 2D ambisonic classes inherit from this classe. It computes the number of harmonics, their degrees and their orders depending of the decomposition order. The harmonics are sorted by their orders, from 0 to the decomposition order and, in each order, there are the 2 harmonics with the orders -order and order. For the first orders, the harmonics arrangement is h[0] h[-1] h[1] h[-2] h[2] h[-3] h[3]etc. with h[order].
      */
-    class Ambisonic : public Hoa::Ambisonic
+    template <typename T> class Ambisonic2D : public hoa::Ambisonic<T>
     {
     public:
         //! The ambisonic constructor.
         /** The ambisonic constructor allocates and initializes the generale member values depending of a decomposition order.
          @param     order	The order, must be at least 1.
          */
-        Ambisonic(unsigned long order) noexcept : Hoa::Ambisonic(order, order * 2 + 1)
+        Ambisonic2D(unsigned long order) noexcept : hoa::Ambisonic<T>(order, order * 2 + 1)
         {
             ;
         }
@@ -30,7 +30,7 @@ namespace Hoa2D
         //! The ambisonic destructor.
         /** The ambisonic destructor.
          */
-        ~Ambisonic()
+        virtual ~Ambisonic2D()
         {
             ;
         }
@@ -42,7 +42,7 @@ namespace Hoa2D
          @see       getHarmonicDegree()
          @see       getHarmonicName()
          */
-        inline long getHarmonicOrder(unsigned long index) const noexcept override
+        inline long getHarmonicOrder(const unsigned long index) const noexcept override
         {
             if(index % 2)
             {

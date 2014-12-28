@@ -4,10 +4,10 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_2D_DECODER
-#define DEF_HOA_2D_DECODER
+#ifndef DEF_HOA_2D_DECODER_IRREGULAR
+#define DEF_HOA_2D_DECODER_IRREGULAR
 
-#include "DecoderRegular_2D.h"
+#include "DecoderIrregular_2D.hpp"
 
 namespace Hoa2D
 {

@@ -7,19 +7,13 @@
 #ifndef __DEF_HOA_DEFS__
 #define __DEF_HOA_DEFS__
 
-/*
-#include <iostream>
-#include <vector>
-#include <map>
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <cmath>
-#include <string>
-#include <assert.h>
-#include <algorithm>
-*/
+#ifdef __APPLE__
+#include <Accelerate/Accelerate.h>
+#elif _WINDOWS
+#include <gsl_cblas.h>
+#else
+#include <cblas.h>
+#endif
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -33,25 +27,6 @@
 #include <cmath>
 #include <vector>
 #include <map>
-#include <list>
-#include <set>
-#include <deque>
-
-#ifdef __APPLE__
-
-#include <Accelerate/Accelerate.h>
-
-#endif
-
-#ifdef _WINDOWS
-
-#include <gsl_cblas.h>
-
-#endif
-
-#ifdef _LINUX
-#include <cblas.h>
-#endif
 
 #ifdef PD_DEBUG
 #include "../../CicmWrapper/Sources/cicm_wrapper.h"
@@ -68,14 +43,25 @@
 #define HOA_PI2 (1.57079632679489661923132169163975144)
 #define HOA_PI4 (0.785398163397448309615660845819875721)
 
-#define NUMBEROFLINEARPOINTS 10000
-#define NUMBEROFCIRCLEPOINTS 36000
-#define NUMBEROFCIRCLEPOINTS_UI 360
-#define NUMBEROFCIRCLEPOINTS_UI2 180
+using namespace std;
 
-namespace Hoa
+namespace hoa
 {
-};
+    typedef unsigned long ulong;
+#ifdef _WINDOWS
+    static inline double round(double val)
+    {
+        return floor(val + 0.5);
+    }
+#endif
+    
+    enum Dimension
+    {
+        HOA2D = 0,
+        HOA3D = 1,
+        Harmonic2D = 2,
+    };
+}
 
 #endif
 

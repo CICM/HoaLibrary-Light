@@ -22,9 +22,9 @@ namespace Hoa3D
         // Plutot faire en spherique - de calculs
         MeterPoint(double y_azimuth = 0, double z_elevation = 0)
         {
-            xyzae[0] = Hoa::abscissa(1., y_azimuth, z_elevation);
-            xyzae[1] = Hoa::ordinate(1., y_azimuth, z_elevation);
-            xyzae[2] = Hoa::elevation(1., y_azimuth, z_elevation);
+            xyzae[0] = hoa::abscissa(1., y_azimuth, z_elevation);
+            xyzae[1] = hoa::ordinate(1., y_azimuth, z_elevation);
+            xyzae[2] = hoa::elevation(1., y_azimuth, z_elevation);
             xyzae[3] = y_azimuth;
             xyzae[4] = z_elevation;
         }
@@ -34,8 +34,8 @@ namespace Hoa3D
             xyzae_rel[0] = x() - pt.x();
             xyzae_rel[1] = y() - pt.y();
             xyzae_rel[2] = z();
-            xyzae_rel[3] = Hoa::azimuth(xyzae_rel[0], xyzae_rel[1]);
-            xyzae_rel[4] = Hoa::elevation(xyzae_rel[0], xyzae_rel[1], xyzae_rel[2]);
+            xyzae_rel[3] = hoa::azimuth(xyzae_rel[0], xyzae_rel[1]);
+            xyzae_rel[4] = hoa::elevation(xyzae_rel[0], xyzae_rel[1], xyzae_rel[2]);
         }
         
         double x() const

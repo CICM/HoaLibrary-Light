@@ -7,18 +7,18 @@
 #ifndef DEF_HOA_2D_WIDER
 #define DEF_HOA_2D_WIDER
 
-#include "Ambisonic_2D.h"
+#include "Ambisonic_2D.hpp"
 
-namespace Hoa2D
+namespace hoa
 {
     //! The ambisonic wider.
     /** The wider should be used to widen the sound propagation with fractional order simulution. The sound field precision depends to the decomposition order. The zero decomposition order has 1 omnidirectionnal harmonic and all the sounds seem to come from all the directions. While the order increases, the number of harmonics increases, the lobes of an encoded sounds narrow and the origin of the sounds is more accurate. Then fractional order can be used to decrease the sound field precision and to wide the sound field propagation. 
      */
-    template <typename Type> class Wider : public Ambisonic
+    template <typename T> class Wider : public Ambisonic2D<T>
     {
     private:
-        Type  m_factor;
-        Type  m_gain;
+        T  m_factor;
+        T  m_gain;
         
     public:
         
@@ -27,8 +27,9 @@ namespace Hoa2D
          
             @param     order	The order.
          */
-        Wider(unsigned long order) noexcept : Ambisonic(order)
+        Wider(unsigned long order) noexcept : Ambisonic2D<T>(order)
         {
+            int ToRedo;
             setWideningValue(0.);
         }
         
@@ -45,10 +46,10 @@ namespace Hoa2D
          
             @param     value The widening value.
          */
-        inline void setWideningValue(const Type value) noexcept
+        inline void setWideningValue(const T value) noexcept
         {
             m_factor = (1. - clip(value, 0., 1.)) * HOA_PI;
-            m_gain   = (std::sin(clip((m_factor - 0.5f) * HOA_PI, -HOA_PI2, HOA_PI2)) + 1.) * 0.5;
+            m_gain   = (sin(m_factor - HOA_PI2) + 1.) * 0.5;
         }
         
         //! This method retreive the widening value.
@@ -56,7 +57,7 @@ namespace Hoa2D
          
             @return     The widening value.
          */
-        inline Type getWideningValue() const noexcept
+        inline T getWideningValue() const noexcept
         {
             return m_factor / HOA_PI;
         }
@@ -66,14 +67,19 @@ namespace Hoa2D
             @param     inputs   The inputs array.
             @param     outputs  The outputs array.
          */
-        inline void process(const Type* inputs, Type* outputs) const noexcept
+        inline void process(const T* inputs, T* outputs) const noexcept 
         {
-            outputs[0] = inputs[0] * (m_gain * m_order_of_decomposition + 1.f);
-            for(unsigned long i = 2, j = 1; i < m_number_of_harmonics; i += 2, j++)
+            const T factor1  = (cos(clip(m_factor, 0., HOA_PI)) + 1.f) *
+            0.5f * (m_gain * (Ambisonic<T>::m_order_of_decomposition - 1) + 1.f);
+            (*outputs++) = (*inputs++) * (m_gain * Ambisonic<T>::m_order_of_decomposition + 1.f);
+            (*outputs++) = (*inputs++) * factor1;
+            (*outputs++) = (*inputs++) * factor1;
+            for(unsigned long i = 2; i <= Ambisonic<T>::m_order_of_decomposition; i++)
             {
-                const float factor  = (std::cos(std::max(m_factor * j, (Type)HOA_PI)) + 1.f) * 0.5f * (m_gain * (m_order_of_decomposition - j) + 1.f);
-                outputs[i-1]        = inputs[i-1] * factor;
-                outputs[i]          = inputs[i] * factor;
+                const T factor  = (cos(clip(m_factor * i, 0., HOA_PI)) + 1.f) *
+                0.5f * (m_gain * (Ambisonic<T>::m_order_of_decomposition - i) + 1.f);
+                (*outputs++)        = (*inputs++) * factor;
+                (*outputs++)        = (*inputs++) * factor;
             }
         }
     };

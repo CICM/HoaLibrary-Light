@@ -7,29 +7,22 @@
 #ifndef DEF_HOA_LIBRARY_2D
 #define DEF_HOA_LIBRARY_2D
 
-#include "../Hoa.h"
+#include "../Hoa.hpp"
 
 //! The 2D high order ambisonic namespace.
 /**
  All the 2D ambisonic classes will be part of this namespace
  */
-namespace Hoa2D{};
+namespace hoa{};
 
-#include "Encoder_2D.h"
 #include "Wider_2D.h"
-#include "Map_2D.h"
-#include "Optim_2D.h"
-#include "Rotate_2D.h"
-#include "Decoder_2D.h"
+#include "Map_2D.hpp"
+#include "Optim_2D.hpp"
+#include "Rotate_2D.hpp"
+#include "DecoderRegular_2D.hpp"
+#include "Vector_2D.hpp"
 
-#include "Projector.h"
-#include "Vector.h"
-#include "Scope.h"
-#include "Meter.h"
-#include "Recomposer.h"
-#include "ChannelManager.h"
-
-using namespace Hoa2D;
+using namespace hoa;
 
 #endif
 

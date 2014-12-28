@@ -7,14 +7,14 @@
 #ifndef __DEF_HOA_3D_AMBISONIC__
 #define __DEF_HOA_3D_AMBISONIC__
 
-#include "../Hoa.h"
+#include "../Hoa.hpp"
 
 namespace Hoa3D
 {
     //! The ambisonic class.
     /** The ambisonics classes inherit from this classe. It computes the number of harmonics depending of the decomposition order. The harmonics are sorted by their degrees, from 0 to the decomposition order. Each degree contains 2 * degree + 1 harmonics with orders in the range -degree to degree. The harmonic input and output arrays in process method of ambisonic classes must have this configuration. For the first degrees, the harmonics arrangement is (0,0) (1,-1) (1,0) (1,1) (2,-2) (2,-1) (2,0) (2,1) (2,2) with (degree,order).
      */
-    class Ambisonic : public Hoa::Ambisonic
+    class Ambisonic : public hoa::Ambisonic
     {      
     public:
         
@@ -22,7 +22,7 @@ namespace Hoa3D
         /** The ambisonic constructor allocates and initializes the generale member values depending of a decomposition order. The order must be at least 1.
             @param     order	The order.
          */
-        Ambisonic(unsigned long order) noexcept  : Hoa::Ambisonic(order, (order + 1) * (order + 1))
+        Ambisonic(unsigned long order) noexcept  : hoa::Ambisonic(order, (order + 1) * (order + 1))
         {
             ;
         }
