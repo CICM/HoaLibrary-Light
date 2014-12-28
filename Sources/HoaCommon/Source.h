@@ -9,7 +9,7 @@
 
 #include "../Hoa.hpp"
 
-namespace HoaCommon
+namespace hoa
 {
 	//! The source
     /** The source store and manage source informations like the position, color, mute...

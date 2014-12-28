@@ -55,11 +55,17 @@ namespace hoa
     }
 #endif
     
-    enum Dimension
+    enum Dimension : bool
     {
-        HOA2D = 0,
-        HOA3D = 1,
-        Harmonic2D = 2,
+        Hoa2d = 0,
+        Hoa3d = 1
+    };
+    
+    enum Optimization
+    {
+        Basic   = 0,	/**< Basic Optimization     */
+        MaxRe   = 1,	/**< Max Re Optimization    */
+        InPhase = 2     /**< In Phase Optimization  */
     };
 }
 

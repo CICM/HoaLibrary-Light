@@ -4,10 +4,10 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_3D_VECTOR
-#define DEF_HOA_3D_VECTOR
+#ifndef DEF_HOA_VECTOR
+#define DEF_HOA_VECTOR
 
-#include "Ambisonic_2D.hpp"
+#include "Planewaves.hpp"
 
 namespace hoa
 {

@@ -7,13 +7,13 @@
 #ifndef __DEF_HOA_HARMONICS__
 #define __DEF_HOA_HARMONICS__
 
-#include "HoaDefs.hpp"
+#include "HoaMath.hpp"
 
 namespace hoa
 {    
     template <Dimension D> class Harmonic;
     
-    template<> class Harmonic<HOA2D>
+    template<> class Harmonic<Hoa2d>
     {
     private:
         const ulong m_degree;
@@ -56,7 +56,7 @@ namespace hoa
         protected:
             const ulong             m_order_of_decomposition;
             const ulong             m_number_of_harmonics;
-            vector<Harmonic<HOA2D>> m_harmonics;
+            vector<Harmonic<Hoa2d>> m_harmonics;
         public:
             
             //! The ambisonic constructor.
@@ -69,7 +69,7 @@ namespace hoa
             {
                 for(ulong i = 0; i < m_number_of_harmonics; i++)
                 {
-                    m_harmonics.push_back(Harmonic<HOA2D>(i));
+                    m_harmonics.push_back(Harmonic<Hoa2d>(i));
                 }
             }
             
@@ -149,7 +149,7 @@ namespace hoa
         };
     };
         
-    template <> class Harmonic<HOA3D>
+    template <> class Harmonic<Hoa3d>
     {
     private:
         const ulong m_degree;
@@ -192,7 +192,7 @@ namespace hoa
         protected:
             const ulong             m_order_of_decomposition;
             const ulong             m_number_of_harmonics;
-            vector<Harmonic<HOA2D>> m_harmonics;
+            vector<Harmonic<Hoa2d>> m_harmonics;
         public:
             
             //! The ambisonic constructor.
@@ -205,7 +205,7 @@ namespace hoa
             {
                 for(ulong i = 0; i < m_number_of_harmonics; i++)
                 {
-                    m_harmonics.push_back(Harmonic<HOA2D>(i));
+                    m_harmonics.push_back(Harmonic<Hoa2d>(i));
                 }
             }
             

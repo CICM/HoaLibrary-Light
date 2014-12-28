@@ -4,57 +4,56 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_2D_DECODER_REGULAR
-#define DEF_HOA_2D_DECODER_REGULAR
+#ifndef DEF_HOA_DECODER
+#define DEF_HOA_DECODER
 
-#include "Ambisonic_2D.hpp"
+#include "Encoder.hpp"
 
 namespace hoa
 {
-    //! The ambisonic regular decoder.
-    /** The regular decoder should be used to decode an ambisonic sound field for a set a channels at equal distances on a circle depending on a decomposition order. The number of channels must be at least the number of harmonics. Note that you can only change the offset of the channels.
+    //! The ambisonic decoder.
+    /** The decoder should be used to decode an ambisonic sound field for a set a channels on a circle depending on a decomposition order or for headphones.
      */
-    template <typename T> class DecoderRegular : public Encoder<HOA2D, T>, public hoa::Planewaves<T>
+    template <Dimension D, typename T> class Decoder : public Encoder<D, T>, public Planewaves<T>
     {
     private:
         T*  m_matrix;
     public:
         
-        //! The regular decoder constructor.
-        /**	The regular decoder constructor allocates and initialize the member values to the decoding matrix depending of a decomposition order and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
-         
-            @param     order				The order
-            @param     numberOfChannels     The number of channels.
+        //! The regular constructor.
+        /**	The regular constructor allocates and initialize the decoding matrix depending of a decomposition order and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
+         @param     order				The order
+         @param     numberOfChannels     The number of channels.
          */
-		DecoderRegular(unsigned long order, unsigned long numberOfChannels) noexcept :
-        Encoder<HOA2D, T>(order),
+        Decoder(const ulong order, const ulong numberOfChannels) noexcept :
+        Encoder<D, T>(order),
         Planewaves<T>(numberOfChannels)
         {
-            m_matrix = new T[Planewaves<T>::getNumberOfChannels() * Encoder<HOA2D, T>::getNumberOfHarmonics()];
+            m_matrix = new T[Planewaves<T>::getNumberOfChannels() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
             setChannelsOffset(0.);
         }
-		
-        //! The regular decoder destructor.
-        /**	The regular decoder destructor free the memory.
+        
+        //! The Rotate destructor.
+        /**	The Rotate destructor free the memory.
          */
-		~DecoderRegular()
+        ~Decoder()
         {
             delete [] m_matrix;
         }
         
         //! Set the offset of the channels.
-		/**	Set the azimuth offset of the channels in radian.
-            @param     offset		An azimuth value.
+        /**	Set the azimuth offset of the channels in radian.
+         @param     offset		An azimuth value.
          */
-		inline void setChannelsOffset(const T offset) noexcept
+        inline void setChannelsOffset(const T offset) noexcept
         {
             Planewaves<T>::setChannelsOffset(offset);
-            const T factor = 1. / (Encoder<HOA2D, T>::getDecompositionOrder() + 1.);
+            const T factor = 1. / (Encoder<D, T>::getDecompositionOrder() + 1.);
             for(unsigned long i = 0; i < Planewaves<T>::getNumberOfChannels(); i++)
             {
-                Encoder<HOA2D, T>::setAzimuth(Planewaves<T>::getChannelAzimuth(i) + Planewaves<T>::getChannelsOffset());
-                Encoder<HOA2D, T>::process(&factor, m_matrix+i*Encoder<HOA2D, T>::getNumberOfHarmonics());
-                m_matrix[i * Encoder<HOA2D, T>::getNumberOfHarmonics()] = factor * 0.5f;
+                Encoder<D, T>::setAzimuth(Planewaves<T>::getChannelAzimuth(i) + Planewaves<T>::getChannelsOffset());
+                Encoder<D, T>::process(&factor, m_matrix+i*Encoder<Hoa2d, T>::getNumberOfHarmonics());
+                m_matrix[i * Encoder<D, T>::getNumberOfHarmonics()] = factor * 0.5f;
             }
         }
         
@@ -67,43 +66,43 @@ namespace hoa
         {
             Planewaves<T>::setChannelAzimuth(index, azimuth);
         }
-				
-        //! This method performs the regular decoding.
-		/**	You should use this method for in-place or not-in-place processing and performs the regular decoding sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
-            @param     inputs  The input array that contains the samples of the harmonics.
-            @param     outputs The output array that contains samples destinated to channels.
+        
+        //! This method performs the decoding.
+        /**	You should use this method for in-place or not-in-place processing and performs the regular decoding sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+         @param     inputs  The input array that contains the samples of the harmonics.
+         @param     outputs The output array that contains samples destinated to channels.
          */
-		inline void process(const T* inputs, T* outputs) const noexcept
+        inline void process(const T* inputs, T* outputs) const noexcept
         {
-            matrix_vector_mul(Encoder<HOA2D, T>::m_number_of_harmonics, Planewaves<T>::m_number_of_channels, inputs, m_matrix, outputs);
+            matrix_vector_mul(Encoder<Hoa2d, T>::m_number_of_harmonics, Planewaves<T>::m_number_of_channels, inputs, m_matrix, outputs);
         }
         
         void compute() noexcept
         {
-            double  current_distance, minimum_distance;
             /*
+            double  current_distance, minimum_distance;
             // Get the minimum distance between the channels
             minimum_distance    = HOA_2PI + 1;
             current_distance    = distance_radian(m_channels_azimuth[0], m_channels_azimuth[m_number_of_channels-1]);
             if(current_distance < minimum_distance)
                 minimum_distance    = current_distance;
-            for(unsigned int i = 1; i < m_number_of_channels; i++)
-            {
-                current_distance  = distance_radian(m_channels_azimuth[i], m_channels_azimuth[i-1]);
-                if(current_distance < minimum_distance)
-                    minimum_distance = current_distance;
-            }
+                for(unsigned int i = 1; i < m_number_of_channels; i++)
+                {
+                    current_distance  = distance_radian(m_channels_azimuth[i], m_channels_azimuth[i-1]);
+                    if(current_distance < minimum_distance)
+                        minimum_distance = current_distance;
+                        }
             
             // Get the optimal number of virtual channels
             // Always prefer the number of harmonics + 1
             if(minimum_distance > 0)
                 m_number_of_virtual_channels = (HOA_2PI / minimum_distance);
-            else
-                m_number_of_virtual_channels = m_number_of_harmonics + 1;
-            if(m_number_of_virtual_channels < m_number_of_harmonics + 1)
-            {
-                m_number_of_virtual_channels = m_number_of_harmonics + 1;
-            }
+                else
+                    m_number_of_virtual_channels = m_number_of_harmonics + 1;
+                    if(m_number_of_virtual_channels < m_number_of_harmonics + 1)
+                    {
+                        m_number_of_virtual_channels = m_number_of_harmonics + 1;
+                    }
             
             if(m_nearest_channel[0] && m_nearest_channel[1])
             {
@@ -226,15 +225,12 @@ namespace hoa
                 {
                     m_decoder_matrix_float[i] = m_decoder_matrix[i];
                 }
-            }
-             */
+            }*/
         }
     };
 }
 
-
-
-
 #endif
+
 
 

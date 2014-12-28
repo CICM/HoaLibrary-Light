@@ -11,7 +11,7 @@
 #include "Source.h"
 #include "SourcesGroup.h"
 
-namespace HoaCommon
+namespace hoa
 {
 	class SourcesGroup;
 	

@@ -4,8 +4,8 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_2D_ENCODER
-#define DEF_HOA_2D_ENCODER
+#ifndef DEF_HOA_ENCODER
+#define DEF_HOA_ENCODER
 
 #include "Harmonics.hpp"
 
@@ -48,7 +48,7 @@ namespace hoa
          */
         inline void setAzimuth(const T azimuth) noexcept
         {
-            m_azimuth = wrap_twopi(azimuth);
+            m_azimuth = azimuth;
             m_cosx    = std::cos(m_azimuth);
             m_sinx    = std::sin(m_azimuth);
         }
@@ -59,7 +59,7 @@ namespace hoa
          */
         inline T getAzimuth() const noexcept
         {
-            return m_azimuth;
+            return wrap_twopi(m_azimuth);
         }
         
         //! This method mute or unmute.
@@ -164,6 +164,8 @@ namespace hoa
         Harmonic<D>::Processor(order)
         {
             setAzimuth(0.);
+            setRadius(1.);
+            setMute(false);
         }
         
         //! The encoder destructor.
@@ -180,7 +182,7 @@ namespace hoa
          */
         inline void setAzimuth(const T azimuth) noexcept
         {
-            m_azimuth = wrap_twopi(azimuth);
+            m_azimuth = azimuth;
             m_cosx    = std::cos(m_azimuth);
             m_sinx    = std::sin(m_azimuth);
         }
@@ -191,7 +193,7 @@ namespace hoa
          */
         inline T getAzimuth() const noexcept
         {
-            return m_azimuth;
+            return wrap_twopi(m_azimuth);
         }
         
         //! This method set the radius.
@@ -212,7 +214,7 @@ namespace hoa
             {
                 m_factor    = 0;
                 m_gain      = 0;
-                m_distance  = 1. / max(radius, 1.);
+                m_distance  = 1. / std::max(radius, (T)1.);
             }
         }
         
