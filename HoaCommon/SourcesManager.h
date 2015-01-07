@@ -7,11 +7,11 @@
 #ifndef DEF_SOURCESMANAGER
 #define DEF_SOURCESMANAGER
 
-#include "../Hoa.hpp"
+#include "../Hoa.h"
 #include "Source.h"
 #include "SourcesGroup.h"
 
-namespace hoa
+namespace HoaCommon
 {
 	class SourcesGroup;
 	

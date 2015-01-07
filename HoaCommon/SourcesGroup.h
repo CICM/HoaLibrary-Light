@@ -10,7 +10,7 @@
 #include "Source.h"
 #include "SourcesManager.h"
 
-namespace hoa
+namespace HoaCommon
 {
 	class SourcesManager;
 	

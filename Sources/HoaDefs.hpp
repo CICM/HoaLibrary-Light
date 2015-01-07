@@ -4,8 +4,8 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef __DEF_HOA_DEFS__
-#define __DEF_HOA_DEFS__
+#ifndef DEF_HOA_DEFS_LIGHT
+#define DEF_HOA_DEFS_LIGHT
 
 #ifdef __APPLE__
 #include <Accelerate/Accelerate.h>
@@ -17,16 +17,19 @@
 
 #include <stdio.h>
 #include <stdarg.h>
-#include <cwchar>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-#include <cstring>
-#include <algorithm>
-#include <memory>
+#include <string>
 #include <cmath>
 #include <vector>
 #include <map>
+#include <set>
+#include <algorithm>
+
+#ifndef NO_SMART_POINTER
+#include <memory>
+#endif
 
 #ifdef PD_DEBUG
 #include "../../CicmWrapper/Sources/cicm_wrapper.h"
@@ -38,11 +41,13 @@
 #include <ext_common.h>
 #endif
 
-#define HOA_PI  (3.141592653589793238462643383279502884)
-#define HOA_2PI (6.283185307179586476925286766559005)
-#define HOA_PI2 (1.57079632679489661923132169163975144)
-#define HOA_PI4 (0.785398163397448309615660845819875721)
-
+#ifndef HOA_PI
+#define HOA_PI  3.14159265358979323846264338327950288
+#define HOA_2PI 6.283185307179586476925286766559005
+#define HOA_PI2 1.57079632679489661923132169163975144
+#define HOA_PI4 0.785398163397448309615660845819875721
+#endif
+#define HOA_1DEG (HOA_PI / 180.)
 using namespace std;
 
 namespace hoa
@@ -54,18 +59,36 @@ namespace hoa
         return floor(val + 0.5);
     }
 #endif
+
+#ifdef NO_SMART_POINTER
+    template <typename T> class unique_ptr
+    {
+    public:
+        T* m_ptr;
+        
+    public:
+        unique_ptr(T* ptr) :
+        m_ptr(ptr)
+        {
+            ;
+        }
+        
+        ~unique_ptr()
+        {
+            delete m_ptr;
+        }
+        
+        T* operator->() const
+        {
+            return m_ptr;
+        }
+    };
+#endif
     
     enum Dimension : bool
     {
         Hoa2d = 0,
         Hoa3d = 1
-    };
-    
-    enum Optimization
-    {
-        Basic   = 0,	/**< Basic Optimization     */
-        MaxRe   = 1,	/**< Max Re Optimization    */
-        InPhase = 2     /**< In Phase Optimization  */
     };
 }
 

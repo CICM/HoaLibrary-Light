@@ -4,17 +4,19 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_ROTATE
-#define DEF_HOA_ROTATE
+#ifndef DEF_HOA_ROTATE_LIGHT
+#define DEF_HOA_ROTATE_LIGHT
 
 #include "Harmonics.hpp"
 
 namespace hoa
 {
+    template <Dimension D, typename T> class Rotate;
+    
     //! The ambisonic encoder.
     /** The encoder should be used to encode a source in the spherical harmonics domain depending of an order of decomposition. It allows to control the azimuth of the source.
      */
-    template <Dimension D, typename T> class Rotate : public Harmonic<D>::Processor
+    template <typename T> class Rotate<Hoa2d, T> : public Harmonic<Hoa2d, T>::Processor
     {
     private:
         T   m_yaw;
@@ -27,7 +29,7 @@ namespace hoa
          @param     order	The order.
          */
         Rotate(const ulong order) noexcept :
-        Harmonic<D>::Processor(order)
+        Harmonic<Hoa2d, T>::Processor(order)
         {
             ;
         }
@@ -76,7 +78,7 @@ namespace hoa
             T sig = (*inputs++);
             (*outputs++) = sin_x * (*inputs) + cos_x * sig;
             (*outputs++) = cos_x * (*inputs++) - sin_x * sig;
-            for(ulong i = 2; i <= Harmonic<D>::Processor::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Harmonic<Hoa2d, T>::Processor::getDecompositionOrder(); i++)
             {
                 cos_x = tcos_x * m_cosx - sin_x * m_sinx;
                 sin_x = tcos_x * m_sinx + sin_x * m_cosx;

@@ -4,20 +4,20 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef __DEF_HOA_HARMONICS__
-#define __DEF_HOA_HARMONICS__
+#ifndef DEF_HOA_HARMONICS_LIGHT
+#define DEF_HOA_HARMONICS_LIGHT
 
 #include "HoaMath.hpp"
 
 namespace hoa
 {    
-    template <Dimension D> class Harmonic;
+    template <Dimension D, typename T> class Harmonic;
     
-    template<> class Harmonic<Hoa2d>
+    template<typename T> class Harmonic<Hoa2d, T>
     {
     private:
-        const ulong m_degree;
-        const long  m_order;
+        ulong m_degree; // To const
+        long  m_order;
     public:
         
         Harmonic(const ulong _index) noexcept :
@@ -53,10 +53,10 @@ namespace hoa
          */
         class Processor
         {
-        protected:
+        private:
             const ulong             m_order_of_decomposition;
             const ulong             m_number_of_harmonics;
-            vector<Harmonic<Hoa2d>> m_harmonics;
+            vector<Harmonic<Hoa2d, T>> m_harmonics;
         public:
             
             //! The ambisonic constructor.
@@ -69,7 +69,7 @@ namespace hoa
             {
                 for(ulong i = 0; i < m_number_of_harmonics; i++)
                 {
-                    m_harmonics.push_back(Harmonic<Hoa2d>(i));
+                    m_harmonics.push_back(Harmonic<Hoa2d, T>(i));
                 }
             }
             
@@ -149,7 +149,7 @@ namespace hoa
         };
     };
         
-    template <> class Harmonic<Hoa3d>
+    template <typename T> class Harmonic<Hoa3d, T>
     {
     private:
         const ulong m_degree;
@@ -190,9 +190,9 @@ namespace hoa
         class Processor
         {
         protected:
-            const ulong             m_order_of_decomposition;
-            const ulong             m_number_of_harmonics;
-            vector<Harmonic<Hoa2d>> m_harmonics;
+            const ulong                 m_order_of_decomposition;
+            const ulong                 m_number_of_harmonics;
+            vector<Harmonic<Hoa3d, T>>  m_harmonics;
         public:
             
             //! The ambisonic constructor.
@@ -205,7 +205,7 @@ namespace hoa
             {
                 for(ulong i = 0; i < m_number_of_harmonics; i++)
                 {
-                    m_harmonics.push_back(Harmonic<Hoa2d>(i));
+                    m_harmonics.push_back(Harmonic<Hoa2d, T>(i));
                 }
             }
             

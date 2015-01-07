@@ -4,8 +4,8 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef __DEF_HOA_LIBRARY__
-#define __DEF_HOA_LIBRARY__
+#ifndef DEF_HOA_LIBRARY_LIGHT
+#define DEF_HOA_LIBRARY_LIGHT
 
 #include "Harmonics.hpp"
 #include "Planewaves.hpp"
@@ -14,6 +14,10 @@
 #include "Rotate.hpp"
 #include "Decoder.hpp"
 #include "Vector.hpp"
+#include "Meter.hpp"
+#include "Projector.hpp"
+#include "Recomposer.hpp"
+#include "Tools.hpp"
 
 #endif
 

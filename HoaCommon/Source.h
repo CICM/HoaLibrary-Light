@@ -7,9 +7,9 @@
 #ifndef DEF_SOURCE
 #define DEF_SOURCE
 
-#include "../Hoa.hpp"
+#include "../Hoa.h"
 
-namespace hoa
+namespace HoaCommon
 {
 	//! The source
     /** The source store and manage source informations like the position, color, mute...

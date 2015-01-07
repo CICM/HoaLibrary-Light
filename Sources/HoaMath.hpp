@@ -4,8 +4,8 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef __DEF_HOA_MATHS__
-#define __DEF_HOA_MATHS__
+#ifndef DEF_HOA_MATH_LIGHT
+#define DEF_HOA_MATH_LIGHT
 
 #include "HoaDefs.hpp"
 
@@ -226,7 +226,7 @@ namespace hoa
 
 	 @see    ordinate
      */
-    inline double abscissa(const double radius, const double azimuth, const double elevation = 0.)
+    template <typename T> inline T abscissa(const T radius, const T azimuth, const T elevation = 0.)
 	{
 		return radius * cos(azimuth + HOA_PI2) * cos(elevation);
 	}
@@ -297,7 +297,7 @@ namespace hoa
 		return sqrt((x1-x2) * (x1-x2) + (y1-y2) * (y1-y2) + (z1-z2) * (z1-z2));
 	}
     
-	inline double distance_radian(double angle1, double angle2)
+	template <typename T> inline T distance_radian(T angle1, T angle2)
     {
         angle1 = wrap_twopi(angle1);
         angle2 = wrap_twopi(angle2);
@@ -322,78 +322,13 @@ namespace hoa
     {
         return acos(sin(elevation1) * sin(elevation2) + cos(elevation1) * cos(elevation2) * cos(azimuth1 - azimuth2));
     }
-    /*
-	inline double spherical_azimuth_interpolation(const double azimuth1, const double elevation1, const double azimuth2, const double elevation2, double mu)
-	{
-		double distance;
-		double angle1 = wrap_twopi(azimuth1);
-        double angle2 = wrap_twopi(azimuth2);
-        if(angle1 > angle2)
-            distance = (angle1 - angle2);
-        else
-            distance = (angle2 - angle1);
-		if(azimuth1 == azimuth2)
-			return azimuth1;
-		if(azimuth1 < azimuth2)
-		{
-			if(distance > HOA_PI)
-				return wrap_twopi(azimuth1 - (HOA_2PI - distance) * mu);
-			else
-				return azimuth1 + distance * mu;
-		}
-		else
-		{
-			if(distance > HOA_PI)
-				return wrap_twopi(azimuth1 + (HOA_2PI - distance) * mu);
-			else
-				return azimuth1 - distance * mu;
-		}
-	}
-
-	inline double spherical_elevation_interpolation(const double azimuth1, const double elevation1, const double azimuth2, const double elevation2, double mu)
-	{
-		double distance = distance_radian(elevation1, elevation2);
-		if(round(azimuth1 / HOA_2PI *360.) == round(wrap_twopi(azimuth2 + HOA_PI) / HOA_2PI * 360.))
-			distance = elevation1 + elevation2;
-
-		if(distance > HOA_PI)
-			distance  = HOA_2PI - distance;
-		if(elevation1 < elevation2)
-			return elevation1 + distance * mu;
-		else
-			return elevation2 + distance * (1. - mu);
-	}
-
-	inline double radianClosestDistance(double angle1, double angle2)
-    {
-        double minRad, maxRad;
-        angle1 = wrap_twopi(angle1);
-        angle2 = wrap_twopi(angle2);
-        minRad = std::min(angle1, angle2);
-        maxRad = std::max(angle1, angle2);
-
-        if (maxRad - minRad <= HOA_PI)
-            return maxRad - minRad;
-        else
-            return HOA_2PI - (maxRad - minRad);
-    }*/
 
 
 	inline bool isInside(const double val, const double v1, const double v2)
 	{
         return (v1 <= v2) ? (val >= v1 && val <= v2) : (val >= v2 && val <= v1);
 	}
-/*
-	inline bool isInsideRad(const double radian, const double loRad, const double hiRad)
-	{
-        return isInside(wrap_twopi(radian-loRad), 0, wrap_twopi(hiRad-loRad));
-	}
-
-    inline bool isInsideDeg(const double degree, const double loDeg, const double hiDeg)
-	{
-        return isInside(wrap_360(degree-loDeg), 0, wrap_360(hiDeg-loDeg));
-	}
-*/
+    
 	inline void vector_add(unsigned int size, double *vec, double inc)
 	{
 		for (unsigned int i=0; i < size; i++)
@@ -449,136 +384,6 @@ namespace hoa
             delete [] temp;
         }
 	}
-    /*
-	inline void vector_sort_coordinates(unsigned int size, double* azimuths, double* elevations, double azymuth, double elevation)
-	{
-        double* abs	= new double[size];
-		double* ord	= new double[size];
-		double* azi	= new double[size];
-		double* cpa	= new double[size];
-		double* cpe	= new double[size];
-		int* index	= new int[size];
-		double g_x = abscissa(1, azymuth, elevation), g_y = ordinate(1, azymuth, elevation);
-		memcpy(cpa, azimuths, size * sizeof(double));
-		memcpy(cpe, elevations, size * sizeof(double));
-	
-		for(unsigned int i = 0; i < size; i++)
-		{
-			abs[i] = abscissa(1., azimuths[i], elevations[i]);
-			ord[i] = ordinate(1., azimuths[i], elevations[i]) - g_y;
-			if(elevation >= 0 && elevations[i] < 0.)
-			{
-				if(abs[i] < 0)
-					abs[i] *= -1;
-				abs[i] += 2.;
-			}
-			else if(elevation < 0 && elevations[i] > 0.)
-			{
-				if(abs[i] > 0)
-					abs[i] *= -1;
-				abs[i] += 2.;
-			}
-			abs[i] -= g_x;
-			
-		}
-		double max = -100;
-		int inc = size - 1;
-		for(unsigned int i = 0; i < size; i++)
-		{
-			azi[i] = wrap_twopi(azimuth(abs[i], ord[i]));
-			if(azi[i] > max)
-			{
-				max = azi[i];
-				index[inc] = i;
-			}
-			
-		}
-		
-		azi[index[inc]] = -100;
-		inc--;
-		while(inc > -1)
-		{
-			max = -1;
-			for(unsigned int j = 0; j < size; j++)
-			{
-				if(azi[j] > max)
-				{
-					max = azi[j];
-					index[inc] = j;
-				}
-			}
-			azi[index[inc]] = -100;
-			inc--;
-		}
-
-		for(unsigned int i = 0; i < size; i++)
-		{
-			azimuths[i] = cpa[index[i]];
-			elevations[i] = cpe[index[i]];
-		}
-		
-		delete [] abs;
-		delete [] ord;
-		delete [] azi;
-		delete [] cpa;
-		delete [] cpe;
-		delete [] index;
-
-	}
-
-	inline void vector_sort_byone(unsigned int size, double* vector, double* vector2)
-	{
-        int index;
-        double* temp	= new double[size];
-		double* temp2	= new double[size];
-        if(temp && size)
-        {
-            index  = 0;
-            temp[0] = vector[0];
-            temp[size - 1] = vector[0];
-			temp2[0] = vector2[0];
-			temp2[size - 1] = vector2[0];
-            for(unsigned int i = 1; i < size; i++)
-            {
-                if(vector[i] < temp[0]) // Get the minimum
-                {
-                    temp[0] = vector[i];
-					temp2[0] = vector2[i];
-                    index = i;
-                }
-                if(vector[i] > temp[size - 1]) // Get the maximum
-				{
-                    temp[size - 1] = vector[i];
-					temp2[size - 1] = vector2[i];
-				}
-            }
-            vector[index] -= 1;
-
-            for(unsigned int i = 1; i < size - 1; i++)
-            {
-                temp[i] = temp[size - 1];
-				temp2[i] = temp2[size - 1];
-                index   = -1;
-                for(unsigned int j = 0; j < size; j++)
-                {
-                    if(vector[j] >= temp[i-1] && vector[j] <= temp[i])
-                    {
-                        temp[i] = vector[j];
-						temp2[i] = vector2[j];
-                        index = j;
-                    }
-                }
-                if(index > -1)
-                {
-                    vector[index] -= 1;
-                }
-            }
-            memcpy(vector, temp, size * sizeof(double));
-			memcpy(vector2, temp2, size * sizeof(double));
-            delete [] temp;
-			delete [] temp2;
-        }
-	}*/
 }
 
 #endif
