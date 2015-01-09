@@ -7,7 +7,8 @@
 #ifndef DEF_HOA_HARMONICS_LIGHT
 #define DEF_HOA_HARMONICS_LIGHT
 
-#include "HoaMath.hpp"
+#include "Math.hpp"
+#include "Signal.hpp"
 
 namespace hoa
 {    
@@ -152,8 +153,8 @@ namespace hoa
     template <typename T> class Harmonic<Hoa3d, T>
     {
     private:
-        const ulong m_degree;
-        const long  m_order;
+        ulong m_degree;
+        long  m_order;
     public:
         
         Harmonic(const ulong index) noexcept :
@@ -205,7 +206,7 @@ namespace hoa
             {
                 for(ulong i = 0; i < m_number_of_harmonics; i++)
                 {
-                    m_harmonics.push_back(Harmonic<Hoa2d, T>(i));
+                    m_harmonics.push_back(Harmonic<Hoa3d, T>(i));
                 }
             }
             

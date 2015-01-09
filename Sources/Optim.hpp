@@ -135,7 +135,7 @@ namespace hoa
          */
         Optim(const ulong order) noexcept :
         Harmonic<Hoa2d, T>::Processor(order),
-        m_facorder(factorial(order)),
+        m_facorder(Math<T>::factorial(order)),
         m_facinphase(m_facorder * m_facorder * order),
         m_facorder1(m_facorder * (order + 2) * order),
         m_facorder2(m_facorder / order)

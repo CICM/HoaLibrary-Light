@@ -7,13 +7,297 @@
 #ifndef DEF_HOA_2D_DECODER
 #define DEF_HOA_2D_DECODER
 
-#include "Ambisonic.h"
-#include "Planewaves.h"
-#include "Encoder.h"
-#include "Rotate.h"
+#include "../Hoa.h"
 
 namespace Hoa2D
 {
+
+    //! The ambisonic class.
+    /**
+     Most of the ambisonic classes inherit from this classe. It computes the number of harmonics, their degrees and their orders depending of the decomposition order. etc...
+     */
+    class Ambisonic
+    {
+    protected:
+        unsigned int	m_order;
+        unsigned int	m_number_of_harmonics;
+        long*           m_harmonics_orders;
+        
+    public:
+        //! The ambisonic constructor.
+        /** The ambisonic constructor allocates and initializes the generale member values depending of a decomposition order.
+         @param     order	The order, must be at least 1.
+         */
+        Ambisonic(unsigned int order);
+        
+        //! The ambisonic destructor.
+        /** The ambisonic destructor.
+         */
+        ~Ambisonic();
+        
+        //! Retrieve the decomposition order.
+        /** Retrieve the decomposition order.
+         
+         @return The order.
+         */
+        unsigned int getDecompositionOrder() const
+        {
+            return m_order;
+        }
+        
+        //! Retrieve the number of harmonics.
+        /** Retrieve the number of harmonics.
+         
+         @return The number of harmonics.
+         */
+        unsigned int getNumberOfHarmonics() const
+        {
+            return m_number_of_harmonics;
+        }
+        
+        //! Retrieve the order of an harmonic.
+        /** The order of an harmonic is in the range -order to order. The harmonics are sorted by their orders, from 0 to the decomposition order and, in each order, there are the 2 harmonics with the orders -order and order. For the first orders, the harmonics arrangement is h[0] h[-1] h[1] h[-2] h[2] h[-3] h[3]etc. with h[order].
+         
+         @param     index	The index of an harmonic.
+         @return    The method returns the order of the harmonic if the harmonic exists, otherwise the function generates an error.
+         @see       getHarmonicDegree()
+         @see       getHarmonicName()
+         */
+        long getHarmonicOrder(unsigned int index) const
+        {
+            assert(index < m_number_of_harmonics);
+            return m_harmonics_orders[index];
+        }
+        
+        //! Retrieve the order of an harmonic.
+        /** The orders of the harmonics are in the range 0 to the decomposition order. Each order contains 2 harmonics with the orders -order and order. For the first orders, the harmonics arrangement is h[0] h[-1] h[1] h[-2] h[2] h[-3] h[3], etc. with h[order].
+         
+         @param     index	The index of an harmonic.
+         @return    The method returns the order of the harmonic if the harmonic exists, otherwise the function generates an error.
+         @see       getHarmonicOrder()
+         @see       getHarmonicName()
+         */
+        long getHarmonicDegree(unsigned int index) const
+        {
+            assert(index < m_number_of_harmonics);
+            return abs(m_harmonics_orders[index]);
+        }
+        
+        //! Retrieve the index of an harmonic.
+        /** The orders of the harmonics are in the range 0 to the decomposition order. Each order contains 2 harmonics with the orders -order and order. For the first orders, the harmonics arrangement is h[0] h[-1] h[1] h[-2] h[2] h[-3] h[3], etc. with h[order].
+         
+         @param     order	The order an harmonic.
+         @return    The method returns the index of the harmonic if the harmonic exists, otherwise the function generates an error.
+         @see       getHarmonicOrder()
+         @see       getHarmonicName()
+         */
+        inline unsigned int getHarmonicIndex(const int harmOrder) const
+        {
+            assert(abs(harmOrder) <= getDecompositionOrder());
+            if(harmOrder < 0)
+                return -harmOrder * 2 - 1;
+            else
+                return harmOrder * 2;
+        };
+        
+        //! Retrieve a name for an harmonic.
+        /** Retrieve a name for an harmonic in a std::string format that will be "harmonic order".
+         
+         @param     index	The index of an harmonic.
+         @return    The method returns a name for the harmonic that contains its order if the harmonic exists, otherwise the function generates an error.
+         
+         @see       getHarmonicDegree()
+         @see       getHarmonicOrder()
+         */
+        std::string getHarmonicName(unsigned int index) const
+        {
+            assert(index < m_number_of_harmonics);
+            return "Harmonic " + int_to_string(getHarmonicOrder(index));
+        }
+    };
+    
+    //! The ambisonic encoder.
+    /** The encoder should be used to encode a signal in the spherical harmonics domain depending of an order of decomposition. It allows to control the azimuth of the encoding.
+     */
+    class Encoder : public Ambisonic
+    {
+        
+    private:
+        
+        double  m_azimuth;
+        double  m_cosx;
+        double  m_sinx;
+        
+    public:
+        
+        //! The encoder constructor.
+        /**	The encoder constructor allocates and initialize the member values to computes spherical harmonics coefficients depending of a decomposition order. The order must be at least 1.
+         
+         @param     order	The order.
+         */
+        Encoder(unsigned int order);
+        
+        //! The encoder destructor.
+        /**	The encoder destructor free the memory.
+         */
+        ~Encoder();
+        
+        //! This method set the angle of azimuth.
+        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 Pi to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is Pi/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
+         
+         @param     azimuth	The azimuth.
+         */
+        void setAzimuth(const double azimuth);
+        
+        //! This method performs the encoding with single precision.
+        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         
+         @param     input	The input sample.
+         @param     outputs The output array.
+         */
+        
+        //! Get the azimuth angle
+        /** The method returns the last angle of encoding between 0 and 2π.
+         
+         @return     The azimuth.
+         */
+        inline double getAzimuth() const {return m_azimuth;};
+        
+        //! This method performs the encoding with single precision.
+        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         
+         @param     input	The input sample.
+         @param     outputs The output array.
+         */
+        void process(const float input, float* outputs);
+        
+        //! This method performs the encoding with double precision.
+        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         
+         @param     input	The input sample.
+         @param     outputs The output array.
+         */
+        void process(const double input, double* outputs);
+    };
+    
+    
+    //! The planewaves class.
+    /**
+     The planewaves classes, that process on a set of channels (or planewaves), inherit from this class. It store basic informations like the number of channels, the coordinates and the names of channels.
+     */
+    class Planewaves
+    {
+    protected:
+        
+        unsigned int    m_number_of_channels;
+        double*         m_channels_azimuth;
+        
+        //! Set the azimuth of a channel.
+        /** Set the azimuth of a channel. The azimuth is in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The maximum index must be the number of channel - 1.
+         
+         @param     index		The index of the channel.
+         @param     azimuth		The azimuth.
+         */
+        void setChannelAzimuth(unsigned int index, double azimuth);
+        
+        //! Set the azimtuh of all the channels.
+        /** Set the azimtuh of all the channels. It is more efficient to set all the channels azimuths at the same time because even if only one channel has changed, all the decoding matrix have to be recomputed. The azimuths are in radian between 0 and 2 Pi, O is the front of the soundfield and Pi is the back of the sound field. The azimtuhs array must have a minimum size of the number of channels.
+         
+         @param     azimuths		The azimuths array.
+         
+         @see    setChannelAzimuth
+         */
+        void setChannelsAzimuth(double* azimuths);
+    public:
+        
+        //! The planewaves constructor.
+        /** The lanewaves constructor allocates and initializes the general member values depending on a number of channels. The number of loudspkeakers must a least 1.
+         
+         @param     numberOfChannels	The number of channels.
+         */
+        Planewaves(unsigned int numberOfChannels);
+        
+        //! The planewaves destructor.
+        /** The Planewaves destructor free the memorie allocated.
+         */
+        ~Planewaves();
+        
+        //! Retrieve the number of channels.
+        /** Retrieve the number of channels of the planewave class.
+         
+         @return The number of channels.
+         */
+        inline unsigned int getNumberOfChannels() const
+        {
+            return m_number_of_channels;
+        }
+        
+        //! Retrieve the azimuth of a channel.
+        /** Retrieve the azimuth of a channel. The azimuth of the channel is in radian, 0 radian is at the front of the soundfield and Pi is at the back of the sound field. The maximum index must be the number of channels - 1.
+         
+         @param      index   The index of the channel.
+         @return     The azimuth of the channel if the channel exists, otherwise the function generates an error.
+         
+         @see getChannelAbscissa
+         @see getChannelOrdinate
+         @see getChannelName
+         */
+        inline double getChannelAzimuth(unsigned int index) const
+        {
+            assert(index < m_number_of_channels);
+            return m_channels_azimuth[index];
+        }
+        
+        
+        //! Retrieve the abscissa of a channel.
+        /** Retrieve the abscissa of a channel. The abscissa is between -1 and 1, -1 is the left of the soundfield, 0 is the center of the soundfield and 1 is the right of the soundfield. The maximum index must be the number of channels - 1.
+         
+         @param     index    The index of the channel.
+         @return    The abscissa of the channel if the channel exists, otherwise the function generates an error.
+         
+         @see getChannelAzimuth
+         @see getChannelOrdinate
+         @see getChannelName
+         */
+        inline double getChannelAbscissa(unsigned int index) const
+        {
+            assert(index < m_number_of_channels);
+            return abscissa(1., m_channels_azimuth[index]);
+        }
+        
+        //! Retrieve the ordinate of a channel.
+        /** Retrieve the ordinate of a channel. The ordinate is between -1 and 1, -1 is the back of the soundfield, 0 is the center of the soundfield and 1 is the front of the soundfield. The maximum index must be the number of channels - 1.
+         
+         @param     index	The index of the channel.
+         @return    The ordinate of the channel if the channel exists, otherwise the function generates an error.
+         
+         @see getChannelAzimuth
+         @see getChannelAbscissa
+         @see getChannelName
+         */
+        inline double getChannelOrdinate(unsigned int index) const
+        {
+            assert(index < m_number_of_channels);
+            return ordinate(1., m_channels_azimuth[index]);
+        }
+        
+        //! Retrieve a name for a channel.
+        /** Retrieve a name for a channel in a std::string format that will be "Channel index azimuth (in degrees)".
+         
+         @param     index	The index of a channel.
+         @return    The method returns a name for the channel that contains its index and its azimuth if the channel exists, otherwise the function generates an error.
+         
+         @see getChannelAzimuth
+         @see getChannelAbscissa
+         @see getChannelOrdinate
+         */
+        inline std::string getChannelName(unsigned int index)
+        {
+            assert(index < m_number_of_channels);
+            return "Channel " + int_to_string(index + 1) + " : " + int_to_string((int)(getChannelAzimuth(index) / HOA_2PI * 360.)) + "°";
+        };
+    };
+    
     //! The ambisonic regular decoder.
     /** The regular decoder should be used to decode an ambisonic sound field for a set a channels at equal distances on a circle depending on a decomposition order. The number of channels must be at least the number of harmonics. Note that you can only change the offset of the channels.
      */

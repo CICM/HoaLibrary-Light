@@ -17,6 +17,8 @@
 #include "Meter.hpp"
 #include "Projector.hpp"
 #include "Recomposer.hpp"
+#include "Scope.hpp"
+#include "Wider.hpp"
 #include "Tools.hpp"
 
 #endif

@@ -78,8 +78,8 @@ namespace hoa
             for(ulong i = 1; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
                 veclocitySum += (*inputs++);
             
-            const T velocityAbscissa = vectors_dot_product(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_channels_abscissa);
-            const T velocityOrdinate = vectors_dot_product(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_channels_ordinate);
+            const T velocityAbscissa = Signal<T>::vectors_dot_product(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_channels_abscissa);
+            const T velocityOrdinate = Signal<T>::vectors_dot_product(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_channels_ordinate);
             if(veclocitySum)
             {
                 (*outputs++) = velocityAbscissa / veclocitySum;
@@ -104,9 +104,9 @@ namespace hoa
             for(ulong i = 1; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
                 m_channels_square[i] = inputs[i] * inputs[i];
             
-            T energySum = vector_sum(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), m_channels_square);
-            const T energyAbscissa = vectors_dot_product(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), m_channels_square, m_channels_abscissa);
-            const T energyOrdinate = vectors_dot_product(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), m_channels_square, m_channels_ordinate);
+            T energySum = Signal<T>::vector_sum(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), m_channels_square);
+            const T energyAbscissa = Signal<T>::vectors_dot_product(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), m_channels_square, m_channels_abscissa);
+            const T energyOrdinate = Signal<T>::vectors_dot_product(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), m_channels_square, m_channels_ordinate);
             
             if(energySum)
             {

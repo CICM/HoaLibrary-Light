@@ -60,7 +60,7 @@ namespace hoa
          */
         inline T getYaw() const noexcept
         {
-            return wrap_twopi(m_yaw);
+            return Math<T>::wrap_twopi(m_yaw);
         };
         
         //! This method performs the rotation.

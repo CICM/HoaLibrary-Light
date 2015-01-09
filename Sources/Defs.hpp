@@ -27,10 +27,6 @@
 #include <set>
 #include <algorithm>
 
-#ifndef NO_SMART_POINTER
-#include <memory>
-#endif
-
 #ifdef PD_DEBUG
 #include "../../CicmWrapper/Sources/cicm_wrapper.h"
 #endif
@@ -58,31 +54,6 @@ namespace hoa
     {
         return floor(val + 0.5);
     }
-#endif
-
-#ifdef NO_SMART_POINTER
-    template <typename T> class unique_ptr
-    {
-    public:
-        T* m_ptr;
-        
-    public:
-        unique_ptr(T* ptr) :
-        m_ptr(ptr)
-        {
-            ;
-        }
-        
-        ~unique_ptr()
-        {
-            delete m_ptr;
-        }
-        
-        T* operator->() const
-        {
-            return m_ptr;
-        }
-    };
 #endif
     
     enum Dimension : bool

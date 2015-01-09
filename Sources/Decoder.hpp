@@ -47,7 +47,7 @@ namespace hoa
          */
         inline void process(const T* inputs, T* outputs) const noexcept
         {
-            matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Planewave<D, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
+            Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Planewave<D, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
         
         void computeMatrix() noexcept
@@ -120,7 +120,7 @@ namespace hoa
                         // Find the closest real planewave to the virtual one
                         for(ulong j = 0; j < nplanewaves; j++)
                         {
-                            T distref = wrap_twopi(planewaves[j].getAzimuth() - angle);
+                            T distref = Math<T>::wrap_twopi(planewaves[j].getAzimuth() - angle);
                             if(distref > HOA_PI)
                             {
                                 distref = HOA_2PI - distref;
@@ -131,15 +131,15 @@ namespace hoa
                                 channel_index1 = j;
                             }
                         }
-                        if(wrap(planewaves[channel_index1].getAzimuth() - angle, (T)-HOA_PI, (T)HOA_PI) >= 0)
+                        if(Math<T>::wrap_pi(planewaves[channel_index1].getAzimuth() - angle) >= 0)
                         {
-                            channel_index2 = wrap_ptr(channel_index1 - 1, nplanewaves);
+                            channel_index2 = Math<T>::wrap_ptr(channel_index1 - 1, nplanewaves);
                         }
                         else
                         {
-                            channel_index2 = wrap_ptr(channel_index1 + 1, nplanewaves);
+                            channel_index2 = Math<T>::wrap_ptr(channel_index1 + 1, nplanewaves);
                         }
-                        distance2  = wrap_twopi(planewaves[channel_index2].getAzimuth() - angle);
+                        distance2  = Math<T>::wrap_twopi(planewaves[channel_index2].getAzimuth() - angle);
                         if(distance2 > HOA_PI)
                         {
                             distance2 = HOA_2PI - distance2;

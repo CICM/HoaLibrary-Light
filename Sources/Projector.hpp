@@ -17,7 +17,7 @@ namespace hoa
     //! The ambisonic projector.
     /** The projector should be used to decode an ambisonic sound field for a set a channels on a circle depending on a decomposition order or for headphones.
      */
-    template <Dimension D, typename T> class Projector : public Encoder<Hoa2d, T>, public Planewave<D, T>::Processor
+    template <typename T> class Projector<Hoa2d, T> : public Encoder<Hoa2d, T>, public Planewave<Hoa2d, T>::Processor
     {
     private:
         T*  m_matrix;
@@ -29,15 +29,15 @@ namespace hoa
          @param     numberOfPlanewaves     The number of planewaves.
          */
         Projector(const ulong order, const ulong numberOfPlanewaves) noexcept :
-        Encoder<D, T>(order),
-        Planewave<D, T>::Processor(numberOfPlanewaves)
+        Encoder<Hoa2d, T>(order),
+        Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
         {
             m_matrix = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                Encoder<D, T>::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
-                Encoder<D, T>::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
+                Encoder<Hoa2d, T>::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
+                Encoder<Hoa2d, T>::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
                 m_matrix[i * Encoder<Hoa2d, T>::getNumberOfHarmonics()] = factor * 0.5;
             }
         }
@@ -57,7 +57,7 @@ namespace hoa
          */
         inline void process(const T* inputs, T* outputs) const noexcept
         {
-            matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Planewave<D, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
+            Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
     };
 }

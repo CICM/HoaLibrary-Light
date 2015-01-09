@@ -61,7 +61,7 @@ namespace hoa
          */
         inline T getAzimuth() const noexcept
         {
-            return wrap_twopi(m_azimuth);
+            return Math<T>::wrap_twopi(m_azimuth);
         }
         
         //! This method mute or unmute.
@@ -202,7 +202,7 @@ namespace hoa
          */
         inline T getAzimuth() const noexcept
         {
-            return wrap_twopi(m_azimuth);
+            return Math<T>::wrap_twopi(m_azimuth);
         }
         
         //! This method set the radius.
@@ -269,7 +269,7 @@ namespace hoa
                 T sin_x = m_sinx;
                 T tcos_x = cos_x;
                 const T gain1   = (m_gain * Harmonic<Hoa2d, T>::Processor::getDecompositionOrder());
-                const T factor1 = (cos(clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - m_gain) + m_distance);
+                const T factor1 = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - m_gain) + m_distance);
                 
                 (*outputs++) = (*inputs) * (gain1 + m_distance);            // Hamonic [0,0]
                 (*outputs++) = (*inputs) * sin_x * factor1;                 // Hamonic [1,-1]
@@ -277,7 +277,7 @@ namespace hoa
                 for(ulong i = 2; i <= Harmonic<Hoa2d, T>::Processor::getDecompositionOrder(); i++)
                 {
                     const T gain    = (m_gain * (Harmonic<Hoa2d, T>::Processor::getDecompositionOrder() - i) + m_distance);
-                    const T factor  = (cos(clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
+                    const T factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
                     
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
                     sin_x   = tcos_x * m_sinx + sin_x * m_cosx;
@@ -311,7 +311,7 @@ namespace hoa
                 T sin_x = m_sinx;
                 T tcos_x = cos_x;
                 const T gain1   = (m_gain * Harmonic<Hoa2d, T>::Processor::getDecompositionOrder());
-                const T factor1 = (cos(clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - m_gain) + m_distance);
+                const T factor1 = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - m_gain) + m_distance);
                 
                 (*outputs++) += (*inputs) * (gain1 + m_distance);            // Hamonic [0,0]
                 (*outputs++) += (*inputs) * sin_x * factor1;                 // Hamonic [1,-1]
@@ -319,7 +319,7 @@ namespace hoa
                 for(ulong i = 2; i <= Harmonic<Hoa2d, T>::Processor::getDecompositionOrder(); i++)
                 {
                     const T gain    = (m_gain * (Harmonic<Hoa2d, T>::Processor::getDecompositionOrder() - i) + m_distance);
-                    const T factor  = (cos(clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
+                    const T factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
                     
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
                     sin_x   = tcos_x * m_sinx + sin_x * m_cosx;

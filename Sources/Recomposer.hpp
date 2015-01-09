@@ -59,7 +59,7 @@ namespace hoa
         
         void process(const T* inputs, T* outputs)
         {
-            matrix_vector_mul(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), Encoder<Hoa2d, T>::getNumberOfHarmonics(), inputs, m_matrix, outputs);
+            Signal<T>::matrix_vector_mul(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), Encoder<Hoa2d, T>::getNumberOfHarmonics(), inputs, m_matrix, outputs);
         }
     };
 
@@ -91,7 +91,7 @@ namespace hoa
     
         inline void setFisheye(const T fisheye) noexcept
         {
-            T factor = 1. - clip(fisheye, (T)0., (T)1.);
+            T factor = 1. - Math<T>::clip(fisheye, (T)0., (T)1.);
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
                 T azimuth = (T)i / (T)Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() * HOA_2PI - HOA_PI;
@@ -149,7 +149,7 @@ namespace hoa
         
         inline void setWidening(const ulong index, const T radius) noexcept
         {
-            m_encoders[index]->setRadius(clip(radius, (T)0, (T)1));
+            m_encoders[index]->setRadius(Math<T>::clip(radius, (T)0, (T)1));
         }
         
         inline T getAzimuth(const ulong index) const noexcept

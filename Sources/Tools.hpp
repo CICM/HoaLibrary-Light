@@ -7,7 +7,8 @@
 #ifndef DEF_HOA_TOOLS_LIGHT
 #define DEF_HOA_TOOLS_LIGHT
 
-#include "HoaMath.hpp"
+#include "Math.hpp"
+#include "Signal.hpp"
 
 namespace hoa
 {
@@ -138,8 +139,8 @@ namespace hoa
         
         inline void setAzimuth(const ulong index, const T azimuth) noexcept
         {
-            m_values_new[index + m_number_of_sources] = wrap_twopi(azimuth);
-            m_values_old[index + m_number_of_sources] = wrap_twopi(m_values_old[index + m_number_of_sources]);
+            m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azimuth);
+            m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
             
             T distance;
             if(m_values_old[index + m_number_of_sources] > m_values_new[index + m_number_of_sources])
@@ -179,28 +180,16 @@ namespace hoa
             m_counter = 0;
         }
         
-        void process(float* vector) noexcept
+        void process(T* vector) noexcept
         {
-            cblas_saxpy(m_number_of_sources * 2, 1., m_values_step, 1, m_values_old, 1);
+            Signal<T>::vector_add(m_number_of_sources * 2, m_values_step, m_values_old);
             if(m_counter++ >= m_ramp)
             {
-                cblas_scopy(m_number_of_sources * 2, m_values_new, 1, m_values_old, 1);
-                memset(m_values_step, 0, sizeof(float) * m_number_of_sources * 2);
+                Signal<T>::vector_copy(m_number_of_sources * 2, m_values_new, m_values_old);
+                Signal<T>::vector_clear(m_number_of_sources * 2, m_values_step);
                 m_counter    = 0;
             }
-            cblas_scopy(m_number_of_sources * 2, m_values_old, 1, vector, 1);
-        }
-        
-        void process(double* vector) noexcept
-        {
-            cblas_daxpy(m_number_of_sources * 2, 1., m_values_step, 1, m_values_old, 1);
-            if(m_counter++ >= m_ramp)
-            {
-                cblas_dcopy(m_number_of_sources * 2, m_values_new, 1, m_values_old, 1);
-                memset(m_values_step, 0, sizeof(double) * m_number_of_sources * 2);
-                m_counter    = 0;
-            }
-            cblas_dcopy(m_number_of_sources * 2, m_values_old, 1, vector, 1);
+            Signal<T>::vector_copy(m_number_of_sources * 2, m_values_old, vector);
         }
     };
 }
