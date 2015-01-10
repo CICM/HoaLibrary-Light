@@ -466,6 +466,193 @@ namespace hoa
             }
         }
     };
+    
+
+    template <typename T> class Encoder<Hoa3d, T> : public Harmonic<Hoa3d, T>::Processor
+    {
+    private:
+        T  m_azimuth;
+        T  m_elevation;
+        T  m_cos_phi;
+        T  m_sin_phi;
+        T  m_cos_theta;
+        T  m_sqrt_rmin;
+        T* m_normalization;
+        bool m_muted;
+    public:
+        
+        //! The encoder constructor.
+        /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
+         @param     order	The order.
+         */
+        Encoder(const ulong order) :
+        Harmonic<Hoa3d, T>::Processor(order)
+        {
+            m_normalization = new T[Harmonic<Hoa3d, T>::Processor::getNumberOfHarmonics()];
+            for(ulong i = 0; i < Harmonic<Hoa3d, T>::Processor::getNumberOfHarmonics(); i++)
+            {
+                ulong l = Harmonic<Hoa3d, T>::Processor::getHarmonicDegree(i);
+                ulong m = abs(Harmonic<Hoa3d, T>::Processor::getHarmonicOrder(i));
+                m_normalization[i] = sqrt((T)(Math<T>::factorial(l - m) * (2 * l + 1)) /  (T)(Math<T>::factorial(l + m) * 4. * HOA_PI));
+            }
+            setMute(false);
+            setAzimuth(0.);
+            setElevation(0.);
+        }
+        
+        //! The encoder destructor.
+        /**	The encoder destructor free the memory.
+         */
+        ~Encoder()
+        {
+            delete [] m_normalization;
+        }
+        
+        //! This method mute or unmute.
+        /**	Mute or unmute.
+         @param     muted	The mute state.
+         */
+        inline void setMute(const bool muted) noexcept
+        {
+            m_muted = muted;
+        }
+        
+        //! This method retrieve the mute or unmute state of a source.
+        /**	Get the Mute state of a source.
+         @return    The mute state of the source.
+         */
+        inline bool getMute() const noexcept
+        {
+            return m_muted;
+        }
+        
+        //! This method set the angle of azimuth.
+        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
+         @param     azimuth	The azimuth.
+         @see       setElevation()
+         */
+        inline void setAzimuth(const T azimuth) noexcept
+        {
+            m_azimuth = Math<T>::wrap_twopi(azimuth);
+            m_cos_phi = std::cos(m_azimuth);
+            m_sin_phi = std::sin(m_azimuth);
+        }
+        
+        //! Get the azimuth angle
+        /** The method returns the azimuth between 0 and 2π.
+         @return     The azimuth.
+         */
+        inline T getAzimuth() const noexcept
+        {
+            return m_azimuth;
+        }
+        
+        //! This method set the angle of elevation.
+        /**	The angle of elevation in radian and you should prefer to use it between -π and π to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The 0 radian is centered at the "front" of the soundfield, then π/2 is at the top, -π/2 is at the bottom and π is behind. Note that if the angle of elevation is between π/2 and 3*π/2, the azimuth is reversed.
+         @param     elevation The elevation.
+         @see       setAzimutHamonic [)
+         */
+        inline void setElevation(const T elevation) noexcept
+        {
+            m_elevation = Math<T>::wrap_pi(elevation);
+            m_cos_theta = std::cos(HOA_PI2 + m_elevation);
+            m_sqrt_rmin = std::sqrt(1 - m_cos_theta * m_cos_theta);
+        }
+        
+        //!	Get the elevation angle
+        /** The method returns the elevation between -π and π.
+         @return     The elevation.
+         */
+        inline T getElevation()  const noexcept
+        {
+            return m_elevation;
+        }
+        
+        //! This method performs the encoding.
+        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics. For the elevation, the function uses three recurrence formulas :
+         \f[P(l, l)(x) = (-1)^l \times (2l - 1)!! \times (1 - x^2)^{0.5l}\f]
+         \f[P(l + 1, l)(x) = x \times (2l + 1) \times P(l, l)\f]
+         \f[P(l + 1, m)(x) = \frac{(2l + 1) \times x \times P(m, l) - (l + m) \times P(m, l - 1)}{(l - m + 1)}\f]
+         with \f$0 \leq l\f$ and \f$-l \leq m \leq +l\f$ and \f[P(0, 0] = 1\f]
+         // P(l+1,l+1)   = -(2l+1)√(1-x²)P(l,l)
+         // P(l,l+1)     = x(2l+1)P(l,l)
+         // P(l+1,m) = (x(2l+1)P(l,m) - (l+m)P(l-1,m))/(l-m+1)
+         // P(l+1,0) = (x(2l+1)P(l,0) - l * P(l-1,0))/(l+1)
+         For the azimuth, the function uses formulas : sin(lϕ) and cos(lϕ)
+         @param     input    The input sample.
+         @param     outputs  The outputs array.
+         */
+        void process(const T* input, T* outputs) const noexcept
+        {
+            const ulong order = Harmonic<Hoa3d, T>::Processor::getDecompositionOrder();
+            // Azimtuh
+            T cos_x = m_cos_phi;
+            T sin_x = m_sin_phi;
+            T tcos_x = cos_x;
+            
+            // Elevation
+            T leg_l2 = 1.;
+            T leg_l1 = m_cos_theta;
+            T tleg_l;
+            T pleg_l = leg_l2;
+            
+            // For m[0] and l{0...N}
+            *(outputs)      = (*input);                 // Hamonic [0, 0]
+            *(outputs+2)    = (*input) * leg_l1 * *(m_normalization+2);        // Hamonic [1, 0]
+            ulong index = 6;
+            for(ulong i = 2; i <= order; i++, index += 2 * i)
+            {
+                tleg_l  = (m_cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
+                leg_l2  = leg_l1;
+                leg_l1   = tleg_l;
+                *(outputs+index) = (*input) * leg_l1 * *(m_normalization+index);   // Hamonic [i, 0]
+            }
+            
+            // For m{1...N-1} and l{m...N}
+            index = 1;
+            for(ulong i = 1; i < order; i++, index = i * i)
+            {
+                ulong inc = 2;
+                leg_l2 = -m_sqrt_rmin * pleg_l * (T)(2 * (i - 1) + 1);
+                leg_l1 = m_cos_theta  * leg_l2 * (T)(2 * (i - 1) + 1);
+                pleg_l = leg_l2;
+                
+                *(outputs+index) = (*input) * leg_l2 * sin_x * *(m_normalization+index);   // Hamonic [i,-i]
+                index += 2*i;
+                *(outputs+index) = (*input) * leg_l2 * cos_x * *(m_normalization+index);   // Hamonic [i, i]
+                index += inc;
+                
+                *(outputs+index) = (*input) * leg_l1 * sin_x * *(m_normalization+index);   // Hamonic [i+1,-i]
+                index += 2*i;
+                *(outputs+index) = (*input) * leg_l1 * cos_x * *(m_normalization+index);   //Hamonic [i+1, i]
+                inc += 2;
+                index += inc;
+                
+                for(ulong j = i + 2; j <= order; j++)
+                {
+                    tleg_l  = (m_cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
+                    leg_l2  = leg_l1;
+                    leg_l1   = tleg_l;
+                    
+                    *(outputs+index) = (*input) * leg_l1 * sin_x * *(m_normalization+index);   //Hamonic [j,-i]
+                    index += 2*i;
+                    *(outputs+index) = (*input) * leg_l1 * cos_x * *(m_normalization+index);   //Hamonic [j, i]
+                    inc += 2;
+                    index += inc;
+                }
+                cos_x   = tcos_x * m_cos_phi - sin_x * m_sin_phi;
+                sin_x   = tcos_x * m_sin_phi + sin_x * m_cos_phi;
+                tcos_x  = cos_x;
+            }
+            
+            // For m[N] and l[N]
+            index = order * order;
+            leg_l2 = -m_sqrt_rmin * pleg_l * (T)(2 * (order - 1) + 1);
+            *(outputs+index) = (*input) * leg_l2 * sin_x * *(m_normalization+index);
+            index += 2 * order;
+            *(outputs+index) = (*input) * leg_l2 * cos_x * *(m_normalization+index);
+        }
+    };
 }
 
 #endif

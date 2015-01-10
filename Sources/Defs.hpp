@@ -56,7 +56,7 @@ namespace hoa
     }
 #endif
     
-    enum Dimension : bool
+    enum Dimension
     {
         Hoa2d = 0,
         Hoa3d = 1

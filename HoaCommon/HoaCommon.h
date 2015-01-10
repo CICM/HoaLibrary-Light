@@ -15,8 +15,6 @@
  */
 namespace HoaCommon{};
 
-
-//#include "Converter.h"
 #include "Source.h"
 #include "SourcesGroup.h"
 #include "SourcesManager.h"

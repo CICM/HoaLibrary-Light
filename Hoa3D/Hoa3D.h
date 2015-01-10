@@ -18,9 +18,6 @@ namespace Hoa3D{};
 
 #include "Encoder_3D.h"
 #include "Decoder_3D.h"
-#include "Wider_3D.h"
-#include "Optim_3D.h"
-#include "Rotate_3D.h"
 #include "Meter_3D.h"
 #include "Map_3D.h"
 #include "Scope_3D.h"
