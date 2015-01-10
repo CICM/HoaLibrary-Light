@@ -147,10 +147,11 @@ namespace hoa
     template <typename T> class Scope<Hoa3d, T> : public Encoder<Hoa3d, T>, protected Planewave<Hoa3d, T>::Processor
     {
     private:
-        unsigned int m_number_of_rows;
-        unsigned int m_number_of_columns;
-        double*     m_harmonics;
-        double*     m_matrix;
+        const ulong m_number_of_rows;
+        const ulong m_number_of_columns;
+        T*  m_matrix;
+        T*  m_vector;
+        T   m_maximum;
     public:
         
         //! The Scope constructor.
@@ -160,19 +161,53 @@ namespace hoa
          @param     numberOfRow      The number of rows.
          @param     numberOfColumn	The number of columns.
          */
-        Scope(unsigned int order, unsigned int numberOfRows, unsigned int numberOfColumns);
+        Scope(ulong order, ulong numberOfRow, ulong numberOfColumn) :
+        Encoder<Hoa3d, T>(order),
+        Planewave<Hoa3d, T>::Processor(numberOfRow * numberOfColumn),
+        m_number_of_rows(numberOfRow),
+        m_number_of_columns(numberOfColumn)
+        {
+            m_matrix = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
+            m_vector = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()];
+            
+            const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
+            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            {
+                Encoder<Hoa2d, T>::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
+                Encoder<Hoa2d, T>::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
+                m_matrix[i * Encoder<Hoa2d, T>::getNumberOfHarmonics()] = factor * 0.5;
+            }
+            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            {
+                m_vector[i] = 0.;
+            }
+            m_maximum = 0;
+        }
         
         //! The Scope destructor.
         /**	The Scope destructor free the memory.
          */
-        ~Scope();
+        ~Scope()
+        {
+            delete [] m_matrix;
+            delete [] m_vector;
+        }
+        
+        //! Retrieve the number of points.
+        /**	Retrieve the number of points used to discretize the ambisonic circle.
+         @return     This method returns the number of points used to discretize the circle.
+         */
+        inline ulong getNumberOfPoints() const noexcept
+        {
+            return Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves();
+        }
         
         //! Retrieve the number of rows.
         /**	Retrieve the number of rows used to discretize the ambisonic sphere.
          
          @return     This method returns the number of rows used to discretize the sphere.
          */
-        inline unsigned int getNumberOfRows() const
+        inline ulong getNumberOfRows() const noexcept
         {
             return m_number_of_rows;
         }
@@ -182,7 +217,7 @@ namespace hoa
          
          @return     This method returns the number of column used to discretize the sphere.
          */
-        inline unsigned int getNumberOfColumns() const
+        inline ulong getNumberOfColumns() const noexcept
         {
             return m_number_of_columns;
         }
@@ -197,10 +232,8 @@ namespace hoa
          @see       getAzimuth
          @see       getElevation
          */
-        inline double getValue(unsigned int rowIndex, unsigned int columnIndex) const
+        inline double getPointValue(const ulong rowIndex, const ulong columnIndex) const noexcept
         {
-            assert(rowIndex < m_number_of_rows);
-            assert(columnIndex < m_number_of_columns);
             return m_matrix[rowIndex * m_number_of_columns + columnIndex];
         }
         
@@ -214,10 +247,8 @@ namespace hoa
          @see       getElevation
          @see       getValue
          */
-        inline double getRadius(unsigned int rowIndex, unsigned int columnIndex) const
+        inline double getPointRadius(const ulong rowIndex, const ulong columnIndex) const noexcept
         {
-            assert(rowIndex < m_number_of_rows);
-            assert(columnIndex < m_number_of_columns);
             return fabs(m_matrix[rowIndex * m_number_of_columns + columnIndex]);
         }
         
@@ -231,9 +262,8 @@ namespace hoa
          @see       getRadius
          @see       getElevation
          */
-        inline double getAzimuth(unsigned int columnIndex) const
+        inline double getPointAzimuth(const ulong columnIndex) const noexcept
         {
-            assert(columnIndex < m_number_of_columns);
             return (double)columnIndex * HOA_2PI / (double)m_number_of_columns;
         }
         
@@ -247,9 +277,8 @@ namespace hoa
          @see       getRadius
          @see       getAzimuth
          */
-        inline double getElevation(unsigned int rowIndex) const
+        inline double getElevation(const ulong rowIndex) const noexcept
         {
-            assert(rowIndex < m_number_of_rows);
             return (double)rowIndex * HOA_PI / (double)(m_number_of_rows - 1) - HOA_PI2;
         }
         

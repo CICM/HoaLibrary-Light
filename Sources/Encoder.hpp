@@ -918,7 +918,7 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        inline void process(const T* input, T* outputs) const noexcept
+        void process(const T* input, T* outputs) const noexcept
         {
             if(!m_muted)
             {
@@ -1006,7 +1006,7 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        inline void processAdd(const T* input, T* outputs) const noexcept
+        void processAdd(const T* input, T* outputs) const noexcept
         {
             if(!m_muted)
             {
