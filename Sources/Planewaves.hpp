@@ -21,13 +21,6 @@ namespace hoa
         T     m_azimuth;
     public:
         
-        Planewave() noexcept :
-        m_index(0),
-        m_azimuth(0)
-        {
-            ;
-        }
-        
         Planewave(const ulong _index, const T _azimuth) noexcept :
         m_index(_index),
         m_azimuth(_azimuth)
@@ -208,16 +201,10 @@ namespace hoa
         T     m_elevation;
     public:
         
-        Planewave() noexcept :
-        m_index(0),
-        m_azimuth(0)
-        {
-            ;
-        }
-        
-        Planewave(const ulong _index, const T _azimuth) noexcept :
+        Planewave(const ulong _index, const T _azimuth, const T _elevation) noexcept :
         m_index(_index),
-        m_azimuth(_azimuth)
+        m_azimuth(_azimuth),
+        m_elevation(_elevation)
         {
             ;
         }
@@ -242,14 +229,29 @@ namespace hoa
             m_azimuth = azimuth;
         }
         
-        inline T getAbscissa(const T offset = 0.) const noexcept
+        inline T getElevation() const noexcept
         {
-            return std::cos(m_azimuth + offset + HOA_PI2);
+            return m_elevation;
         }
         
-        inline T getOrdinate(const T offset = 0.) const noexcept
+        inline void setElevation(const T elevation) noexcept
         {
-            return std::sin(m_azimuth + offset + HOA_PI2);
+            m_elevation = elevation;
+        }
+        
+        inline T getAbscissa(const T offset = 0., const T offset_elevation = 0.) const noexcept
+        {
+            return std::cos(m_azimuth + offset + HOA_PI2) * cos(m_elevation + offset_elevation);
+        }
+        
+        inline T getOrdinate(const T offset = 0., const T offset_elevation = 0.) const noexcept
+        {
+            return std::sin(m_azimuth + offset + HOA_PI2) * cos(m_elevation + offset_elevation);
+        }
+        
+        inline T getHeight(const T offset = 0., const T offset_elevation = 0.) const noexcept
+        {
+            return std::sin(m_elevation + offset_elevation);
         }
         
         inline string getName() const noexcept
@@ -270,7 +272,7 @@ namespace hoa
         {
         private:
             const ulong                 m_number_of_planewaves;
-            vector<Planewave<Hoa2d, T>> m_planewaves;
+            vector<Planewave<Hoa3d, T>> m_planewaves;
             T                           m_offset;
         public:
             
@@ -284,7 +286,7 @@ namespace hoa
             {
                 for(ulong i = 0; i < m_number_of_planewaves; i++)
                 {
-                    m_planewaves.push_back(Planewave<Hoa2d, T>(i+1, (T)i / (m_number_of_planewaves) * HOA_2PI));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(i+1, (T)i / (m_number_of_planewaves) * HOA_2PI, 0.));
                 }
             }
             
@@ -355,6 +357,28 @@ namespace hoa
                 return m_planewaves[index].getAzimuth();
             }
             
+            //! Retrieve the azimuth of a planewaves.
+            /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
+             
+             @param      index   The index of the planewaves.
+             @return     The azimuth of the planewaves.
+             */
+            inline void setPlanewaveElevation(const ulong index, const T azimuth) noexcept
+            {
+                m_planewaves[index].setElevation(azimuth);
+            }
+            
+            //! Retrieve the azimuth of a planewaves.
+            /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
+             
+             @param      index   The index of the planewaves.
+             @return     The azimuth of the planewaves.
+             */
+            inline T getPlanewaveElevation(const ulong index) const noexcept
+            {
+                return m_planewaves[index].getElevation();
+            }
+            
             //! Retrieve the abscissa of a planewaves.
             /** Retrieve the abscissa of a planewaves. The abscissa is between -1 and 1, -1 is the left of the soundfield, 0 is the center of the soundfield and 1 is the right of the soundfield. The maximum index must be the number of planewaves - 1.
              @param     index    The index of the planewaves.
@@ -373,6 +397,16 @@ namespace hoa
             inline T getPlanewaveOrdinate(const ulong index) const noexcept
             {
                 return m_planewaves[index].getOrdinate(m_offset);
+            }
+            
+            //! Retrieve the height of a planewaves.
+            /** Retrieve the ordinate of a planewaves. The height is between -1 and 1, -1 is the back of the soundfield, 0 is the center of the soundfield and 1 is the front of the soundfield. The maximum index must be the number of planewaves - 1.
+             @param     index	The index of the planewaves.
+             @return    The height of the planewaves.
+             */
+            inline T getPlanewaveHeight(const ulong index) const noexcept
+            {
+                return m_planewaves[index].getHeight(m_offset);
             }
             
             //! Retrieve a name for a planewaves.

@@ -167,17 +167,33 @@ namespace hoa
         m_number_of_rows(numberOfRow),
         m_number_of_columns(numberOfColumn)
         {
-            m_matrix = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
-            m_vector = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()];
             
-            const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 0; i < m_number_of_rows; i++)
             {
-                Encoder<Hoa2d, T>::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
-                Encoder<Hoa2d, T>::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
-                m_matrix[i * Encoder<Hoa2d, T>::getNumberOfHarmonics()] = factor * 0.5;
+                const T elevation = (T)i  * HOA_PI / (T)(m_number_of_rows - 1) - HOA_PI2;
+                for(ulong j = 0; j < m_number_of_columns; j++)
+                {
+                    Planewave<Hoa3d, T>::Processor::setPlanewaveAzimuth(i * m_number_of_columns + j, (T)j * HOA_2PI / (T)m_number_of_columns);
+                    Planewave<Hoa3d, T>::Processor::setPlanewaveElevation(i * m_number_of_columns + j, elevation);
+                }
             }
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            
+            m_matrix = new T[Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves() * Encoder<Hoa3d, T>::getNumberOfHarmonics()];
+            m_vector = new T[Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves()];
+            
+            const T factor = 12.5 / (T)(Encoder<Hoa3d, T>::getNumberOfHarmonics());
+            for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
+            {
+                Encoder<Hoa3d, T>::setAzimuth(Planewave<Hoa3d, T>::Processor::getPlanewaveAzimuth(i));
+                Encoder<Hoa3d, T>::setElevation(Planewave<Hoa3d, T>::Processor::getPlanewaveElevation(i));
+                Encoder<Hoa3d, T>::process(&factor, m_matrix + i * Encoder<Hoa3d, T>::getNumberOfHarmonics());
+                for(ulong j = 0; j < Encoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
+                {
+                    const ulong l = Encoder<Hoa3d, T>::getHarmonicDegree(j);
+                    m_matrix[i * Encoder<Hoa3d, T>::getNumberOfHarmonics() + j] *= (2. * l + 1.) / (4. * HOA_PI);
+                }
+            }
+            for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
                 m_vector[i] = 0.;
             }
@@ -191,15 +207,6 @@ namespace hoa
         {
             delete [] m_matrix;
             delete [] m_vector;
-        }
-        
-        //! Retrieve the number of points.
-        /**	Retrieve the number of points used to discretize the ambisonic circle.
-         @return     This method returns the number of points used to discretize the circle.
-         */
-        inline ulong getNumberOfPoints() const noexcept
-        {
-            return Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves();
         }
         
         //! Retrieve the number of rows.
@@ -232,9 +239,9 @@ namespace hoa
          @see       getAzimuth
          @see       getElevation
          */
-        inline double getPointValue(const ulong rowIndex, const ulong columnIndex) const noexcept
+        inline T getPointValue(const ulong rowIndex, const ulong columnIndex) const noexcept
         {
-            return m_matrix[rowIndex * m_number_of_columns + columnIndex];
+            return m_vector[rowIndex * m_number_of_columns + columnIndex];
         }
         
         //! Retrieve the radius of a point of the spherical harmonics projection.
@@ -247,9 +254,9 @@ namespace hoa
          @see       getElevation
          @see       getValue
          */
-        inline double getPointRadius(const ulong rowIndex, const ulong columnIndex) const noexcept
+        inline T getPointRadius(const ulong rowIndex, const ulong columnIndex) const noexcept
         {
-            return fabs(m_matrix[rowIndex * m_number_of_columns + columnIndex]);
+            return fabs(m_vector[rowIndex * m_number_of_columns + columnIndex]);
         }
         
         //! Retrieve the azimuth of a point of the spherical harmonics projection.
@@ -262,9 +269,9 @@ namespace hoa
          @see       getRadius
          @see       getElevation
          */
-        inline double getPointAzimuth(const ulong columnIndex) const noexcept
+        inline T getPointAzimuth(const ulong columnIndex) const noexcept
         {
-            return (double)columnIndex * HOA_2PI / (double)m_number_of_columns;
+            return (T)columnIndex * HOA_2PI / (T)m_number_of_columns;
         }
         
         //! Retrieve the elevation of a point of the spherical harmonics projection.
@@ -277,9 +284,9 @@ namespace hoa
          @see       getRadius
          @see       getAzimuth
          */
-        inline double getElevation(const ulong rowIndex) const noexcept
+        inline T getPointElevation(const ulong rowIndex) const noexcept
         {
-            return (double)rowIndex * HOA_PI / (double)(m_number_of_rows - 1) - HOA_PI2;
+            return (T)rowIndex * HOA_PI / (T)(m_number_of_rows - 1) - HOA_PI2;
         }
         
         //! This method performs the spherical harmonics projection with single precision.
@@ -287,14 +294,15 @@ namespace hoa
          
          @param     inputs   The inputs array.
          */
-        void process(const float* inputs);
-        
-        //! This method performs the spherical harmonics projection with double precision.
-        /**	You should use this method to compute the projection of the spherical harmonics over an ambisonics sphere. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         
-         @param     inputs   The inputs array.
-         */
-        void process(const double* inputs);
+        inline void process(const T* inputs) noexcept
+        {
+            Signal<T>::matrix_vector_mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
+            m_maximum = fabs(Signal<T>::vector_max(Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(), m_vector));
+            if(m_maximum > 1.)
+            {
+                Signal<T>::vector_scale(Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
+            }
+        }
     };
 
 }

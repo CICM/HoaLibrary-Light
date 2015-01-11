@@ -493,8 +493,15 @@ namespace hoa
             for(ulong i = 0; i < Harmonic<Hoa3d, T>::Processor::getNumberOfHarmonics(); i++)
             {
                 ulong l = Harmonic<Hoa3d, T>::Processor::getHarmonicDegree(i);
-                ulong m = abs(Harmonic<Hoa3d, T>::Processor::getHarmonicOrder(i));
-                m_normalization[i] = sqrt((T)(Math<T>::factorial(l - m) * (2 * l + 1)) /  (T)(Math<T>::factorial(l + m) * 4. * HOA_PI));
+                long m = Harmonic<Hoa3d, T>::Processor::getHarmonicOrder(i);
+                if(m == 0)
+                {
+                    m_normalization[i] = 1.;
+                }
+                else
+                {
+                    m_normalization[i] = sqrt(Math<T>::factorial(l - abs(m)) / Math<T>::factorial(l + abs(m))) * sqrt(2.);
+                }
             }
             setMute(false);
             setAzimuth(0.);
@@ -555,7 +562,7 @@ namespace hoa
          */
         inline void setElevation(const T elevation) noexcept
         {
-            m_elevation = elevation;
+            m_elevation = Math<T>::wrap_pi(elevation);
             m_cos_theta = std::cos(HOA_PI2 + m_elevation);
             m_sqrt_rmin = std::sqrt(1 - m_cos_theta * m_cos_theta);
         }
@@ -566,7 +573,7 @@ namespace hoa
          */
         inline T getElevation()  const noexcept
         {
-            return Math<T>::wrap_pi(m_elevation);
+            return m_elevation;
         }
         
         //! This method performs the encoding.
@@ -588,27 +595,33 @@ namespace hoa
             if(!m_muted)
             {
                 const ulong order = Harmonic<Hoa3d, T>::Processor::getDecompositionOrder();
-                // Azimtuh
-                T cos_x = m_cos_phi;
-                T sin_x = m_sin_phi;
-                T tcos_x = cos_x;
+                const T cos_theta = m_cos_theta;
+                const T sqr_theta = -m_sqrt_rmin;
+                const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
+                const T sin_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_sin_phi : -m_sin_phi;
+                const T* norm     = m_normalization;
                 
                 // Elevation
                 T leg_l2 = 1.;
-                T leg_l1 = m_cos_theta;
+                T leg_l1 = cos_theta;
                 T tleg_l;
                 T pleg_l = leg_l2;
                 
+                // Azimtuh
+                T cos_x = cos_phi;
+                T sin_x = sin_phi;
+                T tcos_x = cos_x;
+                
                 // For m[0] and l{0...N}
                 *(outputs)      = (*input);                 // Hamonic [0, 0]
-                *(outputs+2)    = (*input) * leg_l1 * *(m_normalization+2);        // Hamonic [1, 0]
+                *(outputs+2)    = (*input) * leg_l1;      // Hamonic [1, 0]
                 ulong index = 6;
                 for(ulong i = 2; i <= order; i++, index += 2 * i)
                 {
-                    tleg_l  = (m_cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
+                    tleg_l  = (cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
                     leg_l2  = leg_l1;
                     leg_l1   = tleg_l;
-                    *(outputs+index) = (*input) * leg_l1 * *(m_normalization+index);   // Hamonic [i, 0]
+                    *(outputs+index) = (*input) * leg_l1;   // Hamonic [i, 0]
                 }
                 
                 // For m{1...N-1} and l{m...N}
@@ -616,44 +629,44 @@ namespace hoa
                 for(ulong i = 1; i < order; i++, index = i * i)
                 {
                     ulong inc = 2;
-                    leg_l2 = -m_sqrt_rmin * pleg_l * (T)(2 * (i - 1) + 1);
-                    leg_l1 = m_cos_theta  * leg_l2 * (T)(2 * (i - 1) + 1);
+                    leg_l2 = sqr_theta * pleg_l * (T)(2 * (i - 1) + 1);
+                    leg_l1 = cos_theta  * leg_l2 * (T)(2 * i + 1);
                     pleg_l = leg_l2;
                     
-                    *(outputs+index) = (*input) * leg_l2 * sin_x * *(m_normalization+index);   // Hamonic [i,-i]
+                    *(outputs+index) = (*input) * leg_l2 * sin_x * *(norm+index);   // Hamonic [i,-i]
                     index += 2*i;
-                    *(outputs+index) = (*input) * leg_l2 * cos_x * *(m_normalization+index);   // Hamonic [i, i]
+                    *(outputs+index) = (*input) * leg_l2 * cos_x * *(norm+index);   // Hamonic [i, i]
                     index += inc;
                     
-                    *(outputs+index) = (*input) * leg_l1 * sin_x * *(m_normalization+index);   // Hamonic [i+1,-i]
+                    *(outputs+index) = (*input) * leg_l1 * sin_x * *(norm+index);   // Hamonic [i+1,-i]
                     index += 2*i;
-                    *(outputs+index) = (*input) * leg_l1 * cos_x * *(m_normalization+index);   //Hamonic [i+1, i]
+                    *(outputs+index) = (*input) * leg_l1 * cos_x * *(norm+index);   //Hamonic [i+1, i]
                     inc += 2;
                     index += inc;
                     
                     for(ulong j = i + 2; j <= order; j++)
                     {
-                        tleg_l  = (m_cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
+                        tleg_l  = (cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
                         leg_l2  = leg_l1;
                         leg_l1   = tleg_l;
                         
-                        *(outputs+index) = (*input) * leg_l1 * sin_x * *(m_normalization+index);   //Hamonic [j,-i]
+                        *(outputs+index) = (*input) * leg_l1 * sin_x * *(norm+index);   //Hamonic [j,-i]
                         index += 2*i;
-                        *(outputs+index) = (*input) * leg_l1 * cos_x * *(m_normalization+index);   //Hamonic [j, i]
+                        *(outputs+index) = (*input) * leg_l1 * cos_x * *(norm+index);   //Hamonic [j, i]
                         inc += 2;
                         index += inc;
                     }
-                    cos_x   = tcos_x * m_cos_phi - sin_x * m_sin_phi;
-                    sin_x   = tcos_x * m_sin_phi + sin_x * m_cos_phi;
+                    cos_x   = tcos_x * cos_phi - sin_x * sin_phi;
+                    sin_x   = tcos_x * sin_phi + sin_x * cos_phi;
                     tcos_x  = cos_x;
                 }
                 
                 // For m[N] and l[N]
                 index = order * order;
-                leg_l2 = -m_sqrt_rmin * pleg_l * (T)(2 * (order - 1) + 1);
-                *(outputs+index) = (*input) * leg_l2 * sin_x * *(m_normalization+index);
+                leg_l2 = sqr_theta * pleg_l * (T)(2 * (order - 1) + 1);
+                *(outputs+index) = (*input) * leg_l2 * sin_x * *(norm+index);
                 index += 2 * order;
-                *(outputs+index) = (*input) * leg_l2 * cos_x * *(m_normalization+index);
+                *(outputs+index) = (*input) * leg_l2 * cos_x * *(norm+index);
             }
             else
             {
@@ -683,27 +696,33 @@ namespace hoa
             if(!m_muted)
             {
                 const ulong order = Harmonic<Hoa3d, T>::Processor::getDecompositionOrder();
-                // Azimtuh
-                T cos_x = m_cos_phi;
-                T sin_x = m_sin_phi;
-                T tcos_x = cos_x;
+                const T cos_theta = m_cos_theta;
+                const T sqr_theta = -m_sqrt_rmin;
+                const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
+                const T sin_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_sin_phi : -m_sin_phi;
+                const T* norm     = m_normalization;
                 
                 // Elevation
                 T leg_l2 = 1.;
-                T leg_l1 = m_cos_theta;
+                T leg_l1 = cos_theta;
                 T tleg_l;
                 T pleg_l = leg_l2;
                 
+                // Azimtuh
+                T cos_x = cos_phi;
+                T sin_x = sin_phi;
+                T tcos_x = cos_x;
+                
                 // For m[0] and l{0...N}
                 *(outputs)      += (*input);                 // Hamonic [0, 0]
-                *(outputs+2)    += (*input) * leg_l1 * *(m_normalization+2);        // Hamonic [1, 0]
+                *(outputs+2)    += (*input) * leg_l1;      // Hamonic [1, 0]
                 ulong index = 6;
                 for(ulong i = 2; i <= order; i++, index += 2 * i)
                 {
-                    tleg_l      = (m_cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
+                    tleg_l      = (cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
                     leg_l2      = leg_l1;
                     leg_l1      = tleg_l;
-                    *(outputs+index) += (*input) * leg_l1 * *(m_normalization+index);   // Hamonic [i, 0]
+                    *(outputs+index) += (*input) * leg_l1;   // Hamonic [i, 0]
                 }
                 
                 // For m{1...N-1} and l{m...N}
@@ -711,44 +730,44 @@ namespace hoa
                 for(ulong i = 1; i < order; i++, index = i * i)
                 {
                     ulong inc = 2;
-                    leg_l2 = -m_sqrt_rmin * pleg_l * (T)(2 * (i - 1) + 1);
-                    leg_l1 = m_cos_theta  * leg_l2 * (T)(2 * (i - 1) + 1);
+                    leg_l2 = sqr_theta * pleg_l * (T)(2 * (i - 1) + 1);
+                    leg_l1 = cos_theta  * leg_l2 * (T)(2 * i + 1);
                     pleg_l = leg_l2;
                     
-                    *(outputs+index) += (*input) * leg_l2 * sin_x * *(m_normalization+index);   // Hamonic [i,-i]
+                    *(outputs+index) += (*input) * leg_l2 * sin_x * *(norm+index);   // Hamonic [i,-i]
                     index += 2*i;
-                    *(outputs+index) += (*input) * leg_l2 * cos_x * *(m_normalization+index);   // Hamonic [i, i]
+                    *(outputs+index) += (*input) * leg_l2 * cos_x * *(norm+index);   // Hamonic [i, i]
                     index += inc;
                     
-                    *(outputs+index) += (*input) * leg_l1 * sin_x * *(m_normalization+index);   // Hamonic [i+1,-i]
+                    *(outputs+index) += (*input) * leg_l1 * sin_x * *(norm+index);   // Hamonic [i+1,-i]
                     index += 2*i;
-                    *(outputs+index) += (*input) * leg_l1 * cos_x * *(m_normalization+index);   //Hamonic [i+1, i]
+                    *(outputs+index) += (*input) * leg_l1 * cos_x * *(norm+index);   //Hamonic [i+1, i]
                     inc += 2;
                     index += inc;
                     
                     for(ulong j = i + 2; j <= order; j++)
                     {
-                        tleg_l  = (m_cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
+                        tleg_l  = (cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
                         leg_l2  = leg_l1;
                         leg_l1   = tleg_l;
                         
-                        *(outputs+index) += (*input) * leg_l1 * sin_x * *(m_normalization+index);   //Hamonic [j,-i]
+                        *(outputs+index) += (*input) * leg_l1 * sin_x * *(norm+index);   //Hamonic [j,-i]
                         index += 2*i;
-                        *(outputs+index) += (*input) * leg_l1 * cos_x * *(m_normalization+index);   //Hamonic [j, i]
+                        *(outputs+index) += (*input) * leg_l1 * cos_x * *(norm+index);   //Hamonic [j, i]
                         inc += 2;
                         index += inc;
                     }
-                    cos_x   = tcos_x * m_cos_phi - sin_x * m_sin_phi;
-                    sin_x   = tcos_x * m_sin_phi + sin_x * m_cos_phi;
+                    cos_x   = tcos_x * cos_phi - sin_x * sin_phi;
+                    sin_x   = tcos_x * sin_phi + sin_x * cos_phi;
                     tcos_x  = cos_x;
                 }
                 
                 // For m[N] and l[N]
                 index = order * order;
-                leg_l2 = -m_sqrt_rmin * pleg_l * (T)(2 * (order - 1) + 1);
-                *(outputs+index) += (*input) * leg_l2 * sin_x * *(m_normalization+index);
+                leg_l2 = sqr_theta * pleg_l * (T)(2 * (order - 1) + 1);
+                *(outputs+index) += (*input) * leg_l2 * sin_x * *(norm+index);
                 index += 2 * order;
-                *(outputs+index) += (*input) * leg_l2 * cos_x * *(m_normalization+index);
+                *(outputs+index) += (*input) * leg_l2 * cos_x * *(norm+index);
             }
             else
             {
@@ -789,8 +808,15 @@ namespace hoa
             for(ulong i = 0; i < Harmonic<Hoa3d, T>::Processor::getNumberOfHarmonics(); i++)
             {
                 ulong l = Harmonic<Hoa3d, T>::Processor::getHarmonicDegree(i);
-                ulong m = abs(Harmonic<Hoa3d, T>::Processor::getHarmonicOrder(i));
-                m_normalization[i] = sqrt((T)(Math<T>::factorial(l - m) * (2 * l + 1)) /  (T)(Math<T>::factorial(l + m) * 4. * HOA_PI));
+                long m = abs(Harmonic<Hoa3d, T>::Processor::getHarmonicOrder(i));
+                if(m == 0)
+                {
+                    m_normalization[i] = 1.;
+                }
+                else
+                {
+                    m_normalization[i] = sqrt(Math<T>::factorial(l - abs(m)) / Math<T>::factorial(l + abs(m))) * sqrt(2.);
+                }
             }
             m_distance = new T[Harmonic<Hoa3d, T>::Processor::getDecompositionOrder()];
             setMute(false);
@@ -923,27 +949,34 @@ namespace hoa
             if(!m_muted)
             {
                 const ulong order = Harmonic<Hoa3d, T>::Processor::getDecompositionOrder();
-                // Azimtuh
-                T cos_x = m_cos_phi;
-                T sin_x = m_sin_phi;
-                T tcos_x = cos_x;
+                const T cos_theta = m_cos_theta;
+                const T sqr_theta = -m_sqrt_rmin;
+                const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
+                const T sin_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_sin_phi : -m_sin_phi;
+                const T* norm     = m_normalization;
+                const T* dist     = m_distance;
                 
                 // Elevation
                 T leg_l2 = 1.;
-                T leg_l1 = m_cos_theta;
+                T leg_l1 = cos_theta;
                 T tleg_l;
                 T pleg_l = leg_l2;
                 
+                // Azimtuh
+                T cos_x = cos_phi;
+                T sin_x = sin_phi;
+                T tcos_x = cos_x;
+                
                 // For m[0] and l{0...N}
-                *(outputs)      = (*input) * *(m_distance);
-                *(outputs+2)    = (*input) * leg_l1 * *(m_normalization+2) * *(m_distance+1);
+                *(outputs)      = (*input) * *(dist);                 // Hamonic [0, 0]
+                *(outputs+2)    = (*input) * leg_l1 * *(dist+1);      // Hamonic [1, 0]
                 ulong index = 6;
                 for(ulong i = 2; i <= order; i++, index += 2 * i)
                 {
-                    tleg_l  = (m_cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
+                    tleg_l  = (cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
                     leg_l2  = leg_l1;
                     leg_l1   = tleg_l;
-                    *(outputs+index) = (*input) * leg_l1 * *(m_normalization+index) * *(m_distance+i);
+                    *(outputs+index) = (*input) * leg_l1 * *(dist+i);   // Hamonic [i, 0]
                 }
                 
                 // For m{1...N-1} and l{m...N}
@@ -951,44 +984,44 @@ namespace hoa
                 for(ulong i = 1; i < order; i++, index = i * i)
                 {
                     ulong inc = 2;
-                    leg_l2 = -m_sqrt_rmin * pleg_l * (T)(2 * (i - 1) + 1);
-                    leg_l1 = m_cos_theta  * leg_l2 * (T)(2 * (i - 1) + 1);
+                    leg_l2 = sqr_theta * pleg_l * (T)(2 * (i - 1) + 1);
+                    leg_l1 = cos_theta  * leg_l2 * (T)(2 * i + 1);
                     pleg_l = leg_l2;
                     
-                    *(outputs+index) = (*input) * leg_l2 * sin_x * *(m_normalization+index) * *(m_distance+i);
+                    *(outputs+index) = (*input) * leg_l2 * sin_x * *(norm+index) * *(dist+i);   // Hamonic [i,-i]
                     index += 2*i;
-                    *(outputs+index) = (*input) * leg_l2 * cos_x * *(m_normalization+index) * *(m_distance+i);
+                    *(outputs+index) = (*input) * leg_l2 * cos_x * *(norm+index) * *(dist+i);   // Hamonic [i, i]
                     index += inc;
                     
-                    *(outputs+index) = (*input) * leg_l1 * sin_x * *(m_normalization+index) * *(m_distance+i+1);
+                    *(outputs+index) = (*input) * leg_l1 * sin_x * *(norm+index) * *(dist+i+1);   // Hamonic [i+1,-i]
                     index += 2*i;
-                    *(outputs+index) = (*input) * leg_l1 * cos_x * *(m_normalization+index) * *(m_distance+i+1);
+                    *(outputs+index) = (*input) * leg_l1 * cos_x * *(norm+index) * *(dist+i+1);   //Hamonic [i+1, i]
                     inc += 2;
                     index += inc;
                     
                     for(ulong j = i + 2; j <= order; j++)
                     {
-                        tleg_l  = (m_cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
+                        tleg_l  = (cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
                         leg_l2  = leg_l1;
                         leg_l1   = tleg_l;
                         
-                        *(outputs+index) = (*input) * leg_l1 * sin_x * *(m_normalization+index) * *(m_distance+j);
+                        *(outputs+index) = (*input) * leg_l1 * sin_x * *(norm+index) * *(dist+j);   //Hamonic [j,-i]
                         index += 2*i;
-                        *(outputs+index) = (*input) * leg_l1 * cos_x * *(m_normalization+index) * *(m_distance+j);
+                        *(outputs+index) = (*input) * leg_l1 * cos_x * *(norm+index) * *(dist+j);   //Hamonic [j, i]
                         inc += 2;
                         index += inc;
                     }
-                    cos_x   = tcos_x * m_cos_phi - sin_x * m_sin_phi;
-                    sin_x   = tcos_x * m_sin_phi + sin_x * m_cos_phi;
+                    cos_x   = tcos_x * cos_phi - sin_x * sin_phi;
+                    sin_x   = tcos_x * sin_phi + sin_x * cos_phi;
                     tcos_x  = cos_x;
                 }
                 
                 // For m[N] and l[N]
                 index = order * order;
-                leg_l2 = -m_sqrt_rmin * pleg_l * (T)(2 * (order - 1) + 1);
-                *(outputs+index) = (*input) * leg_l2 * sin_x * *(m_normalization+index) * *(m_distance+order);
+                leg_l2 = sqr_theta * pleg_l * (T)(2 * (order - 1) + 1);
+                *(outputs+index) = (*input) * leg_l2 * sin_x * *(norm+index) * *(dist+order);
                 index += 2 * order;
-                *(outputs+index) = (*input) * leg_l2 * cos_x * *(m_normalization+index) * *(m_distance+order);
+                *(outputs+index) = (*input) * leg_l2 * cos_x * *(norm+index) * *(dist+order);
             }
             else
             {
@@ -1011,27 +1044,34 @@ namespace hoa
             if(!m_muted)
             {
                 const ulong order = Harmonic<Hoa3d, T>::Processor::getDecompositionOrder();
-                // Azimtuh
-                T cos_x = m_cos_phi;
-                T sin_x = m_sin_phi;
-                T tcos_x = cos_x;
+                const T cos_theta = m_cos_theta;
+                const T sqr_theta = -m_sqrt_rmin;
+                const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
+                const T sin_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_sin_phi : -m_sin_phi;
+                const T* norm     = m_normalization;
+                const T* dist     = m_distance;
                 
                 // Elevation
                 T leg_l2 = 1.;
-                T leg_l1 = m_cos_theta;
+                T leg_l1 = cos_theta;
                 T tleg_l;
                 T pleg_l = leg_l2;
                 
+                // Azimtuh
+                T cos_x = cos_phi;
+                T sin_x = sin_phi;
+                T tcos_x = cos_x;
+                
                 // For m[0] and l{0...N}
-                *(outputs)      += (*input) * *(m_distance);
-                *(outputs+2)    += (*input) * leg_l1 * *(m_normalization+2) * *(m_distance+1);
+                *(outputs)      += (*input) * *(dist);                 // Hamonic [0, 0]
+                *(outputs+2)    += (*input) * leg_l1 * *(dist+1);      // Hamonic [1, 0]
                 ulong index = 6;
                 for(ulong i = 2; i <= order; i++, index += 2 * i)
                 {
-                    tleg_l  = (m_cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
+                    tleg_l  = (cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
                     leg_l2  = leg_l1;
                     leg_l1   = tleg_l;
-                    *(outputs+index) += (*input) * leg_l1 * *(m_normalization+index) * *(m_distance+i);
+                    *(outputs+index) += (*input) * leg_l1 * *(dist+i);   // Hamonic [i, 0]
                 }
                 
                 // For m{1...N-1} and l{m...N}
@@ -1039,44 +1079,44 @@ namespace hoa
                 for(ulong i = 1; i < order; i++, index = i * i)
                 {
                     ulong inc = 2;
-                    leg_l2 = -m_sqrt_rmin * pleg_l * (T)(2 * (i - 1) + 1);
-                    leg_l1 = m_cos_theta  * leg_l2 * (T)(2 * (i - 1) + 1);
+                    leg_l2 = sqr_theta * pleg_l * (T)(2 * (i - 1) + 1);
+                    leg_l1 = cos_theta  * leg_l2 * (T)(2 * i + 1);
                     pleg_l = leg_l2;
                     
-                    *(outputs+index) += (*input) * leg_l2 * sin_x * *(m_normalization+index) * *(m_distance+i);
+                    *(outputs+index) += (*input) * leg_l2 * sin_x * *(norm+index) * *(dist+i);   // Hamonic [i,-i]
                     index += 2*i;
-                    *(outputs+index) += (*input) * leg_l2 * cos_x * *(m_normalization+index) * *(m_distance+i);
+                    *(outputs+index) += (*input) * leg_l2 * cos_x * *(norm+index) * *(dist+i);   // Hamonic [i, i]
                     index += inc;
                     
-                    *(outputs+index) += (*input) * leg_l1 * sin_x * *(m_normalization+index) * *(m_distance+i+1);
+                    *(outputs+index) += (*input) * leg_l1 * sin_x * *(norm+index) * *(dist+i+1);   // Hamonic [i+1,-i]
                     index += 2*i;
-                    *(outputs+index) += (*input) * leg_l1 * cos_x * *(m_normalization+index) * *(m_distance+i+1);
+                    *(outputs+index) += (*input) * leg_l1 * cos_x * *(norm+index) * *(dist+i+1);   //Hamonic [i+1, i]
                     inc += 2;
                     index += inc;
                     
                     for(ulong j = i + 2; j <= order; j++)
                     {
-                        tleg_l  = (m_cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
+                        tleg_l  = (cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
                         leg_l2  = leg_l1;
                         leg_l1   = tleg_l;
                         
-                        *(outputs+index) += (*input) * leg_l1 * sin_x * *(m_normalization+index) * *(m_distance+j);
+                        *(outputs+index) += (*input) * leg_l1 * sin_x * *(norm+index) * *(dist+j);   //Hamonic [j,-i]
                         index += 2*i;
-                        *(outputs+index) += (*input) * leg_l1 * cos_x * *(m_normalization+index) * *(m_distance+j);
+                        *(outputs+index) += (*input) * leg_l1 * cos_x * *(norm+index) * *(dist+j);   //Hamonic [j, i]
                         inc += 2;
                         index += inc;
                     }
-                    cos_x   = tcos_x * m_cos_phi - sin_x * m_sin_phi;
-                    sin_x   = tcos_x * m_sin_phi + sin_x * m_cos_phi;
+                    cos_x   = tcos_x * cos_phi - sin_x * sin_phi;
+                    sin_x   = tcos_x * sin_phi + sin_x * cos_phi;
                     tcos_x  = cos_x;
                 }
                 
                 // For m[N] and l[N]
                 index = order * order;
-                leg_l2 = -m_sqrt_rmin * pleg_l * (T)(2 * (order - 1) + 1);
-                *(outputs+index) += (*input) * leg_l2 * sin_x * *(m_normalization+index) * *(m_distance+order);
+                leg_l2 = sqr_theta * pleg_l * (T)(2 * (order - 1) + 1);
+                *(outputs+index) += (*input) * leg_l2 * sin_x * *(norm+index) * *(dist+order);
                 index += 2 * order;
-                *(outputs+index) += (*input) * leg_l2 * cos_x * *(m_normalization+index) * *(m_distance+order);
+                *(outputs+index) += (*input) * leg_l2 * cos_x * *(norm+index) * *(dist+order);
             }
         }
     };
