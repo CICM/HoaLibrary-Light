@@ -167,7 +167,6 @@ namespace hoa
         m_number_of_rows(numberOfRow),
         m_number_of_columns(numberOfColumn)
         {
-            
             for(ulong i = 0; i < m_number_of_rows; i++)
             {
                 const T elevation = (T)i  * HOA_PI / (T)(m_number_of_rows - 1) - HOA_PI2;
