@@ -161,7 +161,120 @@ namespace hoa
                 }
             }
         }
-    };}
+    };
+    
+    template <typename T> class Meter<Hoa3d, T> : public Planewave<Hoa3d, T>::Processor
+    {
+    private:
+        ulong   m_ramp;
+        ulong   m_vector_size;
+        T*      m_channels_peaks;
+        ulong*  m_over_leds;
+        
+    public:
+        
+        Meter(ulong numberOfPlanewaves) noexcept :
+        Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
+        {
+            m_ramp                      = 0;
+            m_vector_size               = EPD_MAX_SIGS;
+            m_channels_peaks            = new T[Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves()];
+            m_over_leds                 = new ulong[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()];
+            for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
+            {
+                m_channels_peaks[i] = 0;
+                m_over_leds[i]      = 0;
+            }
+        }
+        
+        ~Meter()
+        {
+            delete [] m_channels_peaks;
+            delete [] m_over_leds;
+        }
+        
+        inline void setVectorSize(ulong vectorSize) noexcept
+        {
+            m_vector_size   = vectorSize;
+            m_ramp          = 0;
+        }
+        
+        inline ulong getVectorSize() const noexcept
+        {
+            return m_vector_size;
+        }
+        
+        void computeDisplay()
+        {
+            ;
+        }
+        
+        inline T getPlanewaveAzimuthMapped(const ulong index) const noexcept
+        {
+            return 0;
+        }
+        
+        inline T getPlanewaveWidth(const ulong index) const noexcept
+        {
+            return 0;
+        }
+        
+        inline T getPlanewaveEnergy(const ulong index) const noexcept
+        {
+            if(m_channels_peaks[index] > 0.)
+            {
+                return 20. * log10(m_channels_peaks[index]);
+            }
+            else
+            {
+                return -90.;
+            }
+        }
+        
+        inline bool getPlanewaveOverLed(const ulong index) const noexcept
+        {
+            return m_over_leds[index];
+        }
+        
+        inline void tick(const ulong time) noexcept
+        {
+            for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::Processor::getNumberOfPlanewaves(); i++)
+            {
+                if(m_channels_peaks[i] > 1.)
+                {
+                    m_over_leds[i] = time;
+                }
+                else if(m_over_leds[i])
+                {
+                    m_over_leds[i]--;
+                }
+            }
+        }
+        
+        inline void process(const T* inputs) noexcept
+        {
+            if(m_ramp++ == m_vector_size)
+            {
+                m_ramp = 0;
+                for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::Processor::getNumberOfPlanewaves(); i++)
+                {
+                    m_channels_peaks[i] = fabs(*inputs++);
+                }
+            }
+            else
+            {
+                for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::Processor::getNumberOfPlanewaves(); i++)
+                {
+                    const T peak = fabs(*inputs++);
+                    if(peak > m_channels_peaks[i])
+                    {
+                        m_channels_peaks[i] = peak;
+                    }
+                }
+            }
+        }
+    };
+}
 
 #endif
 

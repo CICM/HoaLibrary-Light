@@ -23,6 +23,8 @@
 #include "Source.hpp"
 #include "Tools.hpp"
 
+#include "Meter_3D.h"
+
 #endif
 
 

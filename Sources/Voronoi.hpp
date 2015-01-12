@@ -25,22 +25,12 @@ namespace hoa
         T       z;
         Arc<T>* arc;
         
-        Point() noexcept :
-        i(0),
-        x(0),
-        y(0),
-        z(0),
-        arc(NULL)
+        Point() noexcept : i(0), x(0), y(0), z(0), arc(NULL)
         {
             ;
         }
         
-        Point(const T _x, const T _y, const T _z) noexcept :
-        i(0),
-        x(_x),
-        y(_y),
-        z(_z),
-        arc(NULL)
+        Point(const T _x, const T _y, const T _z) noexcept : i(0), x(_x), y(_y), z(_z), arc(NULL)
         {
             ;
         }
