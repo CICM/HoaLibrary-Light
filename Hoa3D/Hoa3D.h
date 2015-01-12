@@ -15,11 +15,7 @@
  */
 namespace Hoa3D{};
 
-
-#include "Encoder_3D.h"
-#include "Decoder_3D.h"
 #include "Meter_3D.h"
-#include "Scope_3D.h"
 #include "Vector_3D.h"
 
 #endif

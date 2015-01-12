@@ -74,6 +74,7 @@ namespace hoa
     {
     private:
         const T   m_cosmaxRe;
+        const T   m_sinmaxRe;
     public:
         
         //! The optimization constructor.
@@ -83,7 +84,8 @@ namespace hoa
          */
         Optim(const ulong order) noexcept :
         Harmonic<Hoa2d, T>::Processor(order),
-        m_cosmaxRe(cos(HOA_PI / (T)(2. * order + 2.)))
+        m_cosmaxRe(cos(HOA_PI / (T)(2. * order + 2.))),
+        m_sinmaxRe(sin(HOA_PI / (T)(2. * order + 2.)))
         {
             ;
         }
@@ -104,12 +106,17 @@ namespace hoa
         inline void process(T const* inputs, T* outputs) const noexcept
         {
             T cos_re = m_cosmaxRe;
+            T sin_re = m_sinmaxRe;
+            T tcos_re = m_cosmaxRe;
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++) * cos_re;
             (*outputs++)  = (*inputs++) * cos_re;
             for(ulong i = 2; i <= Harmonic<Hoa2d, T>::Processor::getDecompositionOrder(); i++)
             {
-                cos_re = 2. * cos_re * cos_re - 1.;
+                cos_re  = tcos_re * m_cosmaxRe - sin_re * m_sinmaxRe;
+                sin_re  = tcos_re * m_sinmaxRe + sin_re * m_cosmaxRe;
+                tcos_re  = cos_re;
+                
                 (*outputs++)  = (*inputs++) * cos_re;
                 (*outputs++)  = (*inputs++) * cos_re;
             }
@@ -233,6 +240,7 @@ namespace hoa
     {
     private:
         const T   m_cosmaxRe;
+        const T   m_sinmaxRe;
     public:
         
         //! The optimization constructor.
@@ -242,7 +250,8 @@ namespace hoa
          */
         Optim(const ulong order) noexcept :
         Harmonic<Hoa3d, T>::Processor(order),
-        m_cosmaxRe(cos(HOA_PI / (T)(2. * order + 2.)))
+        m_cosmaxRe(cos(HOA_PI / (T)(2. * order + 2.))),
+        m_sinmaxRe(sin(HOA_PI / (T)(2. * order + 2.)))
         {
             ;
         }
@@ -263,15 +272,20 @@ namespace hoa
         inline void process(T const* inputs, T* outputs) const noexcept
         {
             T cos_re = m_cosmaxRe;
+            T sin_re = m_cosmaxRe;
+            T tcos_re= cos_re;
             (*outputs++)  = (*inputs++);
+            (*outputs++)  = (*inputs++) * cos_re;
             (*outputs++)  = (*inputs++) * cos_re;
             (*outputs++)  = (*inputs++) * cos_re;
             for(ulong i = 2; i <= Harmonic<Hoa3d, T>::Processor::getDecompositionOrder(); i++)
             {
-                cos_re = 2. * cos_re * cos_re - 1.;
+                cos_re  = tcos_re * m_cosmaxRe - sin_re * m_sinmaxRe;
+                sin_re  = tcos_re * m_sinmaxRe + sin_re * m_cosmaxRe;
+                tcos_re  = cos_re;
                 for(ulong j = 0; j < 2 * i + 1; j++)
                 {
-                    (*outputs++)    = (*inputs++) * cos_re;    // Hamonic [i, ~j]
+                    (*outputs++)    = (*inputs++) * cos_re;    // Hamonic [i, [-i...i]]
                 }
             }
         }
@@ -326,6 +340,7 @@ namespace hoa
             T factor  = m_facinphase / (factor1 * factor2);
             
             (*outputs++)  = (*inputs++);
+            (*outputs++)  = (*inputs++) * factor;
             (*outputs++)  = (*inputs++) * factor;
             (*outputs++)  = (*inputs++) * factor;
             for(ulong i = 2; i <= Harmonic<Hoa3d, T>::Processor::getDecompositionOrder(); i++)

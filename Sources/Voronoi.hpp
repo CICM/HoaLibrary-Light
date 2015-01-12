@@ -4,352 +4,306 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_TOOLS_LIGHT
-#define DEF_HOA_TOOLS_LIGHT
+#ifndef DEF_HOA_VORONOI_LIGHT
+#define DEF_HOA_VORONOI_LIGHT
 
 #include "Math.hpp"
-#include "Signal.hpp"
 
 namespace hoa
 {
-    template <typename T> class Line
+#define HOA_EPSILON 1e-15;
+    
+    template <typename T> class Triangle;
+    template <typename T> class Arc;
+    
+    template <typename T> class Point
     {
-    private:
-        T       m_value_old;
-        T       m_value_new;
-        T       m_value_step;
-        ulong   m_counter;
-        ulong   m_ramp;
-        
     public:
-        Line() noexcept
+        ulong   i;
+        T       x;
+        T       y;
+        T       z;
+        Arc<T>* arc;
+        
+        Point() noexcept :
+        i(0),
+        x(0),
+        y(0),
+        z(0),
+        arc(NULL)
         {
             ;
         }
         
-        ~Line()
+        Point(const T _x, const T _y, const T _z) noexcept :
+        i(0),
+        x(_x),
+        y(_y),
+        z(_z),
+        arc(NULL)
         {
             ;
         }
         
-        inline ulong getRamp() const noexcept
+        static T dot(Point const&a, Point const&b) noexcept
         {
-            return m_ramp;
+            return a.x * b.x + a.y * b.y + a.z * b.z;
         }
         
-        inline T getValue(const ulong index) const noexcept
+        static Point subtract(Point const& a, Point const& b) noexcept
         {
-            return m_value_new;
+            return Point(a.x - b.x, a.y - b.y, a.z - b.z);
         }
         
-        inline void setRamp(const ulong ramp) noexcept
+        static Point cross(Point const& a, Point const& b) noexcept
         {
-            m_ramp = max(ramp, (ulong)1);
+            return Point(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
         }
         
-        inline void setValue(const T value) noexcept
+        static T norm2(Point const& d) noexcept
         {
-            m_value_new = value;
-            m_value_step = (m_value_new - m_value_old) / (T)m_ramp;
-            m_counter = 0;
+            return sqrt(dot(d, d));
         }
         
-        inline void setRadiusDirect(const T value) noexcept
+        static T norm(Point const& d) noexcept
         {
-            m_value_old = m_value_new = value;
-            m_value_step = 0.;
-            m_counter = 0;
+            return sqrt(d.norm2());
         }
         
-        inline T process() noexcept
+        static Point normalise(Point const& d)  noexcept
         {
-            if(m_counter < m_ramp)
-            {
-                m_value_old += m_value_step;
-            }
-            else if(m_counter++ == m_ramp)
-            {
-                m_value_old = m_value_new;
-                m_value_step = 0.;
-                m_counter    = 0;
-            }
-            return m_value_old;
+            T m = 1 / d.norm();
+            return Point(d.x * m, d.y * m, d.z * m);
+        }
+        
+    };
+    
+    template <typename T> class Edge
+    {
+    public:
+        Triangle<T>* t;
+        Point<T>     p;
+        Point<T>     neighbor;
+        Point<T>     next;
+        
+        Edge(Triangle<T>* _t, const Point<T>& _p) noexcept :
+        t(_t),
+        p(_p)
+        {
+            
+        }
+        
+        static void neighbors(Edge const& a, Edge const&  b)
+        {
+            (a.neighbor = b).neighbor = a;
         }
     };
     
-    template <Dimension D, typename T> class PolarLines;
-    
-    template <typename T> class PolarLines<Hoa2d, T>
+    template <typename T> class Arc
     {
-        
-    private:
-        const ulong m_number_of_sources;
-        T*      m_values_old;
-        T*      m_values_new;
-        T*      m_values_step;
-        ulong   m_counter;
-        ulong   m_ramp;
-    
     public:
-        
-        PolarLines(ulong numberOfSources) noexcept :
-        m_number_of_sources(numberOfSources)
+        Triangle<T>* t;
+        Point<T>     p;
+        ulong        index;
+        Point<T>*    prev;
+        Point<T>*    next;
+   
+        Arc(Triangle<T>* _t, const Point<T>& _p, const ulong _index) noexcept :
+        t(_t),
+        p(_p),
+        index(_index),
+        prev(NULL),
+        next(NULL)
         {
-            m_values_old    = new T[m_number_of_sources * 2];
-            m_values_new    = new T[m_number_of_sources * 2];
-            m_values_step   = new T[m_number_of_sources * 2];
-        }
-        
-        ~PolarLines()
-        {
-            delete [] m_values_old;
-            delete [] m_values_new;
-            delete [] m_values_step;
-        }
-        
-        inline ulong getNumberOfSources() const noexcept
-        {
-            return m_number_of_sources;
-        }
-        
-        inline ulong getRamp() const noexcept
-        {
-            return m_ramp;
-        }
-        
-        inline T getRadius(const ulong index) const noexcept
-        {
-            return m_values_new[index];
-        }
-        
-        inline T getAzimuth(const ulong index) const noexcept
-        {
-            return m_values_new[m_number_of_sources +index];
-        }
-        
-        inline void setRamp(const ulong ramp) noexcept
-        {
-            m_ramp = max(ramp, (ulong)1);
-        }
-        
-        inline void setRadius(const ulong index, const T radius) noexcept
-        {
-            m_values_new[index]  = radius;
-            m_values_step[index] = (m_values_new[index] - m_values_old[index]) / (T)m_ramp;
-            m_counter = 0;
-        }
-        
-        inline void setAzimuth(const ulong index, const T azimuth) noexcept
-        {
-            m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azimuth);
-            m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
+            if(p.visible)
+            {
+                next = p.visible;
+            }
+            //int zaza;
             
-            T distance;
-            if(m_values_old[index + m_number_of_sources] > m_values_new[index + m_number_of_sources])
-                distance = (m_values_old[index + m_number_of_sources] - m_values_new[index + m_number_of_sources]);
-            else
-                distance = (m_values_new[index + m_number_of_sources] - m_values_old[index + m_number_of_sources]);
-            
-            if(distance <= HOA_PI)
-            {
-                m_values_step[index + m_number_of_sources] = (m_values_new[index + m_number_of_sources] - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
-            }
-            else
-            {
-                if(m_values_new[index + m_number_of_sources] > m_values_old[index + m_number_of_sources])
-                {
-                    m_values_step[index + m_number_of_sources] = ((m_values_new[index + m_number_of_sources] - HOA_2PI) - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
-                }
-                else
-                {
-                    m_values_step[index + m_number_of_sources] = ((m_values_new[index + m_number_of_sources] + HOA_2PI) - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
-                }
-            }
-            m_counter = 0;
-        }
-        
-        inline void setRadiusDirect(const ulong index, const T radius) noexcept
-        {
-            m_values_old[index] = m_values_new[index] = radius;
-            m_values_step[index] = 0.;
-            m_counter = 0;
-        }
-        
-        inline void setAzimuthDirect(ulong index, const T azimuth) noexcept
-        {
-            m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azimuth;
-            m_values_step[index + m_number_of_sources] = 0.;
-            m_counter = 0;
-        }
-        
-        void process(T* vector) noexcept
-        {
-            Signal<T>::vector_add(m_number_of_sources * 2, m_values_step, m_values_old);
-            if(m_counter++ >= m_ramp)
-            {
-                Signal<T>::vector_copy(m_number_of_sources * 2, m_values_new, m_values_old);
-                Signal<T>::vector_clear(m_number_of_sources * 2, m_values_step);
-                m_counter    = 0;
-            }
-            Signal<T>::vector_copy(m_number_of_sources * 2, m_values_old, vector);
+            p.arc = this;
         }
     };
     
-    template <typename T> class PolarLines<Hoa3d, T>
+    template <typename T> class Triangle
     {
+    public:
+        ulong       index;
+        bool        marked;
+        Edge<T>     a;
+        Edge<T>     b;
+        Edge<T>     c;
+        Point<T>    n;
+        vector<Arc<T>> arcs;
         
+        Triangle(const Point<T> _p1, const Point<T> _p2, const Point<T> _p3, const ulong _index = 0) noexcept :
+        index(_index),
+        marked(false)
+        {
+            a = Edge<T>(this, _p1);
+            b = Edge<T>(this, _p2);
+            c = Edge<T>(this, _p3);
+            a.next = _p2;
+            b.next = _p3;
+            c.next = _p1;
+            n = Point<T>::normalise(Point<T>::cross(Point<T>::subtract(_p3, _p1), Point<T>::subtract(_p2, _p1)));
+        }
+        
+        static bool coplanar(Triangle const& t, Point<T> const& p)
+        {
+            return abs(Point<T>::dot(t.n, p) - Point<T>::dot(t.n, t.a.p)) <= HOA_EPSILON;
+        }
+        
+        static bool visible(Triangle const& t, Point<T> const& p)
+        {
+            return Point<T>::dot(t.n, p) - Point<T>::dot(t.n, t.a.p) > HOA_EPSILON;
+        }
+        
+        static void addConflict(Triangle const&t, Point<T> const&p, const ulong _index)
+        {
+            if(visible(t, p))
+            {
+                t.arcs.push_back(Arc<T>(t, p, _index));
+            }
+        }
+
+
+    };
+    
+    template <Dimension D, typename T> class Voronoi;
+    
+    template <typename T> class Voronoi<Hoa3d, T>
+    {
     private:
-        const ulong m_number_of_sources;
-        T*      m_values_old;
-        T*      m_values_new;
-        T*      m_values_step;
-        ulong   m_counter;
-        ulong   m_ramp;
+        
+        void convexhull3d(vector<Point<T>>& points, vector<Triangle<T>>& triangles)
+        {
+            if(points.size() < 4)
+            {
+                triangles.clear();
+                return;
+            }
+            
+            for(ulong i = 0; i < points.size(); ++i)
+            {
+                points[i].i = i;
+            }
+            //int zaza;
+            //d3.shuffle(points);
+            
+            Point<T> a = points[0];
+            Point<T> b = points[1];
+            Point<T> c = points[2];
+            Triangle<T> t(a, b, c);
+            
+            // Find non-coplanar fourth point.
+            ulong i;
+            for(i = 3; i < points.size() && coplanar(t, points[i]); ++i)
+            {
+                ;
+            }
+            
+            if(i == points.size())
+            {
+                triangles.clear();
+                return; // coplanar points
+            }
+            
+            // Create a tetrahedron.
+            Point<T> d = points[i];
+            points[i] = points[3];
+            points[3] = d;
+            
+            if(visible(t, d))
+            {
+                Point<T> tmp = b;
+                b = c;
+                c = tmp;
+            }
+            
+            Triangle<T> ta(a, b, c, 0);
+            Triangle<T> tb(d, b, a, 1);
+            Triangle<T> tc(c, d, a, 2);
+            Triangle<T> td(b, d, c, 3);
+            triangles = {ta, tb, tc, td};
+            
+            Edge<T>::neighbors(ta.a, tb.b);
+            Edge<T>::neighbors(ta.b, td.c);
+            Edge<T>::neighbors(ta.c, tc.c);
+            
+            Edge<T>::neighbors(tb.a, td.a);
+            Edge<T>::neighbors(td.b, tc.a);
+            Edge<T>::neighbors(tc.b, tb.c);
+            
+            // Initialise conflict graph.
+            for(ulong i = 4; i < points.size(); ++i)
+            {
+                Point<T> p = points[i];
+                addConflict(ta, p, i);
+                addConflict(tb, p, i);
+                addConflict(tc, p, i);
+                addConflict(td, p, i);
+            }
+            /*
+            for(ulong i = 4; i < points.size(); ++i)
+            {
+                Point<T> p = points[i];
+                Point<T> h = p.visible;
+                if(!h)
+                {
+                    continue;
+                }
+                
+                // Find horizon.
+                Point<T> horizon;
+                Point<T> a = h;
+                do a.t.marked = true; while (a = a.nextF);
+                
+                a = h; do {
+                    var t = a.t;
+                    if (horizon = findHorizon(t.a) || findHorizon(t.b) || findHorizon(t.c)) break;
+                } while (a = a.nextF);
+                
+                if (!horizon) continue;
+                
+                for (var j = 0, m = horizon.length, prev = null, first = null; j < m; ++j) {
+                    var e = horizon[j],
+                    f1 = e.triangle, f2 = e.neighbor.triangle,
+                    t = new Triangle(p, e.neighbor.p, e.p, triangles.length);
+                    neighbors(t.b, e);
+                    if (prev) neighbors(prev.a, t.c);
+                    else first = t;
+                    addConflicts(t, f1, f2);
+                    triangles.push(prev = t);
+                }
+                neighbors(prev.a, first.c);
+                
+                a = h; do {
+                    var t = a.t;
+                    for (var j = 0, m = t.visible.length; j < m; ++j) t.visible[j].remove();
+                    t.visible.length = 0;
+                    removeElement(triangles, t.index);
+                } while (a = a.nextF);
+            }
+             */
+        }
+        
+        void delaunay(vector<Point<T>>& points)
+        {
+            /*
+            var p = points.map(cartesian),
+            n = points.length,
+            triangles = d3.convexhull3d(p);
+            
+            if (triangles.length) return triangles.forEach(function(t)
+            {
+                t.coordinates = [points[t.a.p.i], points[t.b.p.i], points[t.c.p.i]];
+                t.centre = circumcentre(t);
+            }), triangles;
+             */
+        };
         
     public:
-        
-        PolarLines(ulong numberOfSources) noexcept :
-        m_number_of_sources(numberOfSources)
-        {
-            m_values_old    = new T[m_number_of_sources * 3];
-            m_values_new    = new T[m_number_of_sources * 3];
-            m_values_step   = new T[m_number_of_sources * 3];
-        }
-        
-        ~PolarLines()
-        {
-            delete [] m_values_old;
-            delete [] m_values_new;
-            delete [] m_values_step;
-        }
-        
-        inline ulong getNumberOfSources() const noexcept
-        {
-            return m_number_of_sources;
-        }
-        
-        inline ulong getRamp() const noexcept
-        {
-            return m_ramp;
-        }
-        
-        inline T getRadius(const ulong index) const noexcept
-        {
-            return m_values_new[index];
-        }
-        
-        inline T getAzimuth(const ulong index) const noexcept
-        {
-            return m_values_new[m_number_of_sources + index];
-        }
-        
-        inline T getElevation(const ulong index) const noexcept
-        {
-            return m_values_new[m_number_of_sources * 2 + index];
-        }
-        
-        inline void setRamp(const ulong ramp) noexcept
-        {
-            m_ramp = max(ramp, (ulong)1);
-        }
-        
-        inline void setRadius(const ulong index, const T radius) noexcept
-        {
-            m_values_new[index]  = radius;
-            m_values_step[index] = (m_values_new[index] - m_values_old[index]) / (T)m_ramp;
-            m_counter = 0;
-        }
-        
-        inline void setAzimuth(const ulong index, const T azimuth) noexcept
-        {
-            m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azimuth);
-            m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
-            
-            T distance;
-            if(m_values_old[index + m_number_of_sources] > m_values_new[index + m_number_of_sources])
-                distance = (m_values_old[index + m_number_of_sources] - m_values_new[index + m_number_of_sources]);
-                else
-                    distance = (m_values_new[index + m_number_of_sources] - m_values_old[index + m_number_of_sources]);
-                    
-                    if(distance <= HOA_PI)
-                    {
-                        m_values_step[index + m_number_of_sources] = (m_values_new[index + m_number_of_sources] - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
-                    }
-                    else
-                    {
-                        if(m_values_new[index + m_number_of_sources] > m_values_old[index + m_number_of_sources])
-                        {
-                            m_values_step[index + m_number_of_sources] = ((m_values_new[index + m_number_of_sources] - HOA_2PI) - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
-                        }
-                        else
-                        {
-                            m_values_step[index + m_number_of_sources] = ((m_values_new[index + m_number_of_sources] + HOA_2PI) - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
-                        }
-                    }
-            m_counter = 0;
-        }
-        
-        inline void setElevation(const ulong index, const T elevation) noexcept
-        {
-            m_values_new[index + m_number_of_sources * 2] = Math<T>::wrap_twopi(elevation);
-            m_values_old[index + m_number_of_sources * 2] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources * 2]);
-            
-            double distance;
-            if(m_values_old[index + m_number_of_sources * 2] > m_values_new[index + m_number_of_sources * 2])
-                distance = (m_values_old[index + m_number_of_sources * 2] - m_values_new[index + m_number_of_sources * 2]);
-            else
-                distance = (m_values_new[index + m_number_of_sources * 2] - m_values_old[index + m_number_of_sources * 2]);
-            
-            if(distance <= HOA_PI)
-            {
-                m_values_step[index + m_number_of_sources * 2] = (m_values_new[index + m_number_of_sources * 2] - m_values_old[index + m_number_of_sources * 2]) / (double)m_ramp;
-            }
-            else
-            {
-                if(m_values_new[index + m_number_of_sources * 2] > m_values_old[index + m_number_of_sources * 2])
-                {
-                    m_values_step[index + m_number_of_sources * 2] = ((m_values_new[index + m_number_of_sources * 2] - HOA_2PI) - m_values_old[index + m_number_of_sources * 2]) / (double)m_ramp;
-                }
-                else
-                {
-                    m_values_step[index + m_number_of_sources * 2] = ((m_values_new[index + m_number_of_sources * 2] + HOA_2PI) - m_values_old[index + m_number_of_sources * 2]) / (double)m_ramp;
-                }
-            }
-            m_counter = 0;
-        }
-        
-        inline void setRadiusDirect(const ulong index, const T radius) noexcept
-        {
-            m_values_old[index] = m_values_new[index] = radius;
-            m_values_step[index] = 0.;
-            m_counter = 0;
-        }
-        
-        inline void setAzimuthDirect(const ulong index, const T azimuth) noexcept
-        {
-            m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azimuth;
-            m_values_step[index + m_number_of_sources] = 0.;
-            m_counter = 0;
-        }
-        
-        inline void setElevationDirect(const ulong index, const T elevation) noexcept
-        {
-            m_values_old[index + m_number_of_sources * 2] = m_values_new[index + m_number_of_sources * 2] = elevation;
-            m_values_step[index + m_number_of_sources * 2] = 0.;
-            m_counter = 0;
-        }
-        
-        void process(T* vector) noexcept
-        {
-            Signal<T>::vector_add(m_number_of_sources * 3, m_values_step, m_values_old);
-            if(m_counter++ >= m_ramp)
-            {
-                Signal<T>::vector_copy(m_number_of_sources * 3, m_values_new, m_values_old);
-                Signal<T>::vector_clear(m_number_of_sources * 3, m_values_step);
-                m_counter    = 0;
-            }
-            Signal<T>::vector_copy(m_number_of_sources * 3, m_values_old, vector);
-        }
     };
 }
 

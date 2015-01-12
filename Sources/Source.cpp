@@ -4,1173 +4,1695 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_SOURCE_LIGHT
-#define DEF_HOA_SOURCE_LIGHT
 
-#include "Math.hpp"
+#include "Source.hpp"
 
 namespace hoa
 {
-    class SourcesManager;
-    class SourcesGroup;
     
-	//! The source
-    /** The source store and manage source informations like the position, color, mute...
-     */
-	class Source
-	{
-	private:
-		
-		double					m_radius;
-		double					m_azimuth;
-        double                  m_elevation;
-		double*					m_color;
-		std::string             m_description;
-		bool                    m_exist;
-		std::vector <long>      m_groups;
-		double                  m_maximum_radius;
-		bool                    m_mute;
-		
-	public:
-		
-		//! The source constructor.
-		/**	The source constructor allocates and initialize the member values for a source.
-		 
-			@param     existence		The existence state of the source.
-			@param     radius			The radius of the source.
-			@param     azimuth			The azimuth of the source.
-            @param     elevation		The elevation of the source.
-		 */
-		Source(bool existence = true, double radius = 0., double azimuth = 0., double elevation = 0.);
-		
-		//! The source destructor.
-        /**	The source destructor free the memory.
-         */
-		~Source();
-		
-		//! Set the existence state of the source.
-		/**
-			@param     state		The existence state of the source.
-			@see getExistence
-         */
-		void setExistence(bool state);
-		
-        //! Set the position of the source with polar coordinates.
-		/**
-            @param     radius			The radius of the source.
-            @param     azimuth			The azimuth of the source.
-            @see setCoordinatesCartesian
-         */
-		void setCoordinatesPolar(double radius, double azimuth);
-        
-		//! Set the position of the source with polar coordinates.
-		/**
-			@param     radius			The radius of the source.
-			@param     azimuth			The azimuth of the source.
-            @param     elevation        The elevation of the source.
-			@see setCoordinatesCartesian
-         */
-		void setCoordinatesPolar(double radius, double azimuth, double elevation);
-		
-		//! Set the radius of the source.
-		/**
-			@param     radius			The radius of the source.
-			@see getRadius
-         */
-		void setRadius(double radius);
-		
-		//! Set the azimuth of the source.
-		/**
-			@param     azimuth			The azimuth of the source.
-         */
-		void setAzimuth(double azimuth);
-        
-        //! Set the elevation of the source.
-		/**
-         @param     elevation			The elevation of the source.
-         */
-		void setElevation(double elevation);
-		
-		//! Set the position of the source with cartesians coordinates.
-		/**
-			@param     abscissa		The abscissa of the source.
-			@param     ordinate		The ordinate of the source.
-         */
-		void setCoordinatesCartesian(double abscissa, double ordinate);
-        
-        //! Set the position of the source with cartesians coordinates.
-		/**
-            @param     abscissa		The abscissa of the source.
-            @param     ordinate		The ordinate of the source.
-            @param     height		The height of the source.
-         */
-		void setCoordinatesCartesian(double abscissa, double ordinate, double height);
-		
-		//! Set the abscissa of the source.
-		/**
-			@param     abscissa		The abscissa of the source.
-         */
-		void setAbscissa(double abscissa);
-		
-		//! Set the ordinate of the source.
-		/**
-			@param     ordinate		The ordinate of the source.
-         */
-		void setOrdinate(double ordinate);
-        
-        //! Set the height of the source.
-		/**
-         @param     height		The height of the source.
-         */
-		void setHeight(double height);
-		
-		//! Set the color of the source.
-		/**
-		 * @param     red		The red component of the color.
-		 * @param     green		The green component of the color
-		 * @param     blue		The blue component of the color
-		 * @param     alpha		The alpha component of the color
-         */
-		void setColor(double red, double green, double blue, double alpha);
-		
-		//! Set the description of the source.
-		/**
-		 * @param     description		The text description of the source.
-         */
-		void setDescription(std::string description);
-		
-		//! Add source to an indexed group.
-		/**
-			@param     groupIndex		The index of the group.
-         */
-		void setGroup(long groupIndex);
-		
-		//! Remove source from an indexed group.
-		/**
-			@param     groupIndex		The index of the group.
-         */
-		void removeGroup(long groupIndex);
-		
-		//! Set the maximum radius of the source
-		/**
-			@param     limitValue		The radius limit value.
-         */
-		void setMaximumRadius(double limitValue);
-		
-		//! Set the mute state of the source
-		/**
-			@param     state		The mute state of the source.
-			@see getMute
-         */
-		void setMute(bool state);
-		
-		//! Get the existence state of the source.
-		/**
-			@return		The existence state of the source.
-			@see setExistence
-         */
-		bool			getExistence()		const {return m_exist;}
-		
-		//! Get the radius of the source.
-		/**
-			@return		The radius of the source.
-			@see setRadius, setCoordinatesPolar
-         */
-		double			getRadius()			const {return m_radius;}
-		
-		//! Get the azimuth of the source.
-		/**
-			@return		The azimuth of the source.
-			@see setAzimuth, setCoordinatesPolar
-         */
-		double			getAzimuth()		const {return m_azimuth;}
-        
-        //! Get the elevation of the source.
-		/**
-            @return		The elevation of the source.
-            @see setElevation, setCoordinatesPolar
-         */
-		double			getElevation()		const {return m_elevation;}
-		
-		//! Get the abscissa of the source.
-		/**
-			@return		The abscissa of the source.
-			@see setAbscissa, setCoordinatesCartesian
-         */
-		double			getAbscissa()		const {return Math<double>::abscissa(m_radius, m_azimuth, m_elevation);}
-		
-		
-		//! Get the ordinate of the source.
-		/**
-			@return		The ordinate of the source.
-			@see setOrdinate, setCoordinatesCartesian
-         */
-		double			getOrdinate()		const {return Math<double>::ordinate(m_radius, m_azimuth, m_elevation);}
-        
-        //! Get the height of the source.
-		/**
-         @return		The height of the source.
-         @see setHeight, setCoordinatesCartesian
-         */
-		double			getHeight()		const {return Math<double>::height(m_radius, m_azimuth, m_elevation);}
-		
-		//! Get the color of the source.
-		/**
-			@return		The rgba color of the source as an array of 4 double.
-			@see setColor
-         */
-		double*			getColor()			const {return m_color;}
-		
-		//! Get the description of the source.
-		/**
-			@return		The description of the source.
-			@see setDescription
-         */
-		std::string		getDescription()	const {return m_description;}
-		
-		//! Get the number of group the source is owned by.
-		/**
-			@return		The number of group.
-			@see setDescription
-         */
-		long			getNumberOfGroups() const {return m_groups.size();}
-		
-		//! Get the the group index the source is owned by at a particular index.
-		/**
-			@param			index			The index of the group
-			@return		The group index.
-         */
-		long			getGroupIndex(long index);
-		
-		//! Determine if the source is owned by a particular group
-		/**
-			@param			groupIndex		The index of the group
-			@return		true if the source is in the group, false otherwise.
-         */
-		bool			isOwnedByGroup(long groupIndex);
-		
-		//! Get the mute state of the source
-		/**
-			@return		The mute state of the source.
-			@see setMute
-         */
-		bool			getMute()			const {return m_mute;}
-	};
-    
-    class SourcesGroup
+    Source::Source(bool existence, double radius, double azimuth, double elevation)
     {
-        
-    private:
-        
-        std::vector <long>      m_sources;
-        std::string             m_description;
-        long                    m_exist;
-        double*					m_color;
-        double					m_centroid_x;
-        double					m_centroid_y;
-        double					m_centroid_z;
-        SourcesManager*         m_source_manager;
-        double                  m_maximum_radius;
-        long                    m_mute;
-        
-        void computeCentroid();
-        void shiftPolar(double radius, double azimuth);
-        void shiftPolar(double radius, double azimuth, double elevation);
-        void shiftRadius(double radius);
-        void shiftAzimuth(double azimuth);
-        void shiftElevation(double elevation);
-        void shiftCartesian(double abscissa, double ordinate);
-        void shiftCartesian(double abscissa, double ordinate, double height);
-        void shiftAbscissa(double abscissa);
-        void shiftOrdinate(double ordinate);
-        void shiftHeight(double ordinate);
-        
-    public:
-        
-        //! The source group constructor.
-        /**	The source group constructor allocates and initialize the member values for a source group.
-         
-         @param     sourcesManager		A SourceManager object's pointer.
-         @param     existence			The existence state of the source.
-         */
-        SourcesGroup(SourcesManager* sourcesManager, bool existence);
-        
-        //! The source group destructor.
-        /**	The source group destructor free the memory.
-         */
-        ~SourcesGroup();
-        
-        //! Set the existence state of the group.
-        /**
-         @param     state		The existence state of the group.
-         @see getExistence
-         */
-        void setExistence(bool state);
-        
-        //! Set the position of the group with polar coordinates.
-        /**
-         @param     radius			The radius of the group.
-         @param     azimuth			The azimuth of the group.
-         @see setRelativeCoordinatesPolar, setCoordinatesCartesian
-         */
-        void setCoordinatesPolar(double radius, double azimuth);
-        
-        //! Set the position of the group with polar coordinates.
-        /**
-         @param     radius			The radius of the group.
-         @param     azimuth			The azimuth of the group.
-         @param     elevation			The elevation of the group.
-         @see setRelativeCoordinatesPolar, setCoordinatesCartesian
-         */
-        void setCoordinatesPolar(double radius, double azimuth, double elevation);
-        
-        //! Set the radius of the group.
-        /**
-         @param     radius			The radius of the group.
-         @see getRadius
-         */
-        void setRadius(double radius);
-        
-        //! Set the azimuth of the group.
-        /**
-         @param     azimuth			The azimuth of the group.
-         */
-        void setAzimuth(double azimuth);
-        
-        //! Set the elevation of the group.
-        /**
-         @param     elevation			The elevation of the group.
-         */
-        void setElevation(double elevation);
-        
-        //! Set the position of the group with cartesians coordinates.
-        /**
-         @param     abscissa		The abscissa of the group.
-         @param     ordinate		The ordinate of the group.
-         */
-        void setCoordinatesCartesian(double abscissa, double ordinate);
-        
-        //! Set the position of the group with cartesians coordinates.
-        /**
-         @param     abscissa		The abscissa of the group.
-         @param     ordinate		The ordinate of the group.
-         @param     height		The height of the group.
-         */
-        void setCoordinatesCartesian(double abscissa, double ordinate, double height);
-        
-        //! Set the abscissa of the group.
-        /**
-         @param     abscissa		The abscissa of the group.
-         */
-        void setAbscissa(double abscissa);
-        
-        //! Set the ordinate of the group.
-        /**
-         @param     ordinate		The ordinate of the group.
-         */
-        void setOrdinate(double ordinate);
-        
-        //! Set the height of the group.
-        /**
-         @param     height		The height of the group.
-         */
-        void setHeight(double height);
-        
-        //! Set the color of the group.
-        /**
-         @param     red			The red component of the color.
-         @param     green		The green component of the color
-         @param     blue			The blue component of the color
-         @param     alpha		The alpha component of the color
-         */
-        void setColor(double red, double green, double blue, double alpha);
-        
-        //! Set the description of the group.
-        /**
-         @param     description		The text description of the group.
-         */
-        void setDescription(std::string description);
-        
-        //! Set the maximum radius of the group
-        /**
-         @param     limitValue		The radius limit value.
-         */
-        void setMaximumRadius(double limitValue);
-        
-        //! Store a new source in this group
-        /**
-         @param     sourceIndex		The index of the source to store.
-         */
-        void addSource(long sourceIndex);
-        
-        //! Remove a source from this group
-        /**
-         @param     sourceIndex		The index of the source to store.
-         */
-        void removeSource(long sourceIndex);
-        
-        //! Notify the group that a source has moved
-        /** You need to call this function whenever a source has moved to update group information.
-         @param     sourceIndex		The index of the source to store.
-         */
-        void sourceHasMoved();
-        
-        //! Set the mute state of the group
-        /**
-         @param     state		The mute state of the group.
-         @see getMute
-         */
-        void setMute(long aValue);
-        
-        //! Set the position of the group with relative polar coordinates.
-        /**
-         @param     radius			The relative radius value.
-         @param     azimuth			The relative azimuth value.
-         @see setCoordinatesPolar, setRelativeRadius
-         */
-        void setRelativeCoordinatesPolar(double radius, double azimuth);
-        
-        //! Set the position of the group with relative polar coordinates.
-        /**
-         @param     radius			The relative radius value.
-         @param     azimuth			The relative azimuth value.
-         @param     elevation		The relative elevation value.
-         @see setCoordinatesPolar, setRelativeRadius
-         */
-        void setRelativeCoordinatesPolar(double radius, double azimuth, double elevation);
-        
-        //! Set the radius of the group with a relative value.
-        /**
-         @param     radius			The relative radius value.
-         @see setCoordinatesPolar, setRelativeRadius
-         */
-        void setRelativeRadius(double radius);
-        
-        //! Set the azimuth of the group with a relative value.
-        /**
-         @param     azimuth			The relative azimuth value.
-         @see setCoordinatesPolar, setRelativeRadius
-         */
-        void setRelativeAzimuth(double azimuth);
-        
-        //! Set the elevation of the group with a relative value.
-        /**
-         @param     elevation			The relative elevation value.
-         @see setCoordinatesPolar, setRelativeRadius
-         */
-        void setRelativeElevation(double elevation);
-        
-        //! Get the existence state of the group.
-        /**
-         @return		The existence state of the group.
-         @see setExistence
-         */
-        bool			getExistence()		const {return m_exist;}
-        
-        //! Get the radius of the group.
-        /**
-         @return		The radius of the group.
-         @see setRadius, setCoordinatesPolar
-         */
-        double			getRadius()			const { return Math<double>::radius(m_centroid_x, m_centroid_y, m_centroid_z);}
-        
-        //! Get the azimuth of the group.
-        /**
-         @return		The azimuth of the group.
-         @see setAzimuth, setCoordinatesPolar
-         */
-        double			getAzimuth()		const {return Math<double>::azimuth(m_centroid_x, m_centroid_y, m_centroid_z) + HOA_PI2;}
-        
-        //! Get the elevation of the group.
-        /**
-         @return		The elevation of the group.
-         @see setAzimuth, setCoordinatesPolar
-         */
-        double			getElevation()		const {return Math<double>::elevation(m_centroid_x, m_centroid_y, m_centroid_z);}
-        
-        //! Get the abscissa of the group.
-        /**
-         @return		The abscissa of the group.
-         @see setAbscissa, setCoordinatesCartesian
-         */
-        double			getAbscissa()		const {return m_centroid_x;}
-        
-        //! Get the ordinate of the group.
-        /**
-         @return		The ordinate of the group.
-         @see setOrdinate, setCoordinatesCartesian
-         */
-        double			getOrdinate()		const {return m_centroid_y;}
-        
-        //! Get the height of the group.
-        /**
-         @return		The height of the group.
-         @see setOrdinate, setCoordinatesCartesian
-         */
-        double			getHeight()		const {return m_centroid_z;}
-        
-        //! Get the color of the group.
-        /**
-         @return		The rgba color of the group as an array of 4 double.
-         @see setColor
-         */
-        double*			getColor()			const {return m_color;}
-        
-        //! Get the description of the group.
-        /**
-         @return		The description of the group.
-         @see setDescription
-         */
-        std::string		getDescription()	const {return m_description;}
-        
-        //! Get the number of sources owned by this group.
-        /**
-         @return		The number of sources.
-         @see setDescription
-         */
-        long			getNumberOfSources() const {return m_sources.size();}
-        
-        //! Get the mute state of the group
-        /**
-         @return		The mute state of the group.
-         @see setMute
-         */
-        bool			getMute()			const {return m_mute;}
-        
-        //! Get the the index of a source stored at a particular index by the group.
-        /**
-         @param			index			The index of the source.
-         @return			The index of the source if it exists, -1 otherwise.
-         */
-        long   getSourceIndex(long index)	const
+        m_exist = existence;
+        setRadius(radius);
+        setAzimuth(azimuth);
+        setElevation(elevation);
+        m_color = new double[4];
+        setColor(0.2, 0.2, 0.2, 1.);
+        setDescription("");
+        m_maximum_radius = -1;
+        m_mute = 0;
+    }
+    
+    void Source::setMaximumRadius(double limitValue)
+    {
+        m_maximum_radius = limitValue;
+    }
+    
+    void Source::setExistence(bool state)
+    {
+        m_exist = state;
+    }
+    
+    void Source::setCoordinatesPolar(double radius, double azimuth)
+    {
+        setRadius(radius);
+        setAzimuth(azimuth);
+    }
+    
+    void Source::setCoordinatesPolar(double radius, double azimuth, double elevation)
+    {
+        setRadius(radius);
+        setAzimuth(azimuth);
+        setElevation(elevation);
+    }
+    
+    void Source::setRadius(double radius)
+    {
+        if(m_maximum_radius >= 0)
         {
-            if(index < m_sources.size() && index >= 0)
-                return m_sources[index];
-            else
-                return -1;
+            if(radius < -m_maximum_radius || radius > m_maximum_radius)
+                return;
         }
-    };
+        m_radius = max(radius, 0.);
+    }
     
-    class SourcesManager
+    void Source::setAzimuth(double azimuth)
+    {
+        m_azimuth = Math<double>::wrap_twopi(azimuth);
+    }
+    
+    void Source::setElevation(double elevation)
+    {
+        m_elevation = Math<double>::wrap(elevation, -HOA_PI, HOA_PI);
+        if(m_elevation > HOA_PI2)
+        {
+            m_azimuth = Math<double>::wrap_twopi(m_azimuth + HOA_PI);
+            m_elevation = HOA_PI2 - (elevation - HOA_PI2);
+        }
+        else if(m_elevation < -HOA_PI2)
+        {
+            m_azimuth = Math<double>::wrap_twopi(m_azimuth + HOA_PI);
+            m_elevation = -HOA_PI2 + (-elevation + HOA_PI2);
+        }
+    }
+    
+    void Source::setCoordinatesCartesian(double abscissa, double ordinate)
+    {
+        setRadius(Math<double>::radius(abscissa, ordinate));
+        setAzimuth(Math<double>::azimuth(abscissa, ordinate));
+    }
+    
+    void Source::setCoordinatesCartesian(double abscissa, double ordinate, double height)
+    {
+        setRadius(Math<double>::radius(abscissa, ordinate, height));
+        setAzimuth(Math<double>::azimuth(abscissa, ordinate, height));
+        setHeight(Math<double>::elevation(abscissa, ordinate, height));
+    }
+    
+    void Source::setAbscissa(double abscissa)
+    {
+        double ordinate = getOrdinate();
+        double height = getHeight();
+        setRadius(Math<double>::radius(abscissa, ordinate, height));
+        setAzimuth(Math<double>::azimuth(abscissa, ordinate, height));
+        setElevation(Math<double>::elevation(abscissa, ordinate, height));
+    }
+    
+    void Source::setOrdinate(double ordinate)
+    {
+        double abscissa = getAbscissa();
+        double height = getHeight();
+        setRadius(Math<double>::radius(abscissa, ordinate, height));
+        setAzimuth(Math<double>::azimuth(abscissa, ordinate, height));
+        setElevation(Math<double>::elevation(abscissa, ordinate, height));
+    }
+    
+    void Source::setHeight(double height)
+    {
+        double abscissa = getAbscissa();
+        double ordinate = getOrdinate();
+        setRadius(Math<double>::radius(abscissa, ordinate, height));
+        setAzimuth(Math<double>::azimuth(abscissa, ordinate, height));
+        setElevation(Math<double>::elevation(abscissa, ordinate, height));
+    }
+    
+    void Source::setColor(double red, double green, double blue, double alpha)
+    {
+        m_color[0]	=  Math<double>::clip(red, 0., 1.);
+        m_color[1]	=  Math<double>::clip(green, 0., 1.);
+        m_color[2]	=  Math<double>::clip(blue, 0., 1.);
+        m_color[3]	=  Math<double>::clip(alpha, 0., 1.);
+    }
+    
+    void Source::setDescription(std::string description)
+    {
+        m_description = description;
+    }
+    
+    void Source::setGroup(long groupIndex)
+    {
+        for(int i = 0; i < m_groups.size(); i++)
+        {
+            if(m_groups[i] == groupIndex)
+                return;
+        }
+        m_groups.push_back(groupIndex);
+    }
+    
+    void Source::setMute(bool state)
+    {
+        m_mute = state;
+    }
+    
+    void Source::removeGroup(long groupIndex)
+    {
+        for(int i = 0; i < m_groups.size(); i++)
+        {
+            if(m_groups[i] == groupIndex)
+            {
+                for(int j = i; j < m_groups.size() - 1; j++)
+                {
+                    m_groups[j] = m_groups[j+1];
+                }
+                m_groups.pop_back();
+            }
+        }
+    }
+    
+    long Source::getGroupIndex(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+            return m_groups[index];
+        else
+            return -1;
+    }
+    
+    bool Source::isOwnedByGroup(long groupIndex)
+    {
+        for (int i = 0; i < m_groups.size(); i++)
+            if (m_groups[i] == groupIndex) return true;
+        return false;
+    }
+    
+    Source::~Source()
+    {
+        delete m_color;
+        m_groups.clear();
+    }
+    
+    SourcesGroup::SourcesGroup(SourcesManager* sourcesManager, bool state)
+    {
+        m_source_manager = sourcesManager;
+        setExistence(state);
+        m_color = new double[4];
+        setColor(0.2, 0.2, 0.2, 1.);
+        setDescription("");
+        computeCentroid();
+        m_maximum_radius = -1;
+        m_mute = 0;
+    }
+    
+    void SourcesGroup::setExistence(bool state)
+    {
+        m_exist = state;
+    }
+    
+    void SourcesGroup::setDescription(std::string description)
+    {
+        m_description = description;
+    }
+    
+    void SourcesGroup::setColor(double red, double green, double blue, double alpha)
+    {
+        m_color[0]	=  Math<double>::clip(red, 0., 1.);
+        m_color[1]	=  Math<double>::clip(green, 0., 1.);
+        m_color[2]	=  Math<double>::clip(blue, 0., 1.);
+        m_color[3]	=  Math<double>::clip(alpha, 0., 1.);
+    }
+    
+    void SourcesGroup::setMaximumRadius(double limitValue)
+    {
+        m_maximum_radius = max(limitValue, 0.0000001);
+    }
+    
+    void SourcesGroup::computeCentroid()
+    {
+        m_centroid_x = 0.;
+        m_centroid_y = 0.;
+        m_centroid_z = 0.;
+        if(m_sources.size())
+        {
+            for(int i = 0; i < m_sources.size(); i++)
+            {
+                if(m_source_manager->sourceGetExistence(m_sources[i]))
+                {
+                    m_centroid_x += m_source_manager->sourceGetAbscissa(m_sources[i]);
+                    m_centroid_y += m_source_manager->sourceGetOrdinate(m_sources[i]);
+                    m_centroid_z += m_source_manager->sourceGetHeight(m_sources[i]);
+                }
+            }
+            m_centroid_x /= m_sources.size();
+            m_centroid_y /= m_sources.size();
+            m_centroid_z /= m_sources.size();
+        }
+    }
+    
+    void SourcesGroup::addSource(long sourceIndex)
+    {
+        for(int i = 0; i < m_sources.size(); i++)
+        {
+            if(m_sources[i] == sourceIndex)
+                return;
+        }
+        m_sources.push_back(sourceIndex);
+        
+        computeCentroid();
+    }
+    
+    void SourcesGroup::sourceHasMoved()
+    {
+        computeCentroid();
+    }
+    
+    void SourcesGroup::removeSource(long sourceIndex)
+    {
+        if(m_sources.size() > 0)
+        {
+            int size = m_sources.size();
+            
+            for(int i = 0; i < size; i++)
+            {
+                if(m_sources[i] == sourceIndex)
+                {
+                    for(int j = i; j < size - 1; j++)
+                    {
+                        m_sources[j] = m_sources[j+1];
+                    }
+                    m_sources.pop_back();
+                }
+            }
+        }
+        computeCentroid();
+    }
+    
+    void SourcesGroup::shiftPolar(double radius, double azimuth)
+    {
+        shiftRadius(radius);
+        shiftAzimuth(azimuth);
+    }
+    
+    void SourcesGroup::shiftPolar(double radius, double azimuth, double elevation)
+    {
+        shiftRadius(radius);
+        shiftAzimuth(azimuth);
+        shiftElevation(elevation);
+    }
+    
+    void SourcesGroup::shiftRadius(double radius)
+    {
+        if(m_maximum_radius >= 0)
+        {
+            if(radius < 0.)
+            {
+                double refRadius = m_maximum_radius;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    if(m_source_manager->sourceGetRadius(m_sources[i]) < refRadius)
+                    {
+                        refRadius = m_source_manager->sourceGetRadius(m_sources[i]);
+                    }
+                }
+                if(radius + refRadius < 0.)
+                {
+                    radius = -refRadius;
+                }
+            }
+            else if(radius >= 0.)
+            {
+                double refRadius = -m_maximum_radius;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    if(m_source_manager->sourceGetRadius(m_sources[i]) > refRadius)
+                    {
+                        refRadius = m_source_manager->sourceGetRadius(m_sources[i]);
+                    }
+                }
+                if(radius + refRadius > m_maximum_radius)
+                {
+                    radius = m_maximum_radius - refRadius;
+                }
+            }
+        }
+        for(int i = 0; i < m_sources.size(); i++)
+        {
+            m_source_manager->sourceSetRadius(m_sources[i], radius + m_source_manager->sourceGetRadius(m_sources[i]));
+        }
+    }
+    
+    void SourcesGroup::shiftAzimuth(double azimuth)
+    {
+        for(int i = 0; i < m_sources.size(); i++)
+        {
+            m_source_manager->sourceSetAzimuth(m_sources[i], azimuth + m_source_manager->sourceGetAzimuth(m_sources[i]));
+        }
+    }
+    
+    void SourcesGroup::shiftElevation(double elevation)
+    {
+        for(int i = 0; i < m_sources.size(); i++)
+        {
+            m_source_manager->sourceSetElevation(m_sources[i], elevation + m_source_manager->sourceGetElevation(m_sources[i]));
+        }
+    }
+    
+    void SourcesGroup::shiftCartesian(double abscissa, double ordinate)
+    {
+        if(m_maximum_radius >= 0)
+        {
+            if(abscissa < 0. &&  ordinate < 0.)
+            {
+                double refAbcsissa = -m_maximum_radius * 2.;
+                double refOrdinate = -m_maximum_radius * 2.;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    double circleAbscissa = -sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetOrdinate(m_sources[i]) * m_source_manager->sourceGetOrdinate(m_sources[i]));
+                    double circleOrdinate = -sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetAbscissa(m_sources[i]) * m_source_manager->sourceGetAbscissa(m_sources[i]));
+                    if(circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]) > refAbcsissa)
+                    {
+                        refAbcsissa = circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]);
+                    }
+                    if(circleOrdinate - m_source_manager->sourceGetOrdinate(m_sources[i]) > refOrdinate)
+                    {
+                        refOrdinate = circleOrdinate - m_source_manager->sourceGetOrdinate(m_sources[i]);
+                    }
+                }
+                if(abscissa < refAbcsissa)
+                {
+                    abscissa = refAbcsissa;
+                }
+                if(ordinate < refOrdinate)
+                {
+                    ordinate = refOrdinate;
+                }
+            }
+            else if(abscissa >= 0.)
+            {
+                double refAbcsissa = m_maximum_radius * 2.;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    double circleAbscissa = sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetOrdinate(m_sources[i]) * m_source_manager->sourceGetOrdinate(m_sources[i]));
+                    if(circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]) < refAbcsissa)
+                    {
+                        refAbcsissa = circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]);
+                    }
+                }
+                if(abscissa > refAbcsissa)
+                {
+                    abscissa = refAbcsissa;
+                }
+            }
+        }
+        
+        for(int i = 0; i < m_sources.size(); i++)
+        {
+            m_source_manager->sourceSetAbscissa(m_sources[i], abscissa + m_source_manager->sourceGetAbscissa(m_sources[i]));
+            m_source_manager->sourceSetOrdinate(m_sources[i], ordinate + m_source_manager->sourceGetOrdinate(m_sources[i]));
+        }
+    }
+    
+    void SourcesGroup::shiftCartesian(double abscissa, double ordinate, double height)
+    {
+        if(m_maximum_radius >= 0)
+        {
+            if(abscissa < 0. &&  ordinate < 0.)
+            {
+                double refAbcsissa = -m_maximum_radius * 2.;
+                double refOrdinate = -m_maximum_radius * 2.;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    double circleAbscissa = -sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetOrdinate(m_sources[i]) * m_source_manager->sourceGetOrdinate(m_sources[i]));
+                    double circleOrdinate = -sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetAbscissa(m_sources[i]) * m_source_manager->sourceGetAbscissa(m_sources[i]));
+                    if(circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]) > refAbcsissa)
+                    {
+                        refAbcsissa = circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]);
+                    }
+                    if(circleOrdinate - m_source_manager->sourceGetOrdinate(m_sources[i]) > refOrdinate)
+                    {
+                        refOrdinate = circleOrdinate - m_source_manager->sourceGetOrdinate(m_sources[i]);
+                    }
+                }
+                if(abscissa < refAbcsissa)
+                {
+                    abscissa = refAbcsissa;
+                }
+                if(ordinate < refOrdinate)
+                {
+                    ordinate = refOrdinate;
+                }
+            }
+            else if(abscissa >= 0.)
+            {
+                double refAbcsissa = m_maximum_radius * 2.;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    double circleAbscissa = sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetOrdinate(m_sources[i]) * m_source_manager->sourceGetOrdinate(m_sources[i]));
+                    if(circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]) < refAbcsissa)
+                    {
+                        refAbcsissa = circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]);
+                    }
+                }
+                if(abscissa > refAbcsissa)
+                {
+                    abscissa = refAbcsissa;
+                }
+            }
+        }
+        
+        for(int i = 0; i < m_sources.size(); i++)
+        {
+            m_source_manager->sourceSetAbscissa(m_sources[i], abscissa + m_source_manager->sourceGetAbscissa(m_sources[i]));
+            m_source_manager->sourceSetOrdinate(m_sources[i], ordinate + m_source_manager->sourceGetOrdinate(m_sources[i]));
+        }
+    }
+    
+    void SourcesGroup::shiftAbscissa(double abscissa)
+    {
+        if(m_maximum_radius >= 0)
+        {
+            if(abscissa < 0.)
+            {
+                double refAbcsissa = -m_maximum_radius * 2.;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    double circleAbscissa = -sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetOrdinate(m_sources[i]) * m_source_manager->sourceGetOrdinate(m_sources[i]));
+                    if(circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]) > refAbcsissa)
+                    {
+                        refAbcsissa = circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]);
+                    }
+                }
+                if(abscissa < refAbcsissa)
+                {
+                    abscissa = refAbcsissa;
+                }
+            }
+            else if(abscissa >= 0.)
+            {
+                double refAbcsissa = m_maximum_radius * 2.;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    double circleAbscissa = sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetOrdinate(m_sources[i]) * m_source_manager->sourceGetOrdinate(m_sources[i]));
+                    if(circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]) < refAbcsissa)
+                    {
+                        refAbcsissa = circleAbscissa - m_source_manager->sourceGetAbscissa(m_sources[i]);
+                    }
+                }
+                if(abscissa > refAbcsissa)
+                {
+                    abscissa = refAbcsissa;
+                }
+            }
+        }
+        
+        for(int i = 0; i < m_sources.size(); i++)
+        {
+            m_source_manager->sourceSetAbscissa(m_sources[i], abscissa + m_source_manager->sourceGetAbscissa(m_sources[i]));
+        }
+    }
+    
+    void SourcesGroup::shiftOrdinate(double ordinate)
+    {
+        if(m_maximum_radius >= 0)
+        {
+            if(ordinate < 0.)
+            {
+                double refOrdinate = -m_maximum_radius * 2.;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    double circleOrdinate = -sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetAbscissa(m_sources[i]) * m_source_manager->sourceGetAbscissa(m_sources[i]));
+                    if(circleOrdinate - m_source_manager->sourceGetOrdinate(m_sources[i]) > refOrdinate)
+                    {
+                        refOrdinate = circleOrdinate - m_source_manager->sourceGetOrdinate(m_sources[i]);
+                    }
+                }
+                if(ordinate < refOrdinate)
+                {
+                    ordinate = refOrdinate;
+                }
+            }
+            else if(ordinate >= 0.)
+            {
+                double refOrdinate = m_maximum_radius * 2.;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    double circleOrdinate = sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetAbscissa(m_sources[i]) * m_source_manager->sourceGetAbscissa(m_sources[i]));
+                    if(circleOrdinate - m_source_manager->sourceGetOrdinate(m_sources[i]) < refOrdinate)
+                    {
+                        refOrdinate = circleOrdinate - m_source_manager->sourceGetOrdinate(m_sources[i]);
+                    }
+                }
+                if(ordinate > refOrdinate)
+                {
+                    ordinate = refOrdinate;
+                }
+            }
+        }
+        
+        for(int i = 0; i < m_sources.size(); i++)
+        {
+            m_source_manager->sourceSetOrdinate(m_sources[i], ordinate + m_source_manager->sourceGetOrdinate(m_sources[i]));
+        }
+    }
+    
+    void SourcesGroup::shiftHeight(double height)
+    {
+        if(m_maximum_radius >= 0)
+        {
+            if(height < 0.)
+            {
+                double refHeight = -m_maximum_radius * 2.;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    double circleHeight = -sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetAbscissa(m_sources[i]) * m_source_manager->sourceGetAbscissa(m_sources[i]));
+                    if(circleHeight - m_source_manager->sourceGetHeight(m_sources[i]) > circleHeight)
+                    {
+                        refHeight = circleHeight - m_source_manager->sourceGetHeight(m_sources[i]);
+                    }
+                }
+                if(height < refHeight)
+                {
+                    height = refHeight;
+                }
+            }
+            else if(height >= 0.)
+            {
+                double refHeight = m_maximum_radius * 2.;
+                for(int i = 0; i < m_sources.size(); i++)
+                {
+                    double circleHeight = sqrt(m_maximum_radius * m_maximum_radius - m_source_manager->sourceGetAbscissa(m_sources[i]) * m_source_manager->sourceGetAbscissa(m_sources[i]));
+                    if(circleHeight - m_source_manager->sourceGetHeight(m_sources[i]) < refHeight)
+                    {
+                        refHeight = circleHeight - m_source_manager->sourceGetHeight(m_sources[i]);
+                    }
+                }
+                if(height > refHeight)
+                {
+                    height = refHeight;
+                }
+            }
+        }
+        
+        for(int i = 0; i < m_sources.size(); i++)
+        {
+            m_source_manager->sourceSetHeight(m_sources[i], height + m_source_manager->sourceGetHeight(m_sources[i]));
+        }
+    }
+    
+    void SourcesGroup::setCoordinatesPolar(double radius, double azimuth)
+    {
+        setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth), Math<double>::ordinate(radius, azimuth));
+    }
+    
+    void SourcesGroup::setCoordinatesPolar(double radius, double azimuth, double elevation)
+    {
+        setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth, elevation), Math<double>::ordinate(radius, azimuth, elevation));
+    }
+    
+    void SourcesGroup::setRadius(double radius)
+    {
+        setCoordinatesCartesian(Math<double>::abscissa(radius, getAzimuth(), getElevation()), Math<double>::ordinate(radius, getAzimuth(), getElevation()), Math<double>::height(radius, getAzimuth(), getElevation()));
+    }
+    
+    void SourcesGroup::setAzimuth(double azimuth)
+    {
+        setCoordinatesCartesian(Math<double>::abscissa(getRadius(), azimuth, getElevation()), Math<double>::ordinate(getRadius(), azimuth, getElevation()), Math<double>::height(getRadius(), azimuth, getElevation()));
+    }
+    
+    void SourcesGroup::setElevation(double elevation)
+    {
+        setCoordinatesCartesian(Math<double>::abscissa(getRadius(), getAzimuth(), elevation), Math<double>::ordinate(getRadius(), getAzimuth(), elevation), Math<double>::height(getRadius(), getAzimuth(), elevation));
+    }
+    
+    void SourcesGroup::setCoordinatesCartesian(double abscissa, double ordinate)
+    {
+        abscissa = abscissa - getAbscissa();
+        ordinate = ordinate - getOrdinate();
+        shiftAbscissa(abscissa);
+        shiftOrdinate(ordinate);
+        computeCentroid();
+    }
+    
+    void SourcesGroup::setCoordinatesCartesian(double abscissa, double ordinate, double height)
+    {
+        abscissa = abscissa - getAbscissa();
+        ordinate = ordinate - getOrdinate();
+        height = height - getHeight();
+        shiftAbscissa(abscissa);
+        shiftOrdinate(ordinate);
+        shiftHeight(height);
+        computeCentroid();
+    }
+    
+    void SourcesGroup::setAbscissa(double abscissa)
+    {
+        double aAbscissaOffset = abscissa - getAbscissa();
+        shiftAbscissa(aAbscissaOffset);
+        computeCentroid();
+    }
+    
+    void SourcesGroup::setOrdinate(double ordinate)
+    {
+        double aOrdinateOffset = ordinate - getOrdinate();
+        shiftOrdinate(aOrdinateOffset);
+        computeCentroid();
+    }
+    
+    void SourcesGroup::setHeight(double height)
+    {
+        double aHeightOffset = height - getHeight();
+        shiftHeight(aHeightOffset);
+        computeCentroid();
+    }
+    
+    void SourcesGroup::setRelativeCoordinatesPolar(double radius, double azimuth)
+    {
+        setRelativeRadius(radius);
+        setRelativeAzimuth(azimuth);
+    }
+    
+    void SourcesGroup::setRelativeCoordinatesPolar(double radius, double azimuth, double elevation)
+    {
+        setRelativeRadius(radius);
+        setRelativeAzimuth(azimuth);
+        setRelativeElevation(elevation);
+    }
+    
+    void SourcesGroup::setRelativeRadius(double radius)
+    {
+        double aRadiusOffset = max(radius, 0.) - getRadius();
+        shiftRadius(aRadiusOffset);
+        computeCentroid();
+    }
+    
+    void SourcesGroup::setRelativeAzimuth(double azimuth)
+    {
+        azimuth +=  HOA_PI2;
+        while (azimuth > HOA_2PI)
+            azimuth -= HOA_2PI;
+        while (azimuth < 0.)
+            azimuth += HOA_2PI;
+        
+        double aAngleOffset = azimuth  - getAzimuth();
+        shiftAzimuth(aAngleOffset);
+        computeCentroid();
+    }
+    
+    void SourcesGroup::setRelativeElevation(double elevation)
+    {
+        elevation +=  HOA_PI2;
+        while (elevation > HOA_2PI)
+            elevation -= HOA_2PI;
+        while (elevation < 0.)
+            elevation += HOA_2PI;
+        
+        double aAngleOffset = elevation  - getElevation();
+        shiftElevation(aAngleOffset);
+        computeCentroid();
+    }
+    
+    void SourcesGroup::setMute(long aValue)
+    {
+        m_mute = Math<double>::clip(aValue, (long)0, (long)1);
+    }
+    
+    SourcesGroup::~SourcesGroup()
+    {
+        delete m_color;
+        m_sources.clear();
+    }
+    
+    
+    SourcesManager::SourcesManager(double maximumLimitValue, bool existence)
+    {
+        setExistence(existence);
+        setMaximumRadius(maximumLimitValue);
+        m_zoom = 1.;
+    }
+    
+    void SourcesManager::setExistence(bool state)
+    {
+        m_exist = state;
+        if(m_exist == 0)
+        {
+            m_sources.clear();
+            m_groups.clear();
+        }
+    }
+    
+    void SourcesManager::clearAll()
     {
         
-    private:
-        
-        double                      m_maximum_radius;
-        std::vector <Source*>       m_sources;
-        std::vector <SourcesGroup*> m_groups;
-        bool                        m_exist;
-        double                      m_zoom;
-        
-        void checkMute();
-        
-    public:
-        
-        //! The source manager constructor.
-        /**	The source manager constructor allocates and initialize the member values.
-         *
-         * @param     maximumRadius		The maximum radius the sources or groups in the source manager could have
-         * @param     existence			The existence state of the source manager.
-         */
-        SourcesManager(double maximumRadius = 1., bool existence = true);
-        
-        //! The source manager destructor free the memory.
-        ~SourcesManager();
-        
-        //! Make a copy of this SourcesManager into an other
-        void copyTo(SourcesManager* sourcesManagerDestination);
-        
-        //! Clear all the sources and groups.
-        void clearAll();
-        
-        //! Set the maximum radius the sources and groups can have
-        /**
-         * @param     limitValue		The radius limit value.
-         */
-        void setMaximumRadius(double limitValue);
-        
-        //! Set the existence state of the sources manager
-        /** If the existence state is false it will delete all sources and groups already stored.
-         *
-         * @param     state		The existence state.
-         */
-        void setExistence(bool state);
-        
-        //! Set the zoom factor.
-        /** Set the zoom factor between 0 and 1.
-         
-         @param     zoom		The zoom factor.
-         */
-        void setZoom(double zoom);
-        
-        //! Get the maximum index of sources.
-        /**
-         @return		The maximum index of source.
-         */
-        long getMaximumIndexOfSource();
-        
-        //! Get the number of sources actually managed.
-        /**
-         @return		The number of sources.
-         */
-        long getNumberOfSources();
-        
-        //! Get the maximum index of the sources actually managed.
-        /**
-         @return		The maximum index.
-         */
-        long getMaximumIndexOfGroup();
-        
-        //! Get the number of groups actually managed.
-        /**
-         @return		The number of group.
-         */
-        long getNumberOfGroups();
-        
-        //! Get the maximum radius of the sources and groups.
-        /**
-         @return		The maximum radius.
-         */
-        double getLimitMaximum();
-        
-        //! Get the existence state of the source manager.
-        /**
-         @return		The existence state.
-         */
-        bool getExistence();
-        
-        //! Get the zoom factor value.
-        /**
-         @return		The zoom factor value.
-         */
-        double getZoom();
-        
-        /* ------------------------------------------------------------------------ */
-        /* ------------------------------- Sources -------------------------------- */
-        /* ------------------------------------------------------------------------ */
-        
-        //! Add a new source with polar coordinates.
-        /**
-         * @param     radius			The radius of the source.
-         * @param     azimuth			The azimuth of the source.
-         * @see sourceNewCartesian
-         */
-        void sourceNewPolar(double radius, double azimuth);
-        
-        //! Add a new source with polar coordinates.
-        /**
-         * @param     radius			The radius of the source.
-         * @param     azimuth			The azimuth of the source.
-         * @param     elevation			The elevation of the source.
-         * @see sourceNewCartesian
-         */
-        void sourceNewPolar(double radius, double azimuth, double elevation);
-        
-        //! Add a new source with cartesian coordinates.
-        /**
-         * @param     abscissa			The abscissa of the source.
-         * @param     ordinate			The ordinate of the source.
-         * @see sourceNewPolar
-         */
-        void sourceNewCartesian(double abscissa, double ordinate);
-        
-        //! Add a new source with cartesian coordinates.
-        /**
-         * @param     abscissa			The abscissa of the source.
-         * @param     ordinate			The ordinate of the source.
-         * @param     height			The height of the source.
-         * @see sourceNewPolar
-         */
-        void sourceNewCartesian(double abscissa, double ordinate, double height);
-        
-        //! Set position of a source with polar coordinates.
-        /**
-         * @param     index				The index of the source.
-         * @param     radius			The radius of the source.
-         * @param     azimuth			The azimuth of the source.
-         * @see sourceSetRadius, sourceSetAzimuth, sourceSetCartesian
-         */
-        void sourceSetPolar(long index, double radius, double azimuth);
-        
-        //! Set position of a source with polar coordinates.
-        /**
-         * @param     index				The index of the source.
-         * @param     radius			The radius of the source.
-         * @param     azimuth			The azimuth of the source.
-         * @param     elevation			The elevation of the source.
-         * @see sourceSetRadius, sourceSetAzimuth, sourceSetCartesian
-         */
-        void sourceSetPolar(long index, double radius, double azimuth, double elevation);
-        
-        //! Set radius of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     radius			The radius of the source.
-         * @see sourceSetPolar, sourceSetAzimuth
-         */
-        void sourceSetRadius(long index, double radius);
-        
-        //! Set azimuth of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     azimuth			The azimuth of the source.
-         * @see sourceSetRadius, sourceSetAzimuth
-         */
-        void sourceSetAzimuth(long index, double azimuth);
-        
-        //! Set elevation of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     elevation			The elevation of the source.
-         * @see sourceSetRadius, sourceSetAzimuth
-         */
-        void sourceSetElevation(long index, double elevation);
-        
-        //! Set position of a source with cartesian coordinates.
-        /**
-         * @param     index				The index of the source.
-         * @param     abscissa			The abscissa of the source.
-         * @param     ordinate			The ordinate of the source.
-         * @see sourceSetAbscissa, sourceSetOrdinate, sourceSetPolar
-         */
-        void sourceSetCartesian(long index, double abscissa, double ordinate);
-        
-        //! Set position of a source with cartesian coordinates.
-        /**
-         * @param     index				The index of the source.
-         * @param     abscissa			The abscissa of the source.
-         * @param     ordinate			The ordinate of the source.
-         * @param     height			The height of the source.
-         * @see sourceSetAbscissa, sourceSetOrdinate, sourceSetPolar
-         */
-        void sourceSetCartesian(long index, double abscissa, double ordinate, double height);
-        
-        //! Set abscissa of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     abscissa			The abscissa of the source.
-         * @see sourceSetOrdinate, sourceSetHeight
-         */
-        void sourceSetAbscissa(long index, double abscissa);
-        
-        //! Set ordinate of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     ordinate			The ordinate of the source.
-         * @see sourceSetAbscissa, sourceSetHeight
-         */
-        void sourceSetOrdinate(long index, double ordinate);
-        
-        //! Set height of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     height			The height of the source.
-         * @see sourceSetOrdinate, sourceSetAbscissa
-         */
-        void sourceSetHeight(long index, double height);
-        
-        //! Set the rgba color of a source.
-        /** All values are clipped between 0 and 1.
-         * @param     index				The index of the source.
-         * @param     red				The red component of the color.
-         * @param     green				The green component of the color
-         * @param     blue				The blue component of the color
-         * @param     alpha				The alpha component of the color
-         */
-        void sourceSetColor(long index, double red, double green, double blue, double alpha);
-        
-        //! Add a description to a given source.
-        /**
-         * @param     index				The index of the source.
-         * @param     description		The text description of the source.
-         */
-        void sourceSetDescription(long index, std::string description);
-        
-        //! Remove a source.
-        /** This will also remove the source from all the group that the source is a part of.
-         * @param     index				The index of the source to remove.
-         */
-        void sourceRemove(long index);
-        
-        //! Set the mute state of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     state				The mute state of the source.
-         */
-        void sourceSetMute(long index, bool state);
-        
-        //! Retrieve the existence state of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The existence state of the source.
-         */
-        long sourceGetExistence(long index);
-        
-        //! Get the radius of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The radius of the source.
-         */
-        double sourceGetRadius(long index);
-        
-        //! Get the azimuth of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The azimuth of the source.
-         */
-        double sourceGetAzimuth(long index);
-        
-        //! Get the elevation of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The elevation of the source.
-         */
-        double sourceGetElevation(long index);
-        
-        //! Get the abscissa of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The abscissa of the source.
-         */
-        double sourceGetAbscissa(long index);
-        
-        //! Get the ordinate of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The ordinate of the source.
-         */
-        double sourceGetOrdinate(long index);
-        
-        //! Get the height of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The height of the source.
-         */
-        double sourceGetHeight(long index);
-        
-        //! Get the rgba color of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The rgba color of the source as an array of 4 values (red, green, blue, alpha).
-         */
-        double* sourceGetColor(long index);
-        
-        //! Get the text description of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The text description.
-         */
-        std::string sourceGetDescription(long index);
-        
-        //! Get the number of group a source is owned by.
-        /**
-         * @param     index				The index of the source.
-         * @return		The number of group.
-         */
-        long sourceGetNumberOfGroups(long index);
-        
-        //! Get the the group index the source is owned by at a particular index.
-        /**
-         * @param		sourceIndex			The index of the source.
-         * @param		groupIndex			The index of the group
-         * @return		The group index.
-         */
-        long sourceGetGroupIndex(long sourceIndex, long groupIndex);
-        
-        //! Retrieve the mute state of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The mute state of the source.
-         */
-        long sourceGetMute(long index);
-        
-        /* ------------------------------------------------------------------------ */
-        /* -------------------------------- Groups -------------------------------- */
-        /* ------------------------------------------------------------------------ */
-        
-        //! Add a source to a group.
-        /**
-         * @param     groupIndex		The index of the group.
-         * @param     sourceIndex		The index of the source.
-         * @see groupRemoveSource
-         */
-        void groupSetSource(long groupIndex, long sourceIndex);
-        
-        //! Remove source from a group.
-        /**
-         * @param     groupIndex		The index of the group.
-         * @param     sourceIndex		The index of the source.
-         * @see groupSetSource
-         */
-        void groupRemoveSource(long groupIndex, long sourceIndex);
-        
-        //! Set position of a group with polar coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The radius of the group.
-         * @param     azimuth			The azimuth of the group.
-         * @see groupSetRadius, groupSetAzimuth, groupSetCartesian
-         */
-        void groupSetPolar(long index, double radius, double azimuth);
-        
-        //! Set position of a group with polar coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The radius of the group.
-         * @param     azimuth			The azimuth of the group.
-         * @param     elevation			The elevation of the group.
-         * @see groupSetRadius, groupSetAzimuth, groupSetCartesian
-         */
-        void groupSetPolar(long index, double radius, double azimuth, double elevation);
-        
-        //! Set radius of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The radius of the group.
-         * @see groupSetPolar, groupSetAzimuth
-         */
-        void groupSetRadius(long index, double radius);
-        
-        //! Set azimuth of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     azimuth			The azimuth of the group.
-         * @see groupSetRadius, groupSetAzimuth
-         */
-        void groupSetAzimuth(long index, double azimuth);
-        
-        //! Set elevation of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     elevation			The elevation of the group.
-         * @see groupSetRadius, groupSetAzimuth
-         */
-        void groupSetElevation(long index, double elevation);
-        
-        //! Set position of a group with cartesian coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     abscissa			The abscissa of the group.
-         * @param     ordinate			The ordinate of the group.
-         * @see groupSetAbscissa, groupSetOrdinate, groupSetPolar
-         */
-        void groupSetCartesian(long index, double abscissa, double ordinate);
-        
-        //! Set position of a group with cartesian coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     abscissa			The abscissa of the group.
-         * @param     ordinate			The ordinate of the group.
-         * @param     height			The height of the group.
-         * @see groupSetAbscissa, groupSetOrdinate, groupSetPolar
-         */
-        void groupSetCartesian(long index, double abscissa, double ordinate, double height);
-        
-        //! Set abscissa of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     abscissa			The abscissa of the group.
-         * @see groupSetOrdinate
-         */
-        void groupSetAbscissa(long index, double abscissa);
-        
-        //! Set ordinate of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     ordinate			The ordinate of the group.
-         * @see groupSetAbscissa
-         */
-        void groupSetOrdinate(long index, double ordinate);
-        
-        //! Set height of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     height			The height of the group.
-         * @see groupSetAbscissa
-         */
-        void groupSetHeight(long index, double height);
-        
-        //! Set position of a group with relative polar coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The relative radius of the group.
-         * @param     azimuth			The relative azimuth of the group.
-         * @see groupSetRadius, groupSetAzimuth, groupSetCartesian
-         */
-        void groupSetRelativePolar(long groupIndex, double radius, double azimuth);
-        
-        //! Set position of a group with relative polar coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The relative radius of the group.
-         * @param     azimuth			The relative azimuth of the group.
-         * @param     elevation			The relative elevation of the group.
-         * @see groupSetRadius, groupSetAzimuth, groupSetCartesian
-         */
-        void groupSetRelativePolar(long groupIndex, double radius, double azimuth, double elevation);
-        
-        //! Set radius of a group with relative value.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The relative radius of the group.
-         * @see groupSetRadius, groupSetAzimuth, groupSetPolar
-         */
-        void groupSetRelativeRadius(long groupIndex, double radius);
-        
-        //! Set azimuth of a group with relative value.
-        /**
-         * @param     index				The index of the group.
-         * @param     azimuth			The relative azimuth of the group.
-         * @see groupSetAzimuth, groupSetRadius, groupSetPolar
-         */
-        void groupSetRelativeAzimuth(long groupIndex, double azimuth);
-        
-        //! Set elevation of a group with relative value.
-        /**
-         * @param     index				The index of the group.
-         * @param     azimuth			The relative elevation of the group.
-         * @see groupSetAzimuth, groupSetRadius, groupSetPolar
-         */
-        void groupSetRelativeElevation(long groupIndex, double elevation);
-        
-        //! Set the rgba color of a group.
-        /** All values are clipped between 0 and 1.
-         * @param     index				The index of the group.
-         * @param     red				The red component of the color.
-         * @param     green				The green component of the color
-         * @param     blue				The blue component of the color
-         * @param     alpha				The alpha component of the color
-         */
-        void groupSetColor(long index, double red, double green, double blue, double alpha);
-        
-        //! Add a description to a given group.
-        /**
-         * @param     index				The index of the group.
-         * @param     description		The text description of the group.
-         */
-        void groupSetDescription(long index, std::string description);
-        
-        //! Remove group.
-        /**
-         * @param     groupIndex		The index of the group.
-         * @see groupRemoveWithSources
-         */
-        void groupRemove(long groupIndex);
-        
-        //! Remove group and sources it contains.
-        /**
-         * @param     groupIndex		The index of the group.
-         * @see groupRemove
-         */
-        void groupRemoveWithSources(long groupIndex);
-        
-        //! Get the number of sources a group contains.
-        /**
-         * @param     groupIndex		The index of the group.
-         */
-        long groupGetNumberOfSources(long groupIndex);
-        
-        //! Get the the index of a source stored at a particular index by a group.
-        /**
-         * @param			groupIndex			The index of the group.
-         * @param			sourceIndex			The index of the source.
-         * @return			The index of the source if it exists, -1 otherwise.
-         */
-        long groupGetSourceIndex(long groupIndex, long sourceIndex);
-        
-        
-        //! Set the mute state of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     state				The mute state of the group.
-         */
-        void groupSetMute(long index, long state);
-        
-        //! Clean all groups
-        void groupClean();
-        
-        //! Retrieve the existence state of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The existence state of the group.
-         */
-        long groupGetExistence(long index);
-        
-        //! Get the radius of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The radius of the group.
-         */
-        double groupGetRadius(long index);
-        
-        //! Get the azimuth of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The azimuth of the group.
-         */
-        double groupGetAzimuth(long index);
-        
-        //! Get the elevation of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The elevation of the group.
-         */
-        double groupGetElevation(long index);
-        
-        //! Get the abscissa of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The abscissa of the group.
-         */
-        double groupGetAbscissa(long index);
-        
-        //! Get the ordinate of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The ordinate of the group.
-         */
-        double groupGetOrdinate(long index);
-        
-        //! Get the height of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The height of the group.
-         */
-        double groupGetHeight(long index);
-        
-        //! Get the rgba color of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The rgba color of the group as an array of 4 values (red, green, blue, alpha).
-         */
-        double* groupGetColor(long index);
-        
-        //! Get the text description of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The text description.
-         */
-        std::string groupGetDescription(long index);
-        
-        //! Retrieve the mute state of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The mute state of the group.
-         */
-        long groupGetMute(long index);
-        
-        //! Returns true if a source is is muted in a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						True if a source is is muted in the group, false otherwise.
-         */
-        bool groupGetIfSourceMuted(long index);
-        
-        //! Retrieve the next free group index.
-        /**
-         * @return						The next free group index.
-         */
-        long groupGetNextIndex();
-    };
+        for(int i = 0; i <= getMaximumIndexOfSource(); i++)
+            sourceRemove(i);
+        for(int i = 0; i <= getMaximumIndexOfGroup(); i++)
+            groupRemove(i);
+    }
+    
+    bool SourcesManager::getExistence()
+    {
+        return m_exist;
+    }
+    
+    void SourcesManager::setMaximumRadius(double limitValue)
+    {
+        m_maximum_radius = limitValue;
+        for(int i = 0; i < m_groups.size(); i++)
+            m_groups[i]->setMaximumRadius(m_maximum_radius);
+    }
+    
+    void SourcesManager::setZoom(double aZoom)
+    {
+        m_zoom = Math<double>::clip(aZoom, 1. / m_maximum_radius, 1.);
+    }
+    
+    double SourcesManager::getZoom()
+    {
+        return m_zoom;
+    }
+    
+    double SourcesManager::getLimitMaximum()
+    {
+        return m_maximum_radius;
+    }
+    
+    long SourcesManager::getMaximumIndexOfSource()
+    {
+        long index = 0;
+        for (int i = 0; i < m_sources.size(); i++)
+        {
+            if(sourceGetExistence(i))
+                index = i;
+        }
+        return  index;
+    }
+    
+    long SourcesManager::getNumberOfSources()
+    {
+        long numberOfSources = 0;
+        for(int i = 0; i < m_sources.size(); i++)
+        {
+            if(m_sources[i]->getExistence())
+                numberOfSources++;
+        }
+        return  numberOfSources;
+    }
+    
+    long SourcesManager::getMaximumIndexOfGroup()
+    {
+        return  m_groups.size();
+    }
+    
+    long SourcesManager::getNumberOfGroups()
+    {
+        long numberOfGroups = 0;
+        for(int i = 0; i < m_groups.size(); i++)
+        {
+            if (m_groups[i]->getExistence())
+                numberOfGroups++;
+        }
+        return  numberOfGroups;
+    }
+    
+    /*******************************************************************************/
+    /*********************************  SOURCES ************************************/
+    /*******************************************************************************/
+    
+    void SourcesManager::sourceRemove(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+        {
+            int numberOfGroups = m_sources[index]->getNumberOfGroups();
+            int indexOfGroup = -1;
+            for(int i = 0; i < numberOfGroups; i++)
+            {
+                indexOfGroup = m_sources[index]->getGroupIndex(i);
+                
+                if(indexOfGroup >= 0 && indexOfGroup <= getMaximumIndexOfGroup())
+                {
+                    if(groupGetExistence(indexOfGroup))
+                        m_groups[indexOfGroup]->removeSource(index);
+                }
+            }
+            m_sources[index]->setExistence(0);
+            m_sources[index]->setDescription("");
+            m_sources[index]->setColor(0.2, 0.2, 0.2, 1.);
+            m_sources[index]->setCoordinatesCartesian(0., 1.);
+            m_sources[index]->setMute(0);
+        }
+    }
+    
+    void SourcesManager::sourceNewPolar(double radius, double azimuth)
+    {
+        for (int i = 0; i <= getMaximumIndexOfSource()+1; i++)
+        {
+            if(!sourceGetExistence(i))
+            {
+                sourceSetPolar(i, radius, azimuth);
+                return;
+            }
+        }
+    }
+    
+    void SourcesManager::sourceNewPolar(double radius, double azimuth, double elevation)
+    {
+        for (int i = 0; i <= getMaximumIndexOfSource()+1; i++)
+        {
+            if(!sourceGetExistence(i))
+            {
+                sourceSetPolar(i, radius, azimuth, elevation);
+                return;
+            }
+        }
+    }
+    
+    void SourcesManager::sourceNewCartesian(double abscissa, double ordinate)
+    {
+        for(int i = 0; i <= getMaximumIndexOfSource()+1; i++)
+        {
+            if(!sourceGetExistence(i))
+            {
+                sourceSetCartesian(i, abscissa, ordinate);
+                return;
+            }
+        }
+    }
+    
+    void SourcesManager::sourceNewCartesian(double abscissa, double ordinate, double height)
+    {
+        for(int i = 0; i <= getMaximumIndexOfSource()+1; i++)
+        {
+            if(!sourceGetExistence(i))
+            {
+                sourceSetCartesian(i, abscissa, ordinate, height);
+                return;
+            }
+        }
+    }
+    
+    void SourcesManager::sourceSetPolar(long index, double radius, double azimuth)
+    {
+        sourceSetRadius(index, radius);
+        sourceSetAzimuth(index, azimuth);
+    }
+    
+    void SourcesManager::sourceSetPolar(long index, double radius, double azimuth, double elevation)
+    {
+        sourceSetRadius(index, radius);
+        sourceSetAzimuth(index, azimuth);
+        sourceSetElevation(index, elevation);
+    }
+    
+    void SourcesManager::sourceSetRadius(long index, double radius)
+    {
+        if (index < 0)
+            return;
+        
+        if(index >= m_sources.size())
+        {
+            for(int i = m_sources.size(); i < index; i++)
+            {
+                m_sources.push_back(new Source(0));
+                m_sources[i]->setMaximumRadius(m_maximum_radius);
+                
+            }
+            m_sources.push_back(new Source(1));
+            m_sources[index]->setMaximumRadius(m_maximum_radius);
+            m_sources[index]->setRadius(radius);
+        }
+        else if(index >= 0)
+        {
+            m_sources[index]->setRadius(radius);
+            if(!m_sources[index]->getExistence())
+                m_sources[index]->setExistence(1);
+        }
+        for(int i = 0; i < m_sources[index]->getNumberOfGroups(); i++)
+        {
+            int groupIndex = m_sources[index]->getGroupIndex(i);
+            if(groupIndex >= 0 && groupIndex < m_groups.size())
+                m_groups[groupIndex]->sourceHasMoved();
+        }
+    }
+    
+    void SourcesManager::sourceSetAzimuth(long index, double azimuth)
+    {
+        if (index < 0)
+            return;
+        
+        if(index >= m_sources.size())
+        {
+            for(int i = m_sources.size(); i < index; i++)
+            {
+                m_sources.push_back(new Source(0));
+                m_sources[i]->setMaximumRadius(m_maximum_radius);
+            }
+            m_sources.push_back(new Source(1));
+            m_sources[index]->setMaximumRadius(m_maximum_radius);
+            m_sources[index]->setAzimuth(azimuth);
+        }
+        else if(index >= 0)
+        {
+            m_sources[index]->setAzimuth(azimuth);
+            if(!m_sources[index]->getExistence())
+                m_sources[index]->setExistence(1);
+        }
+        for(int i = 0; i < m_sources[index]->getNumberOfGroups(); i++)
+        {
+            int groupIndex = m_sources[index]->getGroupIndex(i);
+            if(groupIndex >= 0 && groupIndex < m_groups.size())
+                m_groups[groupIndex]->sourceHasMoved();
+        }
+    }
+    
+    void SourcesManager::sourceSetElevation(long index, double elevation)
+    {
+        if (index < 0)
+            return;
+        
+        if(index >= m_sources.size())
+        {
+            for(int i = m_sources.size(); i < index; i++)
+            {
+                m_sources.push_back(new Source(0));
+                m_sources[i]->setMaximumRadius(m_maximum_radius);
+            }
+            m_sources.push_back(new Source(1));
+            m_sources[index]->setMaximumRadius(m_maximum_radius);
+            m_sources[index]->setElevation(elevation);
+        }
+        else if(index >= 0)
+        {
+            m_sources[index]->setElevation(elevation);
+            if(!m_sources[index]->getExistence())
+                m_sources[index]->setExistence(1);
+        }
+        for(int i = 0; i < m_sources[index]->getNumberOfGroups(); i++)
+        {
+            int groupIndex = m_sources[index]->getGroupIndex(i);
+            if(groupIndex >= 0 && groupIndex < m_groups.size())
+                m_groups[groupIndex]->sourceHasMoved();
+        }
+    }
+    
+    void SourcesManager::sourceSetCartesian(long index, double abscissa, double ordinate)
+    {
+        sourceSetAbscissa(index, abscissa);
+        sourceSetOrdinate(index, ordinate);
+    }
+    
+    void SourcesManager::sourceSetCartesian(long index, double abscissa, double ordinate, double height)
+    {
+        sourceSetAbscissa(index, abscissa);
+        sourceSetOrdinate(index, ordinate);
+        sourceSetHeight(index, height);
+    }
+    
+    void SourcesManager::sourceSetAbscissa(long index, double abscissa)
+    {
+        if (index < 0)
+            return;
+        
+        if(index >= m_sources.size())
+        {
+            for(int i = m_sources.size(); i < index; i++)
+            {
+                m_sources.push_back(new Source(0));
+                m_sources[i]->setMaximumRadius(m_maximum_radius);
+            }
+            m_sources.push_back(new Source(1));
+            m_sources[index]->setMaximumRadius(m_maximum_radius);
+            m_sources[index]->setAbscissa(abscissa);
+        }
+        else if(index >= 0)
+        {
+            m_sources[index]->setAbscissa(abscissa);
+            if(!m_sources[index]->getExistence())
+                m_sources[index]->setExistence(1);
+        }
+        for(int i = 0; i < m_sources[index]->getNumberOfGroups(); i++)
+        {
+            int groupIndex = m_sources[index]->getGroupIndex(i);
+            if(groupIndex >= 0 && groupIndex < m_groups.size())
+                m_groups[groupIndex]->sourceHasMoved();
+        }
+    }
+    
+    void SourcesManager::sourceSetOrdinate(long index, double ordinate)
+    {
+        if (index < 0)
+            return;
+        
+        if(index >= m_sources.size())
+        {
+            for(int i = m_sources.size(); i < index; i++)
+            {
+                m_sources.push_back(new Source(0));
+                m_sources[i]->setMaximumRadius(m_maximum_radius);
+            }
+            m_sources.push_back(new Source(1));
+            m_sources[index]->setMaximumRadius(m_maximum_radius);
+            m_sources[index]->setOrdinate(ordinate);
+        }
+        else if(index >= 0)
+        {
+            m_sources[index]->setOrdinate(ordinate);
+            if(!m_sources[index]->getExistence())
+                m_sources[index]->setExistence(1);
+        }
+        for(int i = 0; i < m_sources[index]->getNumberOfGroups(); i++)
+        {
+            int groupIndex = m_sources[index]->getGroupIndex(i);
+            if(groupIndex >= 0 && groupIndex < m_groups.size())
+                m_groups[groupIndex]->sourceHasMoved();
+        }
+    }
+    
+    void SourcesManager::sourceSetHeight(long index, double height)
+    {
+        if (index < 0)
+            return;
+        
+        if(index >= m_sources.size())
+        {
+            for(int i = m_sources.size(); i < index; i++)
+            {
+                m_sources.push_back(new Source(0));
+                m_sources[i]->setMaximumRadius(m_maximum_radius);
+            }
+            m_sources.push_back(new Source(1));
+            m_sources[index]->setMaximumRadius(m_maximum_radius);
+            m_sources[index]->setHeight(height);
+        }
+        else if(index >= 0)
+        {
+            m_sources[index]->setHeight(height);
+            if(!m_sources[index]->getExistence())
+                m_sources[index]->setExistence(1);
+        }
+        for(int i = 0; i < m_sources[index]->getNumberOfGroups(); i++)
+        {
+            int groupIndex = m_sources[index]->getGroupIndex(i);
+            if(groupIndex >= 0 && groupIndex < m_groups.size())
+                m_groups[groupIndex]->sourceHasMoved();
+        }
+    }
+    
+    void SourcesManager::sourceSetColor(long index, double red, double green, double blue, double alpha)
+    {
+        if(index < m_sources.size() && index >= 0)
+        {
+            m_sources[index]->setColor(red, green, blue, alpha);
+        }
+    }
+    
+    void SourcesManager::sourceSetDescription(long index, std::string description)
+    {
+        if(index < m_sources.size() && index >= 0)
+        {
+            m_sources[index]->setDescription(description);
+        }
+    }
+    void SourcesManager::checkMute()
+    {
+        for(int i = 0; i < m_groups.size(); i++)
+        {
+            m_groups[i]->setMute(1);
+            for(int j = 0; j < m_groups[i]->getNumberOfSources(); j++)
+            {
+                int sourceIndex = m_groups[i]->getSourceIndex(j);
+                if(sourceIndex >= 0 && sourceIndex < m_sources.size())
+                {
+                    if(m_sources[sourceIndex]->getMute() != 1)
+                    {
+                        m_groups[i]->setMute(0);
+                    }
+                }
+            }
+        }
+    }
+    
+    void SourcesManager::sourceSetMute(long index, bool state)
+    {
+        if(index < m_sources.size() && index >= 0)
+        {
+            m_sources[index]->setMute(state);
+            for(int i = 0; i < m_sources[index]->getNumberOfGroups(); i++)
+            {
+                int groupIndex = m_sources[index]->getGroupIndex(i);
+                if(groupIndex >= 0 && groupIndex < m_groups.size())
+                {
+                    m_groups[groupIndex]->setMute(0);
+                }
+            }
+            checkMute();
+        }
+    }
+    
+    /******************************************************************************/
+    
+    double SourcesManager::sourceGetRadius(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+            return m_sources[index]->getRadius();
+        
+        return 0;
+    }
+    
+    double SourcesManager::sourceGetAzimuth(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+            return m_sources[index]->getAzimuth();
+        
+        return 0;
+    }
+    
+    double SourcesManager::sourceGetElevation(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+            return m_sources[index]->getElevation();
+        
+        return 0;
+    }
+    
+    double SourcesManager::sourceGetAbscissa(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+            return m_sources[index]->getAbscissa();
+        
+        return NULL;
+    }
+    
+    double SourcesManager::sourceGetOrdinate(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+            return m_sources[index]->getOrdinate();
+        
+        return 0;
+    }
+    
+    double SourcesManager::sourceGetHeight(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+            return m_sources[index]->getHeight();
+        
+        return 0;
+    }
+    
+    double* SourcesManager::sourceGetColor(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+            return m_sources[index]->getColor();
+        
+        return NULL;
+    }
+    
+    std::string SourcesManager::sourceGetDescription(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+            return m_sources[index]->getDescription();
+        
+        return NULL;
+    }
+    
+    long SourcesManager::sourceGetExistence(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+        {
+            return m_sources[index]->getExistence();
+        }
+        return 0;
+    }
+    
+    long SourcesManager::sourceGetNumberOfGroups(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+        {
+            return m_sources[index]->getNumberOfGroups();
+        }
+        return 0;
+    }
+    
+    long SourcesManager::sourceGetGroupIndex(long sourceIndex, long groupIndex)
+    {
+        if(sourceIndex < m_sources.size() && sourceIndex >= 0)
+        {
+            return m_sources[sourceIndex]->getGroupIndex(groupIndex);
+        }
+        return 0;
+    }
+    
+    long SourcesManager::sourceGetMute(long index)
+    {
+        if(index < m_sources.size() && index >= 0)
+        {
+            return m_sources[index]->getMute();
+        }
+        return 0;
+    }
+    
+    /*******************************************************************************/
+    /**********************************  GROUP  ************************************/
+    /*******************************************************************************/
+    
+    void SourcesManager::groupSetSource(long groupIndex, long sourceIndex)
+    {
+        if (sourceIndex < 0 || groupIndex < 0 )
+            return;
+        
+        if(groupIndex >= m_groups.size())
+        {
+            for(int i = m_groups.size(); i < groupIndex; i++)
+            {
+                m_groups.push_back(new SourcesGroup(this, 0));
+                m_groups[i]->setMaximumRadius(m_maximum_radius);
+                
+            }
+            m_groups.push_back(new SourcesGroup(this, 0));
+            m_groups[groupIndex]->setMaximumRadius(m_maximum_radius);
+            if(m_sources.size() > sourceIndex && m_sources[sourceIndex]->getExistence())
+            {
+                m_groups[groupIndex]->setExistence(1);
+                m_groups[groupIndex]->addSource(sourceIndex);
+                m_sources[sourceIndex]->setGroup(groupIndex);
+                checkMute();
+            }
+        }
+        else if(groupIndex >= 0)
+        {
+            if(m_sources.size() > sourceIndex && m_sources[sourceIndex]->getExistence())
+            {
+                m_groups[groupIndex]->addSource(sourceIndex);
+                m_sources[sourceIndex]->setGroup(groupIndex);
+                m_groups[groupIndex]->setExistence(1);
+                checkMute();
+            }
+        }
+    }
+    
+    void SourcesManager::groupRemoveSource(long groupIndex, long sourceIndex)
+    {
+        if (sourceIndex < 0 || groupIndex < 0 )
+            return;
+        
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            if(m_sources.size() > sourceIndex)
+            {
+                m_groups[groupIndex]->removeSource(sourceIndex);
+                m_sources[sourceIndex]->removeGroup(groupIndex);
+            }
+        }
+    }
+    
+    void SourcesManager::groupSetPolar(long groupIndex, double radius, double azimuth)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setCoordinatesPolar(radius, azimuth);
+        }
+    }
+    
+    void SourcesManager::groupSetPolar(long groupIndex, double radius, double azimuth, double elevation)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setCoordinatesPolar(radius, azimuth, elevation);
+        }
+    }
+    
+    void SourcesManager::groupSetRadius(long groupIndex, double radius)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setRadius(radius);
+        }
+    }
+    
+    void SourcesManager::groupSetAzimuth(long groupIndex, double azimuth)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setAzimuth(azimuth);
+        }
+    }
+    
+    void SourcesManager::groupSetElevation(long groupIndex, double elevation)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setElevation(elevation);
+        }
+    }
+    
+    void SourcesManager::groupSetCartesian(long groupIndex, double abscissa, double ordinate)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setCoordinatesCartesian(abscissa, ordinate);
+        }
+    }
+    
+    void SourcesManager::groupSetCartesian(long groupIndex, double abscissa, double ordinate, double height)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setCoordinatesCartesian(abscissa, ordinate, height);
+        }
+    }
+    
+    void SourcesManager::groupSetAbscissa(long groupIndex, double abscissa)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setAbscissa(abscissa);
+        }
+    }
+    
+    void SourcesManager::groupSetOrdinate(long groupIndex, double ordinate)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setOrdinate(ordinate);
+        }
+    }
+    
+    void SourcesManager::groupSetHeight(long groupIndex, double height)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setHeight(height);
+        }
+    }
+    
+    void SourcesManager::groupSetRelativePolar(long groupIndex, double radius, double azimuth)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setRelativeCoordinatesPolar(radius, azimuth);
+        }
+    }
+    
+    void SourcesManager::groupSetRelativePolar(long groupIndex, double radius, double azimuth, double elevation)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setRelativeCoordinatesPolar(radius, azimuth, elevation);
+        }
+    }
+    
+    void SourcesManager::groupSetRelativeRadius(long groupIndex, double radius)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setRelativeRadius(radius);
+        }
+    }
+    
+    void SourcesManager::groupSetRelativeAzimuth(long groupIndex, double azimuth)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setRelativeAzimuth(azimuth);
+        }
+    }
+    
+    void SourcesManager::groupSetRelativeElevation(long groupIndex, double elevation)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setRelativeElevation(elevation);
+        }
+    }
+    
+    void SourcesManager::groupSetColor(long groupIndex, double red, double green, double blue, double alpha)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setColor(red, green, blue, alpha);
+        }
+    }
+    
+    void SourcesManager::groupSetDescription(long groupIndex, std::string description)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setDescription(description);
+        }
+    }
+    
+    void SourcesManager::groupRemove(long groupIndex)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            for(int i = 0; i < m_sources.size(); i++)
+            {
+                m_sources[i]->removeGroup(groupIndex);
+                
+            }
+            for(int i = 0; i < m_sources.size(); i++)
+            {
+                m_groups[groupIndex]->removeSource(i);
+            }
+            m_groups[groupIndex]->setColor(0.2, 0.2, 0.2, 1.);
+            m_groups[groupIndex]->setDescription("");
+            m_groups[groupIndex]->setExistence(0);
+            m_groups[groupIndex]->setMute(0);
+        }
+    }
+    
+    void SourcesManager::groupRemoveWithSources(long groupIndex)
+    {
+        for(int i = 0; i <= getMaximumIndexOfSource(); i++)
+        {
+            if (m_sources[i]->isOwnedByGroup(groupIndex)) {
+                sourceRemove(i);
+            }
+        }
+        groupRemove(groupIndex);
+    }
+    
+    void SourcesManager::groupSetMute(long groupIndex, long aValue)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            m_groups[groupIndex]->setMute(aValue);
+            for(int i = 0; i < m_groups[groupIndex]->getNumberOfSources(); i++)
+            {
+                int sourceIndex = m_groups[groupIndex]->getSourceIndex(i);
+                if(sourceIndex >= 0 && sourceIndex < m_sources.size())
+                    m_sources[sourceIndex]->setMute(aValue);
+            }
+        }
+        checkMute();
+    }
+    
+    
+    /******************************************************************************/
+    
+    double SourcesManager::groupGetRadius(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+            return m_groups[index]->getRadius();
+        
+        return 0;
+    }
+    
+    double SourcesManager::groupGetAzimuth(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+            return m_groups[index]->getAzimuth();
+        
+        return 0;
+    }
+    
+    double SourcesManager::groupGetElevation(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+            return m_groups[index]->getElevation();
+        
+        return 0;
+    }
+    
+    double SourcesManager::groupGetAbscissa(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+            return m_groups[index]->getAbscissa();
+        
+        return 0;
+    }
+    
+    double SourcesManager::groupGetOrdinate(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+            return m_groups[index]->getOrdinate();
+        
+        return 0;
+    }
+    
+    double SourcesManager::groupGetHeight(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+            return m_groups[index]->getHeight();
+        
+        return 0;
+    }
+    
+    double* SourcesManager::groupGetColor(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+            return m_groups[index]->getColor();
+        
+        return NULL;
+    }
+    
+    std::string SourcesManager::groupGetDescription(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+            return m_groups[index]->getDescription();
+        
+        return NULL;
+    }
+    
+    long SourcesManager::groupGetExistence(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+        {
+            return m_groups[index]->getExistence();
+        }
+        return 0;
+    }
+    
+    long SourcesManager::groupGetNumberOfSources(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+        {
+            return m_groups[index]->getNumberOfSources();
+        }
+        return 0;
+    }
+    
+    long SourcesManager::groupGetSourceIndex(long groupIndex, long sourceIndex)
+    {
+        if(groupIndex < m_groups.size() && groupIndex >= 0)
+        {
+            return m_groups[groupIndex]->getSourceIndex(sourceIndex);
+        }
+        return 0;
+    }
+    
+    long SourcesManager::groupGetMute(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+        {
+            return m_groups[index]->getMute();
+        }
+        return 0;
+    }
+    
+    bool SourcesManager::groupGetIfSourceMuted(long index)
+    {
+        if(index < m_groups.size() && index >= 0)
+        {
+            for(long i = 0; i < groupGetNumberOfSources(index); i++)
+            {
+                if(sourceGetMute(groupGetSourceIndex(index, i)))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    long SourcesManager::groupGetNextIndex()
+    {
+        if(getNumberOfGroups() != 0)
+        {
+            for(int i = 0; i < getMaximumIndexOfGroup()+2; i++)
+            {
+                if(!groupGetExistence(i))
+                {
+                    return i;
+                }
+            }
+        }
+        return getMaximumIndexOfGroup();
+    }
+    
+    void SourcesManager::groupClean()
+    {
+        for(int i = 0; i <= getNumberOfGroups(); i++)
+        {
+            if(groupGetExistence(i))
+            {
+                for(int j = 0; j <= getNumberOfGroups(); j++)
+                {
+                    if (i != j && groupGetExistence(j))
+                    {
+                        if(groupGetNumberOfSources(i) == groupGetNumberOfSources(j))
+                        {
+                            int check = 0;
+                            for(int k = 0; k < groupGetNumberOfSources(i); k++)
+                            {
+                                for(int l = 0; l < groupGetNumberOfSources(i); l++)
+                                {
+                                    if(groupGetSourceIndex(i, k) == groupGetSourceIndex(j, l))
+                                        check++;
+                                }
+                            }
+                            if(check == groupGetNumberOfSources(j))
+                                groupRemove(j);
+                        }
+                    }
+                }
+            }
+        }
+        
+        for(int i = 0; i < getNumberOfGroups(); i++)
+        {
+            if(groupGetExistence(i))
+            {
+                if(groupGetNumberOfSources(i) < 2)
+                {
+                    groupRemove(i);
+                }
+            }
+        }
+    }
+    
+    /************************************/
+    
+    void SourcesManager::copyTo(SourcesManager* sourcesManagerDestination)
+    {
+        double* color;
+        sourcesManagerDestination->setExistence(0);
+        if(getExistence() == 1)
+        {
+            sourcesManagerDestination->setExistence(1);
+            sourcesManagerDestination->setMaximumRadius(getLimitMaximum());
+            
+            for(long i = 0; i <= getMaximumIndexOfSource(); i++)
+            {
+                if(sourceGetExistence(i) == 1)
+                {
+                    color = sourceGetColor(i);
+                    sourcesManagerDestination->sourceSetRadius(i, sourceGetRadius(i));
+                    sourcesManagerDestination->sourceSetAzimuth(i, sourceGetAzimuth(i));
+                    sourcesManagerDestination->sourceSetElevation(i, sourceGetElevation(i));
+                    sourcesManagerDestination->sourceSetColor(i, color[0], color[1], color[2], color[3]);
+                    sourcesManagerDestination->sourceSetDescription(i, sourceGetDescription(i));
+                    sourcesManagerDestination->sourceSetMute(i, sourceGetMute(i));
+                }
+            }
+            for(long i = 0; i <= getMaximumIndexOfGroup(); i++)
+            {
+                if(groupGetExistence(i) == 1)
+                {
+                    for(long j = 0; j < groupGetNumberOfSources(i); j++)
+                    {
+                        sourcesManagerDestination->groupSetSource(i, groupGetSourceIndex(i, j));
+                    }
+                    color = groupGetColor(i);
+                    sourcesManagerDestination->groupSetColor(i, color[0], color[1], color[2], color[3]);
+                    sourcesManagerDestination->groupSetDescription(i, groupGetDescription(i));
+                }
+            }
+        }
+    }
+    
+    /************************************/
+    
+    SourcesManager::~SourcesManager()
+    {
+        m_sources.clear();
+        m_groups.clear();
+    }
 }
-#endif

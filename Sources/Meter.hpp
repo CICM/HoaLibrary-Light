@@ -92,7 +92,7 @@ namespace hoa
                 }
                 
                 m_channels_azimuth_width[channels[i].getIndex()-1] = (previous_portion + next_portion) * 0.5;
-                m_channels_azimuth_mapped[channels[i].getIndex()-1]= Math<T>::wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[i] * 0.5 + Planewave<Hoa2d, T>::Processor::getPlanewavesOffset());
+                m_channels_azimuth_mapped[channels[i].getIndex()-1]= Math<T>::wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[i] * 0.5 + Planewave<Hoa2d, T>::Processor::getPlanewavesRotation());
             }
             channels.clear();
         }

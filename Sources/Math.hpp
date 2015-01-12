@@ -200,11 +200,6 @@ namespace hoa
             return result;
         }
         
-        static inline T distance(T x1, T x2, T y1, T y2, T z1 = 0., T z2 = 0.)
-        {
-            return sqrt((x1-x2) * (x1-x2) + (y1-y2) * (y1-y2) + (z1-z2) * (z1-z2));
-        }
-        
         //! The great-circle distance
         /** This function compute the great circle distance of two points in radians on a unit sphere.
          @param     azimuth1		The azimuth of the first point in radian.
