@@ -2,7 +2,7 @@
 
 #### A high order ambisonics library.
 
-Sound space is one of the principal dimensions of the contemporary musical thought, specialy in the electroacoustic music domain but also in intermedia arts. In this context, the <a title="CICM" href="http://cicm.mshparisnord.org/" target="_blank">CICM</a> has made spatialization its principal research axis. This project&#8217;s aim is to give to musician saptialization models based on high order ambisonics and sound fields synthesis. This project is developed in a part of the Paris 8 University <a title="CICM" href="http://www.labex-arts-h2h.fr/" target="_blank">LABEX arts H2H</a>. You can visit the official website : <a href="http://www.mshparisnord.fr/hoalibrary/" target="_blank"> HoaLibrary</a>.
+Sound space is one of the principal dimensions of the contemporary musical thought, specialy in the electroacoustic music domain but also in intermedia arts. In this context, the <a title="CICM" href="http://cicm.mshparisnord.org/" target="_blank">CICM</a> has made spatialization its principal research axis. This project&#8217;s aim is to give to musician spatialization models based on high order ambisonics and sound fields synthesis. This project is developed in a part of the Paris 8 University <a title="CICM" href="http://www.labex-arts-h2h.fr/" target="_blank">LABEX arts H2H</a>. You can visit the official website : <a href="http://www.mshparisnord.fr/hoalibrary/" target="_blank"> HoaLibrary</a>.
 
 ![Image](https://raw.github.com/CICM/HoaLibrary/master/Ressources/hoa-icon.png "Hoa-Icon")
 
