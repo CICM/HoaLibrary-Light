@@ -29,7 +29,7 @@ namespace hoa
         Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
         {
             m_ramp                      = 0;
-            m_vector_size               = EPD_MAX_SIGS;
+            m_vector_size               = HOA_SYS_MAXBLKSIZE;
             m_channels_peaks            = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()];
             m_channels_azimuth_width    = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()];
             m_channels_azimuth_mapped   = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()];
@@ -177,7 +177,7 @@ namespace hoa
         Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
         {
             m_ramp                      = 0;
-            m_vector_size               = EPD_MAX_SIGS;
+            m_vector_size               = HOA_SYS_MAXBLKSIZE;
             m_channels_peaks            = new T[Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves()];
             m_over_leds                 = new ulong[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()];
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)

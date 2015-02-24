@@ -175,7 +175,7 @@ namespace hoa
          @param     z		The height.
          @return    The elevation.
          */
-        static inline double elevation(const T x, const T y, const T z = 0.)
+        static inline T elevation(const T x, const T y, const T z = 0.)
         {
             if(z == 0)
                 return 0;
