@@ -35,8 +35,8 @@ namespace hoa
             computeMatrix();
         }
         
-        //! The Rotate destructor.
-        /**	The Rotate destructor free the memory.
+        //! The destructor.
+        /** The destructor free the memory.
          */
         ~Decoder()
         {
