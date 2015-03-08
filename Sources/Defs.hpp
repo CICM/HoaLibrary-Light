@@ -1,5 +1,5 @@
 /*
-// Copyright (c) 2012-2014 Eliott Paris, Julien Colafrancesco & Pierre Guillot, CICM, Universite Paris 8.
+// Copyright (c) 2012-2015 Eliott Paris, Julien Colafrancesco & Pierre Guillot, CICM, Universite Paris 8.
 // For information on usage and redistribution, and for a DISCLAIMER OF ALL
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
@@ -60,6 +60,11 @@ namespace hoa
     {
         Hoa2d = 0,
         Hoa3d = 1
+    };
+    
+    enum {
+        HOA_SYS_MAXBLKSIZE  = 8192,
+        HOA_SYS_MAXSIGS     = 250
     };
 }
 

@@ -1,5 +1,5 @@
 /*
-// Copyright (c) 2012-2014 Eliott Paris, Julien Colafrancesco & Pierre Guillot, CICM, Universite Paris 8.
+// Copyright (c) 2012-2015 Eliott Paris, Julien Colafrancesco & Pierre Guillot, CICM, Universite Paris 8.
 // For information on usage and redistribution, and for a DISCLAIMER OF ALL
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
@@ -139,11 +139,11 @@ namespace hoa
                 return m_planewaves[index].getIndex();
             }
             
-            //! Retrieve the azimuth of a planewaves.
-            /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
+            //! Sets the azimuth of a planewaves.
+            /** The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
              
              @param      index   The index of the planewaves.
-             @return     The azimuth of the planewaves.
+             @param      azimuth The new azimuth value.
              */
             inline void setPlanewaveAzimuth(const ulong index, const T azimuth) noexcept
             {
@@ -151,7 +151,7 @@ namespace hoa
             }
             
             //! Retrieve the azimuth of a planewaves.
-            /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
+            /** The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
              
              @param      index   The index of the planewaves.
              @return     The azimuth of the planewaves.
@@ -161,7 +161,7 @@ namespace hoa
                 return m_planewaves[index].getAzimuth();
             }
             
-            //! Retrieve the azimuth of a planewaves.
+            //! Retrieve the azimuth of a planewaves (including rotation).
             /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
              
              @param      index   The index of the planewaves.

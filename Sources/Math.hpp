@@ -1,5 +1,5 @@
 /*
-// Copyright (c) 2012-2014 Eliott Paris, Julien Colafrancesco & Pierre Guillot, CICM, Universite Paris 8.
+// Copyright (c) 2012-2015 Eliott Paris, Julien Colafrancesco & Pierre Guillot, CICM, Universite Paris 8.
 // For information on usage and redistribution, and for a DISCLAIMER OF ALL
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
@@ -175,7 +175,7 @@ namespace hoa
          @param     z		The height.
          @return    The elevation.
          */
-        static inline double elevation(const T x, const T y, const T z = 0.)
+        static inline T elevation(const T x, const T y, const T z = 0.)
         {
             if(z == 0)
                 return 0;
