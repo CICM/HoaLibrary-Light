@@ -61,11 +61,6 @@ namespace hoa
         Hoa2d = 0,
         Hoa3d = 1
     };
-    
-    enum {
-        HOA_SYS_MAXBLKSIZE  = 8192,
-        HOA_SYS_MAXSIGS     = 250
-    };
 }
 
 #endif
