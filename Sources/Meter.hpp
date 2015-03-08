@@ -67,7 +67,7 @@ namespace hoa
             {
                 channels.push_back({i+1, Math<T>::wrap_twopi(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i))});
             }
-            std::sort(channels.begin(), channels.end());
+            std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);
             for(ulong i = 0; i < channels.size(); i++)
             {
                 const T current_angle   = channels[i].getAzimuth();

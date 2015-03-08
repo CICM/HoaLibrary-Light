@@ -63,9 +63,9 @@ namespace hoa
             return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth() / HOA_2PI * 360.) + "°";
         }
         
-        bool operator<(Planewave const& j) const noexcept
+        static bool sort_azimuth(Planewave const& i, Planewave const& j) noexcept
         {
-            return this->m_azimuth < j.m_azimuth;
+            return i.m_azimuth < j.m_azimuth;
         }
         
         //! The planewaves class.
