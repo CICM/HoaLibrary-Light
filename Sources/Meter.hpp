@@ -62,10 +62,10 @@ namespace hoa
         
         void computeDisplay()
         {
-            vector<Planewave<Hoa2d, T>> channels;
+            vector<Planewave<Hoa2d, T> > channels;
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                channels.push_back({i+1, Math<T>::wrap_twopi(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i))});
+                channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i) + Planewave<Hoa2d, T>::Processor::getPlanewavesRotation())));
             }
             std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);
             for(ulong i = 0; i < channels.size(); i++)
@@ -91,8 +91,8 @@ namespace hoa
                     next_portion = next_angle - current_angle;
                 }
                 
-                m_channels_azimuth_width[channels[i].getIndex()-1] = (previous_portion + next_portion) * 0.5;
-                m_channels_azimuth_mapped[channels[i].getIndex()-1]= Math<T>::wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[i] * 0.5 + Planewave<Hoa2d, T>::Processor::getPlanewavesRotation());
+                m_channels_azimuth_width[channels[i].getIndex()] = (previous_portion + next_portion) * 0.5;
+                m_channels_azimuth_mapped[channels[i].getIndex()]= Math<T>::wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[i] * 0.5);
             }
             channels.clear();
         }

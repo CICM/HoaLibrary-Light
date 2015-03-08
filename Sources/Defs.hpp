@@ -37,6 +37,9 @@
 #include <ext_common.h>
 #endif
 
+#if (__cplusplus <= 199711L)
+#define noexcept
+#endif
 
 #define HOA_PI  3.14159265358979323846264338327950288
 #define HOA_2PI 6.283185307179586476925286766559005

@@ -124,7 +124,7 @@ namespace hoa
         Edge<T>     b;
         Edge<T>     c;
         Point<T>    n;
-        vector<Arc<T>> arcs;
+        vector<Arc<T> > arcs;
         
         Triangle(const Point<T> _p1, const Point<T> _p2, const Point<T> _p3, const ulong _index = 0) noexcept :
         index(_index),
@@ -166,7 +166,7 @@ namespace hoa
     {
     private:
         
-        void convexhull3d(vector<Point<T>>& points, vector<Triangle<T>>& triangles)
+        void convexhull3d(vector<Point<T> >& points, vector<Triangle<T> >& triangles)
         {
             if(points.size() < 4)
             {
@@ -215,7 +215,10 @@ namespace hoa
             Triangle<T> tb(d, b, a, 1);
             Triangle<T> tc(c, d, a, 2);
             Triangle<T> td(b, d, c, 3);
-            triangles = {ta, tb, tc, td};
+            triangles[0] = ta;
+            triangles[1] = tb;
+            triangles[2] = tc;
+            triangles[3] = td;
             
             Edge<T>::neighbors(ta.a, tb.b);
             Edge<T>::neighbors(ta.b, td.c);
@@ -278,7 +281,7 @@ namespace hoa
              */
         }
         
-        void delaunay(vector<Point<T>>& points)
+        void delaunay(vector<Point<T> >& points)
         {
             /*
             var p = points.map(cartesian),

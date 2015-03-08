@@ -76,7 +76,7 @@ namespace hoa
         {
         private:
             const ulong                 m_number_of_planewaves;
-            vector<Planewave<Hoa2d, T>> m_planewaves;
+            vector<Planewave<Hoa2d, T> > m_planewaves;
             T                           m_rotation_z;
         public:
             
@@ -334,7 +334,7 @@ namespace hoa
         {
         private:
             const ulong                 m_number_of_planewaves;
-            vector<Planewave<Hoa3d, T>> m_planewaves;
+            vector<Planewave<Hoa3d, T> > m_planewaves;
             T                           m_rotation_z;
             T                           m_rotation_y;
             T                           m_rotation_x;
