@@ -37,7 +37,7 @@ namespace hoa
             return m_ramp;
         }
         
-        inline T getValue(const ulong index) const noexcept
+        inline T getValue() const noexcept
         {
             return m_value_new;
         }
@@ -54,7 +54,7 @@ namespace hoa
             m_counter = 0;
         }
         
-        inline void setRadiusDirect(const T value) noexcept
+        inline void setValueDirect(const T value) noexcept
         {
             m_value_old = m_value_new = value;
             m_value_step = 0.;
