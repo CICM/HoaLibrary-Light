@@ -19,7 +19,6 @@
 #include "Recomposer.hpp"
 #include "Scope.hpp"
 #include "Wider.hpp"
-#include "Voronoi.hpp"
 #include "Source.hpp"
 #include "Tools.hpp"
 

@@ -57,7 +57,7 @@ namespace hoa
         private:
             const ulong             m_order_of_decomposition;
             const ulong             m_number_of_harmonics;
-            vector<Harmonic<Hoa2d, T>> m_harmonics;
+            vector<Harmonic<Hoa2d, T> > m_harmonics;
         public:
             
             //! The ambisonic constructor.
@@ -193,7 +193,7 @@ namespace hoa
         protected:
             const ulong                 m_order_of_decomposition;
             const ulong                 m_number_of_harmonics;
-            vector<Harmonic<Hoa3d, T>>  m_harmonics;
+            vector<Harmonic<Hoa3d, T> >  m_harmonics;
         public:
             
             //! The ambisonic constructor.

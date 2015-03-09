@@ -63,9 +63,9 @@ namespace hoa
             return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth() / HOA_2PI * 360.) + "°";
         }
         
-        bool operator<(Planewave const& j) const noexcept
+        static bool sort_azimuth(Planewave const& i, Planewave const& j) noexcept
         {
-            return this->m_azimuth < j.m_azimuth;
+            return i.m_azimuth < j.m_azimuth;
         }
         
         //! The planewaves class.
@@ -76,7 +76,7 @@ namespace hoa
         {
         private:
             const ulong                 m_number_of_planewaves;
-            vector<Planewave<Hoa2d, T>> m_planewaves;
+            vector<Planewave<Hoa2d, T> > m_planewaves;
             T                           m_rotation_z;
         public:
             
@@ -334,7 +334,7 @@ namespace hoa
         {
         private:
             const ulong                 m_number_of_planewaves;
-            vector<Planewave<Hoa3d, T>> m_planewaves;
+            vector<Planewave<Hoa3d, T> > m_planewaves;
             T                           m_rotation_z;
             T                           m_rotation_y;
             T                           m_rotation_x;

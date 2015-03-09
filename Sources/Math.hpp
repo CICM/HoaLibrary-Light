@@ -93,19 +93,6 @@ namespace hoa
             return new_value;
         }
         
-        static inline ulong wrap_ptr(long index, const ulong size)
-        {
-            while(index < 0)
-            {
-                index += size;
-            }
-            while(index >= size)
-            {
-                index -= size;
-            }
-            return index;
-        }
-        
         //! The abscissa converter function.
         /** This function takes a radius and an azimuth and convert them to an abscissa.
          @param     radius		The radius (greather than 0).
