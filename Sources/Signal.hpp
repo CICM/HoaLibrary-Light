@@ -25,6 +25,12 @@ namespace hoa
             cblas_sgemv(CblasRowMajor, CblasNoTrans, (const int)outputsize, (const int)inputsize, 1.f, matrix, (const int)inputsize, vector, 1, 0.f, outputs, 1);
         }
         
+        static inline void matrix_matrix_mul(const ulong innrow, const ulong outcolumn, const ulong incolumn, const float* in1, const float* in2, float* out)
+        {
+            cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, (const int)innrow, (const int)outcolumn, (const int)incolumn, 1., in1, incolumn, in2, outcolumn, 0., out,  outcolumn);
+            
+        }
+        
         static inline float vector_max(const ulong vectorsize, const float* vector)
         {
 #ifdef __APPLE__
@@ -65,6 +71,11 @@ namespace hoa
             cblas_saxpy(vectorsize, 1., source, 1, dest, 1);
         }
         
+        static inline void vector_add(const ulong vectorsize, const float* source, const ulong incs, float* dest, const ulong incd)
+        {
+            cblas_saxpy(vectorsize, 1., source, incs, dest, incd);
+        }
+        
         static inline float vectors_dot_product(const ulong vectorsize, const float* vector1, const float* vector2)
         {
             return cblas_sdot(vectorsize, vector1, 1, vector2, 1);
@@ -78,6 +89,12 @@ namespace hoa
         static inline void matrix_vector_mul(const ulong inputsize, const ulong outputsize, const double* vector, const double* matrix, double* outputs)
         {
             cblas_dgemv(CblasRowMajor, CblasNoTrans, (const int)outputsize, (const int)inputsize, 1., matrix, (const int)inputsize, vector, 1, 0., outputs, 1);
+        }
+        
+        static inline void matrix_matrix_mul(const ulong innrow, const ulong outcolumn, const ulong incolumn, const double* in1, const double* in2, double* out)
+        {
+            cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, (const int)innrow, (const int)outcolumn, (const int)incolumn, 1., in1, incolumn, in2, outcolumn, 0., out,  outcolumn);
+            
         }
         
         static inline double vector_max(const ulong vectorsize, const double* vector)
@@ -118,6 +135,11 @@ namespace hoa
         static inline void vector_add(const ulong vectorsize, const double* source, double* dest)
         {
             cblas_daxpy(vectorsize, 1., source, 1, dest, 1);
+        }
+        
+        static inline void vector_add(const ulong vectorsize, const double* source, const ulong incs, double* dest, const ulong incd)
+        {
+            cblas_daxpy(vectorsize, 1., source, incs, dest, incd);
         }
         
         static inline double vectors_dot_product(const ulong vectorsize, const double* vector1, const double* vector2)

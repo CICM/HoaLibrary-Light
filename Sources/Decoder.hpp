@@ -8,6 +8,7 @@
 #define DEF_HOA_DECODER_LIGHT
 
 #include "Encoder.hpp"
+#include "Hrtf.hpp"
 
 namespace hoa
 {
@@ -45,12 +46,13 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
-        inline virtual void process(const T* inputs, T* outputs) const noexcept = 0;
+        inline virtual void process(const T* inputs, T* outputs) noexcept = 0;
         
         //! This method computes the decoding matrice.
         /**	You should use this method after changing the position of the loudspeakers.
+         @param vectorsize The vector size for binaural decoding.
          */
-        virtual void computeMatrix() noexcept = 0;
+        virtual void computeMatrix(const ulong vectorsize = 64) = 0;
         
         //! The ambisonic regular decoder.
         /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
@@ -61,6 +63,11 @@ namespace hoa
         /** The irregular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if less than the number of harmonics plus one or when the loudspeakers are not equally spaced.
          */
        class Irregular;
+        
+        //! The ambisonic binaural decoder.
+        /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
+         */
+        class Binaural;
     };
     
     template <typename T> class Decoder<Hoa2d, T>::Regular : public Decoder<Hoa2d, T>
@@ -93,15 +100,16 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to channels.
          */
-        inline void process(const T* inputs, T* outputs) const noexcept
+        inline void process(const T* inputs, T* outputs) noexcept
         {
             Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
         
         //! This method computes the decoding matrice.
         /**	You should use this method after changing the position of the loudspeakers.
+         @param vectorsize The vector size for binaural decoding.
          */
-        void computeMatrix() noexcept
+        void computeMatrix(const ulong vectorsize = 64)
         {
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
@@ -143,15 +151,16 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
-        inline void process(const T* inputs, T* outputs) const noexcept
+        inline void process(const T* inputs, T* outputs) noexcept
         {
             Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
         
         //! This method computes the decoding matrice.
         /**	You should use this method after changing the position of the loudspeakers.
+         @param vectorsize The vector size for binaural decoding.
          */
-        void computeMatrix() noexcept
+        void computeMatrix(const ulong vectorsize = 64)
         {
             Signal<T>::vector_clear(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()*Encoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
             T vector_harmonics[Encoder<Hoa2d, T>::getNumberOfHarmonics()];
@@ -297,6 +306,154 @@ namespace hoa
             }
         }
     };
+    
+#define HOA_NBIN_I 512
+#define HOA_NBIN_O 5
+#define HOA_NBIN_H 11
+#define HOA_NBIN_C 12
+
+    //! The ambisonic binaural decoder.
+    /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
+     */
+    template <typename T> class Decoder<Hoa2d, T>::Binaural : public Decoder<Hoa2d, T>
+    {
+    private:
+        ulong       m_vector_size;
+        ulong       m_counter;
+        T*          m_inputs;
+        T*          m_results;
+        T*          m_result_matrix_left;
+        T*          m_result_matrix_right;
+        T*          m_linear_vector_left;
+        T*          m_linear_vector_right;
+        T*          m_output_left;
+        T*          m_output_right;
+    public:
+        
+        //! The binaural decoder constructor.
+        /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending of a decomposition order and a number of channels. The order and the number of channels must be at least 1.
+         @param     order				The order
+         */
+        Binaural(const ulong order) : Decoder<Hoa2d, T>(order, 2),
+        m_vector_size(0ul), m_counter(0ul), m_inputs(nullptr), m_results(nullptr), m_linear_vector_left(nullptr), m_linear_vector_right(nullptr), m_output_left(nullptr), m_output_right(nullptr)
+        {
+            
+        }
+        
+        //! The binaural decoder destructor.
+        /**	The binaural decoder destructor free the memory.
+         */
+        ~Binaural()
+        {
+            if(m_inputs)
+                delete [] m_inputs;
+            if(m_results)
+                delete [] m_results;
+            if(m_linear_vector_left)
+                delete [] m_linear_vector_left;
+            if(m_linear_vector_right)
+                delete [] m_linear_vector_right;
+            if(m_output_left)
+                delete [] m_output_left;
+            if(m_output_right)
+                delete [] m_output_right;
+        }
+        
+        //! This method computes the decoding matrice.
+        /**	You should use this method after changing the position of the loudspeakers.
+         @param vectorsize The vector size for binaural decoding.
+         */
+        void computeMatrix(const ulong vectorsize = 64)
+        {
+            m_counter     = 0;
+            m_vector_size = vectorsize;
+            if(m_inputs)
+                delete [] m_inputs;
+            if(m_results)
+                delete [] m_results;
+            if(m_linear_vector_left)
+                delete [] m_linear_vector_left;
+            if(m_linear_vector_right)
+                delete [] m_linear_vector_right;
+            if(m_output_left)
+                delete [] m_output_left;
+            if(m_output_right)
+                delete [] m_output_right;
+            
+            m_output_left = new T[m_vector_size];
+            m_output_right = new T[m_vector_size];
+            
+            m_inputs  = new T[HOA_NBIN_H * m_vector_size];
+            Signal<T>::vector_clear(HOA_NBIN_H * m_vector_size, m_inputs);
+            
+            m_results = new T[HOA_NBIN_I * 2 * m_vector_size];
+            Signal<T>::vector_clear(HOA_NBIN_I * 2 * m_vector_size, m_results);
+            m_result_matrix_left    = m_results;
+            m_result_matrix_right   = m_results + m_vector_size  * HOA_NBIN_I;
+            
+            m_linear_vector_left    = new T[m_vector_size + HOA_NBIN_I - 1];
+            Signal<T>::vector_clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_left);
+            m_linear_vector_right   = new T[m_vector_size + HOA_NBIN_I - 1];
+            Signal<T>::vector_clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_right);
+        }
+        
+        //! This method performs the binaural decoding.
+        /**	You should use this method for not-in-place processing and performs the binaural decoding on block of samples. The inputs matrix contains the spherical harmonics samples : inputs[number of harmonics][vector size] and the outputs matrix contains the headphones samples : outputs[2][vector size].
+         @param     inputs	The input samples.
+         @param     outputs  The output array that contains samples destinated to channels.
+         */
+        void process() noexcept
+        {
+            Signal<T>::matrix_matrix_mul(HOA_NBIN_I * 2, m_vector_size, HOA_NBIN_H, Hrtf<T>::getImpulse(), m_inputs, m_results);
+            
+            for(ulong i = 0; i < m_vector_size; i++)
+            {
+                Signal<T>::vector_add(HOA_NBIN_I, m_results + i, m_vector_size, m_linear_vector_left + i, 1);
+                m_output_left[i] = m_linear_vector_left[i];
+            }
+            
+            for(ulong i = 0; i < m_vector_size; i++)
+            {
+                Signal<T>::vector_add(HOA_NBIN_I, m_results + i + m_vector_size * HOA_NBIN_I, m_vector_size, m_linear_vector_right + i, 1);
+                m_output_right[i] = m_linear_vector_right[i];
+            }
+
+            Signal<T>::vector_copy(HOA_NBIN_I - 1, m_linear_vector_left + m_vector_size, m_linear_vector_left);
+            Signal<T>::vector_copy(HOA_NBIN_I - 1, m_linear_vector_right + m_vector_size, m_linear_vector_right);
+            
+            Signal<T>::vector_clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
+            Signal<T>::vector_clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
+        }
+        
+        //! This method performs the binaural decoding.
+        /**	You should use this method for not-in-place processing and performs the binaural decoding sample by sample. The inputs array contains the spherical harmonics samples : inputs[number of harmonics] and the outputs array contains the headphones samples : outputs[2].
+         
+         @param     inputs	The input samples.
+         @param     outputs  The output array that contains samples destinated to channels.
+         */
+        void process(const T* inputs, T* outputs) noexcept
+        {
+            
+            for(ulong i = 0; i < Encoder<Hoa2d, T>::getNumberOfHarmonics() && i < HOA_NBIN_H; i++)
+            {
+                m_inputs[i*m_vector_size+m_counter] = inputs[i];
+            }
+            
+            outputs[0] = m_output_left[m_counter];
+            outputs[1] = m_output_right[m_counter];
+            if(++m_counter >= m_vector_size)
+            {
+                process();
+                m_counter = 0;
+            }
+        }
+        
+    };
+    
+#undef HOA_NBIN_I
+#undef HOA_NBIN_O
+#undef HOA_NBIN_H
+#undef HOA_NBIN_C
     
     template <typename T> class Decoder<Hoa3d, T> : public Encoder<Hoa3d, T>, public Planewave<Hoa3d, T>::Processor
     {
