@@ -62,7 +62,7 @@ namespace hoa
         //! The ambisonic irregular decoder.
         /** The irregular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if less than the number of harmonics plus one or when the loudspeakers are not equally spaced.
          */
-        class Irregular;
+       class Irregular;
         
         //! The ambisonic binaural decoder.
         /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
@@ -335,7 +335,8 @@ namespace hoa
         Binaural(const ulong order) : Decoder<Hoa2d, T>(order, 2),
         m_vector_size(0ul), m_counter(0ul), m_inputs(nullptr), m_results(nullptr), m_linear_vector_left(nullptr), m_linear_vector_right(nullptr), m_output_left(nullptr), m_output_right(nullptr)
         {
-            
+            Decoder::setPlanewaveAzimuth(0, HOA_PI2*3.);
+            Decoder::setPlanewaveAzimuth(1, HOA_PI2);
         }
         
         //! The binaural decoder destructor.
