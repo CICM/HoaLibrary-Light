@@ -63,13 +63,10 @@ namespace hoa
         
         inline T process() noexcept
         {
-            if(m_counter < m_ramp)
+            m_value_old += m_value_step;
+            if(m_counter++ >= m_ramp)
             {
-                m_value_old += m_value_step;
-            }
-            else if(m_counter++ == m_ramp)
-            {
-                m_value_old = m_value_new;
+                m_value_old  = m_value_new;
                 m_value_step = 0.;
                 m_counter    = 0;
             }
