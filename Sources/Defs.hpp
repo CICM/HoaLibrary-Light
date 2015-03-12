@@ -26,6 +26,7 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include <limits>
 
 #ifdef PD_DEBUG
 #include "../../CicmWrapper/Sources/cicm_wrapper.h"

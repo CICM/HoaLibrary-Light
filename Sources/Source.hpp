@@ -25,9 +25,9 @@ namespace hoa
 		double					m_azimuth;
         double                  m_elevation;
 		double*					m_color;
-		std::string             m_description;
+		string                  m_description;
 		bool                    m_exist;
-		std::vector <long>      m_groups;
+		vector <long>           m_groups;
 		double                  m_maximum_radius;
 		bool                    m_mute;
 		
@@ -137,7 +137,7 @@ namespace hoa
 		/**
 		 * @param     description		The text description of the source.
          */
-		void setDescription(std::string description);
+		void setDescription(string description);
 		
 		//! Add source to an indexed group.
 		/**
@@ -226,7 +226,7 @@ namespace hoa
 			@return		The description of the source.
 			@see setDescription
          */
-		std::string		getDescription()	const {return m_description;}
+		string		getDescription()	const {return m_description;}
 		
 		//! Get the number of group the source is owned by.
 		/**
@@ -262,8 +262,8 @@ namespace hoa
         
     private:
         
-        std::vector <long>      m_sources;
-        std::string             m_description;
+        vector <long>           m_sources;
+        string                  m_description;
         long                    m_exist;
         double*					m_color;
         double					m_centroid_x;
@@ -389,7 +389,7 @@ namespace hoa
         /**
          @param     description		The text description of the group.
          */
-        void setDescription(std::string description);
+        void setDescription(string description);
         
         //! Set the maximum radius of the group
         /**
@@ -521,7 +521,7 @@ namespace hoa
          @return		The description of the group.
          @see setDescription
          */
-        std::string		getDescription()	const {return m_description;}
+        string		getDescription()	const {return m_description;}
         
         //! Get the number of sources owned by this group.
         /**
@@ -557,8 +557,8 @@ namespace hoa
     private:
         
         double                      m_maximum_radius;
-        std::vector <Source*>       m_sources;
-        std::vector <SourcesGroup*> m_groups;
+        vector <Source*>            m_sources;
+        vector <SourcesGroup*>      m_groups;
         bool                        m_exist;
         double                      m_zoom;
         
@@ -784,7 +784,7 @@ namespace hoa
          * @param     index				The index of the source.
          * @param     description		The text description of the source.
          */
-        void sourceSetDescription(long index, std::string description);
+        void sourceSetDescription(long index, string description);
         
         //! Remove a source.
         /** This will also remove the source from all the group that the source is a part of.
@@ -860,7 +860,7 @@ namespace hoa
          * @param     index				The index of the source.
          * @return						The text description.
          */
-        std::string sourceGetDescription(long index);
+        string sourceGetDescription(long index);
         
         //! Get the number of group a source is owned by.
         /**
@@ -1048,7 +1048,7 @@ namespace hoa
          * @param     index				The index of the group.
          * @param     description		The text description of the group.
          */
-        void groupSetDescription(long index, std::string description);
+        void groupSetDescription(long index, string description);
         
         //! Remove group.
         /**
@@ -1150,7 +1150,7 @@ namespace hoa
          * @param     index				The index of the group.
          * @return						The text description.
          */
-        std::string groupGetDescription(long index);
+        string groupGetDescription(long index);
         
         //! Retrieve the mute state of a group.
         /**
