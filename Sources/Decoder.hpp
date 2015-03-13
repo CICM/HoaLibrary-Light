@@ -335,7 +335,8 @@ namespace hoa
         Binaural(const ulong order) : Decoder<Hoa2d, T>(order, 2),
         m_vector_size(0ul), m_counter(0ul), m_inputs(nullptr), m_results(nullptr), m_linear_vector_left(nullptr), m_linear_vector_right(nullptr), m_output_left(nullptr), m_output_right(nullptr)
         {
-            
+            Decoder::setPlanewaveAzimuth(0, HOA_PI2*3.);
+            Decoder::setPlanewaveAzimuth(1, HOA_PI2);
         }
         
         //! The binaural decoder destructor.
@@ -584,7 +585,8 @@ namespace hoa
         Binaural(const ulong order) : Decoder<Hoa3d, T>(order, 2),
         m_vector_size(0ul), m_counter(0ul), m_inputs(nullptr), m_results(nullptr), m_linear_vector_left(nullptr), m_linear_vector_right(nullptr), m_output_left(nullptr), m_output_right(nullptr)
         {
-            
+            Decoder::setPlanewaveAzimuth(0, HOA_PI2*3);
+            Decoder::setPlanewaveAzimuth(1, HOA_PI2);
         }
         
         //! The binaural decoder destructor.
