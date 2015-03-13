@@ -175,10 +175,12 @@ namespace hoa
                 bounds.push_back(p);
             }
             
-            Point operator*(T val) noexcept
+            Point operator*(T val) const noexcept
             {
                 return Point(x * val, y * val, z * val);
             }
+            
+            
         };
         
     private:
