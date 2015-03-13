@@ -8,6 +8,7 @@
 #define DEF_HOA_METER_LIGHT
 
 #include "Planewaves.hpp"
+#include "Voronoi.hpp"
 
 namespace hoa
 {
@@ -139,7 +140,7 @@ namespace hoa
         
         inline void tick(const ulong time) noexcept
         {
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
                 if(m_channels_peaks[i] > 1.)
                 {
@@ -157,14 +158,14 @@ namespace hoa
             if(m_ramp++ == m_vector_size)
             {
                 m_ramp = 0;
-                for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::Processor::getNumberOfPlanewaves(); i++)
+                for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
                 {
                     m_channels_peaks[i] = fabs(*inputs++);
                 }
             }
             else
             {
-                for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::Processor::getNumberOfPlanewaves(); i++)
+                for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
                 {
                     const T peak = fabs(*inputs++);
                     if(peak > m_channels_peaks[i])
@@ -176,7 +177,7 @@ namespace hoa
         }
     };
     
-    template <typename T> class Meter<Hoa3d, T> : public Planewave<Hoa3d, T>::Processor
+    template <typename T> class Meter<Hoa3d, T> : public Planewave<Hoa3d, T>::Processor, private Voronoi<T>
     {
     private:
         ulong   m_ramp;
@@ -184,15 +185,15 @@ namespace hoa
         T*      m_channels_peaks;
         ulong*  m_over_leds;
         
+        typedef typename Voronoi<T>::Point Pint;
     public:
         
-        Meter(ulong numberOfPlanewaves) noexcept :
-        Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
+        Meter(ulong numberOfPlanewaves) noexcept : Planewave<Hoa3d, T>::Processor(numberOfPlanewaves)
         {
             m_ramp                      = 0;
             m_vector_size               = 0;
             m_channels_peaks            = new T[Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves()];
-            m_over_leds                 = new ulong[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()];
+            m_over_leds                 = new ulong[Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves()];
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
                 m_channels_peaks[i] = 0;
@@ -215,11 +216,6 @@ namespace hoa
         inline ulong getVectorSize() const noexcept
         {
             return m_vector_size;
-        }
-        
-        void computeDisplay()
-        {
-            ;
         }
         
         inline T getPlanewaveAzimuthMapped(const ulong index) const noexcept
@@ -251,7 +247,7 @@ namespace hoa
         
         inline void tick(const ulong time) noexcept
         {
-            for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
                 if(m_channels_peaks[i] > 1.)
                 {
@@ -269,14 +265,14 @@ namespace hoa
             if(m_ramp++ == m_vector_size)
             {
                 m_ramp = 0;
-                for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::Processor::getNumberOfPlanewaves(); i++)
+                for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
                 {
                     m_channels_peaks[i] = fabs(*inputs++);
                 }
             }
             else
             {
-                for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::Processor::getNumberOfPlanewaves(); i++)
+                for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
                 {
                     const T peak = fabs(*inputs++);
                     if(peak > m_channels_peaks[i])
@@ -285,6 +281,23 @@ namespace hoa
                     }
                 }
             }
+        }
+        
+        void computeDisplay()
+        {
+            Voronoi<T>::clear();
+            for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
+            {
+                Voronoi<T>::add(Voronoi<T>::Point(Planewave<Hoa3d, T>::Processor::getPlanewaveAbscissa(i), Planewave<Hoa3d, T>::Processor::getPlanewaveOrdinate(i), Planewave<Hoa3d, T>::Processor::getPlanewaveHeight(i)));
+            }
+            Voronoi<T>::compute();
+            
+            vector<Pint> points = Voronoi<T>::getPoints();
+            for(ulong i = 0; i < points.size(); i++)
+            {
+                
+            }
+            
         }
     };
 }
