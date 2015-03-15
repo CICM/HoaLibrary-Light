@@ -215,10 +215,10 @@ namespace hoa
         inline void processEnergy(const T* inputs, T* outputs) noexcept
         {
             (*m_channels_square) = (*inputs) * (*inputs);
-            for(ulong i = 1; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 1; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
                 m_channels_square[i] = inputs[i] * inputs[i];
                 
-                T energySum = Signal<T>::vector_sum(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), m_channels_square);
+                T energySum = Signal<T>::vector_sum(Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(), m_channels_square);
                 const T energyAbscissa  = Signal<T>::vectors_dot_product(Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(), m_channels_square, m_channels_abscissa);
                 const T energyOrdinate  = Signal<T>::vectors_dot_product(Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(), m_channels_square, m_channels_ordinate);
                 const T energyHeight    = Signal<T>::vectors_dot_product(Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(), m_channels_square, m_channels_height);
