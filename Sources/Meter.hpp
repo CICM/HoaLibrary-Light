@@ -177,18 +177,17 @@ namespace hoa
         }
     };
     
-    template <typename T> class Meter<Hoa3d, T> : public Planewave<Hoa3d, T>::Processor, private Voronoi<T>
+    template <typename T> class Meter<Hoa3d, T> : public Planewave<Hoa3d, T>::Processor
     {
     private:
         ulong   m_ramp;
         ulong   m_vector_size;
         T*      m_channels_peaks;
         ulong*  m_over_leds;
-        
-        typedef typename Voronoi<T>::Point Pint;
+    
     public:
         
-        Meter(ulong numberOfPlanewaves) noexcept : Planewave<Hoa3d, T>::Processor(numberOfPlanewaves)
+        Meter(const ulong numberOfPlanewaves) noexcept : Planewave<Hoa3d, T>::Processor(numberOfPlanewaves)
         {
             m_ramp                      = 0;
             m_vector_size               = 0;
@@ -207,7 +206,7 @@ namespace hoa
             delete [] m_over_leds;
         }
         
-        inline void setVectorSize(ulong vectorSize) noexcept
+        inline void setVectorSize(const ulong vectorSize) noexcept
         {
             m_vector_size   = vectorSize;
             m_ramp          = 0;
@@ -285,6 +284,9 @@ namespace hoa
         
         void computeDisplay()
         {
+            Voronoi<Hoa3d, T> voronoi;
+            voronoi.compute();
+            /*
             Voronoi<T>::clear();
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
@@ -297,7 +299,7 @@ namespace hoa
             {
                 
             }
-            
+            */
         }
     };
 }
