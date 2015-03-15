@@ -124,7 +124,7 @@ namespace hoa
         m_color[3]	=  Math<double>::clip(alpha, 0., 1.);
     }
     
-    void Source::setDescription(std::string description)
+    void Source::setDescription(string description)
     {
         m_description = description;
     }
@@ -197,7 +197,7 @@ namespace hoa
         m_exist = state;
     }
     
-    void SourcesGroup::setDescription(std::string description)
+    void SourcesGroup::setDescription(string description)
     {
         m_description = description;
     }
@@ -1093,7 +1093,7 @@ namespace hoa
         }
     }
     
-    void SourcesManager::sourceSetDescription(long index, std::string description)
+    void SourcesManager::sourceSetDescription(long index, string description)
     {
         if(index < m_sources.size() && index >= 0)
         {
@@ -1194,7 +1194,7 @@ namespace hoa
         return NULL;
     }
     
-    std::string SourcesManager::sourceGetDescription(long index)
+    string SourcesManager::sourceGetDescription(long index)
     {
         if(index < m_sources.size() && index >= 0)
             return m_sources[index]->getDescription();
@@ -1420,7 +1420,7 @@ namespace hoa
         }
     }
     
-    void SourcesManager::groupSetDescription(long groupIndex, std::string description)
+    void SourcesManager::groupSetDescription(long groupIndex, string description)
     {
         if(groupIndex < m_groups.size() && groupIndex >= 0)
         {
@@ -1533,7 +1533,7 @@ namespace hoa
         return NULL;
     }
     
-    std::string SourcesManager::groupGetDescription(long index)
+    string SourcesManager::groupGetDescription(long index)
     {
         if(index < m_groups.size() && index >= 0)
             return m_groups[index]->getDescription();

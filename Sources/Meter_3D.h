@@ -379,7 +379,7 @@ namespace Hoa3D
         }
         
         //! Retrieve the number of channel.
-        /** Retrieve a name for an channel in a std::string format that will be "Channel index azimuth elevation".
+        /** Retrieve a name for an channel in a string format that will be "Channel index azimuth elevation".
          
          @param     index	The global index of a channel.
          @return    The name of the channel
