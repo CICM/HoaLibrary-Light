@@ -19,6 +19,7 @@ namespace hoa
     private:
         ulong m_index;
         T     m_azimuth;
+ 
     public:
         
         Planewave(const ulong _index, const T _azimuth) noexcept :
@@ -210,7 +211,7 @@ namespace hoa
         ulong m_index;
         T     m_azimuth;
         T     m_elevation;
-
+        
     public:
         
         Planewave(const ulong _index, const T _azimuth, const T _elevation) noexcept :

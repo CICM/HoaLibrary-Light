@@ -285,6 +285,12 @@ namespace hoa
         void computeDisplay()
         {
             Voronoi<Hoa3d, T> voronoi;
+            
+            for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
+            {
+                voronoi.add(Planewave<Hoa3d, T>::Processor::getPlanewaveAbscissa(i), Planewave<Hoa3d, T>::Processor::getPlanewaveOrdinate(i), Planewave<Hoa3d, T>::Processor::getPlanewaveHeight(i));
+            }
+            
             voronoi.compute();
             /*
             Voronoi<T>::clear();

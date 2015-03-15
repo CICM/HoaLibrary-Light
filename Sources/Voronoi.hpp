@@ -11,7 +11,6 @@
 
 namespace hoa
 {
-#define HOA_EPSILON 1e-6
     
     //! A spherical voronoi.
     /** The voronoi class is opaque.
@@ -27,7 +26,6 @@ namespace hoa
             T x;
             T y;
             T z;
-            ulong index;
             vector<Point> neightbours;
             vector<Point> bounds;
             
@@ -42,14 +40,14 @@ namespace hoa
                 neightbours.clear();
             }
             
-            Point(T _x, T _y, T _z, ulong index = 0) noexcept :
-            x(_x), y(_y), z(_z), index(0)
+            Point(T _x, T _y, T _z) noexcept :
+            x(_x), y(_y), z(_z)
             {
                 ;
             }
             
             Point(Point const& other) noexcept :
-            x(other.x), y(other.y), z(other.z), index(other.index)
+            x(other.x), y(other.y), z(other.z)
             {
                 ;
             }
@@ -287,7 +285,7 @@ namespace hoa
             Point   p;
             T  r;
             
-            Triangle(Point const& _a, Point const& _b, Point const& _c) :
+            Triangle(Point const& _a, Point const& _b, Point const& _c) noexcept :
             a(_a), b(_b), c(_c)
             {
                 const Point ac = (c - a);
@@ -312,11 +310,6 @@ namespace hoa
                     r = 0.;
                 }
             }
-            
-            ~Triangle()
-            {
-                ;
-            }
         };
         
     private:
@@ -334,11 +327,10 @@ namespace hoa
             clear();
         }
         
-        void add(Point const& p)
+        void add(const double x, const double y, const double z)
         {
-            m_points.push_back(p);
+            m_points.push_back(Point(x, y, z));
             m_points[m_points.size()-1].normalize();
-            m_points[m_points.size()-1].index = m_points.size();
         }
         
         void clear()
@@ -416,7 +408,6 @@ namespace hoa
         }
     };
 
-#undef HOA_EPSILON
 }
 
 #endif
