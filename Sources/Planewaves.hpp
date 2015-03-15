@@ -19,12 +19,13 @@ namespace hoa
     private:
         ulong m_index;
         T     m_azimuth;
- 
+        T     m_rotation;
     public:
         
         Planewave(const ulong _index, const T _azimuth) noexcept :
         m_index(_index),
-        m_azimuth(_azimuth)
+        m_azimuth(_azimuth),
+        m_rotation(0.)
         {
             
         }
@@ -39,29 +40,34 @@ namespace hoa
             return m_index;
         }
         
-        inline T getAzimuth() const noexcept
+        inline T getAzimuth(const bool rotation = true) const noexcept
         {
-            return m_azimuth;
+            return Math<T>::wrap_twopi((rotation ? m_rotation : 0.) + m_azimuth);
         }
         
         inline void setAzimuth(const T azimuth) noexcept
         {
-            m_azimuth = azimuth;
+            m_azimuth = Math<T>::wrap_twopi(azimuth);
         }
         
-        inline T getAbscissa(const T x_axe = 0.) const noexcept
+        inline void setRotation(const T z_axe) noexcept
         {
-            return cos(m_azimuth + x_axe + HOA_PI2);
+            m_rotation = Math<T>::wrap_twopi(z_axe);
         }
         
-        inline T getOrdinate(const T x_axe = 0.) const noexcept
+        inline T getAbscissa(const bool rotation = true) const noexcept
         {
-            return sin(m_azimuth + x_axe + HOA_PI2);
+            return cos((rotation ? m_rotation : 0.) + m_azimuth + HOA_PI2);
+        }
+        
+        inline T getOrdinate(const bool rotation = true) const noexcept
+        {
+            return sin((rotation ? m_rotation : 0.) + m_azimuth + HOA_PI2);
         }
         
         inline string getName() const noexcept
         {
-            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth() / HOA_2PI * 360.) + "°";
+            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth(false) / HOA_2PI * 360.) + "°";
         }
         
         static bool sort_azimuth(Planewave const& i, Planewave const& j) noexcept
@@ -119,6 +125,10 @@ namespace hoa
             inline void setPlanewavesRotation(const T z_axe) noexcept
             {
                 m_rotation_z = Math<T>::wrap_twopi(z_axe);
+                for(ulong i = 0; i < m_number_of_planewaves; i++)
+                {
+                    m_planewaves[i].setRotation(m_rotation_z);
+                }
             }
             
             //! Get the offset of the planewaves.
@@ -154,43 +164,35 @@ namespace hoa
             //! Retrieve the azimuth of a planewaves.
             /** The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
              
-             @param      index   The index of the planewaves.
+             @param      index      The index of the planewaves.
+             @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
              @return     The azimuth of the planewaves.
              */
-            inline T getPlanewaveAzimuth(const ulong index) const noexcept
+            inline T getPlanewaveAzimuth(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getAzimuth();
-            }
-            
-            //! Retrieve the azimuth of a planewaves (including rotation).
-            /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
-             
-             @param      index   The index of the planewaves.
-             @return     The azimuth of the planewaves.
-             */
-            inline T getPlanewaveAzimuthRotated(const ulong index) const noexcept
-            {
-                return Math<T>::wrap_twopi(m_planewaves[index].getAzimuth() + m_rotation_z);
+                return m_planewaves[index].getAzimuth(rotation);
             }
             
             //! Retrieve the abscissa of a planewaves.
             /** Retrieve the abscissa of a planewaves. The abscissa is between -1 and 1, -1 is the left of the soundfield, 0 is the center of the soundfield and 1 is the right of the soundfield. The maximum index must be the number of planewaves - 1.
              @param     index    The index of the planewaves.
+             @param     rotation   False if you don't want to consider the rotation, otherwise true (default).
              @return    The abscissa of the planewaves.
              */
-            inline T getPlanewaveAbscissa(const ulong index) const noexcept
+            inline T getPlanewaveAbscissa(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getAbscissa(m_rotation_z);
+                return m_planewaves[index].getAbscissa(rotation);
             }
             
             //! Retrieve the ordinate of a planewaves.
             /** Retrieve the ordinate of a planewaves. The ordinate is between -1 and 1, -1 is the back of the soundfield, 0 is the center of the soundfield and 1 is the front of the soundfield. The maximum index must be the number of planewaves - 1.
              @param     index	The index of the planewaves.
+             @param     rotation   False if you don't want to consider the rotation, otherwise true (default).
              @return    The ordinate of the planewaves.
              */
-            inline T getPlanewaveOrdinate(const ulong index) const noexcept
+            inline T getPlanewaveOrdinate(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getOrdinate(m_rotation_z);
+                return m_planewaves[index].getOrdinate(rotation);
             }
             
             //! Retrieve a name for a planewaves.
@@ -211,13 +213,18 @@ namespace hoa
         ulong m_index;
         T     m_azimuth;
         T     m_elevation;
-        
+        T     m_rotation_x;
+        T     m_rotation_y;
+        T     m_rotation_z;
     public:
         
         Planewave(const ulong _index, const T _azimuth, const T _elevation) noexcept :
         m_index(_index),
         m_azimuth(_azimuth),
-        m_elevation(_elevation)
+        m_elevation(_elevation),
+        m_rotation_x(0.),
+        m_rotation_y(0.),
+        m_rotation_z(0.)
         {
             ;
         }
@@ -232,9 +239,16 @@ namespace hoa
             return m_index;
         }
         
-        inline T getAzimuth() const noexcept
+        inline void setRotation(const T x_axe, const T y_axe, const T z_axe) noexcept
         {
-            return m_azimuth;
+            m_rotation_x = Math<T>::wrap_twopi(x_axe);
+            m_rotation_y = Math<T>::wrap_twopi(y_axe);
+            m_rotation_z = Math<T>::wrap_twopi(z_axe);
+        }
+        
+        inline T getAzimuth(const bool rotation = true) const noexcept
+        {
+            return Math<T>::azimuth(getAbscissa(rotation), getOrdinate(rotation), getElevation(rotation));
         }
         
         inline void setAzimuth(const T azimuth) noexcept
@@ -242,9 +256,9 @@ namespace hoa
             m_azimuth = azimuth;
         }
         
-        inline T getElevation() const noexcept
+        inline T getElevation(const bool rotation = true) const noexcept
         {
-            return m_elevation;
+            return Math<T>::elevation(getAbscissa(rotation), getOrdinate(rotation), getElevation(rotation));
         }
         
         inline void setElevation(const T elevation) noexcept
@@ -252,77 +266,89 @@ namespace hoa
             m_elevation = elevation;
         }
         
-        inline T getAbscissa(const T x_axe = 0., const T y_axe = 0., const T z_axe = 0.) const noexcept
+        inline T getAbscissa(const bool rotation = true) const noexcept
         {
-            T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
-            T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
-            T z = sin(m_elevation);
-            
-            // Rotation around x
-            T cosAngle = cos(x_axe);
-            T sinAngle = sin(x_axe);
-            T ry = y * cosAngle - z * sinAngle;
-            z = y * sinAngle + z * cosAngle;
-            y = ry;
-            
-            // Rotation around z
-            cosAngle = cos(z_axe);
-            sinAngle = sin(z_axe);
-            x = x * cosAngle - y * sinAngle;
-            
-            // Rotation around y
-            cosAngle = cos(y_axe);
-            sinAngle = sin(y_axe);
-            return x * cosAngle - z * sinAngle;
+            if(!rotation)
+            {
+                return cos(m_azimuth + HOA_PI2) * cos(m_elevation);
+            }
+            else
+            {
+                T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
+                T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
+                T z = sin(m_elevation);
+                
+                T cosAngle = cos(m_rotation_x);
+                T sinAngle = sin(m_rotation_x);
+                T ry = y * cosAngle - z * sinAngle;
+                T rz = y * sinAngle + z * cosAngle;
+                y = ry;
+                z = rz;
+                
+                cosAngle = cos(m_rotation_z);
+                sinAngle = sin(m_rotation_z);
+                x = x * cosAngle - y * sinAngle;
+                
+                return x * cos(m_rotation_y) - z * sin(m_rotation_y);
+            }
         }
         
-        inline T getOrdinate(const T x_axe = 0., const T y_axe = 0., const T z_axe = 0.) const noexcept
+        inline T getOrdinate(const bool rotation = true) const noexcept
         {
-            T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
-            T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
-            T z = sin(m_elevation);
-            
-            // Rotation around x
-            T cosAngle = cos(x_axe);
-            T sinAngle = sin(x_axe);
-            y = y * cosAngle - z * sinAngle;
-            
-            // Rotation around z
-            cosAngle = cos(z_axe);
-            sinAngle = sin(z_axe);
-            return x * sinAngle + y * cosAngle;
+            if(!rotation)
+            {
+                return sin(m_azimuth + HOA_PI2) * cos(m_elevation);
+            }
+            else
+            {
+                T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
+                T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
+                T z = sin(m_elevation);
+                
+                T cosAngle = cos(m_rotation_x);
+                T sinAngle = sin(m_rotation_x);
+                T ry = y * cosAngle - z * sinAngle;
+                T rz = y * sinAngle + z * cosAngle;
+                y = ry;
+                z = rz;
+                
+                return x * sin(m_rotation_z) + y * cos(m_rotation_z);
+            }
         }
         
-        inline T getHeight(const T x_axe = 0., const T y_axe = 0., const T z_axe = 0.) const noexcept
+        inline T getHeight(const bool rotation = true) const noexcept
         {
-            T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
-            T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
-            T z = sin(m_elevation);
-            
-            // Rotation around x
-            T cosAngle = cos(x_axe);
-            T sinAngle = sin(x_axe);
-            T ry = y * cosAngle - z * sinAngle;
-            z = y * sinAngle + z * cosAngle;
-            y = ry;
-            
-            // Rotation around z
-            cosAngle = cos(z_axe);
-            sinAngle = sin(z_axe);
-            x = x * cosAngle - y * sinAngle;;
-            
-            // Rotation around y
-            cosAngle = cos(y_axe);
-            sinAngle = sin(y_axe);
-            return x * sinAngle + z * cosAngle;
+            if(!rotation)
+            {
+                return sin(m_elevation);
+            }
+            else
+            {
+                T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
+                T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
+                T z = sin(m_elevation);
+                
+                T cosAngle = cos(m_rotation_x);
+                T sinAngle = sin(m_rotation_x);
+                T ry = y * cosAngle - z * sinAngle;
+                T rz = y * sinAngle + z * cosAngle;
+                y = ry;
+                z = rz;
+                
+                cosAngle = cos(m_rotation_z);
+                sinAngle = sin(m_rotation_z);
+                x = x * cosAngle - y * sinAngle;
+                
+                return x * sin(m_rotation_y) + z * cos(m_rotation_y);
+            }
         }
         
         inline string getName() const noexcept
         {
-            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth() / HOA_2PI * 360.) + "°";
+            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth(false) / HOA_2PI * 360.) + "°" " " + to_string(getElevation(false) / HOA_2PI * 360.) + "°";
         }
         
-        bool operator<(Planewave const& j) const noexcept
+        bool sort_azimuth(Planewave const& j) const noexcept
         {
             return this->m_azimuth < j.m_azimuth;
         }
@@ -383,6 +409,10 @@ namespace hoa
                 m_rotation_x = Math<T>::wrap_twopi(x_axe);
                 m_rotation_y = Math<T>::wrap_twopi(y_axe);
                 m_rotation_z = Math<T>::wrap_twopi(z_axe);
+                for(ulong i = 0; i < m_number_of_planewaves; i++)
+                {
+                    m_planewaves[i].setRotation(m_rotation_x, m_rotation_y, m_rotation_z);
+                }
             }
             
             //! Get the offset of the planewaves.
@@ -437,22 +467,12 @@ namespace hoa
             /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
              
              @param      index   The index of the planewaves.
+             @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
              @return     The azimuth of the planewaves.
              */
-            inline T getPlanewaveAzimuth(const ulong index) const noexcept
+            inline T getPlanewaveAzimuth(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getAzimuth();
-            }
-            
-            //! Retrieve the azimuth of a planewaves.
-            /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
-             
-             @param      index   The index of the planewaves.
-             @return     The azimuth of the planewaves.
-             */
-            inline T getPlanewaveAzimuthRotated(const ulong index) const noexcept
-            {
-                return Math<T>::azimuth(getPlanewaveAbscissa(index), getPlanewaveOrdinate(index), getPlanewaveHeight(index));
+                return m_planewaves[index].getAzimuth(rotation);
             }
             
             //! Retrieve the azimuth of a planewaves.
@@ -469,53 +489,46 @@ namespace hoa
             //! Retrieve the azimuth of a planewaves.
             /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
              
-             @param      index   The index of the planewaves.
+             @param      index      The index of the planewaves.
+             @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
              @return     The azimuth of the planewaves.
              */
-            inline T getPlanewaveElevation(const ulong index) const noexcept
+            inline T getPlanewaveElevation(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getElevation();
-            }
-            
-            //! Retrieve the azimuth of a planewaves.
-            /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
-             
-             @param      index   The index of the planewaves.
-             @return     The azimuth of the planewaves.
-             */
-            inline T getPlanewaveElevationRotated(const ulong index) const noexcept
-            {
-                return Math<T>::elevation(getPlanewaveAbscissa(index), getPlanewaveOrdinate(index), getPlanewaveHeight(index));
+                return m_planewaves[index].getElevation(rotation);
             }
             
             //! Retrieve the abscissa of a planewaves.
             /** Retrieve the abscissa of a planewaves. The abscissa is between -1 and 1, -1 is the left of the soundfield, 0 is the center of the soundfield and 1 is the right of the soundfield. The maximum index must be the number of planewaves - 1.
              @param     index    The index of the planewaves.
+             @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
              @return    The abscissa of the planewaves.
              */
-            inline T getPlanewaveAbscissa(const ulong index) const noexcept
+            inline T getPlanewaveAbscissa(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getAbscissa(m_rotation_x, m_rotation_y, m_rotation_z);
+                return m_planewaves[index].getAbscissa(rotation);
             }
             
             //! Retrieve the ordinate of a planewaves.
             /** Retrieve the ordinate of a planewaves. The ordinate is between -1 and 1, -1 is the back of the soundfield, 0 is the center of the soundfield and 1 is the front of the soundfield. The maximum index must be the number of planewaves - 1.
              @param     index	The index of the planewaves.
+             @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
              @return    The ordinate of the planewaves.
              */
-            inline T getPlanewaveOrdinate(const ulong index) const noexcept
+            inline T getPlanewaveOrdinate(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getOrdinate(m_rotation_x, m_rotation_y, m_rotation_z);
+                return m_planewaves[index].getOrdinate(rotation);
             }
             
             //! Retrieve the height of a planewaves.
             /** Retrieve the ordinate of a planewaves. The height is between -1 and 1, -1 is the back of the soundfield, 0 is the center of the soundfield and 1 is the front of the soundfield. The maximum index must be the number of planewaves - 1.
              @param     index	The index of the planewaves.
+             @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
              @return    The height of the planewaves.
              */
-            inline T getPlanewaveHeight(const ulong index) const noexcept
+            inline T getPlanewaveHeight(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getHeight(m_rotation_x, m_rotation_y, m_rotation_z);
+                return m_planewaves[index].getHeight(rotation);
             }
             
             //! Retrieve a name for a planewaves.

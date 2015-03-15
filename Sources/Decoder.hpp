@@ -15,7 +15,48 @@ namespace hoa
     //! The ambisonic decoder.
     /** The decoder is a virtual class from witch inherit the regular, irregular and binaural decoders.
      */
-    template <Dimension D, typename T> class Decoder;
+    template <Dimension D, typename T> class Decoder : public Harmonic<D, T>::Processor, public Planewave<D, T>::Processor
+    {
+        //! The decoder constructor.
+        /**	The decoder constructor allocates and initialize the base classes.
+         @param     order                   The order
+         @param     numberOfPlanewaves      The number of channels.
+         */
+        Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept = 0;
+        
+        //! The destructor.
+        /** The destructor free the memory.
+         */
+        virtual ~Decoder() = 0;
+        
+        //! This method performs the decoding.
+        /**	You should use this method for in-place or not-in-place processing and performs the decoding sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+         @param     inputs  The input array that contains the samples of the harmonics.
+         @param     outputs The output array that contains samples destinated to the channels.
+         */
+        inline virtual void process(const T* inputs, T* outputs) noexcept = 0;
+        
+        //! This method computes the decoding matrice.
+        /**	You should use this method after changing the position of the loudspeakers.
+         @param vectorsize The vector size for binaural decoding.
+         */
+        virtual void computeMatrix(const ulong vectorsize = 64) = 0;
+        
+        //! The ambisonic regular decoder.
+        /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
+         */
+        class Regular;
+        
+        //! The ambisonic irregular decoder.
+        /** The irregular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if less than the number of harmonics plus one or when the loudspeakers are not equally spaced.
+         */
+        class Irregular;
+        
+        //! The ambisonic binaural decoder.
+        /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
+         */
+        class Binaural;
+    };
     
     template <typename T> class Decoder<Hoa2d, T> : public Encoder<Hoa2d, T>, public Planewave<Hoa2d, T>::Processor
     {
@@ -114,7 +155,7 @@ namespace hoa
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                Encoder<Hoa2d, T>::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuthRotated(i));
+                Encoder<Hoa2d, T>::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
                 Encoder<Hoa2d, T>::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
                 m_matrix[i * Encoder<Hoa2d, T>::getNumberOfHarmonics()] = factor * 0.5;
             }
@@ -183,7 +224,7 @@ namespace hoa
                 vector<Planewave<Hoa2d, T> > channels;
                 for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
                 {
-                    channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i) + Planewave<Hoa2d, T>::Processor::getPlanewavesRotation())));
+                    channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i))));
                 }
                 
                 std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);
@@ -310,9 +351,6 @@ namespace hoa
 #define HOA_NBIN_I 512
 #define HOA_NBIN_H 11
 
-    //! The ambisonic binaural decoder.
-    /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
-     */
     template <typename T> class Decoder<Hoa2d, T>::Binaural : public Decoder<Hoa2d, T>
     {
     private:
@@ -545,8 +583,8 @@ namespace hoa
             const T factor = 12.5 / (T)(Encoder<Hoa3d, T>::getNumberOfHarmonics());
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                Encoder<Hoa3d, T>::setAzimuth(Planewave<Hoa3d, T>::Processor::getPlanewaveAzimuthRotated(i));
-                Encoder<Hoa3d, T>::setElevation(Planewave<Hoa3d, T>::Processor::getPlanewaveElevationRotated(i));
+                Encoder<Hoa3d, T>::setAzimuth(Planewave<Hoa3d, T>::Processor::getPlanewaveAzimuth(i));
+                Encoder<Hoa3d, T>::setElevation(Planewave<Hoa3d, T>::Processor::getPlanewaveElevation(i));
                 Encoder<Hoa3d, T>::process(&factor, m_matrix + i * Encoder<Hoa3d, T>::getNumberOfHarmonics());
                 for(ulong j = 0; j < Encoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
                 {
@@ -560,9 +598,6 @@ namespace hoa
 #define HOA_NBIN_I 512
 #define HOA_NBIN_H 16
     
-    //! The ambisonic binaural decoder.
-    /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
-     */
     template <typename T> class Decoder<Hoa3d, T>::Binaural : public Decoder<Hoa3d, T>
     {
     private:
