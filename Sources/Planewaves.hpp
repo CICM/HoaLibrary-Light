@@ -193,11 +193,11 @@ namespace hoa
             }
             
             //! Retrieve a name for a planewaves.
-            /** Retrieve a name for a planewaves in a std::string format that will be "Planewave index azimuth (in degrees)".
+            /** Retrieve a name for a planewaves in a string format that will be "Planewave index azimuth (in degrees)".
              @param     index	The index of a planewaves.
              @return    The method returns a name for the planewaves.
              */
-            inline std::string getPlanewaveName(const ulong index) const noexcept
+            inline string getPlanewaveName(const ulong index) const noexcept
             {
                 return m_planewaves[index].getName();
             }
@@ -518,11 +518,11 @@ namespace hoa
             }
             
             //! Retrieve a name for a planewaves.
-            /** Retrieve a name for a planewaves in a std::string format that will be "Planewave index azimuth (in degrees)".
+            /** Retrieve a name for a planewaves in a string format that will be "Planewave index azimuth (in degrees)".
              @param     index	The index of a planewaves.
              @return    The method returns a name for the planewaves.
              */
-            inline std::string getPlanewaveName(const ulong index) const noexcept
+            inline string getPlanewaveName(const ulong index) const noexcept
             {
                 return m_planewaves[index].getName();
             }
