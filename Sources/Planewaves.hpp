@@ -212,10 +212,19 @@ namespace hoa
             ;
         }
         
+        Planewave(const ulong _index, const T _abscissa, const T _ordinate, const T _height) noexcept :
+        m_index(_index),
+        m_azimuth(Math<T>::azimuth(_abscissa, _ordinate, _height)),
+        m_elevation(Math<T>::elevation(_abscissa, _ordinate, _height))
+        {
+            ;
+        }
+        
         ~Planewave() noexcept
         {
             ;
         }
+        
         
         inline ulong getIndex() const noexcept
         {
@@ -339,9 +348,89 @@ namespace hoa
             m_rotation_y(0.),
             m_rotation_x(0.)
             {
-                for(ulong i = 0; i < m_number_of_planewaves; i++)
+                if(m_number_of_planewaves == 4)
                 {
-                    m_planewaves.push_back(Planewave<Hoa3d, T>(i+1, (T)i / T(m_number_of_planewaves) * HOA_2PI, (T)i / T(m_number_of_planewaves) * HOA_PI2));
+                    const double oh = -(sqrt(2. / 3.) / sqrt(3. / 8.) - 1.);
+                    const double hc = sqrt(1. - oh * oh);
+                    const double el = asin(oh / sqrt(hc*hc + oh*oh));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(1,  0., HOA_PI2));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(2, 0., el));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(3, HOA_2PI / 3., el));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(4, 2. * HOA_2PI / 3., el));
+                }
+                else if(m_number_of_planewaves == 6)
+                {
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(1, 0., HOA_PI2));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(2, 0., 0.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(3, HOA_PI2, 0.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(4, 2. * HOA_PI2, 0.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(5, 3. * HOA_PI2, 0.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(6, 0., -HOA_PI2));
+                }
+                else if(m_number_of_planewaves == 8)
+                {
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(1, 1., 1., 1.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(2, -1., 1., 1.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(3, -1., -1., 1.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(4, 1., -1., 1.));
+                    
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(5, 1., 1., -1.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(6, -1., 1., -1.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(7, -1., -1., -1.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(8, 1., -1., -1.));
+                }
+                else if(m_number_of_planewaves == 12)
+                {
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(1, 0., HOA_PI2));
+                    for(ulong i = 1; i < 6; i++)
+                    {
+                        m_planewaves.push_back(Planewave<Hoa3d, T>(i*2, T(i - 1.) / 5. * HOA_2PI, atan(0.5)));
+                        m_planewaves.push_back(Planewave<Hoa3d, T>(i*2+1, T(i - 1.) / 5. * HOA_2PI - HOA_PI / 5., -atan(0.5)));
+                    }
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(12, 0., -HOA_PI2));
+                }
+                else if(m_number_of_planewaves == 20)
+                {
+                    const T phi = (sqrt(5.) - 1.) / 2.;
+                    const T R = 1. / sqrt(3.);
+                    const T a = R;
+                    const T b = R / phi;
+                    const T c = R * phi;
+                    ulong index = 1;
+                    for(long i = -1; i < 2; i += 2)
+                    {
+                        for(long j = -1; j < 2; j += 2)
+                        {
+                            m_planewaves.push_back(Planewave<Hoa3d, T>(index++, 0., i * c * R, -j * b * R));
+                            m_planewaves.push_back(Planewave<Hoa3d, T>(index++, i * c * R, j * b * R, 0.));
+                            m_planewaves.push_back(Planewave<Hoa3d, T>(index++, i * b * R, 0., -j * c * R));
+                            for(long k = -1; k < 2; k += 2)
+                            {
+                                m_planewaves.push_back(Planewave<Hoa3d, T>(index++, i * a * R, j * a * R, -k * a * R));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if(m_number_of_planewaves % 2)
+                    {
+                        m_planewaves.push_back(Planewave<Hoa3d, T>(1, 0., HOA_PI2));
+                    }
+                    const T     phi     = (sqrt(5.) - 1.) / 4.;
+                    const ulong limit   = (m_number_of_planewaves - (m_number_of_planewaves % 2)) / 2;
+                    const T     offset  = 1. / T(limit) * HOA_PI;
+                    for(ulong i = 0; i < m_number_of_planewaves - (m_number_of_planewaves % 2); i++)
+                    {
+                        if(i < limit)
+                        {
+                            m_planewaves.push_back(Planewave<Hoa3d, T>(i+1, T(i) / T(limit) * HOA_2PI, phi));
+                        }
+                        else
+                        {
+                            m_planewaves.push_back(Planewave<Hoa3d, T>(i+1, T(i - (limit)) / T(limit) * HOA_2PI + offset, phi * 2));
+                        }
+                    }
                 }
             }
             
