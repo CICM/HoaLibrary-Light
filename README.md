@@ -12,9 +12,9 @@ Julien Colafrancesco, Pierre Guillot, Eliott Paris
 
 #### Implementations :
 
-<a title="PureData" href="https://github.com/CICM/HoaLibrary-PD">Pure Data</a><\n>
-<a title="Max" href="https://github.com/CICM/HoaLibrary-Max">Mac</a><\n>
-<a title="Ofx" href="https://github.com/CICM/ofxHoa">Open Framework</a><\n>
+<a title="PureData" href="https://github.com/CICM/HoaLibrary-PD">Pure Data, </a>
+<a title="Max" href="https://github.com/CICM/HoaLibrary-Max">Max, </a>
+<a title="Ofx" href="https://github.com/CICM/ofxHoa">Open Framework</a>
 
 #### Documentation :
 
