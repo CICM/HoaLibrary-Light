@@ -191,165 +191,6 @@ namespace hoa
         Path*   m_top;
         Path*   m_bottom;
         
-        static void filterPath(Path& path, const bool top = true)
-        {
-            if(top)
-            {
-                bool valid = false;
-                for(ulong i = 0; i < path.size(); i++)
-                {
-                    if(path[i].z > 0.)
-                    {
-                        valid = true;
-                    }
-                }
-                if(!valid || path.size() < 3)
-                {
-                    path.clear();
-                }
-                else
-                {
-                    ulong size = path.size();
-                    for(ulong i = 0; i < size;)
-                    {
-                        const ulong p = i ? i-1 : size-1;
-                        const ulong n = (i == size-1) ? 0 : i+1;
-                        if(path[i].z < 0. && path[p].z >= 0. && path[n].z >= 0.)
-                        {
-                            const T dist1 = path[p].z / (path[p].z - path[i].z);
-                            Point temp1 = (path[i] - path[p]) * dist1 + path[p];
-                            temp1.z = 0.;
-                            temp1.normalize();
-                            
-                            const T dist2 = path[n].z / (path[n].z - path[i].z);
-                            path[i] = (path[i] - path[n]) * dist2 + path[n];
-                            path[i].z = 0.;
-                            path[i].normalize();
-                            path.insert(path.begin()+i, temp1);
-                            size++;
-                            i += 3;
-                        }
-                        else if(path[i].z < 0. && path[p].z >= 0.)
-                        {
-                            const T dist = path[p].z / (path[p].z - path[i].z);
-                            Point temp = (path[i] - path[p]) * dist + path[p];
-                            temp.z = 0.;
-                            temp.normalize();
-                            path.insert(path.begin()+i, temp);
-                            size++;
-                            i += 2;
-                        }
-                        else if(path[i].z < 0. && path[n].z >= 0.)
-                        {
-                            const T dist = path[n].z / (path[n].z - path[i].z);
-                            Point temp = (path[i] - path[n]) * dist + path[n];
-                            temp.z = 0.;
-                            temp.normalize();
-                            path.insert(path.begin()+n, temp);
-                            size++;
-                            i += 2;
-                        }
-                        else
-                        {
-                            i++;
-                        }
-                    }
-                    size = path.size();
-                    for(ulong i = 0; i < size;)
-                    {
-                        const ulong p = i ? i-1 : size-1;
-                        const ulong n = (i == size-1) ? 0 : i+1;
-                        if(path[i].z <= 0. && path[p].z <= 0. && path[n].z <= 0.)
-                        {
-                            path.erase(path.begin()+i);
-                            size--;
-                        }
-                        else
-                        {
-                            i++;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                bool valid = false;
-                for(ulong i = 0; i < path.size(); i++)
-                {
-                    if(path[i].z < 0.)
-                    {
-                        valid = true;
-                    }
-                }
-                if(!valid || path.size() < 3)
-                {
-                    path.clear();
-                }
-                else
-                {
-                    ulong size = path.size();
-                    for(ulong i = 0; i < size;)
-                    {
-                        const ulong p = i ? i-1 : size-1;
-                        const ulong n = (i == size-1) ? 0 : i+1;
-                        if(path[i].z > 0. && path[p].z <= 0. && path[n].z <= 0.)
-                        {
-                            const T dist1 = path[i].z / (path[i].z - path[p].z);
-                            Point temp = (path[p] - path[i]) * dist1 + path[i];
-                            temp.z = 0.;
-                            temp.normalize();
-                            
-                            const T dist2 = path[i].z / (path[i].z - path[n].z);
-                            path[i] = (path[n] - path[i]) * dist2 + path[i];
-                            path[i].z = 0.;
-                            path[i].normalize();
-                            path.insert(path.begin()+i, temp);
-                            size++;
-                            i += 3;
-                        }
-                        else if(path[i].z > 0. && path[p].z <= 0.)
-                        {
-                            const T dist = path[i].z / (path[i].z - path[p].z);
-                            Point temp = (path[p] - path[i]) * dist + path[i];
-                            temp.z = 0.;
-                            temp.normalize();
-                            path.insert(path.begin()+i, temp);
-                            size++;
-                            i += 2;
-                        }
-                        else if(path[i].z > 0. && path[n].z <= 0.)
-                        {
-                            const T dist = path[i].z / (path[i].z - path[n].z);
-                            Point temp = (path[n] - path[i]) * dist + path[i];
-                            temp.z = 0.;
-                            temp.normalize();
-                            path.insert(path.begin()+n, temp);
-                            size++;
-                            i += 2;
-                        }
-                        else
-                        {
-                            i++;
-                        }
-                    }
-                    size = path.size();
-                    for(ulong i = 0; i < size;)
-                    {
-                        const ulong p = i ? i-1 : size-1;
-                        const ulong n = (i == size-1) ? 0 : i+1;
-                        if(path[i].z >= 0. && path[p].z >= 0. && path[n].z >= 0.)
-                        {
-                            path.erase(path.begin()+i);
-                            size--;
-                        }
-                        else
-                        {
-                            i++;
-                        }
-                    }
-                }
-            }
-        }
     public:
         
         Meter(const ulong numberOfPlanewaves) noexcept : Planewave<Hoa3d, T>::Processor(numberOfPlanewaves)
@@ -452,10 +293,9 @@ namespace hoa
             
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                voronoi.add(Planewave<Hoa3d, T>::Processor::getPlanewaveAbscissa(i), Planewave<Hoa3d, T>::Processor::getPlanewaveOrdinate(i), Planewave<Hoa3d, T>::Processor::getPlanewaveHeight(i));
+                voronoi.add(Point(Planewave<Hoa3d, T>::Processor::getPlanewaveAbscissa(i), Planewave<Hoa3d, T>::Processor::getPlanewaveOrdinate(i), Planewave<Hoa3d, T>::Processor::getPlanewaveHeight(i)));
                 m_bottom[i].clear();
             }
-            //voronoi.add(0., 0., 1.);
             voronoi.compute();
             Path const& bottom = voronoi.getPoints();
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
@@ -464,21 +304,14 @@ namespace hoa
                 {
                     m_bottom[i].push_back(bottom[i].bounds[j]);
                 }
-                filterPath(m_bottom[i], false);
             }
             
             voronoi.clear();
             
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                voronoi.add(Planewave<Hoa3d, T>::Processor::getPlanewaveAbscissa(i), Planewave<Hoa3d, T>::Processor::getPlanewaveOrdinate(i), Planewave<Hoa3d, T>::Processor::getPlanewaveHeight(i));
+                voronoi.add(Point(Planewave<Hoa3d, T>::Processor::getPlanewaveAbscissa(i), Planewave<Hoa3d, T>::Processor::getPlanewaveOrdinate(i), Planewave<Hoa3d, T>::Processor::getPlanewaveHeight(i)));
                 m_top[i].clear();
-            }
-            
-            for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
-            {
-                const double az = T(i) / T(Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves()) * HOA_2PI;
-                voronoi.add(Math<T>::abscissa(1., az, -HOA_PI2 + HOA_EPSILON), Math<T>::ordinate(1., az, -HOA_PI2 + HOA_EPSILON), Math<T>::height(1., az, HOA_PI2 + HOA_EPSILON));
             }
             voronoi.compute();
             Path const& top = voronoi.getPoints();
@@ -488,8 +321,6 @@ namespace hoa
                 {
                     m_top[i].push_back(top[i].bounds[j]);
                 }
-
-                filterPath(m_top[i], true);
             }
         }
         

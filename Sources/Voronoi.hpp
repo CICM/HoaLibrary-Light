@@ -17,10 +17,10 @@ namespace hoa
      */
     template <Dimension D, typename T> class Voronoi;
     
-    template <typename T> class Voronoi<Hoa3d, T>
+    template <typename T> class Voronoi <Hoa3d, T>
     {
-    public:
         
+    public:
         struct Point
         {
             T x;
@@ -38,9 +38,10 @@ namespace hoa
             ~Point() noexcept
             {
                 neightbours.clear();
+                bounds.clear();
             }
             
-            Point(T _x, T _y, T _z) noexcept :
+            Point(T _x, T _y, T _z, ulong index = 0) noexcept :
             x(_x), y(_y), z(_z)
             {
                 ;
@@ -52,28 +53,9 @@ namespace hoa
                 ;
             }
             
-            T distance(Point const& other) const noexcept
+            T length(Point const& other) const noexcept
             {
                 return sqrt((other.x - x) * (other.x - x) + (other.y - y) * (other.y - y) + (other.z - z) * (other.z - z));
-            }
-            
-            T radius()  const noexcept
-            {
-                return sqrt(x*x + y*y + z*z);
-            }
-            
-            T azimuth() const noexcept
-            {
-                if (x == 0 && y == 0)
-                    return 0;
-                return atan2(y, x) - HOA_PI2;
-            }
-            
-            T elevation()  const noexcept
-            {
-                if(z == 0)
-                    return 0;
-                return asin(z / sqrt(x*x + y*y + z*z));
             }
             
             T length() const noexcept
@@ -120,17 +102,32 @@ namespace hoa
             
             bool operator==(Point const& other) const noexcept
             {
-                return fabs(other.x - x) < HOA_EPSILON && fabs(y - other.y) < HOA_EPSILON && fabs(other.z - z) < HOA_EPSILON;
+                return fabs(other.x - x) < HOA_EPSILON && fabs(other.y - y) < HOA_EPSILON && fabs(other.z - z) < HOA_EPSILON;
             }
             
             bool operator!=(Point const& other) const noexcept
             {
-                return other.x != x || y != other.y || other.z != z;
+                return fabs(other.x - x) > HOA_EPSILON && fabs(other.y - y) > HOA_EPSILON && fabs(other.z - z) > HOA_EPSILON;
             }
             
             Point cross(Point const& other) const noexcept
             {
                 return Point(other.y * z - other.z * y, other.z * x - other.x * z, other.x * y - other.y * x);
+            }
+            
+            T dot(Point const& other) const noexcept
+            {
+                return x * other.x + y * other.y + z * other.z;
+            }
+            
+            T dot() const noexcept
+            {
+                return x * x + y * y + z * z;
+            }
+            
+            static Point fromPolar(const T r, const T a, const T t) noexcept
+            {
+                return Point(r * cos(a + HOA_PI2) * cos(t), r * sin(a + HOA_PI2) * cos(t), r * sin(t));
             }
             
             void normalize() noexcept
@@ -145,6 +142,32 @@ namespace hoa
                 {
                     x = 0; y = 0; z = 0;
                 }
+            }
+            
+            Point normalized() const noexcept
+            {
+                Point t = *this;
+                t.normalize();
+                return t;
+            }
+            
+            T radius()  const noexcept
+            {
+                return sqrt(x*x + y*y + z*z);
+            }
+            
+            T azimuth() const noexcept
+            {
+                if (x == 0 && y == 0)
+                    return 0;
+                return atan2(y, x) - HOA_PI2;
+            }
+            
+            T elevation()  const noexcept
+            {
+                if(z == 0)
+                    return 0;
+                return asin(z / sqrt(x*x + y*y + z*z));
             }
             
             void addNeighbour(Point const& p)
@@ -190,14 +213,66 @@ namespace hoa
                 y = ry;
             }
             
+            void filterBounds()
+            {
+                const T el = HOA_PI2 - elevation();
+                const T az = azimuth();
+                for(ulong i = 0; i < bounds.size(); i++)
+                {
+                    bounds[i].rotateZ(-az);
+                    bounds[i].rotateX(el);
+                }
+                std::sort(bounds.begin(), bounds.end(), compareAzimuth);
+                for(ulong i = 0; i < bounds.size(); i++)
+                {
+                    bounds[i].rotateX(-el);
+                    bounds[i].rotateZ(az);
+                }
+                
+                ulong size = bounds.size();
+                for(ulong i = 0; i < size; i++)
+                {
+                    const ulong p = i ? i-1 : size-1;
+                    const ulong n = (i == size-1) ? 0 : i+1;
+                    if(bounds[i].z < 0. && bounds[p].z > 0.)
+                    {
+                        const T dist = bounds[p].z / (bounds[p].z - bounds[i].z);
+                        Point temp((bounds[i].x - bounds[p].x) * dist + bounds[p].x, (bounds[i].y - bounds[p].y) * dist + bounds[p].y, 0.);
+                        temp.normalize();
+                        bounds.insert(bounds.begin()+(i), temp);
+                        size++;
+                    }
+                    else if(bounds[i].z < 0. && bounds[n].z > 0.)
+                    {
+                        const T dist = bounds[n].z / (bounds[n].z - bounds[i].z);
+                        Point temp((bounds[i].x - bounds[n].x) * dist + bounds[n].x, (bounds[i].y - bounds[n].y) * dist + bounds[n].y, 0.);
+                        temp.normalize();
+                        bounds.insert(bounds.begin()+(i+1), temp);
+                        size++;
+                    }
+                }
+                for(ulong i = 0; i < size; i++)
+                {
+                    if(bounds[i].z < 0.)
+                    {
+                        bounds.erase(bounds.begin()+i);
+                        size--; i--;
+                    }
+                }
+            }
+            
             static bool compareAzimuth(Point const& p1, Point const& p2) noexcept
             {
                 return p1.azimuth() < p2.azimuth();
             }
+            
+            static bool compareElevation(Point const& p1, Point const& p2) noexcept
+            {
+                return p1.elevation() < p2.elevation();
+            }
         };
         
     private:
-        
         struct Triangle
         {
             Point   a;
@@ -207,7 +282,7 @@ namespace hoa
             T  r;
             
             Triangle(Point const& _a, Point const& _b, Point const& _c) noexcept :
-            a(_a), b(_b), c(_c)
+            a(_a), b(_b), c(_c), r(0.)
             {
                 const Point ac = (c - a);
                 const Point ab = (b - a);
@@ -216,27 +291,21 @@ namespace hoa
                 if(_d > HOA_EPSILON)
                 {
                     p = (((t.cross(ab) * ac.lenght2()) + (ac.cross(t) * ab.lenght2())) / _d + a);
-                    if(p.distance(Point(0., 0., 0)) > HOA_EPSILON)
+                    if(p.length(Point(0., 0., 0)) > HOA_EPSILON)
                     {
                         p.normalize();
-                        r = p.distance(a);
+                        r = p.length(a);
                     }
-                    else
-                    {
-                        r = 0.;
-                    }
-                }
-                else
-                {
-                    r = 0.;
                 }
             }
         };
         
-    private:
+        static bool onBottom(Point const& p1) noexcept
+        {
+            return p1.z < 0.;
+        }
+            
         vector<Point>       m_points;
-        vector<Triangle>    m_triangles;
-        
     public:
         
         Voronoi() noexcept
@@ -249,16 +318,14 @@ namespace hoa
             clear();
         }
         
-        void add(const double x, const double y, const double z)
+        void add(Point const& p)
         {
-            m_points.push_back(Point(x, y, z));
-            m_points[m_points.size()-1].normalize();
+            m_points.push_back(p.normalized());
         }
         
         void clear()
         {
             m_points.clear();
-            m_triangles.clear();
         }
         
         vector<Point> const& getPoints() const noexcept
@@ -271,9 +338,32 @@ namespace hoa
             return m_points;
         }
         
+        vector<Point> const& getBounds(const ulong i) const noexcept
+        {
+            return m_points[i].bounds;
+        }
+        
+        vector<Point>& getBounds(const ulong i) noexcept
+        {
+            return m_points[i].bounds;
+        }
+        
+        vector<Point> const& getNeightbours(const ulong i) const noexcept
+        {
+            return m_points[i].neightbours;
+        }
+        
+        vector<Point>& getNeightbours(const ulong i) noexcept
+        {
+            return m_points[i].neightbours;
+        }
+        
         void compute()
         {
-            m_triangles.clear();
+            if(find_if(m_points.begin(), m_points.end(), onBottom) == m_points.end())
+            {
+                m_points.push_back(Point(0., 0., -1.));
+            }
             for(ulong i = 0; i < m_points.size() - 2; i++)
             {
                 for(ulong j = i+1; j < m_points.size() - 1; j++)
@@ -281,14 +371,14 @@ namespace hoa
                     for(ulong k = j+1; k < m_points.size(); k++)
                     {
                         Triangle t(m_points[i], m_points[j], m_points[k]);
-                        if(t.r != 0.)
+                        if(t.r > 0.)
                         {
                             bool valid = true;
                             for(ulong l = 0; l < m_points.size(); l++)
                             {
                                 if(l != i && l != j && l != k)
                                 {
-                                    if(t.p.distance(m_points[l]) < t.r - HOA_EPSILON)
+                                    if(t.p.length(m_points[l]) < t.r - HOA_EPSILON)
                                     {
                                         valid = false;
                                     }
@@ -296,7 +386,6 @@ namespace hoa
                             }
                             if(valid)
                             {
-                                m_triangles.push_back(t);
                                 m_points[i].addNeighbour(m_points[j]);
                                 m_points[i].addNeighbour(m_points[k]);
                                 m_points[i].addBound(t.p);
@@ -313,19 +402,7 @@ namespace hoa
             }
             for(ulong i = 0; i < m_points.size(); i++)
             {
-                const T el = HOA_PI2 - m_points[i].elevation();
-                const T az = m_points[i].azimuth();
-                for(ulong j = 0; j < m_points[i].bounds.size(); j++)
-                {
-                    m_points[i].bounds[j].rotateZ(-az);
-                    m_points[i].bounds[j].rotateX(el);
-                }
-                sort(m_points[i].bounds.begin(), m_points[i].bounds.end(), Point::compareAzimuth);
-                for(ulong j = 0; j < m_points[i].bounds.size(); j++)
-                {
-                    m_points[i].bounds[j].rotateX(-el);
-                    m_points[i].bounds[j].rotateZ(az);
-                }
+                m_points[i].filterBounds();
             }
         }
     };
