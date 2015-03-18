@@ -142,7 +142,7 @@ namespace hoa
         {
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                if(m_channels_peaks[i] > 1.)
+                if(m_channels_peaks[i] >= 1.)
                 {
                     m_over_leds[i] = time;
                 }
@@ -253,7 +253,7 @@ namespace hoa
         {
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                if(m_channels_peaks[i] > 1.)
+                if(m_channels_peaks[i] >= 1.)
                 {
                     m_over_leds[i] = time;
                 }
