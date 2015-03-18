@@ -419,6 +419,8 @@ namespace hoa
             
             m_output_left = new T[m_vector_size];
             m_output_right = new T[m_vector_size];
+            Signal<T>::vector_clear(m_vector_size, m_output_left);
+            Signal<T>::vector_clear(m_vector_size, m_output_right);
             
             m_inputs  = new T[HOA_NBIN_H * m_vector_size];
             Signal<T>::vector_clear(HOA_NBIN_H * m_vector_size, m_inputs);
@@ -470,7 +472,6 @@ namespace hoa
          */
         void process(const T* inputs, T* outputs) noexcept
         {
-            
             for(ulong i = 0; i < Encoder<Hoa2d, T>::getNumberOfHarmonics() && i < HOA_NBIN_H; i++)
             {
                 m_inputs[i*m_vector_size+m_counter] = inputs[i];
@@ -666,6 +667,8 @@ namespace hoa
             
             m_output_left = new T[m_vector_size];
             m_output_right = new T[m_vector_size];
+            Signal<T>::vector_clear(m_vector_size, m_output_left);
+            Signal<T>::vector_clear(m_vector_size, m_output_right);
             
             m_inputs  = new T[HOA_NBIN_H * m_vector_size];
             Signal<T>::vector_clear(HOA_NBIN_H * m_vector_size, m_inputs);
