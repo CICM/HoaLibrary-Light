@@ -19,18 +19,16 @@ namespace hoa
     private:
         ulong m_index;
         T     m_azimuth;
-        T     m_rotation;
     public:
         
         Planewave(const ulong _index, const T _azimuth) noexcept :
         m_index(_index),
-        m_azimuth(_azimuth),
-        m_rotation(0.)
+        m_azimuth(_azimuth)
         {
             
         }
         
-        ~Planewave()
+        ~Planewave() noexcept
         {
             ;
         }
@@ -40,9 +38,9 @@ namespace hoa
             return m_index;
         }
         
-        inline T getAzimuth(const bool rotation = true) const noexcept
+        inline T getAzimuth(const T z_axe = 0.) const noexcept
         {
-            return Math<T>::wrap_twopi((rotation ? m_rotation : 0.) + m_azimuth);
+            return Math<T>::wrap_twopi(z_axe + m_azimuth);
         }
         
         inline void setAzimuth(const T azimuth) noexcept
@@ -50,24 +48,19 @@ namespace hoa
             m_azimuth = Math<T>::wrap_twopi(azimuth);
         }
         
-        inline void setRotation(const T z_axe) noexcept
+        inline T getAbscissa(const T z_axe = 0.) const noexcept
         {
-            m_rotation = Math<T>::wrap_twopi(z_axe);
+            return cos(z_axe + m_azimuth + HOA_PI2);
         }
         
-        inline T getAbscissa(const bool rotation = true) const noexcept
+        inline T getOrdinate(const T z_axe = 0.) const noexcept
         {
-            return cos((rotation ? m_rotation : 0.) + m_azimuth + HOA_PI2);
-        }
-        
-        inline T getOrdinate(const bool rotation = true) const noexcept
-        {
-            return sin((rotation ? m_rotation : 0.) + m_azimuth + HOA_PI2);
+            return sin(z_axe + m_azimuth + HOA_PI2);
         }
         
         inline string getName() const noexcept
         {
-            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth(false) / HOA_2PI * 360.) + "°";
+            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth() / HOA_2PI * 360.) + "°";
         }
         
         static bool sort_azimuth(Planewave const& i, Planewave const& j) noexcept
@@ -83,7 +76,7 @@ namespace hoa
         {
         private:
             const ulong                 m_number_of_planewaves;
-            vector<Planewave<Hoa2d, T> > m_planewaves;
+            vector<Planewave<Hoa2d, T> >m_planewaves;
             T                           m_rotation_z;
         public:
             
@@ -104,7 +97,7 @@ namespace hoa
             //! The ambisonic destructor.
             /** The ambisonic destructor.
              */
-            ~Processor()
+            ~Processor() noexcept
             {
                 m_planewaves.clear();
             }
@@ -125,10 +118,6 @@ namespace hoa
             inline void setPlanewavesRotation(const T z_axe) noexcept
             {
                 m_rotation_z = Math<T>::wrap_twopi(z_axe);
-                for(ulong i = 0; i < m_number_of_planewaves; i++)
-                {
-                    m_planewaves[i].setRotation(m_rotation_z);
-                }
             }
             
             //! Get the offset of the planewaves.
@@ -170,7 +159,7 @@ namespace hoa
              */
             inline T getPlanewaveAzimuth(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getAzimuth(rotation);
+                return m_planewaves[index].getAzimuth(rotation ? m_rotation_z : 0.);
             }
             
             //! Retrieve the abscissa of a planewaves.
@@ -181,7 +170,7 @@ namespace hoa
              */
             inline T getPlanewaveAbscissa(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getAbscissa(rotation);
+                return m_planewaves[index].getAbscissa(rotation ? m_rotation_z : 0.);
             }
             
             //! Retrieve the ordinate of a planewaves.
@@ -192,7 +181,7 @@ namespace hoa
              */
             inline T getPlanewaveOrdinate(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getOrdinate(rotation);
+                return m_planewaves[index].getOrdinate(rotation ? m_rotation_z : 0.);
             }
             
             //! Retrieve a name for a planewaves.
@@ -213,23 +202,17 @@ namespace hoa
         ulong m_index;
         T     m_azimuth;
         T     m_elevation;
-        T     m_rotation_x;
-        T     m_rotation_y;
-        T     m_rotation_z;
     public:
         
         Planewave(const ulong _index, const T _azimuth, const T _elevation) noexcept :
         m_index(_index),
         m_azimuth(_azimuth),
-        m_elevation(_elevation),
-        m_rotation_x(0.),
-        m_rotation_y(0.),
-        m_rotation_z(0.)
+        m_elevation(_elevation)
         {
             ;
         }
         
-        ~Planewave()
+        ~Planewave() noexcept
         {
             ;
         }
@@ -239,16 +222,18 @@ namespace hoa
             return m_index;
         }
         
-        inline void setRotation(const T x_axe, const T y_axe, const T z_axe) noexcept
+        inline T getAzimuth(const T x_axe, const T y_axe, const T z_axe) const noexcept
         {
-            m_rotation_x = Math<T>::wrap_twopi(x_axe);
-            m_rotation_y = Math<T>::wrap_twopi(y_axe);
-            m_rotation_z = Math<T>::wrap_twopi(z_axe);
-        }
-        
-        inline T getAzimuth(const bool rotation = true) const noexcept
-        {
-            return Math<T>::azimuth(getAbscissa(rotation), getOrdinate(rotation), getElevation(rotation));
+            const T x = getAbscissa(x_axe, y_axe, z_axe);
+            const T y = getOrdinate(x_axe, y_axe, z_axe);
+            if(x == 0. && y == 0.)
+            {
+                return 0.;
+            }
+            else
+            {
+                return Math<T>::wrap_twopi(atan2(y, x) - HOA_PI2);
+            }
         }
         
         inline void setAzimuth(const T azimuth) noexcept
@@ -256,9 +241,19 @@ namespace hoa
             m_azimuth = azimuth;
         }
         
-        inline T getElevation(const bool rotation = true) const noexcept
+        inline T getElevation(const T x_axe, const T y_axe, const T z_axe) const noexcept
         {
-            return Math<T>::elevation(getAbscissa(rotation), getOrdinate(rotation), getElevation(rotation));
+            const T z = getHeight(x_axe, y_axe, z_axe);
+            if(z == 0.)
+            {
+                return 0.;
+            }
+            else
+            {
+                const T x = getAbscissa(x_axe, y_axe, z_axe);
+                const T y = getOrdinate(x_axe, y_axe, z_axe);
+                return Math<T>::wrap_pi(asin(z / sqrt(x*x + y*y + z*z)));
+            }
         }
         
         inline void setElevation(const T elevation) noexcept
@@ -266,92 +261,59 @@ namespace hoa
             m_elevation = elevation;
         }
         
-        inline T getAbscissa(const bool rotation = true) const noexcept
+        inline T getAbscissa(const T x_axe, const T y_axe, const T z_axe) const noexcept
         {
-            if(!rotation)
-            {
-                return cos(m_azimuth + HOA_PI2) * cos(m_elevation);
-            }
-            else
-            {
-                T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
-                T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
-                T z = sin(m_elevation);
-                
-                T cosAngle = cos(m_rotation_x);
-                T sinAngle = sin(m_rotation_x);
-                T ry = y * cosAngle - z * sinAngle;
-                T rz = y * sinAngle + z * cosAngle;
-                y = ry;
-                z = rz;
-                
-                cosAngle = cos(m_rotation_z);
-                sinAngle = sin(m_rotation_z);
-                x = x * cosAngle - y * sinAngle;
-                
-                return x * cos(m_rotation_y) - z * sin(m_rotation_y);
-            }
+            T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
+            T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
+            T z = sin(m_elevation);
+            
+            const T cosAngle = cos(x_axe);
+            const T sinAngle = sin(x_axe);
+            T ry = y * cosAngle - z * sinAngle;
+            z = y * sinAngle + z * cosAngle;
+            y = ry;
+            
+            x = x * cos(z_axe) - y * sin(z_axe);
+            
+            return x * cos(y_axe) - z * sin(y_axe);
         }
         
-        inline T getOrdinate(const bool rotation = true) const noexcept
+        inline T getOrdinate(const T x_axe, const T y_axe, const T z_axe) const noexcept
         {
-            if(!rotation)
-            {
-                return sin(m_azimuth + HOA_PI2) * cos(m_elevation);
-            }
-            else
-            {
-                T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
-                T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
-                T z = sin(m_elevation);
-                
-                T cosAngle = cos(m_rotation_x);
-                T sinAngle = sin(m_rotation_x);
-                T ry = y * cosAngle - z * sinAngle;
-                T rz = y * sinAngle + z * cosAngle;
-                y = ry;
-                z = rz;
-                
-                return x * sin(m_rotation_z) + y * cos(m_rotation_z);
-            }
+            const T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation) * cos(x_axe) - sin(m_elevation) * sin(x_axe);
+            return sin(m_azimuth + HOA_PI2) * cos(m_elevation);// * sin(z_axe) + y * cos(z_axe);
         }
         
-        inline T getHeight(const bool rotation = true) const noexcept
+        inline T getHeight(const T x_axe, const T y_axe, const T z_axe) const noexcept
         {
-            if(!rotation)
-            {
-                return sin(m_elevation);
-            }
-            else
-            {
-                T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
-                T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
-                T z = sin(m_elevation);
-                
-                T cosAngle = cos(m_rotation_x);
-                T sinAngle = sin(m_rotation_x);
-                T ry = y * cosAngle - z * sinAngle;
-                T rz = y * sinAngle + z * cosAngle;
-                y = ry;
-                z = rz;
-                
-                cosAngle = cos(m_rotation_z);
-                sinAngle = sin(m_rotation_z);
-                x = x * cosAngle - y * sinAngle;
-                
-                return x * sin(m_rotation_y) + z * cos(m_rotation_y);
-            }
+            T x = cos(m_azimuth + HOA_PI2) * cos(m_elevation);
+            T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation);
+            T z = sin(m_elevation);
+            
+            T cosAngle = cos(x_axe);
+            T sinAngle = sin(x_axe);
+            T ry = y * cosAngle - z * sinAngle;
+            T rz = y * sinAngle + z * cosAngle;
+            y = ry;
+            z = rz;
+            
+            cosAngle = cos(z_axe);
+            sinAngle = sin(z_axe);
+            x = x * cosAngle - y * sinAngle;
+            
+            return x * sin(y_axe) + z * cos(y_axe);
         }
         
         inline string getName() const noexcept
         {
-            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth(false) / HOA_2PI * 360.) + "°" " " + to_string(getElevation(false) / HOA_2PI * 360.) + "°";
+            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth() / HOA_2PI * 360.) + "°" " " + to_string(getElevation() / HOA_2PI * 360.) + "°";
         }
         
         bool sort_azimuth(Planewave const& j) const noexcept
         {
             return this->m_azimuth < j.m_azimuth;
         }
+        
         
         //! The planewaves class.
         /**
@@ -361,7 +323,7 @@ namespace hoa
         {
         private:
             const ulong                 m_number_of_planewaves;
-            vector<Planewave<Hoa3d, T> > m_planewaves;
+            vector<Planewave<Hoa3d, T> >m_planewaves;
             T                           m_rotation_z;
             T                           m_rotation_y;
             T                           m_rotation_x;
@@ -379,14 +341,14 @@ namespace hoa
             {
                 for(ulong i = 0; i < m_number_of_planewaves; i++)
                 {
-                    m_planewaves.push_back(Planewave<Hoa3d, T>(i+1, (T)i / (m_number_of_planewaves) * HOA_2PI, 0.));
+                    m_planewaves.push_back(Planewave<Hoa3d, T>(i+1, (T)i / T(m_number_of_planewaves) * HOA_2PI, (T)i / T(m_number_of_planewaves) * HOA_PI2));
                 }
             }
             
             //! The ambisonic destructor.
             /** The ambisonic destructor.
              */
-            ~Processor()
+            ~Processor() noexcept
             {
                 m_planewaves.clear();
             }
@@ -409,10 +371,6 @@ namespace hoa
                 m_rotation_x = Math<T>::wrap_twopi(x_axe);
                 m_rotation_y = Math<T>::wrap_twopi(y_axe);
                 m_rotation_z = Math<T>::wrap_twopi(z_axe);
-                for(ulong i = 0; i < m_number_of_planewaves; i++)
-                {
-                    m_planewaves[i].setRotation(m_rotation_x, m_rotation_y, m_rotation_z);
-                }
             }
             
             //! Get the offset of the planewaves.
@@ -472,7 +430,7 @@ namespace hoa
              */
             inline T getPlanewaveAzimuth(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getAzimuth(rotation);
+                return m_planewaves[index].getAzimuth(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
             }
             
             //! Retrieve the azimuth of a planewaves.
@@ -495,7 +453,7 @@ namespace hoa
              */
             inline T getPlanewaveElevation(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getElevation(rotation);
+                return m_planewaves[index].getElevation(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
             }
             
             //! Retrieve the abscissa of a planewaves.
@@ -506,7 +464,7 @@ namespace hoa
              */
             inline T getPlanewaveAbscissa(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getAbscissa(rotation);
+                return m_planewaves[index].getAbscissa(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
             }
             
             //! Retrieve the ordinate of a planewaves.
@@ -517,7 +475,7 @@ namespace hoa
              */
             inline T getPlanewaveOrdinate(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getOrdinate(rotation);
+                return m_planewaves[index].getOrdinate(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
             }
             
             //! Retrieve the height of a planewaves.
@@ -528,7 +486,7 @@ namespace hoa
              */
             inline T getPlanewaveHeight(const ulong index, const bool rotation = true) const noexcept
             {
-                return m_planewaves[index].getHeight(rotation);
+                return m_planewaves[index].getHeight(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
             }
             
             //! Retrieve a name for a planewaves.
