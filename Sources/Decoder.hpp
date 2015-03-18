@@ -40,7 +40,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        virtual void computeMatrix(const ulong vectorsize = 64) = 0;
+        virtual void computeRendering(const ulong vectorsize = 64) = 0;
         
         //! The ambisonic regular decoder.
         /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
@@ -93,7 +93,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        virtual void computeMatrix(const ulong vectorsize = 64) = 0;
+        virtual void computeRendering(const ulong vectorsize = 64) = 0;
         
         //! The ambisonic regular decoder.
         /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
@@ -125,7 +125,7 @@ namespace hoa
         Regular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
         {
             m_matrix = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()*Encoder<Hoa2d, T>::getNumberOfHarmonics()];
-            computeMatrix();
+            computeRendering();
         }
         
         //! The destructor.
@@ -150,7 +150,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeMatrix(const ulong vectorsize = 64)
+        void computeRendering(const ulong vectorsize = 64)
         {
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
@@ -176,7 +176,7 @@ namespace hoa
         Irregular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
         {
             m_matrix = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()*Encoder<Hoa2d, T>::getNumberOfHarmonics()];
-            computeMatrix();
+            computeRendering();
         }
         
         //! The destructor.
@@ -201,7 +201,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeMatrix(const ulong vectorsize = 64)
+        void computeRendering(const ulong vectorsize = 64)
         {
             Signal<T>::vector_clear(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()*Encoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
             T vector_harmonics[Encoder<Hoa2d, T>::getNumberOfHarmonics()];
@@ -400,7 +400,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeMatrix(const ulong vectorsize = 64)
+        void computeRendering(const ulong vectorsize = 64)
         {
             m_counter     = 0;
             m_vector_size = vectorsize;
@@ -525,7 +525,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        virtual void computeMatrix(const ulong vectorsize = 64) = 0;
+        virtual void computeRendering(const ulong vectorsize = 64) = 0;
         
         //! The ambisonic regular decoder.
         /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
@@ -557,7 +557,7 @@ namespace hoa
         Regular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa3d, T>(order, numberOfPlanewaves)
         {
             m_matrix = new T[Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves()*Encoder<Hoa3d, T>::getNumberOfHarmonics()];
-            computeMatrix();
+            computeRendering();
         }
         
         //! The regular destructor.
@@ -578,7 +578,7 @@ namespace hoa
             Signal<T>::matrix_vector_mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
         
-        void computeMatrix(const ulong vectorsize = 64)
+        void computeRendering(const ulong vectorsize = 64)
         {
             const T factor = 12.5 / (T)(Encoder<Hoa3d, T>::getNumberOfHarmonics());
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
@@ -647,7 +647,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeMatrix(const ulong vectorsize = 64)
+        void computeRendering(const ulong vectorsize = 64)
         {
             m_counter     = 0;
             m_vector_size = vectorsize;
