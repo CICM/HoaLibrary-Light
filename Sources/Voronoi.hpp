@@ -190,85 +190,6 @@ namespace hoa
                 y = ry;
             }
             
-            
-            void computeView(const bool top = true)
-            {
-                bool valid = false;
-                for(ulong i = 0; i < bounds.size(); i++)
-                {
-                    if(bounds[i].z > 0.)
-                    {
-                        valid = true;
-                    }
-                }
-                if(!valid || bounds.size() < 3)
-                {
-                    bounds.clear();
-                }
-                else
-                {
-                    ulong size = bounds.size();
-                    for(ulong i = 0; i < size;)
-                    {
-                        const ulong p = i ? i-1 : size-1;
-                        const ulong n = (i == size-1) ? 0 : i+1;
-                        if(bounds[i].z < 0. && bounds[p].z >= 0. && bounds[n].z >= 0.)
-                        {
-                            const T dist = bounds[p].z / (bounds[p].z - bounds[i].z);
-                            Point temp1 = (bounds[i] - bounds[p]) * dist + bounds[p];
-                            temp1.z = 0.;
-                            temp1.normalize();
-                            
-                            bounds[i] = (bounds[i] - bounds[n]) * dist + bounds[n];
-                            bounds[i].z = 0.;
-                            bounds[i].normalize();
-                            bounds.insert(bounds.begin()+i, temp1);
-                            size++;
-                            i += 3;
-                        }
-                        else if(bounds[i].z < 0. && bounds[p].z >= 0.)
-                        {
-                            const T dist = bounds[p].z / (bounds[p].z - bounds[i].z);
-                            Point temp = (bounds[i] - bounds[p]) * dist + bounds[p];
-                            temp.z = 0.;
-                            temp.normalize();
-                            bounds.insert(bounds.begin()+i, temp);
-                            size++;
-                            i += 2;
-                        }
-                        else if(bounds[i].z < 0. && bounds[n].z >= 0.)
-                        {
-                            const T dist = bounds[n].z / (bounds[n].z - bounds[i].z);
-                            Point temp = (bounds[i] - bounds[n]) * dist + bounds[n];
-                            temp.z = 0.;
-                            temp.normalize();
-                            bounds.insert(bounds.begin()+n, temp);
-                            size++;
-                            i += 2;
-                        }
-                        else
-                        {
-                            i++;
-                        }
-                    }
-                    size = bounds.size();
-                    for(ulong i = 0; i < size;)
-                    {
-                        const ulong p = i ? i-1 : size-1;
-                        const ulong n = (i == size-1) ? 0 : i+1;
-                        if(bounds[i].z <= 0. && bounds[p].z <= 0. && bounds[n].z <= 0.)
-                        {
-                            bounds.erase(bounds.begin()+i);
-                            size--;
-                        }
-                        else
-                        {
-                            i++;
-                        }
-                    }
-                }
-            }
-            
             static bool compareAzimuth(Point const& p1, Point const& p2) noexcept
             {
                 return p1.azimuth() < p2.azimuth();
@@ -315,6 +236,7 @@ namespace hoa
     private:
         vector<Point>       m_points;
         vector<Triangle>    m_triangles;
+        
     public:
         
         Voronoi() noexcept
