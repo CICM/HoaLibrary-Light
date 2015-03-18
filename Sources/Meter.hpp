@@ -180,7 +180,7 @@ namespace hoa
     template <typename T> class Meter<Hoa3d, T> : public Planewave<Hoa3d, T>::Processor
     {
     public:
-        typedef typename Voronoi<Hoa3d, T>::Point Point;
+        typedef typename Voronoi<Hoa3d>::Point Point;
         typedef vector<Point> Path;
     private:
         ulong   m_ramp;
@@ -289,11 +289,11 @@ namespace hoa
         
         void computeRendering()
         {
-            Voronoi<Hoa3d, T> voronoi;
+            Voronoi<Hoa3d> voronoi;
             
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                voronoi.add(Point(Planewave<Hoa3d, T>::Processor::getPlanewaveAbscissa(i), Planewave<Hoa3d, T>::Processor::getPlanewaveOrdinate(i), Planewave<Hoa3d, T>::Processor::getPlanewaveHeight(i)));
+                voronoi.add(Point(Planewave<Hoa3d, T>::Processor::getPlanewaveAbscissa(i), Planewave<Hoa3d, T>::Processor::getPlanewaveOrdinate(i), -Planewave<Hoa3d, T>::Processor::getPlanewaveHeight(i)));
                 m_bottom[i].clear();
             }
             voronoi.compute();
@@ -303,11 +303,11 @@ namespace hoa
                 for(ulong j = 0; j < bottom[i].bounds.size(); j++)
                 {
                     m_bottom[i].push_back(bottom[i].bounds[j]);
+                    m_bottom[i][j].z = -m_bottom[i][j].z;
                 }
             }
             
             voronoi.clear();
-            
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
                 voronoi.add(Point(Planewave<Hoa3d, T>::Processor::getPlanewaveAbscissa(i), Planewave<Hoa3d, T>::Processor::getPlanewaveOrdinate(i), Planewave<Hoa3d, T>::Processor::getPlanewaveHeight(i)));

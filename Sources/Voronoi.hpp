@@ -15,17 +15,17 @@ namespace hoa
     //! A spherical voronoi.
     /** The voronoi class is opaque.
      */
-    template <Dimension D, typename T> class Voronoi;
+    template <Dimension D> class Voronoi;
     
-    template <typename T> class Voronoi <Hoa3d, T>
+    template <> class Voronoi <Hoa3d>
     {
         
     public:
         struct Point
         {
-            T x;
-            T y;
-            T z;
+            double x;
+            double y;
+            double z;
             vector<Point> neightbours;
             vector<Point> bounds;
             
@@ -41,7 +41,7 @@ namespace hoa
                 bounds.clear();
             }
             
-            Point(T _x, T _y, T _z, ulong index = 0) noexcept :
+            Point(double _x, double _y, double _z, ulong index = 0) noexcept :
             x(_x), y(_y), z(_z)
             {
                 ;
@@ -53,19 +53,19 @@ namespace hoa
                 ;
             }
             
-            T length(Point const& other) const noexcept
+            double length(Point const& other) const noexcept
             {
                 return sqrt((other.x - x) * (other.x - x) + (other.y - y) * (other.y - y) + (other.z - z) * (other.z - z));
             }
             
-            T length() const noexcept
+            double length() const noexcept
             {
                 return sqrt((x + x) * (x + x) + (y + y) * (y + y) + (z + z) * (z + z));
             }
             
-            T lenght2() const noexcept
+            double lenght2() const noexcept
             {
-                const T l = length();
+                const double l = length();
                 return l * l;
             }
             
@@ -84,18 +84,18 @@ namespace hoa
                 return Point(x * other.x, y * other.y, z * other.z);
             }
             
-            Point operator*(T val) const noexcept
+            Point operator*(double val) const noexcept
             {
                 return Point(x * val, y * val, z * val);
             }
             
-            Point& operator*=(T val) noexcept
+            Point& operator*=(double val) noexcept
             {
                 x *= val; y *= val; z *= val;
                 return *this;
             }
             
-            Point operator/(T val) const noexcept
+            Point operator/(double val) const noexcept
             {
                 return Point(x / val, y / val, z / val);
             }
@@ -115,27 +115,27 @@ namespace hoa
                 return Point(other.y * z - other.z * y, other.z * x - other.x * z, other.x * y - other.y * x);
             }
             
-            T dot(Point const& other) const noexcept
+            double dot(Point const& other) const noexcept
             {
                 return x * other.x + y * other.y + z * other.z;
             }
             
-            T dot() const noexcept
+            double dot() const noexcept
             {
                 return x * x + y * y + z * z;
             }
             
-            static Point fromPolar(const T r, const T a, const T t) noexcept
+            static Point fromPolar(const double r, const double a, const double t) noexcept
             {
                 return Point(r * cos(a + HOA_PI2) * cos(t), r * sin(a + HOA_PI2) * cos(t), r * sin(t));
             }
             
             void normalize() noexcept
             {
-                const T l = length();
+                const double l = length();
                 if(l)
                 {
-                    const T f = (2. / length());
+                    const double f = (2. / length());
                     x *= f; y *= f; z *= f;
                 }
                 else
@@ -151,19 +151,19 @@ namespace hoa
                 return t;
             }
             
-            T radius()  const noexcept
+            double radius()  const noexcept
             {
                 return sqrt(x*x + y*y + z*z);
             }
             
-            T azimuth() const noexcept
+            double azimuth() const noexcept
             {
                 if (x == 0 && y == 0)
                     return 0;
                 return atan2(y, x) - HOA_PI2;
             }
             
-            T elevation()  const noexcept
+            double elevation()  const noexcept
             {
                 if(z == 0)
                     return 0;
@@ -186,37 +186,37 @@ namespace hoa
                 }
             }
             
-            void rotateZ(const T _z) noexcept
+            void rotateZ(const double _z) noexcept
             {
-                const T cosAngle = cos(_z);
-                const T sinAngle = sin(_z);
-                const T rx = x * cosAngle - y * sinAngle;
+                const double cosAngle = cos(_z);
+                const double sinAngle = sin(_z);
+                const double rx = x * cosAngle - y * sinAngle;
                 y = x * sinAngle + y * cosAngle;
                 x = rx;
             }
             
-            void rotateY(const T _y) noexcept
+            void rotateY(const double _y) noexcept
             {
-                const T cosAngle = cos(_y);
-                const T sinAngle = sin(_y);
-                const T rx = x * cosAngle - z * sinAngle;
+                const double cosAngle = cos(_y);
+                const double sinAngle = sin(_y);
+                const double rx = x * cosAngle - z * sinAngle;
                 z = x * sinAngle + z * cosAngle;
                 x = rx;
             }
             
-            void rotateX(const T _x) noexcept
+            void rotateX(const double _x) noexcept
             {
-                const T cosAngle = cos(_x);
-                const T sinAngle = sin(_x);
-                const T ry = y * cosAngle - z * sinAngle;
+                const double cosAngle = cos(_x);
+                const double sinAngle = sin(_x);
+                const double ry = y * cosAngle - z * sinAngle;
                 z = y * sinAngle + z * cosAngle;
                 y = ry;
             }
             
             void filterBounds()
             {
-                const T el = HOA_PI2 - elevation();
-                const T az = azimuth();
+                const double el = HOA_PI2 - elevation();
+                const double az = azimuth();
                 for(ulong i = 0; i < bounds.size(); i++)
                 {
                     bounds[i].rotateZ(-az);
@@ -236,7 +236,7 @@ namespace hoa
                     const ulong n = (i == size-1) ? 0 : i+1;
                     if(bounds[i].z < 0. && bounds[p].z > 0.)
                     {
-                        const T dist = bounds[p].z / (bounds[p].z - bounds[i].z);
+                        const double dist = bounds[p].z / (bounds[p].z - bounds[i].z);
                         Point temp((bounds[i].x - bounds[p].x) * dist + bounds[p].x, (bounds[i].y - bounds[p].y) * dist + bounds[p].y, 0.);
                         temp.normalize();
                         bounds.insert(bounds.begin()+(i), temp);
@@ -244,7 +244,7 @@ namespace hoa
                     }
                     else if(bounds[i].z < 0. && bounds[n].z > 0.)
                     {
-                        const T dist = bounds[n].z / (bounds[n].z - bounds[i].z);
+                        const double dist = bounds[n].z / (bounds[n].z - bounds[i].z);
                         Point temp((bounds[i].x - bounds[n].x) * dist + bounds[n].x, (bounds[i].y - bounds[n].y) * dist + bounds[n].y, 0.);
                         temp.normalize();
                         bounds.insert(bounds.begin()+(i+1), temp);
@@ -279,7 +279,7 @@ namespace hoa
             Point   b;
             Point   c;
             Point   p;
-            T  r;
+            double  r;
             
             Triangle(Point const& _a, Point const& _b, Point const& _c) noexcept :
             a(_a), b(_b), c(_c), r(0.)
@@ -287,7 +287,7 @@ namespace hoa
                 const Point ac = (c - a);
                 const Point ab = (b - a);
                 const Point t = ab.cross(ac);
-                const T _d = (2. * t.lenght2());
+                const double _d = (2. * t.lenght2());
                 if(_d > HOA_EPSILON)
                 {
                     p = (((t.cross(ab) * ac.lenght2()) + (ac.cross(t) * ab.lenght2())) / _d + a);
