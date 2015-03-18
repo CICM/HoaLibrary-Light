@@ -289,8 +289,7 @@ namespace hoa
         
         inline T getOrdinate(const T x_axe, const T y_axe, const T z_axe) const noexcept
         {
-            const T y = sin(m_azimuth + HOA_PI2) * cos(m_elevation) * cos(x_axe) - sin(m_elevation) * sin(x_axe);
-            return sin(m_azimuth + HOA_PI2) * cos(m_elevation);// * sin(z_axe) + y * cos(z_axe);
+            return cos(m_azimuth + HOA_PI2) * cos(m_elevation) * sin(z_axe) + ((sin(m_azimuth + HOA_PI2) * cos(m_elevation)) * cos(x_axe) - sin(m_elevation) * sin(x_axe)) * cos(z_axe);
         }
         
         inline T getHeight(const T x_axe, const T y_axe, const T z_axe) const noexcept
