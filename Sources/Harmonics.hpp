@@ -20,7 +20,7 @@ namespace hoa
     public:
         
         //! The harmonic constructor.
-        /** The harmonic constructor allocates and initializes the generale member values depending of an index.
+        /** The harmonic constructor allocates and initializes the generale member values depending on an index.
          @param index    The index must be at least 1.
          */
         Harmonic(const ulong index) noexcept = 0;
@@ -77,11 +77,11 @@ namespace hoa
     public:
         
         //! The harmonic constructor.
-        /** The harmonic constructor allocates and initializes the generale member values depending of an index.
+        /** The harmonic constructor allocates and initializes the generale member values depending on an index.
          @param index    The index must be at least 1.
          */
         Harmonic(const ulong index) noexcept :
-        m_index(index)
+        m_index(index+1)
         {
             ;
         }
@@ -100,7 +100,7 @@ namespace hoa
          */
         inline ulong getIndex() const noexcept
         {
-            return m_index;
+            return m_index-1;
         }
         
         //! Get the degree of the harmonic.
@@ -159,7 +159,7 @@ namespace hoa
     public:
         
         //! The harmonic constructor.
-        /** The harmonic constructor allocates and initializes the generale member values depending of an index.
+        /** The harmonic constructor allocates and initializes the generale member values depending on an index.
          @param index    The index must be at least 1.
          */
         Harmonic(const ulong index) noexcept :
@@ -247,14 +247,14 @@ namespace hoa
     public:
         
         //! The harmonic processor constructor.
-        /** The harmonic processor constructor allocates and initializes the generale member values depending of a decomposition order.
+        /** The harmonic processor constructor allocates and initializes the generale member values depending on a decomposition order.
          @param order    The order of decomposition, must be at least 1.
          */
         Processor(const ulong order) noexcept :
         m_order_of_decomposition(order),
         m_number_of_harmonics(Harmonic<D, T>::getNumberOfHarmonics(order))
         {
-            for(ulong i = 1; i <= m_number_of_harmonics; i++)
+            for(ulong i = 0; i < m_number_of_harmonics; i++)
             {
                 m_harmonics.push_back(Harmonic<D, T>(i));
             }

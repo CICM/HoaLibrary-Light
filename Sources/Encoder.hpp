@@ -11,32 +11,178 @@
 
 namespace hoa
 {
-    //! The ambisonic encoder.
-    /** The encoder should be used to encode a source in the spherical harmonics domain depending of an order of decomposition. It allows to control the azimuth of the source.
+    //! The encoder class generates the harmonics for one or several signal according to an azimuth, an elevation and a radius.
+    /** The encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and potentially the radius of the signal.
      */
     template <Dimension D, typename T> class Encoder : public Processor< Harmonic<D, T> >
     {
-        ;
+    public:
+        
+        //! The encoder constructor.
+        /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
+         @param     order	The order.
+         */
+        Encoder(const ulong order) noexcept = 0;
+        
+        //! The encoder destructor.
+        /**	The encoder destructor free the memory.
+         */
+        virtual ~Encoder() noexcept;
+        
+        //! This method performs the encoding.
+        /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs   The pointer to the input sample ot the inputs samples.
+         @param     outputs  The outputs array.
+         */
+        virtual void process(const T* input, T* outputs) const noexcept;
+        
+        //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
+        /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
+         */
+        class Basic : public Encoder
+        {
+            //! The basic constructor.
+            /**	The basic constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
+             @param     order	The order.
+             */
+            Basic(const ulong order) noexcept = 0;
+            
+            //! The basic destructor.
+            /**	The basic destructor free the memory.
+             */
+            virtual ~Basic() noexcept;
+            
+            //! Mute or unmute the process.
+            /**	This method mutes or unmutes the process.
+             @param     muted	The mute state.
+             */
+            virtual void setMute(const bool muted) noexcept;
+            
+            //! Get the mute or unmute state of the process.
+            /**	This method gets mute state of the process.
+             @return    The mute state of the process.
+             */
+            virtual bool getMute() const noexcept;
+            
+            //! Set the azimuth.
+            /**	This method  sets the azimuth \f$\theta\f$ in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
+             @param     azimuth	The azimuth.
+             @see       setElevation()
+             */
+            virtual void setAzimuth(const T azimuth) noexcept;
+            
+            //! Get the azimuth
+            /** The method returns the azimuth \f$\theta\f$ between \f$0\f$ and \f$2\pi\f$.
+             @return     The azimuth.
+             */
+            virtual T getAzimuth() const noexcept;
+            
+            //! Set the elevation.
+            /**	This method  sets the elevation \f$\varphi\f$ in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
+             @param     elevation The elevation.
+             @see       setAzimutHamonic [)
+             */
+            virtual void setElevation(const T elevation) noexcept;
+            
+            //!	Get the elevation angle
+            /** The method returns the elevation \f$\varphi\f$ between \f$-\pi\f$ and \f$\pi\f$.
+             @return     The elevation.
+             */
+            virtual T getElevation()  const noexcept;
+            
+            //! This method performs the encoding.
+            /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+             \f[Y_{l,m}(\theta, \varphi) = k_{l, m} P_{l, \left|m\right|}(\cos{(\varphi)}) e^{+im\theta} \f]
+             with \f$e^{+im\theta}\f$ the azimuth part of the equation with \f$i\f$ the imaginary, \f$P_{l, \left|m\right|}(\cos{(\varphi)})\f$ the elevation part of the equation with \f$P_{l, \left|m\right|}(x)\f$ the associated Legendre polynomials, \f$k_{l, m}\f$ the normalization, \f$l\f$ the degree, \f$m\f$ the order, \theta the azimuth in radian and \phi the elevation in radian.\n
+             
+             The azimuth part \f$e^{+im\theta}\f$ can be expressed with the real form :\n
+             if \f$m \geq 0\f$ then
+             \f[e^{+im\theta} = \cos{(m\theta)}\f]
+             else
+             \f[e^{+im\theta} = sin{(\left|m\right|\theta)}\f]
+             The elevation part \f$P_{l, \left|m\right|}(x)\f$ can be expressed with recursives formulas :
+             \f[P_{l+1,l+1}(x) = -(2l+1)\sqrt{(1-x^2)}P_{(l,l)}(x) \f]
+             \f[P_{l,l+1}(x) = x(2l+1)P_{(l,l)}(x) \f]
+             \f[P_{l+1,m}(x) = \frac{x(2l+1)P_{(l,m)}(x) - (l+m)P_{(l-1,m)}(x)}{l-m+1} \f]
+             and with \f[P_{0, 0}(x) = 1\f]
+             The normalization part k_{l, m} is equivalent to :\n
+             if \f$m = 0\f$ then
+             \f[k_{l, m} = 1\f]
+             else
+             \f[k_{l, m} = \frac{\sqrt{(l - \left|m\right|)!}}{l + \left|m\right|}\sqrt{2} \f]
+             
+             @param     input    The pointer to the input sample.
+             @param     outputs  The outputs array.
+             */
+            void process(const T* input, T* outputs) const noexcept override;
+            
+            //! This method performs the encoding but add the result to the outputs.
+            /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+             @see process
+             @param     input    The pointer to the input sample.
+             @param     outputs  The outputs array.
+             */
+            void processAdd(const T* input, T* outputs) const noexcept;
+        };
+        
+        //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
+        /** The dc encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of the signal. The distance compensation is performed with the simulation of fractional orders when the signal is inside the ambisonics circle or sphere and with gain attenuation when the signal is outside the ambisonics circle or sphere.
+         */
+        class DC;
+        
+        //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
+        /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
+         */
+        class Multi;
     };
     
-    //! The ambisonic encoder with distance compensation.
-    /** The encoder with distance compensation should be used to encode a source in the spherical harmonics domain depending of an order of decomposition. It allows to control the azimuth and the radius of the source.
-     */
-    template <Dimension D, typename T> class EncoderDC : public Processor< Harmonic<D, T> >
-    {
-        ;
-    };
-    
-    //! The ambisonic multi-encoder with distance compensation.
-    /** The map is a multi encoder with distance compensation.
-     */
-    template <Dimension D, typename T> class EncoderMulti : public Processor< Harmonic<D, T> >
-    {
-        ;
-    };
-    
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
     
     template <typename T> class Encoder<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >
+    {
+    public:
+        
+        //! The encoder constructor.
+        /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
+         @param     order	The order.
+         */
+        Encoder(const ulong order) noexcept : Processor< Harmonic<Hoa2d, T> >(order)
+        {
+            ;
+        }
+        
+        //! The encoder destructor.
+        /**	The encoder destructor free the memory.
+         */
+        virtual ~Encoder() noexcept
+        {
+            
+        }
+        
+        //! This method performs the encoding.
+        /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs   The pointer to the input sample ot the inputs samples.
+         @param     outputs  The outputs array.
+         */
+        virtual void process(const T* input, T* outputs) const noexcept = 0;
+        
+        //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
+        /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
+         */
+        class Basic;
+        
+        //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
+        /** The dc encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of the signal. The distance compensation is performed with the simulation of fractional orders when the signal is inside the ambisonics circle or sphere and with gain attenuation when the signal is outside the ambisonics circle or sphere.
+         */
+        class DC;
+        
+        //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
+        /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
+         */
+        class Multi;
+    };
+    
+    template <typename T> class Encoder<Hoa2d, T>::Basic : public Encoder<Hoa2d, T>
     {
     private:
         T    m_azimuth;
@@ -49,7 +195,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
             @param     order	The order.
          */
-        Encoder(const ulong order) : Processor< Harmonic<Hoa2d, T> >(order)
+        Basic(const ulong order) noexcept: Encoder<Hoa2d, T>(order)
         {
             setMute(false);
             setAzimuth(0.);
@@ -58,7 +204,7 @@ namespace hoa
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        ~Encoder()
+        ~Basic() noexcept
         {
             ;
         }
@@ -102,7 +248,7 @@ namespace hoa
         }
         
         //! This method performs the encoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
         // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
          @param     input	The input sample.
@@ -137,7 +283,7 @@ namespace hoa
         }
         
         //! This method performs the encoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
          // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
          @param     input	The input sample.
@@ -166,7 +312,7 @@ namespace hoa
         }
     };
     
-    template <typename T> class EncoderDC<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >
+    template <typename T> class Encoder<Hoa2d, T>::DC : public Encoder<Hoa2d, T>
     {
     private:
         T   m_azimuth;
@@ -183,8 +329,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        EncoderDC(const ulong order) :
-        Processor< Harmonic<Hoa2d, T> >(order)
+        DC(const ulong order) noexcept: Encoder<Hoa2d, T>(order)
         {
             setAzimuth(0.);
             setRadius(1.);
@@ -194,7 +339,7 @@ namespace hoa
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        ~EncoderDC()
+        ~DC() noexcept
         {
             ;
         }
@@ -269,7 +414,7 @@ namespace hoa
         }
         
         //! This method performs the encoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
          // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
          @param     input	The input sample.
@@ -311,7 +456,7 @@ namespace hoa
         }
         
         //! This method performs the encoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
          // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
          @param     input	The input sample.
@@ -347,33 +492,32 @@ namespace hoa
     };
     
     
-    template <typename T> class EncoderMulti<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >
+    template <typename T> class Encoder<Hoa2d, T>::Multi : public Encoder<Hoa2d, T>
     {
     private:
-        const ulong                 m_number_of_sources;
-        vector<EncoderDC<Hoa2d, T>*>m_encoders;
+        const ulong                     m_number_of_sources;
+        vector<Encoder<Hoa2d, T>::DC*>  m_encoders;
     public:
         
         //! The map constructor.
-        /**	The map constructor allocates and initialize the member values and classes depending of a decomposition order and the number of sources. The order and the number of sources must be at least 1.
+        /**	The map constructor allocates and initialize the member values and classes depending on a decomposition order and the number of sources. The order and the number of sources must be at least 1.
          
          @param     order            The order.
          @param     numberOfSources	The number of sources.
          */
-        EncoderMulti(ulong order, ulong numberOfSources) noexcept :
-        Processor< Harmonic<Hoa2d, T> >(order),
+        Multi(const ulong order, ulong numberOfSources) noexcept : Encoder<Hoa2d, T>(order),
         m_number_of_sources(numberOfSources)
         {
             for(ulong i = 0; i < m_number_of_sources; i++)
             {
-                m_encoders.push_back(new EncoderDC<Hoa2d, T>(order));
+                m_encoders.push_back(new Encoder<Hoa2d, T>::DC(order));
             }
         }
         
         //! The map destructor.
         /**	The map destructor free the memory and deallocate the member classes.
          */
-        ~EncoderMulti()
+        ~Multi() noexcept
         {
             for(ulong i = 0; i < m_number_of_sources; i++)
             {
@@ -476,8 +620,52 @@ namespace hoa
             }
         }
     };
-
+    
     template <typename T> class Encoder<Hoa3d, T> : public Processor< Harmonic<Hoa3d, T> >
+    {
+    public:
+        
+        //! The encoder constructor.
+        /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
+         @param     order	The order.
+         */
+        Encoder(const ulong order) noexcept : Processor< Harmonic<Hoa3d, T> >(order)
+        {
+            ;
+        }
+        
+        //! The encoder destructor.
+        /**	The encoder destructor free the memory.
+         */
+        virtual ~Encoder() noexcept
+        {
+            
+        }
+        
+        //! This method performs the encoding.
+        /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs   The pointer to the input sample ot the inputs samples.
+         @param     outputs  The outputs array.
+         */
+        virtual void process(const T* input, T* outputs) const noexcept = 0;
+        
+        //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
+        /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
+         */
+        class Basic;
+        
+        //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
+        /** The dc encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of the signal. The distance compensation is performed with the simulation of fractional orders when the signal is inside the ambisonics circle or sphere and with gain attenuation when the signal is outside the ambisonics circle or sphere.
+         */
+        class DC;
+        
+        //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
+        /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
+         */
+        class Multi;
+    };
+
+    template <typename T> class Encoder<Hoa3d, T>::Basic : public Encoder<Hoa3d, T>
     {
     private:
         T  m_azimuth;
@@ -494,7 +682,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const ulong order) : Processor< Harmonic<Hoa3d, T> >(order)
+        Basic(const ulong order) noexcept : Encoder<Hoa3d, T>(order)
         {
             m_normalization = new T[Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics()];
             for(ulong i = 0; i < Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics(); i++)
@@ -518,7 +706,7 @@ namespace hoa
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        ~Encoder()
+        ~Basic() noexcept
         {
             delete [] m_normalization;
         }
@@ -584,7 +772,7 @@ namespace hoa
         }
         
         //! This method performs the encoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics. For the elevation, the function uses three recurrence formulas :
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics. For the elevation, the function uses three recurrence formulas :
          \f[P(l, l)(x) = (-1)^l \times (2l - 1)!! \times (1 - x^2)^{0.5l}\f]
          \f[P(l + 1, l)(x) = x \times (2l + 1) \times P(l, l)\f]
          \f[P(l + 1, m)(x) = \frac{(2l + 1) \times x \times P(m, l) - (l + m) \times P(m, l - 1)}{(l - m + 1)}\f]
@@ -685,7 +873,7 @@ namespace hoa
         }
         
         //! This method performs the encoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics. For the elevation, the function uses three recurrence formulas :
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics. For the elevation, the function uses three recurrence formulas :
          \f[P(l, l)(x) = (-1)^l \times (2l - 1)!! \times (1 - x^2)^{0.5l}\f]
          \f[P(l + 1, l)(x) = x \times (2l + 1) \times P(l, l)\f]
          \f[P(l + 1, m)(x) = \frac{(2l + 1) \times x \times P(m, l) - (l + m) \times P(m, l - 1)}{(l - m + 1)}\f]
@@ -787,9 +975,9 @@ namespace hoa
     };
 
     /* The ambisonic encoder with distance compensation. */
-    /* The encoder with distance compensation should be used to encode a source in the spherical harmonics domain depending of an order of decomposition. It allows to control the azimuth and the radius of the source.
+    /* The encoder with distance compensation should be used to encode a source in the spherical harmonics domain depending on an order of decomposition. It allows to control the azimuth and the radius of the source.
      */
-    template <typename T> class EncoderDC<Hoa3d, T> : public Processor< Harmonic<Hoa3d, T> >
+    template <typename T> class Encoder<Hoa3d, T>::DC : public Encoder<Hoa3d, T>
     {
     private:
         T  m_azimuth;
@@ -808,8 +996,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        EncoderDC(const ulong order) :
-        Processor< Harmonic<Hoa3d, T> >(order)
+        DC(const ulong order) noexcept : Encoder<Hoa3d, T>(order)
         {
             m_normalization = new T[Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics()];
             for(ulong i = 0; i < Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics(); i++)
@@ -835,7 +1022,7 @@ namespace hoa
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        ~EncoderDC()
+        ~DC() noexcept
         {
             delete [] m_normalization;
             delete [] m_distance;
@@ -945,7 +1132,7 @@ namespace hoa
         }
         
         //! This method performs the encoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
          // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
          @param     input	The input sample.
@@ -1040,7 +1227,7 @@ namespace hoa
         }
         
         //! This method performs the encoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
          // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
          @param     input	The input sample.
@@ -1128,33 +1315,32 @@ namespace hoa
         }
     };
     
-    template <typename T> class EncoderMulti<Hoa3d, T> : public Processor< Harmonic<Hoa3d, T> >
+    template <typename T> class Encoder<Hoa3d, T>::Multi : public Encoder<Hoa3d, T>
     {
     private:
-        const ulong                 m_number_of_sources;
-        vector<EncoderDC<Hoa3d, T>*>m_encoders;
+        const ulong                     m_number_of_sources;
+        vector<Encoder<Hoa3d, T>::DC *> m_encoders;
     public:
         
         //! The map constructor.
-        /**	The map constructor allocates and initialize the member values and classes depending of a decomposition order and the number of sources. The order and the number of sources must be at least 1.
+        /**	The map constructor allocates and initialize the member values and classes depending on a decomposition order and the number of sources. The order and the number of sources must be at least 1.
          
          @param     order            The order.
          @param     numberOfSources	The number of sources.
          */
-        EncoderMulti(ulong order, ulong numberOfSources) noexcept :
-        Processor< Harmonic<Hoa3d, T> >(order),
+        Multi(const ulong order, ulong numberOfSources) noexcept : Encoder<Hoa3d, T>(order),
         m_number_of_sources(numberOfSources)
         {
             for(ulong i = 0; i < m_number_of_sources; i++)
             {
-                m_encoders.push_back(new EncoderDC<Hoa3d, T>(order));
+                m_encoders.push_back(new Encoder<Hoa3d, T>::DC(order));
             }
         }
         
         //! The map destructor.
         /**	The map destructor free the memory and deallocate the member classes.
          */
-        ~EncoderMulti()
+        ~Multi() noexcept
         {
             for(ulong i = 0; i < m_number_of_sources; i++)
             {
@@ -1280,6 +1466,8 @@ namespace hoa
             }
         }
     };
+    
+#endif
 }
 
 #endif

@@ -74,8 +74,8 @@ namespace hoa
         }
         
         //! The abscissa converter function.
-        /** This function takes the radius \f$\rho\f$, the azimuth \f$\theta\f$ and the elevation \f$\phi\f$ of a point and retrieves the abscissa \f$x\f$.
-         \f[x = \rho \times cos{(\theta + \frac{\pi}{2})} \times cos{(\phi)} \f]
+        /** This function takes the radius \f$\rho\f$, the azimuth \f$\theta\f$ and the elevation \f$\varphi\f$ of a point and retrieves the abscissa \f$x\f$.
+         \f[x = \rho \times cos{(\theta + \frac{\pi}{2})} \times cos{(\varphi)} \f]
          @param     radius		The radius.
          @param     azimuth		The azimuth.
          @param     elevation   The elevation.
@@ -87,8 +87,8 @@ namespace hoa
         }
         
         //! The ordinate converter function.
-        /** This function takes the radius \f$\rho\f$, the azimuth \f$\theta\f$ and the elevation \f$\phi\f$ of a point and retrieves the ordinate \f$y\f$.
-         \f[y = \rho \times sin{(\theta + \frac{\pi}{2})} \times cos{(\phi)} \f]
+        /** This function takes the radius \f$\rho\f$, the azimuth \f$\theta\f$ and the elevation \f$\varphi\f$ of a point and retrieves the ordinate \f$y\f$.
+         \f[y = \rho \times sin{(\theta + \frac{\pi}{2})} \times cos{(\varphi)} \f]
          @param     radius		The radius (greather than 0).
          @param     azimuth		The azimuth (between \f$0\f$ and \f$2\pi\f$).
          @param     elevation   The elevation (between \f$-\pi\f$ and \f$\pi\f$).
@@ -100,8 +100,8 @@ namespace hoa
         }
         
         //! The height converter function.
-        /** This function takes the radius \f$\rho\f$, the azimuth \f$\theta\f$ and the elevation \f$\phi\f$ of a point and retrieves the height \f$h\f$.
-         \f[h = \rho \times sin{(\phi)} \f]
+        /** This function takes the radius \f$\rho\f$, the azimuth \f$\theta\f$ and the elevation \f$\varphi\f$ of a point and retrieves the height \f$h\f$.
+         \f[h = \rho \times sin{(\varphi)} \f]
          @param     radius		The radius.
          @param     azimuth		The azimuth.
          @param     elevation   The elevation.
@@ -141,8 +141,8 @@ namespace hoa
         }
         
         //! The elevation converter function.
-        /** This function takes the abscissa \f$x\f$, the ordinate \f$y\f$ and the height \f$z\f$ of a point and retrieves the elevation \f$\phi\f$.
-         \f[\phi = \arcsin{(\frac{z}{\sqrt{x^2 + y^2 +z^2}})} \f]
+        /** This function takes the abscissa \f$x\f$, the ordinate \f$y\f$ and the height \f$z\f$ of a point and retrieves the elevation \f$\varphi\f$.
+         \f[\varphi = \arcsin{(\frac{z}{\sqrt{x^2 + y^2 +z^2}})} \f]
          @param     x		The abscissa.
          @param     y		The ordinate.
          @param     z		The height.

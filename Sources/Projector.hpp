@@ -17,27 +17,27 @@ namespace hoa
      */
     template <Dimension D, typename T> class Projector;
     
-    template <typename T> class Projector<Hoa2d, T> : public Encoder<Hoa2d, T>, public Planewave<Hoa2d, T>::Processor
+    template <typename T> class Projector<Hoa2d, T> : public Encoder<Hoa2d, T>::Basic, public Planewave<Hoa2d, T>::Processor
     {
     private:
         T*  m_matrix;
     public:
         
         //! The regular constructor.
-        /**	The regular constructor allocates and initialize the decoding matrix depending of a decomposition order and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
+        /**	The regular constructor allocates and initialize the decoding matrix depending on a decomposition order and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
          @param     order				The order
          @param     numberOfPlanewaves     The number of planewaves.
          */
         Projector(const ulong order, const ulong numberOfPlanewaves) noexcept :
-        Encoder<Hoa2d, T>(order),
+        Encoder<Hoa2d, T>::Basic(order),
         Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
         {
             m_matrix = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                Encoder<Hoa2d, T>::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
-                Encoder<Hoa2d, T>::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
+                Encoder<Hoa2d, T>::Basic::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
+                Encoder<Hoa2d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
                 m_matrix[i * Encoder<Hoa2d, T>::getNumberOfHarmonics()] = factor * 0.5;
             }
         }

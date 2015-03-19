@@ -33,7 +33,7 @@ namespace hoa
         
     };
     
-    template <typename T> class Scope<Hoa2d, T> : public Encoder<Hoa2d, T>, protected Planewave<Hoa2d, T>::Processor
+    template <typename T> class Scope<Hoa2d, T> : public Encoder<Hoa2d, T>::Basic, protected Planewave<Hoa2d, T>::Processor
     {
     private:
         T*  m_matrix;
@@ -47,7 +47,7 @@ namespace hoa
          @param     numberOfPoints   The number of points.
          */
         Scope(ulong order, ulong numberOfPoints) noexcept :
-        Encoder<Hoa2d, T>(order),
+        Encoder<Hoa2d, T>::Basic(order),
         Planewave<Hoa2d, T>::Processor(numberOfPoints)
         {
             m_matrix = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
@@ -56,8 +56,8 @@ namespace hoa
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                Encoder<Hoa2d, T>::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
-                Encoder<Hoa2d, T>::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
+                Encoder<Hoa2d, T>::Basic::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
+                Encoder<Hoa2d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
                 m_matrix[i * Encoder<Hoa2d, T>::getNumberOfHarmonics()] = factor * 0.5;
             }
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
@@ -156,7 +156,7 @@ namespace hoa
         }
     };
 
-    template <typename T> class Scope<Hoa3d, T> : public Encoder<Hoa3d, T>, protected Planewave<Hoa3d, T>::Processor
+    template <typename T> class Scope<Hoa3d, T> : public Encoder<Hoa3d, T>::Basic, protected Planewave<Hoa3d, T>::Processor
     {
     private:
         const ulong m_number_of_rows;
@@ -174,7 +174,7 @@ namespace hoa
          @param     numberOfColumn	The number of columns.
          */
         Scope(ulong order, ulong numberOfRow, ulong numberOfColumn) noexcept :
-        Encoder<Hoa3d, T>(order),
+        Encoder<Hoa3d, T>::Basic(order),
         Planewave<Hoa3d, T>::Processor(numberOfRow * numberOfColumn),
         m_number_of_rows(numberOfRow),
         m_number_of_columns(numberOfColumn)
@@ -195,9 +195,9 @@ namespace hoa
             const T factor = 12.5 / (T)(Encoder<Hoa3d, T>::getNumberOfHarmonics());
             for(ulong i = 0; i < Planewave<Hoa3d, T>::Processor::getNumberOfPlanewaves(); i++)
             {
-                Encoder<Hoa3d, T>::setAzimuth(Planewave<Hoa3d, T>::Processor::getPlanewaveAzimuth(i));
-                Encoder<Hoa3d, T>::setElevation(Planewave<Hoa3d, T>::Processor::getPlanewaveElevation(i));
-                Encoder<Hoa3d, T>::process(&factor, m_matrix + i * Encoder<Hoa3d, T>::getNumberOfHarmonics());
+                Encoder<Hoa3d, T>::Basic::setAzimuth(Planewave<Hoa3d, T>::Processor::getPlanewaveAzimuth(i));
+                Encoder<Hoa3d, T>::Basic::setElevation(Planewave<Hoa3d, T>::Processor::getPlanewaveElevation(i));
+                Encoder<Hoa3d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa3d, T>::getNumberOfHarmonics());
                 for(ulong j = 0; j < Encoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
                 {
                     const ulong l = Encoder<Hoa3d, T>::getHarmonicDegree(j);

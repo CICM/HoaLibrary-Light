@@ -29,14 +29,14 @@ namespace hoa
          */
         virtual ~Rotate() noexcept;
         
-        //! This method sets the angle of the rotation around the z axis, the yaw value,
-        /** The yaw is equivalent to a rotation around the z axis, the value is in radian and should be between 0 and 2π.
+        //! This method sets the angle of the rotation around the z axis, the yaw value.
+        /** The yaw is equivalent to a rotation around the z axis, the yaw value \f$\theta\f$ is in radian and should be between \f$0\f$ and \f$2\pi\f$.
          @param     yaw The yaw value.
          */
         virtual void setYaw(const T yaw) noexcept;
         
         //! Get the angle of the rotation around the z axis, the yaw value.
-        /** The method returns the angle of the rotation around the z axis, the yaw value, in radian between 0 and 2π.
+        /** The method returns the angle of the rotation around the z axis, the yaw value \f$\theta\f$, in radian between \f$0\f$ and \f$2\pi\f$.
          @return     The yaw value.
          */
         virtual T getYaw() const noexcept;
@@ -44,11 +44,11 @@ namespace hoa
         //! This method performs the rotation.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          If \f$l = 0\f$
-         \f[h'_{0,0}(\theta) = h_{0,0}\f]
+         \f[Y^{rotated}_{0,0}(\theta) = Y_{0,0}\f]
          else
-         \f[h'_{l,-l}(\theta) = \sin{(\theta l)} \times h_{l,l} + \cos{(\theta l)} \times h_{l,-l}\f]
+         \f[Y^{rotated}_{l,-l}(\theta) = \sin{(\theta l)} \times Y_{l,l} + \cos{(\theta l)} \times Y_{l,-l}\f]
          and 
-         \f[h'_{l,l}(\theta) = \cos{(\theta l)} \times h_{l,l} - \sin{(\theta l)} \times h_{l,-l}\f]
+         \f[Y^{rotated}_{l,l}(\theta) = \cos{(\theta l)} \times Y_{l,l} - \sin{(\theta l)} \times Y_{l,-l}\f]
          with \f$\theta\f$ the rotation in radian, \f$l\f$ the degree and \f$m\f$ the order.
          @param     inputs   The input array.
          @param     outputs  The output array.

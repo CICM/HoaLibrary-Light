@@ -45,9 +45,9 @@ namespace hoa
         //! This method perform the widening.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics. \n
          If \f$l = 0\f$
-         \f[h'_{0,0}(x) = (g_x \times N + 1) \times h_{l,m}\f]
+         \f[Y^{widened}_{0,0}(x) = (g_x \times N + 1) \times Y_{l,m}\f]
          else
-         \f[h'_{l,m}(x) = \frac{(g_x \times (N - 1) + 1) (\cos{(\min{(0, \max{(a_x \times l, \pi)})})} + 1)}{2} \times h_{l,m}\f]
+         \f[Y^{widened}_{l,m}(x) = \frac{(g_x \times (N - 1) + 1) (\cos{(\min{(0, \max{(a_x \times l, \pi)})})} + 1)}{2} \times Y_{l,m}\f]
          with 
          \f[a_x = (1 - x)\pi\f]
          and
