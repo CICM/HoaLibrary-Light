@@ -329,7 +329,7 @@ namespace hoa
         
         inline string getName() const noexcept
         {
-            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth() / HOA_2PI * 360.) + "°" " " + to_string(getElevation() / HOA_2PI * 360.) + "°";
+            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth(0., 0., 0.) / HOA_2PI * 360.) + "°" " " + to_string(getElevation(0., 0., 0.) / HOA_2PI * 360.) + "°";
         }
         
         bool sort_azimuth(Planewave const& j) const noexcept
