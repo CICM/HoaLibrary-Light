@@ -14,7 +14,7 @@ namespace hoa
     //! The rotate class rotates a sound field in the harmonics domain (2d available only).
     /** The rotate should be used to rotate a sound field by wheighting the harmonics depending on the rotation.
      */
-    template <Dimension D, typename T> class Rotate : public  Harmonic<D, T>::Processor
+    template <Dimension D, typename T> class Rotate : public  Processor< Harmonic<D, T> >
     {
     public:
         
@@ -27,27 +27,36 @@ namespace hoa
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
          */
-        virtual ~Rotate() noexcept = 0;
+        virtual ~Rotate() noexcept;
         
         //! This method sets the angle of the rotation around the z axis, the yaw value,
         /** The yaw is equivalent to a rotation around the z axis, the value is in radian and should be between 0 and 2π.
          @param     yaw The yaw value.
          */
-        virtual void setYaw(const T yaw) noexcept = 0;
+        virtual void setYaw(const T yaw) noexcept;
         
         //! Get the angle of the rotation around the z axis, the yaw value.
         /** The method returns the angle of the rotation around the z axis, the yaw value, in radian between 0 and 2π.
          @return     The yaw value.
          */
-        virtual T getYaw() const noexcept = 0;
+        virtual T getYaw() const noexcept;
         
         //! This method performs the rotation.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         If \f$l = 0\f$
+         \f[h'_{0,0}(\theta) = h_{0,0}\f]
+         else
+         \f[h'_{l,-l}(\theta) = \sin{(\theta l)} \times h_{l,l} + \cos{(\theta l)} \times h_{l,-l}\f]
+         and 
+         \f[h'_{l,l}(\theta) = \cos{(\theta l)} \times h_{l,l} - \sin{(\theta l)} \times h_{l,-l}\f]
+         with \f$\theta\f$ the rotation in radian, \f$l\f$ the degree and \f$m\f$ the order.
          @param     inputs   The input array.
          @param     outputs  The output array.
          */
-        virtual void process(const T* inputs, T* outputs) const noexcept = 0;
+        virtual void process(const T* inputs, T* outputs) const noexcept;
     };
+    
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
     
     template <typename T> class Rotate<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >
     {
@@ -61,8 +70,7 @@ namespace hoa
         /**	The rotate constructor allocates and initialize the member values to computes spherical harmonics rotation depending on a decomposition order. The order must be at least 1.
          @param     order	The order.
          */
-        Rotate(const ulong order) noexcept :
-        Processor< Harmonic<Hoa2d, T> >(order)
+        Rotate(const ulong order) noexcept : Processor< Harmonic<Hoa2d, T> >(order)
         {
             ;
         }
@@ -121,6 +129,8 @@ namespace hoa
             }
         }
     };
+    
+#endif
 }
 
 #endif
