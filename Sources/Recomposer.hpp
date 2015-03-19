@@ -64,14 +64,14 @@ namespace hoa
     };
 
     
-    template <typename T> class Recomposer<Hoa2d, T, Fisheye> : public Harmonic<Hoa2d, T>::Processor, public Planewave<Hoa2d, T>::Processor
+    template <typename T> class Recomposer<Hoa2d, T, Fisheye> : public Processor< Harmonic<Hoa2d, T> >, public Planewave<Hoa2d, T>::Processor
     {
     private:
         vector<Encoder<Hoa2d, T>*>m_encoders;
     public:
         
         Recomposer(ulong order, ulong numberOfPlanewaves) noexcept :
-        Harmonic<Hoa2d, T>::Processor(order),
+        Processor< Harmonic<Hoa2d, T> >(order),
         Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
         {
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
@@ -117,14 +117,14 @@ namespace hoa
         }
     };
     
-    template <typename T> class Recomposer<Hoa2d, T, Free> : public Harmonic<Hoa2d, T>::Processor, public Planewave<Hoa2d, T>::Processor
+    template <typename T> class Recomposer<Hoa2d, T, Free> : public Processor< Harmonic<Hoa2d, T> >, public Planewave<Hoa2d, T>::Processor
     {
     private:
         vector<EncoderDC<Hoa2d, T>*>m_encoders;
     public:
         
         Recomposer(ulong order, ulong numberOfPlanewaves) noexcept :
-        Harmonic<Hoa2d, T>::Processor(order),
+        Processor< Harmonic<Hoa2d, T> >(order),
         Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
         {
             for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)

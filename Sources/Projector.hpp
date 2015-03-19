@@ -12,11 +12,11 @@
 
 namespace hoa
 {
-    template <Dimension D, typename T> class Projector;
-    
     //! The ambisonic projector.
     /** The projector should be used to decode an ambisonic sound field for a set a channels on a circle depending on a decomposition order or for headphones.
      */
+    template <Dimension D, typename T> class Projector;
+    
     template <typename T> class Projector<Hoa2d, T> : public Encoder<Hoa2d, T>, public Planewave<Hoa2d, T>::Processor
     {
     private:

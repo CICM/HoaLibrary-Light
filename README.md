@@ -10,9 +10,15 @@ Sound space is one of the principal dimensions of the contemporary musical thoug
 
 Julien Colafrancesco, Pierre Guillot, Eliott Paris
 
+#### Implementations :
+
+<a title="PureData" href="https://github.com/CICM/HoaLibrary-PD">Pure Data, </a>
+<a title="Max" href="https://github.com/CICM/HoaLibrary-Max">Max, </a>
+<a title="Ofx" href="https://github.com/CICM/ofxHoa">Open Framework</a>
+
 #### Documentation :
 
-<a title="Documentation" href="http://cicm.github.io/HoaLibrary/">documentation</a>
+<a title="Documentation" href="http://cicm.github.io/HoaLibrary/">Documentation</a>
 
 #### Dependencies : 
 

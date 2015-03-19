@@ -11,9 +11,6 @@
 
 namespace hoa
 {
-    //! The signal class.
-    /** The signal class owns a set of static methods to perform operations over vectors and matrices.
-     */
     template <typename T> class Signal;
     
     template<> class Signal<float>

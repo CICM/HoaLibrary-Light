@@ -51,6 +51,9 @@
 
 using namespace std;
 
+//! The namespace of the hoa library.
+/** All the classes of the hoa library are inside this namespace.
+ */
 namespace hoa
 {
     typedef unsigned long ulong;
@@ -61,10 +64,23 @@ namespace hoa
     }
 #endif
     
+    //! The dimension of class.
+    /** Most of the classes are specialized for 2d or 3d.
+     */
     enum Dimension
     {
-        Hoa2d = 0,
-        Hoa3d = 1
+        Hoa2d = 0, /*!<  The 2d dimension. */
+        Hoa3d = 1  /*!<  The 3d dimension. */
+    };
+    
+    //! The processor.
+    /** The processor owns a set of harmonics or planewaves and performs digital signal processing.
+     */
+    template <typename T> class Processor
+    {
+    public:
+        
+        virtual void process(const T* inputs, T* outputs);
     };
 }
 
