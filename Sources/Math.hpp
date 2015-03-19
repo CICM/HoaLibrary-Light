@@ -35,7 +35,7 @@ namespace hoa
         
         //! The wrapping function between  \f$0\f$ and \f$2\pi\f$.
         /** The function wraps a number between \f$0\f$ and \f$2\pi\f$.
-         \f[f(x) = x \bmod 2\pi \f]
+         \f[f(x) = x \% 2\pi \f]
          @param     value   The value to wrap.
          @return    The function return the wrapped value.
          */
@@ -55,7 +55,7 @@ namespace hoa
         
         //! The wrapping function between \f$-\pi\f$ and \f$\pi\f$.
         /** The function wraps a number between \f$-\pi\f$ and \f$\pi\f$.
-          \f[f(x) = x \bmod \pi \f]
+          \f[f(x) = x \% \pi \f]
          @param     value   The value to wrap.
          @return    The function return the wrapped value.
          */

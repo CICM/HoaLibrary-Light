@@ -49,7 +49,7 @@ namespace hoa
         virtual void process(const T* inputs, T* outputs) const noexcept = 0;
     };
     
-    template <typename T> class Rotate<Hoa2d, T> : public Harmonic<Hoa2d, T>::Processor
+    template <typename T> class Rotate<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >
     {
     private:
         T   m_yaw;
@@ -62,7 +62,7 @@ namespace hoa
          @param     order	The order.
          */
         Rotate(const ulong order) noexcept :
-        Harmonic<Hoa2d, T>::Processor(order)
+        Processor< Harmonic<Hoa2d, T> >(order)
         {
             ;
         }
@@ -110,7 +110,7 @@ namespace hoa
             T sig = (*inputs++);
             (*outputs++) = sin_x * (*inputs) + cos_x * sig;
             (*outputs++) = cos_x * (*inputs++) - sin_x * sig;
-            for(ulong i = 2; i <= Harmonic<Hoa2d, T>::Processor::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder(); i++)
             {
                 cos_x = tcos_x * m_cosx - sin_x * m_sinx;
                 sin_x = tcos_x * m_sinx + sin_x * m_cosx;
