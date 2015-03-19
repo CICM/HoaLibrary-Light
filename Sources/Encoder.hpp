@@ -67,7 +67,6 @@ namespace hoa
             //! Set the azimuth.
             /**	This method  sets the azimuth \f$\theta\f$ in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
              @param     azimuth	The azimuth.
-             @see       setElevation()
              */
             virtual void setAzimuth(const T azimuth) noexcept;
             
@@ -80,11 +79,10 @@ namespace hoa
             //! Set the elevation.
             /**	This method  sets the elevation \f$\varphi\f$ in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
              @param     elevation The elevation.
-             @see       setAzimutHamonic [)
              */
             virtual void setElevation(const T elevation) noexcept;
             
-            //!	Get the elevation angle
+            //!	Get the elevation.
             /** The method returns the elevation \f$\varphi\f$ between \f$-\pi\f$ and \f$\pi\f$.
              @return     The elevation.
              */
@@ -93,7 +91,7 @@ namespace hoa
             //! This method performs the encoding.
             /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
              \f[Y_{l,m}(\theta, \varphi) = k_{l, m} P_{l, \left|m\right|}(\cos{(\varphi)}) e^{+im\theta} \f]
-             with \f$e^{+im\theta}\f$ the azimuth part of the equation with \f$i\f$ the imaginary, \f$P_{l, \left|m\right|}(\cos{(\varphi)})\f$ the elevation part of the equation with \f$P_{l, \left|m\right|}(x)\f$ the associated Legendre polynomials, \f$k_{l, m}\f$ the normalization, \f$l\f$ the degree, \f$m\f$ the order, \theta the azimuth in radian and \phi the elevation in radian.\n
+             with \f$e^{+im\theta}\f$ the azimuth part of the equation with \f$i\f$ the imaginary, \f$P_{l, \left|m\right|}(\cos{(\varphi)})\f$ the elevation part of the equation with \f$P_{l, \left|m\right|}(x)\f$ the associated Legendre polynomials, \f$k_{l, m}\f$ the normalization, \f$l\f$ the degree, \f$m\f$ the order, \f$\theta\f$ the azimuth in radian and \f$\varphi\f$ the elevation in radian.\n
              
              The azimuth part \f$e^{+im\theta}\f$ can be expressed with the real form :\n
              if \f$m \geq 0\f$ then
@@ -114,7 +112,7 @@ namespace hoa
              @param     input    The pointer to the input sample.
              @param     outputs  The outputs array.
              */
-            void process(const T* input, T* outputs) const noexcept override;
+            virtual void process(const T* input, T* outputs) const noexcept override;
             
             //! This method performs the encoding but add the result to the outputs.
             /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -122,18 +120,187 @@ namespace hoa
              @param     input    The pointer to the input sample.
              @param     outputs  The outputs array.
              */
-            void processAdd(const T* input, T* outputs) const noexcept;
+            virtual void processAdd(const T* input, T* outputs) const noexcept;
         };
         
         //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
         /** The dc encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of the signal. The distance compensation is performed with the simulation of fractional orders when the signal is inside the ambisonics circle or sphere and with gain attenuation when the signal is outside the ambisonics circle or sphere.
          */
-        class DC;
+        class DC : public Encoder
+        {
+        public:
+            
+            //! The dc constructor.
+            /**	The dc constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
+             @param     order	The order.
+             */
+            DC(const ulong order) noexcept = 0;
+            
+            //! The dc destructor.
+            /**	The dc destructor free the memory.
+             */
+            virtual ~DC() noexcept;
+            
+            //! Mute or unmute the process.
+            /**	This method mutes or unmutes the process.
+             @param     muted	The mute state.
+             */
+            virtual void setMute(const bool muted) noexcept;
+            
+            //! Get the mute or unmute state of the process.
+            /**	This method gets mute state of the process.
+             @return    The mute state of the process.
+             */
+            virtual bool getMute() const noexcept;
+            
+            //! Set the azimuth.
+            /**	This method  sets the azimuth \f$\theta\f$ in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
+             @param     azimuth	The azimuth.
+             */
+            virtual void setAzimuth(const T azimuth) noexcept;
+            
+            //! Get the azimuth.
+            /** The method returns the azimuth \f$\theta\f$ between \f$0\f$ and \f$2\pi\f$.
+             @return     The azimuth.
+             */
+            virtual T getAzimuth() const noexcept;
+            
+            //! Set the elevation.
+            /**	This method  sets the elevation \f$\varphi\f$ in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
+             @param     elevation The elevation.
+             */
+            virtual void setElevation(const T elevation) noexcept;
+            
+            //!	Get the elevation.
+            /** The method returns the elevation \f$\varphi\f$ between \f$-\pi\f$ and \f$\pi\f$.
+             @return     The elevation.
+             */
+            virtual T getElevation()  const noexcept;
+            
+            //! Set the radius.
+            /**	This method  sets the radius \f$\rho\f$ between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the center of the soundfield, \f$1\f$ is the radius of the ambisonics circle or sphere, beyond this limit the gain decreases and before the sound field is widened.
+             @param     radius The radius.
+             */
+            virtual void setRadius(const T radius) noexcept;
+            
+            //! Get the radius.
+            /** The method returns the radius \f$\rho\f$ between \f$0\f$ and \f$+\infty\f$.
+             @return     The radius.
+             */
+            virtual T getRadius() const noexcept;
+            
+            //! This method performs the encoding.
+            /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+             \f[Y^{dc}_{l,m}(\theta, \varphi, \rho) = (\frac{1}{\max{(\rho, 1)}})Y^{widened}_{l,m}(\rho) \leftarrow Y_{l,m}(\theta, \varphi) \f]
+             with \f$Y_{l,m}\f$ the basic encoding, \f$Y^{widened}_{l,m}\f$ the widening operation, \f$l\f$ the degree, \f$m\f$ the order, \f$\theta\f$ the azimuth in radian, \f$\varphi\f$ the elevation in radian and \f$\rho\f$ the radius.\n
+             @see Basic
+             @see Wider
+             @param     input    The pointer to the input sample.
+             @param     outputs  The outputs array.
+             */
+            virtual void process(const T* input, T* outputs) const noexcept;
+            
+            //! This method performs the encoding but add the result to the outputs.
+            /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+             @see process
+             @param     input    The pointer to the input sample.
+             @param     outputs  The outputs array.
+             */
+            inline void processAdd(const T* input, T* outputs) const noexcept;
+            
+        };
         
         //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
         /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
          */
-        class Multi;
+        class Multi : public Encoder
+        {
+        public:
+            
+            //! The multi encoder constructor.
+            /**	The multi encoder constructor allocates and initialize the member values and classes depending on a decomposition order and the number of sources. The order and the number of sources must be at least 1.
+             
+             @param     order            The order.
+             @param     numberOfSources	The number of sources.
+             */
+            Multi(const ulong order, ulong numberOfSources) noexcept = 0;
+            
+            //! The multi encoder destructor.
+            /**	The multi encoder destructor free the memory and deallocate the member classes.
+             */
+            virtual ~Multi() noexcept;
+            
+            //! This method retrieve the number of sources.
+            /** Retrieve the number of sources.
+             @return The number of sources.
+             */
+            virtual ulong getNumberOfSources() const noexcept;
+            
+            //! Set the azimuth of a signal.
+            /**	This method  sets the azimuth \f$\theta_index\f$ of a signal in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
+             @param index   The index of the signal.
+             @param azimuth	The azimuth.
+             */
+            virtual void setAzimuth(const ulong index, const T azimuth) noexcept;
+            
+            //! Set the elevation  of a signal.
+            /**	This method  sets the elevation \f$\varphi_index\f$  of a signal in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
+             @param index       The index of the signal.
+             @param elevation   The elevation.
+             */
+            virtual void setElevation(const ulong index, const T azimuth) noexcept;
+            
+            //! Set the radius.
+            /**	This method  sets the radius \f$\rho_index\f$ between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the center of the soundfield, \f$1\f$ is the radius of the ambisonics circle or sphere, beyond this limit the gain decreases and before the sound field is widened.
+             @param index   The index of the signal.
+             @param radius  The radius.
+             */
+            virtual void setRadius(const ulong index, const T radius) noexcept;
+            
+            //! This method mute or unmute a signal.
+            /**	Mute or unmute a signal with a boolean value.
+             @param     index	The index of the signal.
+             @param     muted	The mute state.
+             */
+            virtual void setMute(const ulong index, const bool muted) noexcept;
+            
+            //! Get the azimuth of a signal.
+            /** The method returns the azimuth \f$\theta_index\f$ between \f$0\f$ and \f$2\pi\f$.
+             @param index The index of the signal.
+             @return    The azimuth.
+             */
+            virtual T getAzimuth(const ulong index) const noexcept;
+            
+            //!	Get the elevation of a signal.
+            /** The method returns the elevation \f$\varphi_index\f$ between \f$-\pi\f$ and \f$\pi\f$.
+             @param index The index of the signal.
+             @return     The elevation.
+             */
+            virtual T getElevation(const ulong index) const noexcept;
+            
+            //! Get the radius of a signal.
+            /** The method returns the radius \f$\rho_index\f$ between \f$0\f$ and \f$+\infty\f$.
+             @param index The index of the signal.
+             @return     The radius.
+             */
+            virtual T getRadius(const ulong index) const noexcept;
+            
+            //! Get the mute or unmute state of a signal.
+            /**	This method gets mute state of a signal.
+             @param index The index of the signal.
+             @return    The mute state of the signal.
+             */
+            virtual bool getMute(const ulong index) const noexcept;
+            
+            
+            //! This method performs the encoding with distance compensation.
+            /**	You should use this method for in-place or not-in-place processing and performs the encoding with distance compensation sample by sample. The input array contains the samples of the sources and the minimum size sould be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+             \f[Y^{multi}_{l,m}(\theta_0^n, \varphi_0^n, \rho_0^n) = \sum_{i=0}^n Y^{dc}_{l,m}(\theta_i, \varphi_i, \rho_i) \f]
+             @param     input  The input array.
+             @param     outputs The outputs array.
+             */
+            virtual void process(const T* input, T* outputs) const noexcept;
+        };
     };
     
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -753,7 +920,7 @@ namespace hoa
         //! This method set the angle of elevation.
         /**	The angle of elevation in radian and you should prefer to use it between -π and π to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The 0 radian is centered at the "front" of the soundfield, then π/2 is at the top, -π/2 is at the bottom and π is behind. Note that if the angle of elevation is between π/2 and 3*π/2, the azimuth is reversed.
          @param     elevation The elevation.
-         @see       setAzimutHamonic [)
+         
          */
         inline void setElevation(const T elevation) noexcept
         {
@@ -1052,7 +1219,7 @@ namespace hoa
         //! This method set the angle of elevation.
         /**	The angle of elevation in radian and you should prefer to use it between -π and π to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The 0 radian is centered at the "front" of the soundfield, then π/2 is at the top, -π/2 is at the bottom and π is behind. Note that if the angle of elevation is between π/2 and 3*π/2, the azimuth is reversed.
          @param     elevation The elevation.
-         @see       setAzimutHamonic [)
+         
          */
         inline void setElevation(const T elevation) noexcept
         {
