@@ -63,7 +63,7 @@ namespace hoa
     
     void Source::setElevation(double elevation)
     {
-        m_elevation = Math<double>::wrap(elevation, -HOA_PI, HOA_PI);
+        m_elevation = Math<double>::wrap_pi(elevation);
         if(m_elevation > HOA_PI2)
         {
             m_azimuth = Math<double>::wrap_twopi(m_azimuth + HOA_PI);

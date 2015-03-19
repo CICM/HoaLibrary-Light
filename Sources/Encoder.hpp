@@ -779,8 +779,8 @@ namespace hoa
         }
     };
 
-    //! The ambisonic encoder with distance compensation.
-    /** The encoder with distance compensation should be used to encode a source in the spherical harmonics domain depending of an order of decomposition. It allows to control the azimuth and the radius of the source.
+    /* The ambisonic encoder with distance compensation. */
+    /* The encoder with distance compensation should be used to encode a source in the spherical harmonics domain depending of an order of decomposition. It allows to control the azimuth and the radius of the source.
      */
     template <typename T> class EncoderDC<Hoa3d, T> : public Harmonic<Hoa3d, T>::Processor
     {

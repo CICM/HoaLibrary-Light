@@ -11,21 +11,42 @@
 
 namespace hoa
 {
+    //! The optimizations of class.
+    /** The 3 kind of optimizations.
+     */
     enum Optimization
     {
-        Basic = 0,
-        MaxRe = 1,
-        InPhase=2
+        Basic = 0, /*!<  The basic dimension. */
+        MaxRe = 1, /*!<  The max-re dimension. */
+        InPhase=2  /*!<  The in-phase dimension. */
     };
     
-    //! The ambisonic optimization.
-    /** The optimization should be used to optimize the ambisonic sound field. There are 3 optimization modes, Basic (no optimization), MaxRe (energy vector optimization) and InPhase (energy and velocity vector optimization). Basic has no effect, it should be used with a perfect ambisonic channels, arrengement where all the channels are to equal distance on a circle, and for a listener placed at the perfect center of the circle. MaxRe should be used for auditory confined to the center of the circle. InPhase should be used when the auditory covers the entire channels area and when the channels arragement is not a perfect circle or when the channels are not to equal distance. Note that the optimizations decrease the precision of the sound field restitution thus it can be compared to particular cases of the fractional orders.
+    //! The optim class optimizes the ambisonic sound field for several restitution systems.
+    /** The optim should be used to optimize the ambisonic sound field. There are 3 optimizations, Basic (no optimization), MaxRe (energy vector optimization) and InPhase (energy and velocity vector optimization). Basic has no effect, it should be used (or not) with a perfect ambisonic channels arrengement where all the channels are to equal distance on a circle, and for a listener placed at the perfect center of the circle. MaxRe should be used for auditory confined to the center of the circle. InPhase should be used when the auditory covers the entire channels area and when the channels arragement is not a perfect circle or when the channels are not to equal distance. Note that the optimizations decrease the precision of the sound field restitution thus it can be compared to particular cases of the fractional orders.
      */
-    template <Dimension D, typename T, Optimization O> class Optim;
+    template <Dimension D, typename T, Optimization O> class Optim : public Harmonic<D, T>::Processor
+    {
+    public:
+        
+        //! The optim constructor.
+        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending of a decomposition order. The order must be at least 1.
+         @param     order	The order.
+         */
+        Optim(const ulong order) noexcept = 0;
+        
+        //! The optim destructor.
+        /**	The optim destructor free the memory.
+         */
+        virtual ~Optim() noexcept = 0;
+        
+        //! This method performs the optimization.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs   The inputs array.
+         @param     outputs  The outputs array.
+         */
+        virtual void process(T const* inputs, T* outputs) const noexcept = 0;
+    };
     
-    //! The ambisonic optimization.
-    /** The basic.
-     */
     template <typename T> class Optim<Hoa2d, T, Basic> : public Harmonic<Hoa2d, T>::Processor
     {
     public:
@@ -33,7 +54,6 @@ namespace hoa
         //! The optimization constructor.
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending of a decomposition order. The order must be at least 1.
          @param     order	The order.
-         @param     optim	The optimization.
          */
         Optim(const ulong order) noexcept :
         Harmonic<Hoa2d, T>::Processor(order)
@@ -44,13 +64,13 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~Optim()
+        ~Optim() noexcept
         {
             ;
         }
         
         //! This method performs the basic optimization.
-        /**	You should use this method for in-place or not-in-place processing and performs the basic optimization sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
@@ -67,9 +87,6 @@ namespace hoa
         }
     };
     
-    //! The ambisonic optimization.
-    /** The optimization should be used to optimize the ambisonic sound field. There are 3 optimization modes, Basic (no optimization), MaxRe (energy vector optimization) and InPhase (energy and velocity vector optimization). Basic has no effect, it should be used with a perfect ambisonic channels, arrengement where all the channels are to equal distance on a circle, and for a listener placed at the perfect center of the circle. MaxRe should be used for auditory confined to the center of the circle. InPhase should be used when the auditory covers the entire channels area and when the channels arragement is not a perfect circle or when the channels are not to equal distance. Note that the optimizations decrease the precision of the sound field restitution thus it can be compared to particular cases of the fractional orders.
-     */
     template <typename T> class Optim<Hoa2d, T, MaxRe> : public Harmonic<Hoa2d, T>::Processor
     {
     private:
@@ -80,7 +97,6 @@ namespace hoa
         //! The optimization constructor.
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending of a decomposition order. The order must be at least 1.
          @param     order	The order.
-         @param     optim	The optimization.
          */
         Optim(const ulong order) noexcept :
         Harmonic<Hoa2d, T>::Processor(order),
@@ -93,13 +109,13 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~Optim()
+        ~Optim() noexcept
         {
             ;
         }
         
         //! This method performs the max-re optimization.
-        /**	You should use this method for in-place or not-in-place processing and performs the max-re optimization sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
@@ -123,9 +139,6 @@ namespace hoa
         }
     };
     
-    //! The ambisonic optimization.
-    /** The basic.
-     */
     template <typename T> class Optim<Hoa2d, T, InPhase> : public Harmonic<Hoa2d, T>::Processor
     {
     private:
@@ -138,7 +151,6 @@ namespace hoa
         //! The optimization constructor.
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending of a decomposition order. The order must be at least 1.
          @param     order	The order.
-         @param     optim	The optimization.
          */
         Optim(const ulong order) noexcept :
         Harmonic<Hoa2d, T>::Processor(order),
@@ -153,13 +165,13 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~Optim()
+        ~Optim() noexcept
         {
             ;
         }
         
         //! This method performs the in-phase optimization.
-        /**	You should use this method for in-place or not-in-place processing and performs the in-phase optimization sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
@@ -186,9 +198,6 @@ namespace hoa
         }
     };
     
-    //! The ambisonic optimization.
-    /** The basic.
-     */
     template <typename T> class Optim<Hoa3d, T, Basic> : public Harmonic<Hoa3d, T>::Processor
     {
     public:
@@ -196,7 +205,6 @@ namespace hoa
         //! The optimization constructor.
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending of a decomposition order. The order must be at least 1.
          @param     order	The order.
-         @param     optim	The optimization.
          */
         Optim(const ulong order) noexcept :
         Harmonic<Hoa3d, T>::Processor(order)
@@ -207,13 +215,13 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~Optim()
+        ~Optim() noexcept
         {
             ;
         }
         
         //! This method performs the basic optimization.
-        /**	You should use this method for in-place or not-in-place processing and performs the basic optimization sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
@@ -233,9 +241,6 @@ namespace hoa
         }
     };
     
-    //! The ambisonic optimization.
-    /** The optimization should be used to optimize the ambisonic sound field. There are 3 optimization modes, Basic (no optimization), MaxRe (energy vector optimization) and InPhase (energy and velocity vector optimization). Basic has no effect, it should be used with a perfect ambisonic channels, arrengement where all the channels are to equal distance on a circle, and for a listener placed at the perfect center of the circle. MaxRe should be used for auditory confined to the center of the circle. InPhase should be used when the auditory covers the entire channels area and when the channels arragement is not a perfect circle or when the channels are not to equal distance. Note that the optimizations decrease the precision of the sound field restitution thus it can be compared to particular cases of the fractional orders.
-     */
     template <typename T> class Optim<Hoa3d, T, MaxRe> : public Harmonic<Hoa3d, T>::Processor
     {
     private:
@@ -246,7 +251,6 @@ namespace hoa
         //! The optimization constructor.
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending of a decomposition order. The order must be at least 1.
          @param     order	The order.
-         @param     optim	The optimization.
          */
         Optim(const ulong order) noexcept :
         Harmonic<Hoa3d, T>::Processor(order),
@@ -259,13 +263,13 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~Optim()
+        ~Optim() noexcept
         {
             ;
         }
         
         //! This method performs the max-re optimization.
-        /**	You should use this method for in-place or not-in-place processing and performs the max-re optimization sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
@@ -290,10 +294,7 @@ namespace hoa
             }
         }
     };
-    
-    //! The ambisonic optimization.
-    /** The basic.
-     */
+
     template <typename T> class Optim<Hoa3d, T, InPhase> : public Harmonic<Hoa3d, T>::Processor
     {
     private:
@@ -306,7 +307,6 @@ namespace hoa
         //! The optimization constructor.
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending of a decomposition order. The order must be at least 1.
          @param     order	The order.
-         @param     optim	The optimization.
          */
         Optim(const ulong order) noexcept :
         Harmonic<Hoa3d, T>::Processor(order),
@@ -321,13 +321,13 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~Optim()
+        ~Optim() noexcept
         {
             ;
         }
         
         //! This method performs the in-phase optimization.
-        /**	You should use this method for in-place or not-in-place processing and performs the in-phase optimization sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */

@@ -14,9 +14,6 @@ namespace hoa
     class SourcesManager;
     class SourcesGroup;
     
-	//! The source
-    /** The source store and manage source informations like the position, color, mute...
-     */
 	class Source
 	{
 	private:

@@ -12,12 +12,27 @@
 
 namespace hoa
 {
-    
-    template <Dimension D, typename T> class Scope;
-    
-    //! The ambisonic scope.
-    /** The scope discretize a circle by a set of point and uses a decoder to project the circular harmonics on it. This class should be used for graphical interfaces outside the digital signal processing if the number of points to discretize the circle is very large. Then you should prefer to record snapshot of the circular harmonics and to call the process method at an interval adapted to a graphical rendering.
+    //! The scope class offers a representation a the sound field in the harmonics domain.
+    /** The scope discretize a circle for the 2d or a sphere for the 3d by a set of point and uses a decoder to project the  harmonics on it. This class should be used for graphical interfaces outside the digital signal processing. If the number of points for the discretization is very large, then you should prefer to record snapshot of the harmonics and to call the process method at an interval adapted to a graphical rendering.
      */
+    template <Dimension D, typename T> class Scope : public Harmonic<D, T>::Processor, protected Planewave<D, T>::Processor
+    {
+    public:
+        
+        //! The scope constructor.
+        /**	The scope constructor allocates and initialize the member values to computes harmonics projection depending on a decomposition order and a number of points. The order must be at least 1.
+         @param     order            The order.
+         @param     numberOfPoints   The number of points.
+         */
+        Scope(ulong order, ulong numberOfPoints) = 0;
+        
+        //! The Scope destructor.
+        /**	The Scope destructor free the memory.
+         */
+        ~Scope() noexcept = 0;
+        
+    };
+    
     template <typename T> class Scope<Hoa2d, T> : public Encoder<Hoa2d, T>, protected Planewave<Hoa2d, T>::Processor
     {
     private:
@@ -28,11 +43,10 @@ namespace hoa
         
         //! The scope constructor.
         /**	The scope constructor allocates and initialize the member values to computes circular harmonics projection on a circle depending on a decomposition order and a circle discretization. The circle is discretized by the number of points. The order must be at least 1. The number of points and column should be at least 3 (but it's very low).
-         
          @param     order            The order.
          @param     numberOfPoints   The number of points.
          */
-        Scope(ulong order, ulong numberOfPoints) :
+        Scope(ulong order, ulong numberOfPoints) noexcept :
         Encoder<Hoa2d, T>(order),
         Planewave<Hoa2d, T>::Processor(numberOfPoints)
         {
@@ -52,10 +66,11 @@ namespace hoa
             }
             m_maximum = 0;
         }
-        //! The Scope destructor.
-        /**	The Scope destructor free the memory.
+        
+        //! The scope destructor.
+        /**	The scope destructor free the memory.
          */
-        ~Scope()
+        ~Scope() noexcept
         {
             delete [] m_matrix;
             delete [] m_vector;
@@ -140,10 +155,7 @@ namespace hoa
             }
         }
     };
-    
-    //! The ambisonic scope.
-    /** The scope discretize a sphere by a set of point and uses a decoder to project the spherical harmonics on it. This class should be used for graphical interfaces outside the digital signal processing if the number of points to discretize the sphere is very large. Then you should prefer to record snapshot of the spherical harmonics and to call the process method at an interval adapted to a graphical rendering.
-     */
+
     template <typename T> class Scope<Hoa3d, T> : public Encoder<Hoa3d, T>, protected Planewave<Hoa3d, T>::Processor
     {
     private:
@@ -161,7 +173,7 @@ namespace hoa
          @param     numberOfRow      The number of rows.
          @param     numberOfColumn	The number of columns.
          */
-        Scope(ulong order, ulong numberOfRow, ulong numberOfColumn) :
+        Scope(ulong order, ulong numberOfRow, ulong numberOfColumn) noexcept :
         Encoder<Hoa3d, T>(order),
         Planewave<Hoa3d, T>::Processor(numberOfRow * numberOfColumn),
         m_number_of_rows(numberOfRow),
@@ -199,10 +211,10 @@ namespace hoa
             m_maximum = 0;
         }
         
-        //! The Scope destructor.
-        /**	The Scope destructor free the memory.
+        //! The scope destructor.
+        /**	The scope destructor free the memory.
          */
-        ~Scope()
+        ~Scope() noexcept
         {
             delete [] m_matrix;
             delete [] m_vector;

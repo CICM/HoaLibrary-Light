@@ -11,11 +11,44 @@
 
 namespace hoa
 {
-    template <Dimension D, typename T> class Rotate;
-    
-    //! The ambisonic encoder.
-    /** The encoder should be used to encode a source in the spherical harmonics domain depending of an order of decomposition. It allows to control the azimuth of the source.
+    //! The rotate class rotates a sound field in the harmonics domain (2d available only).
+    /** The rotate should be used to rotate a sound field by wheighting the harmonics depending on the rotation.
      */
+    template <Dimension D, typename T> class Rotate : public  Harmonic<D, T>::Processor
+    {
+    public:
+        
+        //! The rotate constructor.
+        /**	The rotate constructor allocates and initialize the member values. The order must be at least 1.
+         @param     order	The order.
+         */
+        Rotate(const ulong order) noexcept  = 0;
+        
+        //! The Rotate destructor.
+        /**	The Rotate destructor free the memory.
+         */
+        virtual ~Rotate() noexcept = 0;
+        
+        //! This method sets the angle of the rotation around the z axis, the yaw value,
+        /** The yaw is equivalent to a rotation around the z axis, the value is in radian and should be between 0 and 2π.
+         @param     yaw The yaw value.
+         */
+        virtual void setYaw(const T yaw) noexcept = 0;
+        
+        //! Get the angle of the rotation around the z axis, the yaw value.
+        /** The method returns the angle of the rotation around the z axis, the yaw value, in radian between 0 and 2π.
+         @return     The yaw value.
+         */
+        virtual T getYaw() const noexcept = 0;
+        
+        //! This method performs the rotation.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs   The input array.
+         @param     outputs  The output array.
+         */
+        virtual void process(const T* inputs, T* outputs) const noexcept = 0;
+    };
+    
     template <typename T> class Rotate<Hoa2d, T> : public Harmonic<Hoa2d, T>::Processor
     {
     private:
@@ -37,14 +70,13 @@ namespace hoa
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
          */
-        ~Rotate()
+        ~Rotate() noexcept
         {
             ;
         }
         
         //! This method sets the angle of the rotation around the z axis, the yaw value,
         /** The yaw is equivalent to a rotation around the z axis, the value is in radian and should be between 0 and 2π.
-         
          @param     yaw The yaw value.
          */
         inline void setYaw(const T yaw) noexcept
@@ -64,7 +96,7 @@ namespace hoa
         };
         
         //! This method performs the rotation.
-        /**	You should use this method for in-place or not-in-place processing and performs the rotation sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The input array.
          @param     outputs  The output array.
          */

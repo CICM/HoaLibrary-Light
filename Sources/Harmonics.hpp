@@ -11,38 +11,109 @@
 #include "Signal.hpp"
 
 namespace hoa
-{    
-    template <Dimension D, typename T> class Harmonic;
+{
+    //! The harmonic class owns basic ordering informations.
+    /** The harmonic allows to retrieves informations about its ACN ordering, the degree and the order.
+     */
+    template <Dimension D, typename T> class Harmonic
+    {
+    public:
+        
+        //! The harmonic constructor.
+        /** The harmonic constructor allocates and initializes the generale member values depending of an index.
+         @param index    The index must be at least 1.
+         */
+        Harmonic(const ulong _index) noexcept = 0;
+        
+        //! The harmonic destructor.
+        /** The harmonic destructor free the memory.
+         */
+        virtual ~Harmonic() noexcept = 0;
+        
+        //! Get the index of the harmonic.
+        /** The method returns the index of the harmonic.
+         @return     The index.
+         */
+        virtual ulong getIndex() const noexcept = 0;
+
+        //! Get the degree of the harmonic.
+        /** The method returns the degree of the harmonic.
+         @return     The degree.
+         */
+        virtual ulong getDegree() const noexcept = 0;
+        
+        //! Get the order of the harmonic.
+        /** The method returns the order of the harmonic.
+         @return     The order.
+         */
+        virtual long getOrder() const noexcept = 0;
+        
+        //! Get the name of the harmonic.
+        /** The method returns the name of the harmonic.
+         @return     The name.
+         */
+        virtual string getName() const noexcept = 0;
+    };
     
     template<typename T> class Harmonic<Hoa2d, T>
     {
     private:
-        ulong m_degree; // To const
+        ulong m_index;
+        ulong m_degree;
         long  m_order;
     public:
         
+        //! The harmonic constructor.
+        /** The harmonic constructor allocates and initializes the generale member values depending of an index.
+         @param index    The index must be at least 1.
+         */
         Harmonic(const ulong _index) noexcept :
+        m_index(_index),
         m_degree((_index + _index % 2) * 0.5),
         m_order(m_degree * (1 - (_index % 2) * 2))
         {
             ;
         }
         
-        ~Harmonic()
+        //! The harmonic destructor.
+        /** The harmonic destructor free the memory.
+         */
+        ~Harmonic() noexcept
         {
             ;
         }
         
+        //! Get the index of the harmonic.
+        /** The method returns the index of the harmonic.
+         @return     The index.
+         */
+        inline ulong getIndex() const noexcept
+        {
+            return m_index;
+        }
+        
+        //! Get the degree of the harmonic.
+        /** The method returns the degree of the harmonic.
+         @return     The degree.
+         */
         inline ulong getDegree() const noexcept
         {
             return m_degree;
         }
         
+        //! Get the order of the harmonic.
+        /** The method returns the order of the harmonic.
+         @return     The order.
+         */
         inline long getOrder() const noexcept
         {
             return m_order;
         }
         
+        //! Get the name of the harmonic.
+        /** The method returns the name of the harmonic.
+         @return     The name.
+         */
         inline string getName() const noexcept
         {
             return "Harmonic " + to_string(getDegree()) + " " + to_string(getOrder());
@@ -55,8 +126,8 @@ namespace hoa
         class Processor
         {
         private:
-            const ulong             m_order_of_decomposition;
-            const ulong             m_number_of_harmonics;
+            const ulong                 m_order_of_decomposition;
+            const ulong                 m_number_of_harmonics;
             vector<Harmonic<Hoa2d, T> > m_harmonics;
         public:
             
@@ -145,7 +216,7 @@ namespace hoa
              */
             string getHarmonicName(const ulong index) const noexcept
             {
-                return "Harmonic " + to_string(getHarmonicDegree(index)) + " " + to_string(getHarmonicOrder(index));
+                return m_harmonics[index].getName();
             }
         };
     };
@@ -153,32 +224,62 @@ namespace hoa
     template <typename T> class Harmonic<Hoa3d, T>
     {
     private:
+        ulong m_index;
         ulong m_degree;
         long  m_order;
     public:
         
-        Harmonic(const ulong index) noexcept :
-        m_degree(sqrt(index)),
-        m_order(index - (m_degree * (m_degree + 1)))
+        //! The harmonic constructor.
+        /** The harmonic constructor allocates and initializes the generale member values depending of an index.
+         @param index    The index must be at least 1.
+         */
+        Harmonic(const ulong _index) noexcept :
+        m_index(_index),
+        m_degree(sqrt(_index)),
+        m_order(_index - (m_degree * (m_degree + 1)))
         {
             
         }
         
-        ~Harmonic()
+        //! The harmonic destructor.
+        /** The harmonic destructor free the memory.
+         */
+        ~Harmonic() noexcept
         {
             ;
         }
         
+        //! Get the index of the harmonic.
+        /** The method returns the index of the harmonic.
+         @return     The index.
+         */
+        inline ulong getIndex() const noexcept
+        {
+            return m_index;
+        }
+        
+        //! Get the degree of the harmonic.
+        /** The method returns the degree of the harmonic.
+         @return     The degree.
+         */
         inline ulong getDegree() const noexcept
         {
             return m_degree;
         }
         
+        //! Get the order of the harmonic.
+        /** The method returns the order of the harmonic.
+         @return     The order.
+         */
         inline long getOrder() const noexcept
         {
             return m_order;
         }
         
+        //! Get the name of the harmonic.
+        /** The method returns the name of the harmonic.
+         @return     The name.
+         */
         inline string getName() const noexcept
         {
             return "Harmonic " + to_string(getDegree()) + " " + to_string(getOrder());
@@ -193,7 +294,7 @@ namespace hoa
         protected:
             const ulong                 m_order_of_decomposition;
             const ulong                 m_number_of_harmonics;
-            vector<Harmonic<Hoa3d, T> >  m_harmonics;
+            vector<Harmonic<Hoa3d, T> > m_harmonics;
         public:
             
             //! The ambisonic constructor.
@@ -281,7 +382,7 @@ namespace hoa
              */
             string getHarmonicName(const ulong index) const noexcept
             {
-                return "Harmonic " + to_string(getHarmonicDegree(index)) + " " + to_string(getHarmonicOrder(index));
+                return m_harmonics[index].getName();
             }
         };
     };    

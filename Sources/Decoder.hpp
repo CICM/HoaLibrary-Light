@@ -13,21 +13,22 @@
 namespace hoa
 {
     //! The ambisonic decoder.
-    /** The decoder is a virtual class from witch inherit the regular, irregular and binaural decoders.
+    /** The decoder is a virtual class from witch inherit the Regular, Irregular and Binaural decoders.
      */
     template <Dimension D, typename T> class Decoder : public Harmonic<D, T>::Processor, public Planewave<D, T>::Processor
     {
+    public:
         //! The decoder constructor.
         /**	The decoder constructor allocates and initialize the base classes.
          @param     order                   The order
          @param     numberOfPlanewaves      The number of channels.
          */
-        Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept = 0;
+        Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept;
         
         //! The destructor.
         /** The destructor free the memory.
          */
-        virtual ~Decoder() = 0;
+        virtual ~Decoder();
         
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and performs the decoding sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.

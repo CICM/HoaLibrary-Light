@@ -11,10 +11,45 @@
 
 namespace hoa
 {
-    //! The ambisonic encoder with distance compensation.
-    /** The encoder with distance compensation should be used to encode a source in the spherical harmonics domain depending of an order of decomposition. It allows to control the azimuth and the radius of the source.
+    //! The wider class wides the diffusion of the sound field in the harmonics domain.
+    /** The wider simulates fractional orders to diffuse a sound field from omni directional when the widening factor is \f$0\f$ to the most directional when the widening factor is \f$1\f$.
      */
-    template <Dimension D, typename T> class Wider;
+    template <Dimension D, typename T> class Wider : public Harmonic<D, T>::Processor
+    {
+    public:
+        
+        //! The wider constructor.
+        /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
+         @param     order	The order.
+         */
+        Wider(const ulong order) noexcept = 0;
+        
+        //! The wider destructor.
+        /**	The wider destructor free the memory.
+         */
+        virtual ~Wider() noexcept = 0;
+        
+        //! This method set the widening value.
+        /**	The the widening value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is omni directional and at \f$1\f$ the sound field is instact.
+         @param     radius   The radius.
+         @see       setAzimuth()
+         */
+        virtual void setWidening(const T radius) noexcept = 0;
+        
+        //! Get the the widening value.
+        /** The method returns the the widening value.
+         @return     The widening value.
+         */
+        virtual T getWidening() const noexcept = 0;
+        
+        //! This method perform the widening.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs	The input array.
+         @param     outputs The output array.
+         */
+        virtual void process(const T* inputs, T* outputs) const noexcept = 0;
+
+    };
     
     template <typename T> class Wider<Hoa2d, T> : public Harmonic<Hoa2d, T>::Processor
     {
@@ -24,50 +59,47 @@ namespace hoa
         T   m_factor;
     public:
         
-        //! The encoder constructor.
-        /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
+        //! The wider constructor.
+        /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const ulong order) :
-        Harmonic<Hoa2d, T>::Processor(order)
+        Wider(const ulong order) noexcept : Harmonic<Hoa2d, T>::Processor(order)
         {
             setWidening(1.);
         }
         
-        //! The encoder destructor.
-        /**	The encoder destructor free the memory.
+        //! The wider destructor.
+        /**	The wider destructor free the memory.
          */
-        ~Wider()
+        ~Wider() noexcept
         {
             ;
         }
         
-        //! This method set the radius.
-        /**	The radius is between 0 and infinity. At 0, the source is in the center of the ambisonic circle and at 1, the source is at the limit of the ambisonic circle. Over 1, the source get away the ambisonic circle.
+        //! This method set the widening value.
+        /**	The the widening value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is omni directional and at \f$1\f$ the sound field is instact.
          @param     radius   The radius.
          @see       setAzimuth()
          */
-        inline void setWidening(const T radius) noexcept
+        inline void setWidening(const T widening) noexcept
         {
-            m_widening  = Math<T>::clip(radius, (T)0., (T)1.);
+            m_widening  = Math<T>::clip(widening, (T)0., (T)1.);
             m_factor    = (1. - m_widening) * HOA_PI;
             m_gain      = (sin(m_factor - HOA_PI2) + 1.) * 0.5;
         }
         
-        //! Get the azimuth.
-        /** The method returns the azimuth between 0 and 2π.
-         @return     The azimuth.
+        //! Get the the widening value.
+        /** The method returns the the widening value.
+         @return     The widening value.
          */
         inline T getWidening() const noexcept
         {
             return m_widening;
         }
         
-        //! This method performs the encoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
-         // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
-         @param     input	The input sample.
+        //! This method perform the widening.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs	The input array.
          @param     outputs The output array.
          */
         inline void process(const T* inputs, T* outputs) const noexcept
@@ -97,26 +129,25 @@ namespace hoa
         T   m_factor;
     public:
         
-        //! The encoder constructor.
-        /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
+        //! The wider constructor.
+        /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const ulong order) :
-        Harmonic<Hoa3d, T>::Processor(order)
+        Wider(const ulong order) noexcept : Harmonic<Hoa3d, T>::Processor(order)
         {
             setWidening(1.);
         }
         
-        //! The encoder destructor.
-        /**	The encoder destructor free the memory.
+        //! The wider destructor.
+        /**	The wider destructor free the memory.
          */
-        ~Wider()
+        ~Wider() noexcept
         {
             ;
         }
         
-        //! This method set the radius.
-        /**	The radius is between 0 and infinity. At 0, the source is in the center of the ambisonic circle and at 1, the source is at the limit of the ambisonic circle. Over 1, the source get away the ambisonic circle.
+        //! This method set the widening value.
+        /**	The the widening value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is omni directional and at \f$1\f$ the sound field is instact.
          @param     radius   The radius.
          @see       setAzimuth()
          */
@@ -127,20 +158,18 @@ namespace hoa
             m_gain      = (sin(m_factor - HOA_PI2) + 1.) * 0.5;
         }
         
-        //! Get the azimuth.
-        /** The method returns the azimuth between 0 and 2π.
-         @return     The azimuth.
+        //! Get the the widening value.
+        /** The method returns the the widening value.
+         @return     The widening value.
          */
         inline T getWidening() const noexcept
         {
             return m_widening;
         }
         
-        //! This method performs the encoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         // cos(x + b) = cos(x) * cos(b) - sin(x) * sin(b)
-         // sin(x + b) = cos(x) * sin(b) + sin(x) * cos(b)
-         @param     input	The input sample.
+        //! This method perform the widening.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs	The input array.
          @param     outputs The output array.
          */
         inline void process(const T* inputs, T* outputs) const noexcept

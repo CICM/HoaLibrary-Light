@@ -12,9 +12,6 @@
 namespace hoa
 {
     
-    //! A spherical voronoi.
-    /** The voronoi class is opaque.
-     */
     template <Dimension D> class Voronoi;
     
     template <> class Voronoi <Hoa3d>

@@ -12,7 +12,22 @@
 
 namespace hoa
 {
-    template<Dimension D, typename T> class Planewave;
+    //! The planewave class.
+    /** The .
+     */
+    template<Dimension D, typename T> class Planewave
+    {
+    public:
+        
+        //! The planewaves processor.
+        /**
+         The planewaves processor classes, that process on a set of planewaves inherit from this class. It store basic informations like the number of planewaves, the coordinates and the names of the planewaves.
+         */
+        class Processor
+        {
+            ;
+        };
+    };
     
     template<typename T> class Planewave<Hoa2d, T>
     {
@@ -68,9 +83,9 @@ namespace hoa
             return i.m_azimuth < j.m_azimuth;
         }
         
-        //! The planewaves class.
+        //! The planewaves processor.
         /**
-         The planewaves classes, that process on a set of planewaves inherit from this class. It store basic informations like the number of planewaves, the coordinates and the names of the planewaves.
+         The planewaves processor classes, that process on a set of planewaves inherit from this class. It store basic informations like the number of planewaves, the coordinates and the names of the planewaves.
          */
         class Processor
         {
