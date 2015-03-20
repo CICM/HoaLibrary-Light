@@ -7,7 +7,7 @@
 #ifndef DEF_HOA_WIDER_LIGHT
 #define DEF_HOA_WIDER_LIGHT
 
-#include "Harmonics.hpp"
+#include "Processor.hpp"
 
 namespace hoa
 {

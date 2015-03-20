@@ -72,16 +72,6 @@ namespace hoa
         Hoa2d = 0, /*!<  The 2d dimension. */
         Hoa3d = 1  /*!<  The 3d dimension. */
     };
-    
-    //! The processor.
-    /** The processor owns a set of harmonics or planewaves and performs digital signal processing.
-     */
-    template <typename T> class Processor
-    {
-    public:
-        
-        virtual void process(const T* inputs, T* outputs);
-    };
 }
 
 #endif

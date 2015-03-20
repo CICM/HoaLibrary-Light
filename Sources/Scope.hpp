@@ -20,7 +20,7 @@ namespace hoa
     public:
         
         //! The scope constructor.
-        /**	The scope constructor allocates and initialize the member values to computes harmonics projection depending on a decomposition order and a number of points. The order must be at least 1.
+        /**	The scope constructor allocates and initialize the member values to computes harmonics projection depending on a order of decomposition and a number of points. The order must be at least 1.
          @param     order            The order.
          @param     numberOfPoints   The number of points.
          */
@@ -42,7 +42,7 @@ namespace hoa
     public:
         
         //! The scope constructor.
-        /**	The scope constructor allocates and initialize the member values to computes circular harmonics projection on a circle depending on a decomposition order and a circle discretization. The circle is discretized by the number of points. The order must be at least 1. The number of points and column should be at least 3 (but it's very low).
+        /**	The scope constructor allocates and initialize the member values to computes circular harmonics projection on a circle depending on a order of decomposition and a circle discretization. The circle is discretized by the number of points. The order must be at least 1. The number of points and column should be at least 3 (but it's very low).
          @param     order            The order.
          @param     numberOfPoints   The number of points.
          */
@@ -167,7 +167,7 @@ namespace hoa
     public:
         
         //! The Scope constructor.
-        /**	The Scope constructor allocates and initialize the member values to computes spherical harmonics projection on a sphere depending on a decomposition order and a sphere discretization. The sphere discretization is done by a set of points defined by rows and columns then the precision will be lower at the elevation center (0 radian) than at the top (1/2 Pi) or the bottom (-1/2 Pi) of the sphere. The number of row discretize the elevation then it set how many points are used between the bottom and the top. The number of column discretize the azimuth circle then it set how many points are used to make the turn from the front (O radian). Then the sphere is discretized by number of rows * number of columns points. The order must be at least 1. The number of rows and column should be at least 3 (but it's very low).
+        /**	The Scope constructor allocates and initialize the member values to computes spherical harmonics projection on a sphere depending on a order of decomposition and a sphere discretization. The sphere discretization is done by a set of points defined by rows and columns then the precision will be lower at the elevation center (0 radian) than at the top (1/2 Pi) or the bottom (-1/2 Pi) of the sphere. The number of row discretize the elevation then it set how many points are used between the bottom and the top. The number of column discretize the azimuth circle then it set how many points are used to make the turn from the front (O radian). Then the sphere is discretized by number of rows * number of columns points. The order must be at least 1. The number of rows and column should be at least 3 (but it's very low).
          
          @param     order            The order.
          @param     numberOfRow      The number of rows.

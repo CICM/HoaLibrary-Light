@@ -7,7 +7,8 @@
 #ifndef DEF_HOA_VORONOI_LIGHT
 #define DEF_HOA_VORONOI_LIGHT
 
-#include "Harmonics.hpp"
+#include "Defs.hpp"
+#include "Math.hpp"
 
 namespace hoa
 {

@@ -7,7 +7,7 @@
 #ifndef DEF_HOA_ENCODER_LIGHT
 #define DEF_HOA_ENCODER_LIGHT
 
-#include "Harmonics.hpp"
+#include "Processor.hpp"
 
 namespace hoa
 {
@@ -41,6 +41,7 @@ namespace hoa
          */
         class Basic : public Encoder
         {
+        public:
             //! The basic constructor.
             /**	The basic constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
              @param     order	The order.
@@ -93,9 +94,9 @@ namespace hoa
              \f[Y_{l,m}(\theta, \varphi) = k_{l, m} P_{l, \left|m\right|}(\cos{(\varphi)}) e^{+im\theta} \f]
              with \f$e^{+im\theta}\f$ the azimuth part of the equation with \f$i\f$ the imaginary, \f$P_{l, \left|m\right|}(\cos{(\varphi)})\f$ the elevation part of the equation with \f$P_{l, \left|m\right|}(x)\f$ the associated Legendre polynomials, \f$k_{l, m}\f$ the normalization, \f$l\f$ the degree, \f$m\f$ the order, \f$\theta\f$ the azimuth in radian and \f$\varphi\f$ the elevation in radian.\n
              
-             The azimuth part \f$e^{+im\theta}\f$ can be expressed with the real form :\n
+             The azimuth part in the imaginary form \f$e^{+im\theta}\f$ can be expressed with the real form :\n
              if \f$m \geq 0\f$ then
-             \f[e^{+im\theta} = \cos{(m\theta)}\f]
+             \f[e^{+im\theta} = \cos{(\left|m\right|\theta)}\f]
              else
              \f[e^{+im\theta} = sin{(\left|m\right|\theta)}\f]
              The elevation part \f$P_{l, \left|m\right|}(x)\f$ can be expressed with recursives formulas :
@@ -218,7 +219,7 @@ namespace hoa
         public:
             
             //! The multi encoder constructor.
-            /**	The multi encoder constructor allocates and initialize the member values and classes depending on a decomposition order and the number of sources. The order and the number of sources must be at least 1.
+            /**	The multi encoder constructor allocates and initialize the member values and classes depending on a order of decomposition and the number of sources. The order and the number of sources must be at least 1.
              
              @param     order            The order.
              @param     numberOfSources	The number of sources.
@@ -294,7 +295,7 @@ namespace hoa
             
             
             //! This method performs the encoding with distance compensation.
-            /**	You should use this method for in-place or not-in-place processing and performs the encoding with distance compensation sample by sample. The input array contains the samples of the sources and the minimum size sould be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+            /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array contains the samples of the sources and the minimum size sould be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
              \f[Y^{multi}_{l,m}(\theta_0^n, \varphi_0^n, \rho_0^n) = \sum_{i=0}^n Y^{dc}_{l,m}(\theta_i, \varphi_i, \rho_i) \f]
              @param     input  The input array.
              @param     outputs The outputs array.
@@ -667,7 +668,7 @@ namespace hoa
     public:
         
         //! The map constructor.
-        /**	The map constructor allocates and initialize the member values and classes depending on a decomposition order and the number of sources. The order and the number of sources must be at least 1.
+        /**	The map constructor allocates and initialize the member values and classes depending on a order of decomposition and the number of sources. The order and the number of sources must be at least 1.
          
          @param     order            The order.
          @param     numberOfSources	The number of sources.
@@ -774,7 +775,7 @@ namespace hoa
         
         
         //! This method performs the encoding with distance compensation.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding with distance compensation sample by sample. The input array contains the samples of the sources and the minimum size sould be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array contains the samples of the sources and the minimum size sould be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     input  The input array.
          @param     outputs The outputs array.
          */
@@ -1490,7 +1491,7 @@ namespace hoa
     public:
         
         //! The map constructor.
-        /**	The map constructor allocates and initialize the member values and classes depending on a decomposition order and the number of sources. The order and the number of sources must be at least 1.
+        /**	The map constructor allocates and initialize the member values and classes depending on a order of decomposition and the number of sources. The order and the number of sources must be at least 1.
          
          @param     order            The order.
          @param     numberOfSources	The number of sources.
@@ -1620,7 +1621,7 @@ namespace hoa
         
         
         //! This method performs the encoding with distance compensation.
-        /**	You should use this method for in-place or not-in-place processing and performs the encoding with distance compensation sample by sample. The input array contains the samples of the sources and the minimum size sould be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array contains the samples of the sources and the minimum size sould be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     input  The input array.
          @param     outputs The outputs array.
          */

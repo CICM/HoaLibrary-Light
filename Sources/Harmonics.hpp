@@ -12,7 +12,7 @@
 
 namespace hoa
 {
-    //! The harmonic class owns basic ordering informations.
+    //! The harmonic class owns basic harmonics ordering informations.
     /** The harmonic allows to retrieves informations about its ACN ordering, the degree and the order.
      */
     template <Dimension D, typename T> class Harmonic
@@ -31,25 +31,25 @@ namespace hoa
         ~Harmonic() noexcept;
         
         //! Get the index of the harmonic.
-        /** The method returns the index of the harmonic.
+        /** The method returns the index \f$i\f$ of the harmonic.
          @return     The index.
          */
         ulong getIndex() const noexcept;
 
         //! Get the degree of the harmonic.
-        /** The method returns the degree of the harmonic.
+        /** The method returns the degree \f$l\f$ of the harmonic.
          @return     The degree.
          */
         ulong getDegree() const noexcept;
         
         //! Get the order of the harmonic.
-        /** The method returns the order of the harmonic.
+        /** The method returns the order \f$m\f$ of the harmonic.
          @return     The order.
          */
         long getOrder() const noexcept;
         
         //! Get the name of the harmonic.
-        /** The method returns the name of the harmonic.
+        /** The method returns the name \f$harmonic_{l,m}\f$ of the harmonic.
          @return     The name.
          */
         string getName() const noexcept;
@@ -63,12 +63,14 @@ namespace hoa
         static ulong getHarmonicIndex(const ulong degree, const long order) noexcept;
         
         //! Get the number of harmonics for an order of decomposition.
-        /** The method returns the number of harmonics for a decomposition order.
+        /** The method returns the number of harmonics for a order of decomposition \f$N\f$.
          @param order   The order of decomposition.
          @return        The number of harmonics.
          */
         static ulong getNumberOfHarmonics(const ulong order) noexcept;
     };
+    
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
     
     template<typename T> class Harmonic<Hoa2d, T>
     {
@@ -142,7 +144,7 @@ namespace hoa
         }
         
         //! Get the number of harmonics for an order of decomposition.
-        /** The method returns the number of harmonics for a decomposition order.
+        /** The method returns the number of harmonics for a order of decomposition.
          @param order   The order of decomposition.
          @return        The number of harmonics.
          */
@@ -224,7 +226,7 @@ namespace hoa
         }
         
         //! Get the number of harmonics for an order of decomposition.
-        /** The method returns the number of harmonics for a decomposition order.
+        /** The method returns the number of harmonics for a order of decomposition.
          @param order   The order of decomposition.
          @return        The number of harmonics.
          */
@@ -234,106 +236,8 @@ namespace hoa
         }
     };
     
-    //! The harmonic processor.
-    /** The harmonic processor owns a set of harmonics depending on the decomposition order.
-     */
-    template <Dimension D, typename T> class Processor< Harmonic<D, T> >
-    {
-    private:
-        
-        const ulong                 m_order_of_decomposition;
-        const ulong                 m_number_of_harmonics;
-        vector< Harmonic<D, T> >    m_harmonics;
-    public:
-        
-        //! The harmonic processor constructor.
-        /** The harmonic processor constructor allocates and initializes the generale member values depending on a decomposition order.
-         @param order    The order of decomposition, must be at least 1.
-         */
-        Processor(const ulong order) noexcept :
-        m_order_of_decomposition(order),
-        m_number_of_harmonics(Harmonic<D, T>::getNumberOfHarmonics(order))
-        {
-            for(ulong i = 0; i < m_number_of_harmonics; i++)
-            {
-                m_harmonics.push_back(Harmonic<D, T>(i));
-            }
-        }
-        
-        //! The ambisonic destructor.
-        /** The ambisonic destructor.
-         */
-        ~Processor() noexcept
-        {
-            m_harmonics.clear();
-        }
-        
-        //! Retrieve the decomposition order.
-        /** Retrieve the decomposition order.
-         @return The order.
-         */
-        inline ulong getDecompositionOrder() const noexcept
-        {
-            return m_order_of_decomposition;
-        }
-        
-        //! Retrieve the number of harmonics.
-        /** Retrieve the number of harmonics.
-         @return The number of harmonics.
-         */
-        inline ulong getNumberOfHarmonics() const noexcept
-        {
-            return m_number_of_harmonics;
-        }
-        
-        //! Retrieve the order of an harmonic.
-        /** The orders of the harmonic are in the range -order to order.
-         @param     index	The index of an harmonic.
-         @return    The method returns the order of the harmonic.
-         @see       getHarmonicDegree()
-         @see       getHarmonicName()
-         */
-        inline long getHarmonicOrder(const ulong index) const noexcept
-        {
-            return m_harmonics[index].getOrder();
-        }
-        
-        //! Retrieve the degree of an harmonic.
-        /** The degrees of the harmonics are in the range 0 to decomposition order.
-         @param     index	The index of an harmonic.
-         @return    The method returns the degree of the harmonic.
-         @see       getHarmonicOrder()
-         @see       getHarmonicName()
-         */
-        inline ulong getHarmonicDegree(const ulong index) const noexcept
-        {
-            return m_harmonics[index].getDegree();
-        }
-        
-        //! Retrieve the index of an harmonic.
-        /** The indices of the harmonics are in the range 0 to number of harmonics - 1.
-         @param     order	The order an harmonic.
-         @return    The method returns the index of the harmonic.
-         @see       getHarmonicOrder()
-         @see       getHarmonicName()
-         */
-        inline ulong getHarmonicIndex(const ulong degree, long order) const noexcept
-        {
-            return Harmonic<D, T>::getHarmonicIndex(order, order);
-        }
-        
-        //! Retrieve the name of an harmonic.
-        /** Retrieve the name of an harmonic.
-         @param     index	The index of an harmonic.
-         @return    The method returns the name of the harmonic that contains its degree and its order.
-         @see       getHarmonicDegree()
-         @see       getHarmonicOrder()
-         */
-        string getHarmonicName(const ulong index) const noexcept
-        {
-            return m_harmonics[index].getName();
-        }
-    };
+#endif
+    
 }
 
 #endif

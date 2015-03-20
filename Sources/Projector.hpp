@@ -7,13 +7,13 @@
 #ifndef DEF_HOA_PROJECTOR_LIGHT
 #define DEF_HOA_PROJECTOR_LIGHT
 
-#include "Harmonics.hpp"
+#include "Encoder.hpp"
 #include "Planewaves.hpp"
 
 namespace hoa
 {
     //! The ambisonic projector.
-    /** The projector should be used to decode an ambisonic sound field for a set a channels on a circle depending on a decomposition order or for headphones.
+    /** The projector should be used to decode an ambisonic sound field for a set a channels on a circle depending on a order of decomposition or for headphones.
      */
     template <Dimension D, typename T> class Projector;
     
@@ -24,7 +24,7 @@ namespace hoa
     public:
         
         //! The regular constructor.
-        /**	The regular constructor allocates and initialize the decoding matrix depending on a decomposition order and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
+        /**	The regular constructor allocates and initialize the decoding matrix depending on a order of decomposition and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
          @param     order				The order
          @param     numberOfPlanewaves     The number of planewaves.
          */

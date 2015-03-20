@@ -7,7 +7,7 @@
 #ifndef DEF_HOA_ROTATE_LIGHT
 #define DEF_HOA_ROTATE_LIGHT
 
-#include "Harmonics.hpp"
+#include "Processor.hpp"
 
 namespace hoa
 {
@@ -67,7 +67,7 @@ namespace hoa
     public:
         
         //! The rotate constructor.
-        /**	The rotate constructor allocates and initialize the member values to computes spherical harmonics rotation depending on a decomposition order. The order must be at least 1.
+        /**	The rotate constructor allocates and initialize the member values to computes spherical harmonics rotation depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
         Rotate(const ulong order) noexcept : Processor< Harmonic<Hoa2d, T> >(order)

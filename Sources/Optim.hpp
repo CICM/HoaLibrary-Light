@@ -7,7 +7,7 @@
 #ifndef DEF_HOA_OPTIM_LIGHT
 #define DEF_HOA_OPTIM_LIGHT
 
-#include "Harmonics.hpp"
+#include "Processor.hpp"
 
 namespace hoa
 {
@@ -19,7 +19,7 @@ namespace hoa
     public:
         
         //! The optim constructor.
-        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
         Optim(const ulong order) noexcept = 0;
@@ -44,7 +44,7 @@ namespace hoa
         public:
             
             //! The optim constructor.
-            /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+            /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
             Basic(const ulong order) noexcept = 0;
@@ -71,7 +71,7 @@ namespace hoa
         {
         public:
             //! The optim constructor.
-            /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+            /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
             MaxRe(const ulong order) noexcept = 0;
@@ -98,7 +98,7 @@ namespace hoa
         {
         public:
             //! The optim constructor.
-            /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+            /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
             InPhase(const ulong order) noexcept = 0;
@@ -126,7 +126,7 @@ namespace hoa
     public:
         
         //! The optim constructor.
-        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
         Optim(const ulong order) noexcept : Processor< Harmonic<Hoa2d, T> >(order)
@@ -170,7 +170,7 @@ namespace hoa
     public:
         
         //! The optimization constructor.
-        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
         Basic(const ulong order) noexcept :  Optim<Hoa2d, T>(order)
@@ -212,7 +212,7 @@ namespace hoa
     public:
         
         //! The optimization constructor.
-        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
         MaxRe(const ulong order) noexcept :  Optim<Hoa2d, T>(order),
@@ -265,7 +265,7 @@ namespace hoa
     public:
         
         //! The optimization constructor.
-        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
         InPhase(const ulong order) noexcept :  Optim<Hoa2d, T>(order),
@@ -318,7 +318,7 @@ namespace hoa
     public:
         
         //! The optim constructor.
-        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
         Optim(const ulong order) noexcept : Processor< Harmonic<Hoa3d, T> >(order)
@@ -362,7 +362,7 @@ namespace hoa
     public:
         
         //! The optimization constructor.
-        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
         Basic(const ulong order) noexcept : Optim<Hoa3d, T>(order)
@@ -407,7 +407,7 @@ namespace hoa
     public:
         
         //! The optimization constructor.
-        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
         MaxRe(const ulong order) noexcept : Optim<Hoa3d, T>(order),
@@ -462,7 +462,7 @@ namespace hoa
     public:
         
         //! The optimization constructor.
-        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a decomposition order. The order must be at least 1.
+        /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
         InPhase(const ulong order) noexcept : Optim<Hoa3d, T>(order),
