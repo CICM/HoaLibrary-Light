@@ -26,7 +26,7 @@ namespace hoa
     template <Dimension D, typename T, Recomposition M> class Recomposer;
     
     
-    template <typename T> class Recomposer<Hoa2d, T, Fixe> : public Encoder<Hoa2d, T>::Basic, public Planewave<Hoa2d, T>::Processor
+    template <typename T> class Recomposer<Hoa2d, T, Fixe> : public Encoder<Hoa2d, T>::Basic, public Processor< Planewave<Hoa2d, T> >
     {
     private:
         T* m_matrix;
@@ -35,18 +35,18 @@ namespace hoa
         
         Recomposer(ulong order, ulong numberOfPlanewaves) noexcept :
         Encoder<Hoa2d, T>::Basic(order),
-        Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
+        Processor< Planewave<Hoa2d, T> >(numberOfPlanewaves)
         {
             const T factor = 1.;
             T* vector   = new T[Encoder<Hoa2d, T>::getNumberOfHarmonics()];
-            m_matrix    = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            m_matrix    = new T[Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
+            for(ulong i = 0; i < Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(); i++)
             {
-                Encoder<Hoa2d, T>::Basic::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
+                Encoder<Hoa2d, T>::Basic::setAzimuth(Processor< Planewave<Hoa2d, T> >::getPlanewaveAzimuth(i));
                 Encoder<Hoa2d, T>::Basic::process(&factor, vector);
                 for(ulong j = 0; j < Encoder<Hoa2d, T>::getNumberOfHarmonics(); j++)
                 {
-                    m_matrix[j * Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() + i] = vector[j];
+                    m_matrix[j * Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves() + i] = vector[j];
                 }
             }
             delete [] vector;
@@ -59,12 +59,12 @@ namespace hoa
         
         void process(const T* inputs, T* outputs)
         {
-            Signal<T>::matrix_vector_mul(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), Encoder<Hoa2d, T>::getNumberOfHarmonics(), inputs, m_matrix, outputs);
+            Signal<T>::matrix_vector_mul(Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(), Encoder<Hoa2d, T>::getNumberOfHarmonics(), inputs, m_matrix, outputs);
         }
     };
 
     
-    template <typename T> class Recomposer<Hoa2d, T, Fisheye> : public Processor< Harmonic<Hoa2d, T> >, public Planewave<Hoa2d, T>::Processor
+    template <typename T> class Recomposer<Hoa2d, T, Fisheye> : public Processor< Harmonic<Hoa2d, T> >, public Processor< Planewave<Hoa2d, T> >
     {
     private:
         vector< typename Encoder<Hoa2d, T>::Basic*>m_encoders;
@@ -72,9 +72,9 @@ namespace hoa
         
         Recomposer(ulong order, ulong numberOfPlanewaves) noexcept :
         Processor< Harmonic<Hoa2d, T> >(order),
-        Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
+        Processor< Planewave<Hoa2d, T> >(numberOfPlanewaves)
         {
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 0; i < Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(); i++)
             {
                 m_encoders.push_back(new typename Encoder<Hoa2d, T>::Basic(order));
             }
@@ -82,7 +82,7 @@ namespace hoa
         
         ~Recomposer()
         {
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 0; i < Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(); i++)
             {
                 delete m_encoders[i];
             }
@@ -92,9 +92,9 @@ namespace hoa
         inline void setFisheye(const T fisheye) noexcept
         {
             T factor = 1. - Math<T>::clip(fisheye, (T)0., (T)1.);
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 0; i < Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(); i++)
             {
-                T azimuth = (T)i / (T)Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() * HOA_2PI - HOA_PI;
+                T azimuth = (T)i / (T)Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves() * HOA_2PI - HOA_PI;
                 if(azimuth < HOA_PI)
                 {
                     azimuth *= factor;
@@ -110,14 +110,14 @@ namespace hoa
         inline void process(const T* inputs, T* outputs) const noexcept
         {
             m_encoders[0]->process(inputs, outputs);
-            for(ulong i = 1; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 1; i < Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(); i++)
             {
                 m_encoders[i]->processAdd(inputs++, outputs);
             }
         }
     };
     
-    template <typename T> class Recomposer<Hoa2d, T, Free> : public Processor< Harmonic<Hoa2d, T> >, public Planewave<Hoa2d, T>::Processor
+    template <typename T> class Recomposer<Hoa2d, T, Free> : public Processor< Harmonic<Hoa2d, T> >, public Processor< Planewave<Hoa2d, T> >
     {
     private:
         vector< typename Encoder<Hoa2d, T>::DC* >  m_encoders;
@@ -125,9 +125,9 @@ namespace hoa
         
         Recomposer(ulong order, ulong numberOfPlanewaves) noexcept :
         Processor< Harmonic<Hoa2d, T> >(order),
-        Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
+        Processor< Planewave<Hoa2d, T> >(numberOfPlanewaves)
         {
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 0; i < Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(); i++)
             {
                 m_encoders.push_back(new typename Encoder<Hoa2d, T>::DC(order));
             }
@@ -135,7 +135,7 @@ namespace hoa
         
         ~Recomposer()
         {
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 0; i < Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(); i++)
             {
                 delete m_encoders[i];
             }
@@ -165,7 +165,7 @@ namespace hoa
         inline void process(const T* inputs, T* outputs) const noexcept
         {
             m_encoders[0]->process(inputs, outputs);
-            for(ulong i = 1; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 1; i < Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(); i++)
             {
                 m_encoders[i]->processAdd(inputs++, outputs);
             }

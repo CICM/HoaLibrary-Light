@@ -152,6 +152,7 @@ namespace hoa
         m_rotation_y(0.),
         m_rotation_x(0.)
         {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
             if(D == Hoa2d)
             {
                 for(ulong i = 0; i < m_number_of_planewaves; i++)
@@ -246,6 +247,7 @@ namespace hoa
                     }
                 }
             }
+#endif
         }
         
         //! The ambisonic destructor.

@@ -55,6 +55,7 @@ namespace hoa
         virtual void processEnergy(const T* inputs, T* outputs) noexcept = 0;
     };
     
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
    
     template <typename T> class Vector<Hoa2d, T> : public Processor< Planewave<Hoa2d, T> >
     {
@@ -270,6 +271,8 @@ namespace hoa
                 }
         }
     };
+    
+#endif
 }
 
 #endif

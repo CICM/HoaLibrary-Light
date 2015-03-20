@@ -18,7 +18,7 @@ namespace hoa
      */
     template <Dimension D, typename T> class Projector;
     
-    template <typename T> class Projector<Hoa2d, T> : public Encoder<Hoa2d, T>::Basic, public Planewave<Hoa2d, T>::Processor
+    template <typename T> class Projector<Hoa2d, T> : public Encoder<Hoa2d, T>::Basic, public Processor< Planewave<Hoa2d, T> >
     {
     private:
         T*  m_matrix;
@@ -31,13 +31,13 @@ namespace hoa
          */
         Projector(const ulong order, const ulong numberOfPlanewaves) noexcept :
         Encoder<Hoa2d, T>::Basic(order),
-        Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
+        Processor< Planewave<Hoa2d, T> >(numberOfPlanewaves)
         {
-            m_matrix = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
+            m_matrix = new T[Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            for(ulong i = 0; i < Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(); i++)
             {
-                Encoder<Hoa2d, T>::Basic::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
+                Encoder<Hoa2d, T>::Basic::setAzimuth(Processor< Planewave<Hoa2d, T> >::getPlanewaveAzimuth(i));
                 Encoder<Hoa2d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
                 m_matrix[i * Encoder<Hoa2d, T>::getNumberOfHarmonics()] = factor * 0.5;
             }
@@ -58,7 +58,7 @@ namespace hoa
          */
         inline void process(const T* inputs, T* outputs) const noexcept
         {
-            Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
+            Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor< Planewave<Hoa2d, T> >::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
     };
 #endif
