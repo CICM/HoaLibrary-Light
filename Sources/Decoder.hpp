@@ -119,7 +119,7 @@ namespace hoa
     public:
         
         //! The regular constructor.
-        /**	The regular constructor allocates and initialize the decoding matrix depending on a decomposition order and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
+        /**	The regular constructor allocates and initialize the decoding matrix depending on a order of decomposition and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
@@ -170,7 +170,7 @@ namespace hoa
     public:
         
         //! The irregular constructor.
-        /**	The irregular constructor allocates and initialize the decoding matrix depending on a decomposition order and a number of channels. The order must be at least 1.
+        /**	The irregular constructor allocates and initialize the decoding matrix depending on a order of decomposition and a number of channels. The order must be at least 1.
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
@@ -231,8 +231,8 @@ namespace hoa
                 std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);
                 
                 {
-                    const T current_angle   = channels[0].getAzimuth();
-                    const T previous_angle  = channels[channels.size() - 1].getAzimuth();
+                    const T current_angle   = channels[0].getAzimuth(0., 0., 0.);
+                    const T previous_angle  = channels[channels.size() - 1].getAzimuth(0., 0., 0.);
                     const T previous_portion= (HOA_2PI - previous_angle) + current_angle;
                     if(smallest_distance > previous_portion)
                     {
@@ -242,8 +242,8 @@ namespace hoa
                 }
                 for(ulong i = 1; i < channels.size(); i++)
                 {
-                    const T current_angle   = channels[i].getAzimuth();
-                    const T previous_angle  = channels[i-1].getAzimuth();
+                    const T current_angle   = channels[i].getAzimuth(0., 0., 0.);
+                    const T previous_angle  = channels[i-1].getAzimuth(0., 0., 0.);
                     const T previous_portion= current_angle - previous_angle;
                     if(smallest_distance > previous_portion)
                     {
@@ -265,17 +265,17 @@ namespace hoa
                 {
                     const T angle = T(i) / T(nvirtual) * HOA_2PI;
                     //post("virtual %i :  %f", (int)i , (float)(angle / HOA_2PI * 360.f));
-                    if(angle < channels[0].getAzimuth())
+                    if(angle < channels[0].getAzimuth(0., 0., 0.))
                     {
-                        const T portion = (HOA_2PI - channels[channels.size()-1].getAzimuth()) + channels[0].getAzimuth();
+                        const T portion = (HOA_2PI - channels[channels.size()-1].getAzimuth(0., 0., 0.)) + channels[0].getAzimuth(0., 0., 0.);
                         
-                        const T factor1 = (1. - ((channels[0].getAzimuth() - angle) / portion)) * factor;
+                        const T factor1 = (1. - ((channels[0].getAzimuth(0., 0., 0.) - angle) / portion)) * factor;
                         Encoder<Hoa2d, T>::Basic::setAzimuth(angle);
                         Encoder<Hoa2d, T>::Basic::process(&factor1, vector_harmonics);
                         vector_harmonics[0] = factor1 * 0.5;
                         Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
                         
-                        const T factor2 = ((channels[0].getAzimuth() - angle) / portion) * factor;
+                        const T factor2 = ((channels[0].getAzimuth(0., 0., 0.) - angle) / portion) * factor;
                         Encoder<Hoa2d, T>::Basic::process(&factor2, vector_harmonics);
                         vector_harmonics[0] = factor2 * 0.5;
                         Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size() - 1].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
@@ -288,17 +288,17 @@ namespace hoa
                         //     (float)(channels[0].getAzimuth() / HOA_2PI * 360.f),
                         //     (float)(factor1 / factor) * 100.f);
                     }
-                    else if(angle >= channels[channels.size() - 1].getAzimuth())
+                    else if(angle >= channels[channels.size() - 1].getAzimuth(0., 0., 0.))
                     {
-                        const T portion = (HOA_2PI - channels[channels.size()-1].getAzimuth()) + channels[0].getAzimuth();
+                        const T portion = (HOA_2PI - channels[channels.size()-1].getAzimuth(0., 0., 0.)) + channels[0].getAzimuth(0., 0., 0.);
                         
-                        const T factor1 = (1. - ((angle - channels[channels.size()-1].getAzimuth()) / portion)) * factor;
+                        const T factor1 = (1. - ((angle - channels[channels.size()-1].getAzimuth(0., 0., 0.)) / portion)) * factor;
                         Encoder<Hoa2d, T>::Basic::setAzimuth(angle);
                         Encoder<Hoa2d, T>::Basic::process(&factor1, vector_harmonics);
                         vector_harmonics[0] = factor1 * 0.5;
                         Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size()-1].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
                         
-                        const T factor2 = ((angle - channels[channels.size()-1].getAzimuth()) / portion) * factor;
+                        const T factor2 = ((angle - channels[channels.size()-1].getAzimuth(0., 0., 0.)) / portion) * factor;
                         Encoder<Hoa2d, T>::Basic::process(&factor2, vector_harmonics);
                         vector_harmonics[0] = factor2 * 0.5;
                         Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
@@ -315,17 +315,17 @@ namespace hoa
                     {
                         for(ulong j = 1; j < channels.size(); j++)
                         {
-                            if(angle < channels[j].getAzimuth() && angle >= channels[j-1].getAzimuth())
+                            if(angle < channels[j].getAzimuth(0., 0., 0.) && angle >= channels[j-1].getAzimuth(0., 0., 0.))
                             {
-                                const T portion = (channels[j].getAzimuth() - channels[j-1].getAzimuth());
+                                const T portion = (channels[j].getAzimuth(0., 0., 0.) - channels[j-1].getAzimuth(0., 0., 0.));
                                 
-                                const T factor1 = (1. - ((channels[j].getAzimuth() - angle) / portion)) * factor;
+                                const T factor1 = (1. - ((channels[j].getAzimuth(0., 0., 0.) - angle) / portion)) * factor;
                                 Encoder<Hoa2d, T>::Basic::setAzimuth(angle);
                                 Encoder<Hoa2d, T>::Basic::process(&factor1, vector_harmonics);
                                 vector_harmonics[0] = factor1 * 0.5;
                                 Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
                                 
-                                const T factor2 = ((channels[j].getAzimuth() - angle) / portion) * factor;
+                                const T factor2 = ((channels[j].getAzimuth(0., 0., 0.) - angle) / portion) * factor;
                                 Encoder<Hoa2d, T>::Basic::process(&factor2, vector_harmonics);
                                 vector_harmonics[0] = factor2 * 0.5;
                                 Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j-1].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
@@ -368,7 +368,7 @@ namespace hoa
     public:
         
         //! The binaural decoder constructor.
-        /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a decomposition order and a number of channels. The order and the number of channels must be at least 1.
+        /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a order of decomposition and a number of channels. The order and the number of channels must be at least 1.
          @param     order				The order
          */
         Binaural(const ulong order) : Decoder<Hoa2d, T>(order, 2),
@@ -552,7 +552,7 @@ namespace hoa
     public:
         
         //! The regular constructor.
-        /**	The regular constructor allocates and initialize the decoding matrix depending on a decomposition order and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
+        /**	The regular constructor allocates and initialize the decoding matrix depending on a order of decomposition and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
@@ -616,7 +616,7 @@ namespace hoa
     public:
         
         //! The binaural decoder constructor.
-        /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a decomposition order and a number of channels. The order and the number of channels must be at least 1.
+        /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a order of decomposition and a number of channels. The order and the number of channels must be at least 1.
          @param     order				The order
          */
         Binaural(const ulong order) : Decoder<Hoa3d, T>(order, 2),

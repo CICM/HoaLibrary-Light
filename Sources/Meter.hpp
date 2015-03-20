@@ -77,9 +77,9 @@ namespace hoa
                 }
                 std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);
                 {
-                    const T current_angle   = channels[0].getAzimuth();
-                    const T previous_angle  = channels[channels.size() - 1].getAzimuth();
-                    const T next_angle      = channels[1].getAzimuth();
+                    const T current_angle   = channels[0].getAzimuth(0., 0., 0.);
+                    const T previous_angle  = channels[channels.size() - 1].getAzimuth(0., 0., 0.);
+                    const T next_angle      = channels[1].getAzimuth(0., 0., 0.);
                     const T previous_portion= (HOA_2PI - previous_angle) + current_angle;
                     const T next_portion    = next_angle - current_angle;
                     m_channels_azimuth_width[channels[0].getIndex()] = (previous_portion + next_portion) * 0.5;
@@ -87,9 +87,9 @@ namespace hoa
                 }
                 for(ulong i = 1; i < channels.size() - 1; i++)
                 {
-                    const T current_angle   = channels[i].getAzimuth();
-                    const T previous_angle  = channels[i-1].getAzimuth();
-                    const T next_angle      = channels[i+1].getAzimuth();
+                    const T current_angle   = channels[i].getAzimuth(0., 0., 0.);
+                    const T previous_angle  = channels[i-1].getAzimuth(0., 0., 0.);
+                    const T next_angle      = channels[i+1].getAzimuth(0., 0., 0.);
                     const T previous_portion= current_angle - previous_angle;
                     const T next_portion    = next_angle - current_angle;
                     m_channels_azimuth_width[channels[i].getIndex()] = (previous_portion + next_portion) * 0.5;
@@ -97,9 +97,9 @@ namespace hoa
                 }
                 {
                     const ulong index = channels.size() - 1;
-                    const T current_angle   = channels[index].getAzimuth();
-                    const T previous_angle  = channels[index - 1].getAzimuth();
-                    const T next_angle      = channels[0].getAzimuth();
+                    const T current_angle   = channels[index].getAzimuth(0., 0., 0.);
+                    const T previous_angle  = channels[index - 1].getAzimuth(0., 0., 0.);
+                    const T next_angle      = channels[0].getAzimuth(0., 0., 0.);
                     const T previous_portion= current_angle - previous_angle;
                     const T next_portion    = (HOA_2PI - current_angle) + next_angle;
                     m_channels_azimuth_width[channels[index].getIndex()] = (previous_portion + next_portion) * 0.5;
