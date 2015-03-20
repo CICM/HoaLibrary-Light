@@ -12,10 +12,10 @@
 
 namespace hoa
 {
-    //! The ambisonic decoder.
-    /** The decoder is a virtual class from witch inherit the Regular, Irregular and Binaural decoders.
+    //! The decoder class decodes a sound field in the harmonics domain through the planewave domain.
+    /** The decoder should be used to decode a set the harmonics domain to a set of planewave for loudspeakers. There are three types of decoder. Regular for a perfect circle or sphere of loudspeakers. Irregular when the loudspeakers are not equally spaced over the circle or the sphere. Binaural for headphone restitution.
      */
-    template <Dimension D, typename T> class Decoder : public Harmonic<D, T>::Processor, public Planewave<D, T>::Processor
+    template <Dimension D, typename T> class Decoder : public Processor< Harmonic<D, T> >, public Processor< Planewave<D, T> >
     {
     public:
         //! The decoder constructor.
@@ -23,7 +23,7 @@ namespace hoa
          @param     order                   The order
          @param     numberOfPlanewaves      The number of channels.
          */
-        Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept;
+        Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept = 0;
         
         //! The destructor.
         /** The destructor free the memory.
@@ -35,31 +35,33 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
-        inline virtual void process(const T* inputs, T* outputs) noexcept = 0;
+        virtual void process(const T* inputs, T* outputs) noexcept;
         
         //! This method computes the decoding matrice.
-        /**	You should use this method after changing the position of the loudspeakers.
+        /**	You should use this method after changing the position of the loudspeakers and/or calling the process method.
          @param vectorsize The vector size for binaural decoding.
          */
-        virtual void computeRendering(const ulong vectorsize = 64) = 0;
+        virtual void computeRendering(const ulong vectorsize = 64);
         
-        //! The ambisonic regular decoder.
+        //! The regular decoder.
         /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
          */
         class Regular;
         
-        //! The ambisonic irregular decoder.
+        //! The irregular decoder.
         /** The irregular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if less than the number of harmonics plus one or when the loudspeakers are not equally spaced.
          */
         class Irregular;
         
-        //! The ambisonic binaural decoder.
+        //! The binaural decoder.
         /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
          */
         class Binaural;
     };
     
-    template <typename T> class Decoder<Hoa2d, T> : public Encoder<Hoa2d, T>::Basic, public Planewave<Hoa2d, T>::Processor
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+    
+    template <typename T> class Decoder<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >, public Processor< Planewave<Hoa2d, T> >
     {
     public:
         
@@ -69,8 +71,8 @@ namespace hoa
          @param     numberOfPlanewaves     The number of channels.
          */
         Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept :
-        Encoder<Hoa2d, T>::Basic(order),
-        Planewave<Hoa2d, T>::Processor(numberOfPlanewaves)
+        Processor< Harmonic<Hoa2d, T> >(order),
+        Processor< Planewave<Hoa2d, T> >(numberOfPlanewaves)
         {
             ;
         }
@@ -125,7 +127,7 @@ namespace hoa
          */
         Regular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
         {
-            m_matrix = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()*Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics()];
+            m_matrix = new T[Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics()];
             computeRendering();
         }
         
@@ -142,22 +144,23 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to channels.
          */
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
-            Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
+            Signal<T>::matrix_vector_mul(Decoder<Hoa2d, T>::getNumberOfHarmonics(), Decoder<Hoa2d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
         
         //! This method computes the decoding matrice.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeRendering(const ulong vectorsize = 64)
+        void computeRendering(const ulong vectorsize = 64) override
         {
-            const T factor = 1. / (T)(Encoder<Hoa2d, T>::Basic::getDecompositionOrder() + 1.);
-            for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+            typename Encoder<Hoa2d, T>::Basic encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
+            const T factor = 1. / (T)(Decoder<Hoa2d, T>::getDecompositionOrder() + 1.);
+            for(ulong i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
-                Encoder<Hoa2d, T>::Basic::setAzimuth(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i));
-                Encoder<Hoa2d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
+                encoder.setAzimuth(Decoder<Hoa2d, T>::getPlanewaveAzimuth(i));
+                encoder.process(&factor, m_matrix + i * Decoder<Hoa2d, T>::getNumberOfHarmonics());
                 m_matrix[i * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics()] = factor * 0.5;
             }
         }
@@ -176,7 +179,7 @@ namespace hoa
          */
         Irregular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
         {
-            m_matrix = new T[Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()*Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics()];
+            m_matrix = new T[Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics()];
             computeRendering();
         }
         
@@ -193,39 +196,40 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
-            Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
+            Signal<T>::matrix_vector_mul(Decoder<Hoa2d, T>::getNumberOfHarmonics(), Decoder<Hoa2d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
         
         //! This method computes the decoding matrice.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeRendering(const ulong vectorsize = 64)
+        void computeRendering(const ulong vectorsize = 64)  override
         {
-            Signal<T>::vector_clear(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves()*Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), m_matrix);
-            T vector_harmonics[Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics()];
+            typename Encoder<Hoa2d, T>::Basic encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
+            Signal<T>::vector_clear(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
+            T vector_harmonics[Decoder<Hoa2d, T>::getNumberOfHarmonics()];
             
-            if(Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves() == 1)
+            if(Decoder<Hoa2d, T>::getNumberOfPlanewaves() == 1)
             {
-                const ulong nls = ulong(Encoder<Hoa2d, T>::Basic::getDecompositionOrder() + 1.);
+                const ulong nls = ulong(Decoder<Hoa2d, T>::getDecompositionOrder() + 1.);
                 const T factor = 1. / (T)(nls);
                 for(ulong i = 0; i <nls; i++)
                 {
-                    Encoder<Hoa2d, T>::Basic::setAzimuth(T(i) * HOA_2PI / T(nls));
-                    Encoder<Hoa2d, T>::Basic::process(&factor, vector_harmonics);
+                    encoder.setAzimuth(T(i) * HOA_2PI / T(nls));
+                    encoder.process(&factor, vector_harmonics);
                     vector_harmonics[0] = factor * 0.5;
-                    Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix);
+                    Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix);
                 }
             }
             else
             {
                 T smallest_distance = HOA_2PI;
                 vector<Planewave<Hoa2d, T> > channels;
-                for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
+                for(ulong i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
-                    channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i))));
+                    channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Decoder<Hoa2d, T>::getPlanewaveAzimuth(i)), 0.));
                 }
                 
                 std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);
@@ -253,9 +257,9 @@ namespace hoa
                 }
                 //post("");
                 
-                if(smallest_distance > HOA_2PI / T(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics() + 1.))
+                if(smallest_distance > HOA_2PI / T(Decoder<Hoa2d, T>::getNumberOfHarmonics() + 1.))
                 {
-                    smallest_distance = HOA_2PI / T(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics() + 1.);
+                    smallest_distance = HOA_2PI / T(Decoder<Hoa2d, T>::getNumberOfHarmonics() + 1.);
                 }
                 const ulong nvirtual = ceil(HOA_2PI / smallest_distance);
                 const T factor = 1. / (T)(nvirtual);
@@ -270,15 +274,15 @@ namespace hoa
                         const T portion = (HOA_2PI - channels[channels.size()-1].getAzimuth(0., 0., 0.)) + channels[0].getAzimuth(0., 0., 0.);
                         
                         const T factor1 = (1. - ((channels[0].getAzimuth(0., 0., 0.) - angle) / portion)) * factor;
-                        Encoder<Hoa2d, T>::Basic::setAzimuth(angle);
-                        Encoder<Hoa2d, T>::Basic::process(&factor1, vector_harmonics);
+                        encoder.setAzimuth(angle);
+                        encoder.process(&factor1, vector_harmonics);
                         vector_harmonics[0] = factor1 * 0.5;
-                        Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
+                        Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
                         
                         const T factor2 = ((channels[0].getAzimuth(0., 0., 0.) - angle) / portion) * factor;
-                        Encoder<Hoa2d, T>::Basic::process(&factor2, vector_harmonics);
+                        encoder.process(&factor2, vector_harmonics);
                         vector_harmonics[0] = factor2 * 0.5;
-                        Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size() - 1].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
+                        Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size() - 1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
                         
                         //post("portion : %f", (float)portion / HOA_2PI * 360.f);
                         //post("channel %i (%f) : %f", (int)channels[channels.size()-1].getIndex(),
@@ -293,15 +297,15 @@ namespace hoa
                         const T portion = (HOA_2PI - channels[channels.size()-1].getAzimuth(0., 0., 0.)) + channels[0].getAzimuth(0., 0., 0.);
                         
                         const T factor1 = (1. - ((angle - channels[channels.size()-1].getAzimuth(0., 0., 0.)) / portion)) * factor;
-                        Encoder<Hoa2d, T>::Basic::setAzimuth(angle);
-                        Encoder<Hoa2d, T>::Basic::process(&factor1, vector_harmonics);
+                        encoder.setAzimuth(angle);
+                        encoder.process(&factor1, vector_harmonics);
                         vector_harmonics[0] = factor1 * 0.5;
-                        Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size()-1].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
+                        Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size()-1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
                         
                         const T factor2 = ((angle - channels[channels.size()-1].getAzimuth(0., 0., 0.)) / portion) * factor;
-                        Encoder<Hoa2d, T>::Basic::process(&factor2, vector_harmonics);
+                        encoder.process(&factor2, vector_harmonics);
                         vector_harmonics[0] = factor2 * 0.5;
-                        Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
+                        Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
                         
                         //post("portion : %f", (float)portion / HOA_2PI * 360.f);
                         //post("channel %i (%f) : %f", (int)channels[channels.size()-1].getIndex(),
@@ -320,15 +324,15 @@ namespace hoa
                                 const T portion = (channels[j].getAzimuth(0., 0., 0.) - channels[j-1].getAzimuth(0., 0., 0.));
                                 
                                 const T factor1 = (1. - ((channels[j].getAzimuth(0., 0., 0.) - angle) / portion)) * factor;
-                                Encoder<Hoa2d, T>::Basic::setAzimuth(angle);
-                                Encoder<Hoa2d, T>::Basic::process(&factor1, vector_harmonics);
+                                encoder.setAzimuth(angle);
+                                encoder.process(&factor1, vector_harmonics);
                                 vector_harmonics[0] = factor1 * 0.5;
-                                Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
+                                Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
                                 
                                 const T factor2 = ((channels[j].getAzimuth(0., 0., 0.) - angle) / portion) * factor;
-                                Encoder<Hoa2d, T>::Basic::process(&factor2, vector_harmonics);
+                                encoder.process(&factor2, vector_harmonics);
                                 vector_harmonics[0] = factor2 * 0.5;
-                                Signal<T>::vector_add(Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j-1].getIndex() * Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics());
+                                Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j-1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
                                 
                                 //post("portion : %f", (float)portion / HOA_2PI * 360.f);
                                 //post("channel %i (%f) : %f", (int)channels[j-1].getIndex(),
@@ -374,8 +378,8 @@ namespace hoa
         Binaural(const ulong order) : Decoder<Hoa2d, T>(order, 2),
         m_vector_size(0ul), m_counter(0ul), m_inputs(nullptr), m_results(nullptr), m_linear_vector_left(nullptr), m_linear_vector_right(nullptr), m_output_left(nullptr), m_output_right(nullptr)
         {
-            Decoder::setPlanewaveAzimuth(0, HOA_PI2*3.);
-            Decoder::setPlanewaveAzimuth(1, HOA_PI2);
+            Decoder<Hoa2d, T>::setPlanewaveAzimuth(0, HOA_PI2*3.);
+            Decoder<Hoa2d, T>::setPlanewaveAzimuth(1, HOA_PI2);
         }
         
         //! The binaural decoder destructor.
@@ -401,7 +405,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeRendering(const ulong vectorsize = 64)
+        void computeRendering(const ulong vectorsize = 64)  override
         {
             m_counter     = 0;
             m_vector_size = vectorsize;
@@ -442,8 +446,9 @@ namespace hoa
          @param     inputs	The input samples.
          @param     outputs  The output array that contains samples destinated to channels.
          */
-        void process() noexcept
+        void processBlock() noexcept
         {
+   
             Signal<T>::matrix_matrix_mul(HOA_NBIN_I * 2, m_vector_size, HOA_NBIN_H, Hrtf<Hoa2d, T>::getImpulse(), m_inputs, m_results);
             
             for(ulong i = 0; i < m_vector_size; i++)
@@ -471,18 +476,18 @@ namespace hoa
          @param     inputs	The input samples.
          @param     outputs  The output array that contains samples destinated to channels.
          */
-        void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
-            for(ulong i = 0; i < Encoder<Hoa2d, T>::Basic::getNumberOfHarmonics() && i < HOA_NBIN_H; i++)
+            for(ulong i = 0; i < Decoder<Hoa2d, T>::getNumberOfHarmonics() && i < 9; i++)
             {
                 m_inputs[i*m_vector_size+m_counter] = inputs[i];
             }
-            
+       
             outputs[0] = m_output_left[m_counter];
             outputs[1] = m_output_right[m_counter];
             if(++m_counter >= m_vector_size)
             {
-                process();
+                processBlock();
                 m_counter = 0;
             }
         }
@@ -740,6 +745,8 @@ namespace hoa
     
 #undef HOA_NBIN_I
 #undef HOA_NBIN_H
+    
+#endif
 
 }
 

@@ -12,7 +12,7 @@
 
 namespace hoa
 {
-    
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
     enum Recomposition
     {
         Fixe    = 0,
@@ -171,6 +171,7 @@ namespace hoa
             }
         }
     };
+#endif
 }
 
 #endif

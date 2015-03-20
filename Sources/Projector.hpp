@@ -12,6 +12,7 @@
 
 namespace hoa
 {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
     //! The ambisonic projector.
     /** The projector should be used to decode an ambisonic sound field for a set a channels on a circle depending on a order of decomposition or for headphones.
      */
@@ -60,6 +61,7 @@ namespace hoa
             Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
     };
+#endif
 }
 
 #endif

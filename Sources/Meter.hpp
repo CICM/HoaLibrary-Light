@@ -73,7 +73,7 @@ namespace hoa
                 vector<Planewave<Hoa2d, T> > channels;
                 for(ulong i = 0; i < Planewave<Hoa2d, T>::Processor::getNumberOfPlanewaves(); i++)
                 {
-                    channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i) + Planewave<Hoa2d, T>::Processor::getPlanewavesRotation())));
+                    channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Planewave<Hoa2d, T>::Processor::getPlanewaveAzimuth(i) + Planewave<Hoa2d, T>::Processor::getPlanewavesRotation()), 0.));
                 }
                 std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);
                 {

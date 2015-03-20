@@ -137,7 +137,7 @@ namespace hoa
          @param azimuth     The azimuth \f$\theta\f$.
          @param elevation   The elevation \f$\varphi\f$ (ignored).
          */
-        Planewave(const ulong _index, const T _azimuth, const T _elevation = 0.) noexcept :
+        Planewave(const ulong _index, const T _azimuth, const T _elevation) noexcept :
         m_index(_index),
         m_azimuth(_azimuth)
         {
@@ -151,7 +151,7 @@ namespace hoa
          @param ordinate    The ordinate \f$y\f$.
          @param height      The height \f$z\f$ (ignored).
          */
-        Planewave(const ulong _index, const T _abscissa, const T _ordinate, const T _height = 0.) noexcept :
+        Planewave(const ulong _index, const T _abscissa, const T _ordinate, const T _height) noexcept :
         m_index(_index),
         m_azimuth(Math<T>::azimuth(_abscissa, _ordinate, 0.))
         {
@@ -295,7 +295,7 @@ namespace hoa
             {
                 for(ulong i = 0; i < m_number_of_planewaves; i++)
                 {
-                    m_planewaves.push_back(Planewave<Hoa2d, T>(i+1, (T)i / (m_number_of_planewaves) * HOA_2PI));
+                    m_planewaves.push_back(Planewave<Hoa2d, T>(i+1, (T)i / (m_number_of_planewaves) * HOA_2PI, 0.));
                 }
             }
             
