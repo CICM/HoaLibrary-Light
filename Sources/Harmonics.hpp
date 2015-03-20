@@ -83,7 +83,7 @@ namespace hoa
          @param index    The index must be at least 1.
          */
         Harmonic(const ulong index) noexcept :
-        m_index(index+1)
+        m_index(index)
         {
             ;
         }
@@ -102,7 +102,7 @@ namespace hoa
          */
         inline ulong getIndex() const noexcept
         {
-            return m_index-1;
+            return m_index;
         }
         
         //! Get the degree of the harmonic.
@@ -150,7 +150,7 @@ namespace hoa
          */
         static inline ulong getNumberOfHarmonics(const ulong order) noexcept
         {
-            return order * 2  + 1;
+            return order * 2 + 1;
         }
     };
         
