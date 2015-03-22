@@ -2,7 +2,7 @@
 
 #### A high order ambisonics library.
 
-Sound space is one of the principal dimensions of the contemporary musical thought, specialy in the electroacoustic music domain but also in intermedia arts. In this context, the [CICM](http://cicm.mshparisnord.org/ "CICM") has made spatialization its principal research axis. This project's aim is to give to musician spatialization models based on high order ambisonics and sound fields synthesis. This project is developed in a part of the Paris 8 University <a title="CICM" href="http://www.labex-arts-h2h.fr/" target="_blank">LABEX arts H2H</a>. You can visit the official website : <a href="http://www.mshparisnord.fr/hoalibrary/" target="_blank"> HoaLibrary</a>.
+Sound space is one of the principal dimensions of the contemporary musical thought, specialy in the electroacoustic music domain but also in intermedia arts. In this context, the [CICM](http://cicm.mshparisnord.org/ "CICM") has made spatialization its principal research axis. This project's aim is to give to musician spatialization models based on high order ambisonics and sound fields synthesis. This project is developed in a part of the Paris 8 University [LABEX arts H2H](http://www.labex-arts-h2h.fr/ "LABEX arts H2H"). You can visit the official website : [HoaLibrary](http://www.mshparisnord.fr/hoalibrary/ "HoaLibrary").
 
 ![Image](https://raw.github.com/CICM/HoaLibrary/master/Ressources/hoa-icon.png "Hoa-Icon")
 
@@ -12,20 +12,21 @@ Julien Colafrancesco, Pierre Guillot, Eliott Paris
 
 #### Implementations :
 
-<a title="PureData" href="https://github.com/CICM/HoaLibrary-PD">Pure Data, </a>
-<a title="Max" href="https://github.com/CICM/HoaLibrary-Max">Max, </a>
-<a title="Ofx" href="https://github.com/CICM/ofxHoa">Open Framework</a>
+[PureData](https://github.com/CICM/HoaLibrary-PD "PureData")<br/>
+[Max](https://github.com/CICM/HoaLibrary-Max "Max")<br/>
+[Ofx](https://github.com/CICM/ofxHoa "Open Framework")<br/>
+[Faust](https://github.com/CICM/HoaLibrary-Faust "Faust")
 
 #### Documentation :
 
-<a title="Documentation" href="http://cicm.github.io/HoaLibrary/">Documentation</a>
+[Documentation](http://cicm.github.io/HoaLibrary-Light "Documentation")
 
 #### Dependencies : 
 
-<a title="Cblas" href="http://www.netlib.org/clapack/cblas/" target="_blank">Cblas</a>, you can use Gsl, Apple Accelerate or Intel Composer XE.
+[Cblas](http://www.netlib.org/clapack/cblas/ "Cblas") you can use Gsl, Apple Accelerate or Intel Composer XE.
 
 ##### License : 
 
-The Hoa Library in under the <a title="GNU" href="http://www.gnu.org/copyleft/gpl.html" target="_blank">GNU Public License</a>. If you'd like to avoid the restrictions of the GPL and use Hoa Library for a closed-source product, you contact the <a title="CICM" href="http://cicm.mshparisnord.org/" target="_blank">CICM</a>.
+The Hoa Library in under the [GNU](http://www.gnu.org/copyleft/gpl.html "GNU Public License"). If you'd like to avoid the restrictions of the GPL and use Hoa Library for a closed-source product, you contact the [CICM](http://cicm.mshparisnord.org/ "CICM").
 
 
