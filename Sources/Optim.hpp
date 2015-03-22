@@ -14,7 +14,7 @@ namespace hoa
     //! The optim class optimizes the ambisonic sound field for several restitution systems.
     /** The optim should be used to optimize the ambisonic sound field. There are 3 optimizations, Basic (no optimization), MaxRe (energy vector optimization) and InPhase (energy and velocity vector optimization). Basic has no effect, it should be used (or not) with a perfect ambisonic channels arrengement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle ot the sphere. MaxRe should be used should be used for an auditory confined to the center of the circle ot the sphere. InPhase should be used when the auditory covers the entire channels area and when the channels arragement is not a perfect circle or a perfect sphere or when the channels are not to equal distance. Note that the optimizations decrease the precision of the sound field restitution thus it can be compared to particular cases of the fractional orders.
      */
-    template <Dimension D, typename T> class Optim : public Processor< Harmonic<D, T> >
+    template <Dimension D, typename T> class Optim : public Processor<D, T>::Harmonics
     {
     public:
         
@@ -34,7 +34,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        virtual void process(T const* inputs, T* outputs) const noexcept;
+        virtual void process(T const* inputs, T* outputs) noexcept;
         
         //! The basic optim.
         /** The basic optim has no effect, it should be used (or not) with a perfect ambisonic channels arrengement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle ot the sphere.
@@ -61,7 +61,7 @@ namespace hoa
              @param     inputs   The inputs array.
              @param     outputs  The outputs array.
              */
-            virtual void process(T const* inputs, T* outputs) const noexcept;
+            virtual void process(T const* inputs, T* outputs) noexcept;
         };
         
         //! The maxre optim.
@@ -88,7 +88,7 @@ namespace hoa
              @param     inputs   The inputs array.
              @param     outputs  The outputs array.
              */
-            virtual void process(T const* inputs, T* outputs) const noexcept;
+            virtual void process(T const* inputs, T* outputs) noexcept;
         };
         
         //! The inphase optim.
@@ -115,13 +115,13 @@ namespace hoa
              @param     inputs   The inputs array.
              @param     outputs  The outputs array.
              */
-            virtual void process(T const* inputs, T* outputs) const noexcept;
+            virtual void process(T const* inputs, T* outputs) noexcept;
         };
     };
     
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     
-    template <typename T> class Optim<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >
+    template <typename T> class Optim<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
     {
     public:
         
@@ -129,7 +129,7 @@ namespace hoa
         /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Optim(const ulong order) noexcept : Processor< Harmonic<Hoa2d, T> >(order)
+        Optim(const ulong order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
         {
             ;
         }
@@ -147,7 +147,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        virtual void process(T const* inputs, T* outputs) const noexcept = 0;
+        virtual void process(T const* inputs, T* outputs) noexcept = 0;
         
         //! The basic optim.
         /** The basic optim has no effect, it should be used (or not) with a perfect ambisonic channels arrengement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle ot the sphere.
@@ -191,12 +191,12 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) const noexcept
+        inline void process(T const* inputs, T* outputs) noexcept
         {
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
-            for(ulong i = 2; i <= Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 (*outputs++)  = (*inputs++);
                 (*outputs++)  = (*inputs++);
@@ -235,7 +235,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) const noexcept
+        inline void process(T const* inputs, T* outputs) noexcept
         {
             T cos_re = m_cosmaxRe;
             T sin_re = m_sinmaxRe;
@@ -243,7 +243,7 @@ namespace hoa
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++) * cos_re;
             (*outputs++)  = (*inputs++) * cos_re;
-            for(ulong i = 2; i <= Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 cos_re  = tcos_re * m_cosmaxRe - sin_re * m_sinmaxRe;
                 sin_re  = tcos_re * m_sinmaxRe + sin_re * m_cosmaxRe;
@@ -290,10 +290,10 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) const noexcept
+        inline void process(T const* inputs, T* outputs) noexcept
         {
-            T order1 = Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder() + 3;
-            T order2 = Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder() - 1;
+            T order1 = Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() + 3;
+            T order2 = Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - 1;
             T factor1 = m_facorder1;
             T factor2 = m_facorder2;
             T factor  = m_facinphase / (factor1 * factor2);
@@ -301,7 +301,7 @@ namespace hoa
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++) * factor;
             (*outputs++)  = (*inputs++) * factor;
-            for(ulong i = 2; i <= Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 factor1 *= order1++;
                 factor2 /= order2--;
@@ -313,7 +313,7 @@ namespace hoa
         }
     };
     
-    template <typename T> class Optim<Hoa3d, T> : public Processor< Harmonic<Hoa3d, T> >
+    template <typename T> class Optim<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics
     {
     public:
         
@@ -321,7 +321,7 @@ namespace hoa
         /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Optim(const ulong order) noexcept : Processor< Harmonic<Hoa3d, T> >(order)
+        Optim(const ulong order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
         {
             ;
         }
@@ -339,7 +339,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        virtual void process(T const* inputs, T* outputs) const noexcept = 0;
+        virtual void process(T const* inputs, T* outputs) noexcept = 0;
         
         //! The basic optim.
         /** The basic optim has no effect, it should be used (or not) with a perfect ambisonic channels arrengement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle ot the sphere.
@@ -383,13 +383,13 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) const noexcept
+        inline void process(T const* inputs, T* outputs) noexcept
         {
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
-            for(ulong i = 2; i <= Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 for(ulong j = 0; j < 2 * i + 1; j++)
                 {
@@ -430,7 +430,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) const noexcept
+        inline void process(T const* inputs, T* outputs) noexcept
         {
             T cos_re = m_cosmaxRe;
             T sin_re = m_cosmaxRe;
@@ -439,7 +439,7 @@ namespace hoa
             (*outputs++)  = (*inputs++) * cos_re;
             (*outputs++)  = (*inputs++) * cos_re;
             (*outputs++)  = (*inputs++) * cos_re;
-            for(ulong i = 2; i <= Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 cos_re  = tcos_re * m_cosmaxRe - sin_re * m_sinmaxRe;
                 sin_re  = tcos_re * m_sinmaxRe + sin_re * m_cosmaxRe;
@@ -487,10 +487,10 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) const noexcept
+        inline void process(T const* inputs, T* outputs) noexcept
         {
-            T order1 = Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder() + 3;
-            T order2 = Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder() - 1;
+            T order1 = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() + 3;
+            T order2 = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() - 1;
             T factor1 = m_facorder1;
             T factor2 = m_facorder2;
             T factor  = m_facinphase / (factor1 * factor2);
@@ -499,7 +499,7 @@ namespace hoa
             (*outputs++)  = (*inputs++) * factor;
             (*outputs++)  = (*inputs++) * factor;
             (*outputs++)  = (*inputs++) * factor;
-            for(ulong i = 2; i <= Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 factor1 *= order1++;
                 factor2 /= order2--;

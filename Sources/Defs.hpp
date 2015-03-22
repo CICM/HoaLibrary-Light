@@ -15,18 +15,10 @@
 #include <cblas.h>
 #endif
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <iostream>
-#include <iomanip>
-#include <fstream>
 #include <string>
 #include <cmath>
 #include <vector>
 #include <map>
-#include <set>
-#include <algorithm>
-#include <limits>
 
 #ifdef PD_DEBUG
 #include "../../CicmWrapper/Sources/cicm_wrapper.h"

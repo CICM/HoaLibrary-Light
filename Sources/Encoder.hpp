@@ -14,7 +14,7 @@ namespace hoa
     //! The encoder class generates the harmonics for one or several signal according to an azimuth, an elevation and a radius.
     /** The encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and potentially the radius of the signal.
      */
-    template <Dimension D, typename T> class Encoder : public Processor< Harmonic<D, T> >
+    template <Dimension D, typename T> class Encoder : public Processor<D, T>::Harmonics
     {
     public:
         
@@ -34,7 +34,7 @@ namespace hoa
          @param     inputs   The pointer to the input sample ot the inputs samples.
          @param     outputs  The outputs array.
          */
-        virtual void process(const T* input, T* outputs) const noexcept;
+        virtual void process(const T* input, T* outputs) noexcept;
         
         //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
         /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
@@ -113,7 +113,7 @@ namespace hoa
              @param     input    The pointer to the input sample.
              @param     outputs  The outputs array.
              */
-            virtual void process(const T* input, T* outputs) const noexcept override;
+            virtual void process(const T* input, T* outputs) noexcept override;
             
             //! This method performs the encoding but add the result to the outputs.
             /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -121,7 +121,7 @@ namespace hoa
              @param     input    The pointer to the input sample.
              @param     outputs  The outputs array.
              */
-            virtual void processAdd(const T* input, T* outputs) const noexcept;
+            virtual void processAdd(const T* input, T* outputs) noexcept;
         };
         
         //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
@@ -199,7 +199,7 @@ namespace hoa
              @param     input    The pointer to the input sample.
              @param     outputs  The outputs array.
              */
-            virtual void process(const T* input, T* outputs) const noexcept;
+            virtual void process(const T* input, T* outputs) noexcept;
             
             //! This method performs the encoding but add the result to the outputs.
             /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -207,7 +207,7 @@ namespace hoa
              @param     input    The pointer to the input sample.
              @param     outputs  The outputs array.
              */
-            inline void processAdd(const T* input, T* outputs) const noexcept;
+            inline void processAdd(const T* input, T* outputs) noexcept;
             
         };
         
@@ -300,13 +300,13 @@ namespace hoa
              @param     input  The input array.
              @param     outputs The outputs array.
              */
-            virtual void process(const T* input, T* outputs) const noexcept;
+            virtual void process(const T* input, T* outputs) noexcept;
         };
     };
     
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     
-    template <typename T> class Encoder<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >
+    template <typename T> class Encoder<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
     {
     public:
         
@@ -314,7 +314,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const ulong order) noexcept : Processor< Harmonic<Hoa2d, T> >(order)
+        Encoder(const ulong order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
         {
             ;
         }
@@ -332,7 +332,7 @@ namespace hoa
          @param     inputs   The pointer to the input sample ot the inputs samples.
          @param     outputs  The outputs array.
          */
-        virtual void process(const T* input, T* outputs) const noexcept = 0;
+        virtual void process(const T* input, T* outputs) noexcept = 0;
         
         //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
         /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
@@ -422,7 +422,7 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        inline void process(const T* input, T* outputs) const noexcept 
+        inline void process(const T* input, T* outputs) noexcept 
         {
             if(!m_muted)
             {
@@ -432,7 +432,7 @@ namespace hoa
                 (*outputs++)    = (*input);                         // Hamonic [0,0]
                 (*outputs++)    = (*input) * sin_x;                 // Hamonic [1,-1]
                 (*outputs++)    = (*input) * cos_x;                 // Hamonic [1,1]
-                for(ulong i = 2; i <= Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder(); i++)
+                for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
                 {
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
                     sin_x   = tcos_x * m_sinx + sin_x * m_cosx;
@@ -443,7 +443,7 @@ namespace hoa
             }
             else
             {
-                for(ulong i = 0; i < Processor< Harmonic<Hoa2d, T> >::getNumberOfHarmonics(); i++)
+                for(ulong i = 0; i < Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -457,7 +457,7 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        inline void processAdd(const T* input, T* outputs) const noexcept
+        inline void processAdd(const T* input, T* outputs) noexcept
         {
             if(!m_muted)
             {
@@ -467,7 +467,7 @@ namespace hoa
                 (*outputs++)    += (*input);                         // Hamonic [0,0]
                 (*outputs++)    += (*input) * sin_x;                 // Hamonic [1,-1]
                 (*outputs++)    += (*input) * cos_x;                 // Hamonic [1,1]
-                for(ulong i = 2; i <= Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder(); i++)
+                for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
                 {
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
                     sin_x   = tcos_x * m_sinx + sin_x * m_cosx;
@@ -588,22 +588,22 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        inline void process(const T* input, T* outputs) const noexcept
+        inline void process(const T* input, T* outputs) noexcept
         {
             if(!m_muted)
             {
                 T cos_x = m_cosx;
                 T sin_x = m_sinx;
                 T tcos_x = cos_x;
-                const T gain1   = (m_gain * Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder());
+                const T gain1   = (m_gain * Processor<Hoa2d, T>::Harmonics::getDecompositionOrder());
                 const T factor1 = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - m_gain) + m_distance);
                 
                 (*outputs++) = (*input) * (gain1 + m_distance);            // Hamonic [0,0]
                 (*outputs++) = (*input) * sin_x * factor1;                 // Hamonic [1,-1]
                 (*outputs++) = (*input) * cos_x * factor1;                 // Hamonic [1,1]
-                for(ulong i = 2; i <= Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder(); i++)
+                for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
                 {
-                    const T gain    = (m_gain * (Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder() - i) + m_distance);
+                    const T gain    = (m_gain * (Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - i) + m_distance);
                     const T factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
                     
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
@@ -616,7 +616,7 @@ namespace hoa
             }
             else
             {
-                for(ulong i = 0; i < Processor< Harmonic<Hoa2d, T> >::getNumberOfHarmonics(); i++)
+                for(ulong i = 0; i < Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -630,22 +630,22 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        inline void processAdd(const T* input, T* outputs) const noexcept
+        inline void processAdd(const T* input, T* outputs) noexcept
         {
             if(!m_muted)
             {
                 T cos_x = m_cosx;
                 T sin_x = m_sinx;
                 T tcos_x = cos_x;
-                const T gain1   = (m_gain * Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder());
+                const T gain1   = (m_gain * Processor<Hoa2d, T>::Harmonics::getDecompositionOrder());
                 const T factor1 = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - m_gain) + m_distance);
                 
                 (*outputs++) += (*input) * (gain1 + m_distance);            // Hamonic [0,0]
                 (*outputs++) += (*input) * sin_x * factor1;                 // Hamonic [1,-1]
                 (*outputs++) += (*input) * cos_x * factor1;                 // Hamonic [1,1]
-                for(ulong i = 2; i <= Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder(); i++)
+                for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
                 {
-                    const T gain    = (m_gain * (Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder() - i) + m_distance);
+                    const T gain    = (m_gain * (Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - i) + m_distance);
                     const T factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
                     
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
@@ -779,7 +779,7 @@ namespace hoa
          @param     input  The input array.
          @param     outputs The outputs array.
          */
-        inline void process(const T* input, T* outputs) const noexcept
+        inline void process(const T* input, T* outputs) noexcept
         {
             m_encoders[0]->process(input, outputs);
             for(ulong i = 1; i < m_number_of_sources; i++)
@@ -789,7 +789,7 @@ namespace hoa
         }
     };
     
-    template <typename T> class Encoder<Hoa3d, T> : public Processor< Harmonic<Hoa3d, T> >
+    template <typename T> class Encoder<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics
     {
     public:
         
@@ -797,7 +797,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const ulong order) noexcept : Processor< Harmonic<Hoa3d, T> >(order)
+        Encoder(const ulong order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
         {
             ;
         }
@@ -815,7 +815,7 @@ namespace hoa
          @param     inputs   The pointer to the input sample ot the inputs samples.
          @param     outputs  The outputs array.
          */
-        virtual void process(const T* input, T* outputs) const noexcept = 0;
+        virtual void process(const T* input, T* outputs) noexcept = 0;
         
         //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
         /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
@@ -852,11 +852,11 @@ namespace hoa
          */
         Basic(const ulong order) noexcept : Encoder<Hoa3d, T>(order)
         {
-            m_normalization = new T[Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics()];
-            for(ulong i = 0; i < Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics(); i++)
+            m_normalization = new T[Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics()];
+            for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
             {
-                ulong l = Processor< Harmonic<Hoa3d, T> >::getHarmonicDegree(i);
-                long m = Processor< Harmonic<Hoa3d, T> >::getHarmonicOrder(i);
+                ulong l = Processor<Hoa3d, T>::Harmonics::getHarmonicDegree(i);
+                long m = Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(i);
                 if(m == 0)
                 {
                     m_normalization[i] = 1.;
@@ -953,11 +953,11 @@ namespace hoa
          @param     input    The input sample.
          @param     outputs  The outputs array.
          */
-        void process(const T* input, T* outputs) const noexcept
+        void process(const T* input, T* outputs) noexcept
         {
             if(!m_muted)
             {
-                const ulong order = Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder();
+                const ulong order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -1033,7 +1033,7 @@ namespace hoa
             }
             else
             {
-                for(ulong i = 0; i < Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics(); i++)
+                for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -1054,11 +1054,11 @@ namespace hoa
          @param     input    The input sample.
          @param     outputs  The outputs array.
          */
-        void processAdd(const T* input, T* outputs) const noexcept
+        void processAdd(const T* input, T* outputs) noexcept
         {
             if(!m_muted)
             {
-                const ulong order = Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder();
+                const ulong order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -1134,7 +1134,7 @@ namespace hoa
             }
             else
             {
-                for(ulong i = 0; i < Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics(); i++)
+                for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -1166,11 +1166,11 @@ namespace hoa
          */
         DC(const ulong order) noexcept : Encoder<Hoa3d, T>(order)
         {
-            m_normalization = new T[Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics()];
-            for(ulong i = 0; i < Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics(); i++)
+            m_normalization = new T[Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics()];
+            for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
             {
-                ulong l = Processor< Harmonic<Hoa3d, T> >::getHarmonicDegree(i);
-                long m = abs(Processor< Harmonic<Hoa3d, T> >::getHarmonicOrder(i));
+                ulong l = Processor<Hoa3d, T>::Harmonics::getHarmonicDegree(i);
+                long m = abs(Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(i));
                 if(m == 0)
                 {
                     m_normalization[i] = 1.;
@@ -1180,7 +1180,7 @@ namespace hoa
                     m_normalization[i] = sqrt(Math<T>::factorial(l - abs(m)) / Math<T>::factorial(l + abs(m))) * sqrt(2.);
                 }
             }
-            m_distance = new T[Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder()];
+            m_distance = new T[Processor<Hoa3d, T>::Harmonics::getDecompositionOrder()];
             setMute(false);
             setAzimuth(0.);
             setElevation(0.);
@@ -1260,13 +1260,13 @@ namespace hoa
                 dist        = 1. / radius;
             }
             
-            const T gain1   = (gain * Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder());
+            const T gain1   = (gain * Processor<Hoa3d, T>::Harmonics::getDecompositionOrder());
             m_distance[0] = (gain1 + dist);
             m_distance[1] = (cos(Math<T>::clip(factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - gain) + dist);
                                                                                    
-            for(ulong i = 2; i <= Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                const T gain1   = (gain * (Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder() - i) + dist);
+                const T gain1   = (gain * (Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() - i) + dist);
                 const T factor1 = (cos(Math<T>::clip(factor * i, 0., HOA_PI)) + 1.) * 0.5;
                 m_distance[i]   = factor1 * gain1;
             }
@@ -1306,11 +1306,11 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        void process(const T* input, T* outputs) const noexcept
+        void process(const T* input, T* outputs) noexcept
         {
             if(!m_muted)
             {
-                const ulong order = Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder();
+                const ulong order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -1387,7 +1387,7 @@ namespace hoa
             }
             else
             {
-                for(ulong i = 0; i < Processor< Harmonic<Hoa3d, T> >::getNumberOfHarmonics(); i++)
+                for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -1401,11 +1401,11 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        void processAdd(const T* input, T* outputs) const noexcept
+        void processAdd(const T* input, T* outputs) noexcept
         {
             if(!m_muted)
             {
-                const ulong order = Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder();
+                const ulong order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -1625,7 +1625,7 @@ namespace hoa
          @param     input  The input array.
          @param     outputs The outputs array.
          */
-        inline void process(const T* input, T* outputs) const noexcept
+        inline void process(const T* input, T* outputs) noexcept
         {
             m_encoders[0]->process(input, outputs);
             for(ulong i = 1; i < m_number_of_sources; i++)

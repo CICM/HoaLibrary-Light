@@ -15,7 +15,7 @@ namespace hoa
     //! The processor.
     /** The processor owns a set of harmonics or planewaves and performs digital signal processing.
      */
-    template <typename T> class Processor
+    template <Dimension D, typename T> class Processor
     {
     public:
         
@@ -24,13 +24,17 @@ namespace hoa
          @param     input  The input array.
          @param     outputs The outputs array.
          */
-        virtual void process(const T* input, T* outputs) const = 0;
+        virtual void process(const T* input, T* outputs) noexcept = 0;
+        
+        class Harmonics;
+        
+        class Planewaves;
     };
     
     //! The harmonic processor.
     /** The harmonic processor owns a set of harmonics depending on the order of decomposition.
      */
-    template <Dimension D, typename T> class Processor< Harmonic<D, T> >
+    template <Dimension D, typename T> class Processor<D, T>::Harmonics : virtual public Processor<D, T>
     {
     private:
         
@@ -39,11 +43,11 @@ namespace hoa
         vector< Harmonic<D, T> >    m_harmonics;
     public:
         
-        //! The harmonic processor constructor.
-        /** The harmonic processor constructor allocates and initializes the generale member values depending on a order of decomposition \f$N\f$.
+        //! The harmonics constructor.
+        /** The harmonics constructor allocates and initializes the generale member values depending on a order of decomposition \f$N\f$.
          @param order    The order of decomposition \f$N\f$, must be at least 1.
          */
-        Processor(const ulong order) noexcept :
+        Harmonics(const ulong order) noexcept :
         m_order_of_decomposition(order),
         m_number_of_harmonics(Harmonic<D, T>::getNumberOfHarmonics(order))
         {
@@ -53,10 +57,10 @@ namespace hoa
             }
         }
         
-        //! The ambisonic destructor.
-        /** The ambisonic destructor.
+        //! The harmonics destructor.
+        /** The harmonics destructor.
          */
-        ~Processor() noexcept
+        ~Harmonics() noexcept
         {
             m_harmonics.clear();
         }
@@ -126,12 +130,23 @@ namespace hoa
         {
             return m_harmonics[index].getName();
         }
+        
+        //! This method performs the processing.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array and the outputs array depends of the template and the processing.
+         @param     input  The input array.
+         @param     outputs The outputs array.
+         */
+        virtual void process(const T* input, T* outputs) noexcept
+        {
+            ;
+        }
     };
+
     
     //! The planewave processor.
     /** The planewave processor owns a set of planewaves.
      */
-    template <Dimension D, typename T> class Processor< Planewave<D, T> >
+    template <Dimension D, typename T> class Processor<D, T>::Planewaves : virtual public Processor<D, T>
     {
     private:
         const ulong                 m_number_of_planewaves;
@@ -146,7 +161,7 @@ namespace hoa
         /** The planewaves constructor allocates and initializes the general member values depending on a number of planewaves. The number of planewaves must be a least 1.
          @param     numberOfPlanewaves	The number of planewaves.
          */
-        Processor(const ulong numberOfPlanewaves) noexcept :
+        Planewaves(const ulong numberOfPlanewaves) noexcept :
         m_number_of_planewaves(numberOfPlanewaves),
         m_rotation_z(0.),
         m_rotation_y(0.),
@@ -250,10 +265,10 @@ namespace hoa
 #endif
         }
         
-        //! The ambisonic destructor.
-        /** The ambisonic destructor.
+        //! The planewaves destructor.
+        /** The planewaves destructor.
          */
-        ~Processor() noexcept
+        ~Planewaves() noexcept
         {
             m_planewaves.clear();
         }
@@ -402,6 +417,16 @@ namespace hoa
         inline string getPlanewaveName(const ulong index) const noexcept
         {
             return m_planewaves[index].getName();
+        }
+        
+        //! This method performs the processing.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array and the outputs array depends of the template and the processing.
+         @param     input  The input array.
+         @param     outputs The outputs array.
+         */
+        virtual void process(const T* input, T* outputs) noexcept
+        {
+            ;
         }
     };
 }

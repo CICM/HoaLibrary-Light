@@ -15,7 +15,7 @@ namespace hoa
     //! The decoder class decodes a sound field in the harmonics domain through the planewave domain.
     /** The decoder should be used to decode a set the harmonics domain to a set of planewave for loudspeakers. There are three types of decoder. Regular for a perfect circle or sphere of loudspeakers. Irregular when the loudspeakers are not equally spaced on the circle or the sphere. Binaural for headphone restitution.
      */
-    template <Dimension D, typename T> class Decoder : public Processor< Harmonic<D, T> >, public Processor< Planewave<D, T> >
+    template <Dimension D, typename T> class Decoder : public Processor<D, T>::Harmonics, public Processor<D, T>::Planewaves
     {
     public:
         //! The decoder constructor.
@@ -148,7 +148,7 @@ namespace hoa
     
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     
-    template <typename T> class Decoder<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >, public Processor< Planewave<Hoa2d, T> >
+    template <typename T> class Decoder<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics, public Processor<Hoa2d, T>::Planewaves
     {
     public:
         
@@ -158,8 +158,8 @@ namespace hoa
          @param     numberOfPlanewaves     The number of channels.
          */
         Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept :
-        Processor< Harmonic<Hoa2d, T> >(order),
-        Processor< Planewave<Hoa2d, T> >(numberOfPlanewaves)
+        Processor<Hoa2d, T>::Harmonics(order),
+        Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
         {
             ;
         }
@@ -584,7 +584,7 @@ namespace hoa
 #undef HOA_NBIN_I
 #undef HOA_NBIN_H
     
-    template <typename T> class Decoder<Hoa3d, T> : public Processor< Harmonic<Hoa3d, T> >, public Processor< Planewave<Hoa3d, T> >
+    template <typename T> class Decoder<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics, public Processor<Hoa3d, T>::Planewaves
     {
     public:
         
@@ -594,8 +594,8 @@ namespace hoa
          @param     numberOfPlanewaves     The number of channels.
          */
         Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept :
-        Processor< Harmonic<Hoa3d, T> >(order),
-        Processor< Planewave<Hoa3d, T> >(numberOfPlanewaves)
+        Processor<Hoa3d, T>::Harmonics(order),
+        Processor<Hoa3d, T>::Planewaves(numberOfPlanewaves)
         {
             ;
         }

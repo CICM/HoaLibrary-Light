@@ -14,7 +14,7 @@ namespace hoa
     //! The wider class wides the diffusion of the sound field in the harmonics domain.
     /** The wider simulates fractional orders to diffuse a sound field from omni directional when the widening factor is \f$0\f$ to the most directional when the widening factor is \f$1\f$.
      */
-    template <Dimension D, typename T> class Wider : public Processor< Harmonic<D, T> >
+    template <Dimension D, typename T> class Wider : public Processor<D, T>::Harmonics
     {
     public:
         
@@ -56,13 +56,13 @@ namespace hoa
          @param     inputs	The input array.
          @param     outputs The output array.
          */
-        virtual void process(const T* inputs, T* outputs) const noexcept;
+        virtual void process(const T* inputs, T* outputs) noexcept;
 
     };
     
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     
-    template <typename T> class Wider<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >
+    template <typename T> class Wider<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
     {
     private:
         T   m_widening;
@@ -74,7 +74,7 @@ namespace hoa
         /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const ulong order) noexcept : Processor< Harmonic<Hoa2d, T> >(order)
+        Wider(const ulong order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
         {
             setWidening(1.);
         }
@@ -113,17 +113,17 @@ namespace hoa
          @param     inputs	The input array.
          @param     outputs The output array.
          */
-        inline void process(const T* inputs, T* outputs) const noexcept
+        inline void process(const T* inputs, T* outputs) noexcept
         {
-            T gain   = (m_gain * Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder());
+            T gain   = (m_gain * Processor<Hoa2d, T>::Harmonics::getDecompositionOrder());
             T factor = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain - m_gain) + 1.);
             
             (*outputs++) = (*inputs++) * (gain + 1.);            // Hamonic [0,0]
             (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,-1]
             (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,1]
-            for(ulong i = 2; i <= Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                gain    = (m_gain * (Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder() - i) + 1.);
+                gain    = (m_gain * (Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - i) + 1.);
                 factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
                 
                 (*outputs++)    = (*inputs++) * factor * gain;    // Hamonic [i,-i]
@@ -132,7 +132,7 @@ namespace hoa
         }
     };
     
-    template <typename T> class Wider<Hoa3d, T> : public Processor< Harmonic<Hoa3d, T> >
+    template <typename T> class Wider<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics
     {
     private:
         T   m_widening;
@@ -144,7 +144,7 @@ namespace hoa
         /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const ulong order) noexcept : Processor< Harmonic<Hoa3d, T> >(order)
+        Wider(const ulong order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
         {
             setWidening(1.);
         }
@@ -183,18 +183,18 @@ namespace hoa
          @param     inputs	The input array.
          @param     outputs The output array.
          */
-        inline void process(const T* inputs, T* outputs) const noexcept
+        inline void process(const T* inputs, T* outputs) noexcept
         {
-            T gain   = (m_gain * Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder());
+            T gain   = (m_gain * Processor<Hoa3d, T>::Harmonics::getDecompositionOrder());
             T factor = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain - m_gain) + 1.);
             
             (*outputs++) = (*inputs++) * (gain + 1.);            // Hamonic [0,0]
             (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,-1]
             (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,0]
             (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,1]
-            for(ulong i = 2; i <= Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                gain    = (m_gain * (Processor< Harmonic<Hoa3d, T> >::getDecompositionOrder() - i) + 1.);
+                gain    = (m_gain * (Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() - i) + 1.);
                 factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
                 
                 for(ulong j = 0; j < 2 * i + 1; j++)

@@ -14,7 +14,7 @@ namespace hoa
     //! The rotate class rotates a sound field in the harmonics domain (2d available only).
     /** The rotate should be used to rotate a sound field by wheighting the harmonics depending on the rotation.
      */
-    template <Dimension D, typename T> class Rotate : public  Processor< Harmonic<D, T> >
+    template <Dimension D, typename T> class Rotate : public  Processor<D, T>::Harmonics
     {
     public:
         
@@ -22,7 +22,7 @@ namespace hoa
         /**	The rotate constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Rotate(const ulong order) noexcept  = 0;
+        Rotate(const ulong order) noexcept = 0;
         
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
@@ -53,12 +53,12 @@ namespace hoa
          @param     inputs   The input array.
          @param     outputs  The output array.
          */
-        virtual void process(const T* inputs, T* outputs) const noexcept;
+        virtual void process(const T* inputs, T* outputs) noexcept;
     };
     
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     
-    template <typename T> class Rotate<Hoa2d, T> : public Processor< Harmonic<Hoa2d, T> >
+    template <typename T> class Rotate<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
     {
     private:
         T   m_yaw;
@@ -70,7 +70,7 @@ namespace hoa
         /**	The rotate constructor allocates and initialize the member values to computes spherical harmonics rotation depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Rotate(const ulong order) noexcept : Processor< Harmonic<Hoa2d, T> >(order)
+        Rotate(const ulong order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
         {
             ;
         }
@@ -108,7 +108,7 @@ namespace hoa
          @param     inputs   The input array.
          @param     outputs  The output array.
          */
-        inline void process(const T* inputs, T* outputs) const noexcept
+        inline void process(const T* inputs, T* outputs) noexcept
         {
             T cos_x = m_cosx;
             T sin_x = m_sinx;
@@ -118,7 +118,7 @@ namespace hoa
             T sig = (*inputs++);
             (*outputs++) = sin_x * (*inputs) + cos_x * sig;
             (*outputs++) = cos_x * (*inputs++) - sin_x * sig;
-            for(ulong i = 2; i <= Processor< Harmonic<Hoa2d, T> >::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 cos_x = tcos_x * m_cosx - sin_x * m_sinx;
                 sin_x = tcos_x * m_sinx + sin_x * m_cosx;
