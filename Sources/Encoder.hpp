@@ -108,7 +108,7 @@ namespace hoa
              if \f$m = 0\f$ then
              \f[k_{l, m} = 1\f]
              else
-             \f[k_{l, m} = \frac{\sqrt{(l - \left|m\right|)!}}{l + \left|m\right|}\sqrt{2} \f]
+             \f[k_{l, m} = \sqrt{\frac{(l - \left|m\right|)!}{(l + \left|m\right|})!}\sqrt{2} \f]
              
              @param     input    The pointer to the input sample.
              @param     outputs  The outputs array.
