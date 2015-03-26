@@ -291,7 +291,7 @@ namespace hoa
             m_values_new[index + m_number_of_sources * 2] = Math<T>::wrap_pi(elevation);
             m_values_old[index + m_number_of_sources * 2] = Math<T>::wrap_pi(m_values_old[index + m_number_of_sources * 2]);
             
-            double distance;
+            T distance;
             if(m_values_old[index + m_number_of_sources * 2] > m_values_new[index + m_number_of_sources * 2])
                 distance = (m_values_old[index + m_number_of_sources * 2] - m_values_new[index + m_number_of_sources * 2]);
             else
@@ -299,17 +299,17 @@ namespace hoa
             
             if(distance <= HOA_PI)
             {
-                m_values_step[index + m_number_of_sources * 2] = (m_values_new[index + m_number_of_sources * 2] - m_values_old[index + m_number_of_sources * 2]) / (double)m_ramp;
+                m_values_step[index + m_number_of_sources * 2] = (m_values_new[index + m_number_of_sources * 2] - m_values_old[index + m_number_of_sources * 2]) / (T)m_ramp;
             }
             else
             {
                 if(m_values_new[index + m_number_of_sources * 2] > m_values_old[index + m_number_of_sources * 2])
                 {
-                    m_values_step[index + m_number_of_sources * 2] = ((m_values_new[index + m_number_of_sources * 2] - HOA_2PI) - m_values_old[index + m_number_of_sources * 2]) / (double)m_ramp;
+                    m_values_step[index + m_number_of_sources * 2] = ((m_values_new[index + m_number_of_sources * 2] - HOA_2PI) - m_values_old[index + m_number_of_sources * 2]) / (T)m_ramp;
                 }
                 else
                 {
-                    m_values_step[index + m_number_of_sources * 2] = ((m_values_new[index + m_number_of_sources * 2] + HOA_2PI) - m_values_old[index + m_number_of_sources * 2]) / (double)m_ramp;
+                    m_values_step[index + m_number_of_sources * 2] = ((m_values_new[index + m_number_of_sources * 2] + HOA_2PI) - m_values_old[index + m_number_of_sources * 2]) / (T)m_ramp;
                 }
             }
             m_counter = 0;

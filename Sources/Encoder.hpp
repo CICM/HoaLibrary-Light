@@ -249,7 +249,7 @@ namespace hoa
              @param index       The index of the signal.
              @param elevation   The elevation.
              */
-            virtual void setElevation(const ulong index, const T azimuth) noexcept;
+            virtual void setElevation(const ulong index, const T elevation) noexcept;
             
             //! Set the radius.
             /**	This method  sets the radius \f$\rho_index\f$ between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the center of the soundfield, \f$1\f$ is the radius of the ambisonics circle or sphere, beyond this limit the gain decreases and before the sound field is widened.
@@ -1546,9 +1546,9 @@ namespace hoa
          @param     azimuth	The azimuth.
          @see       setRadius()
          */
-        inline void setElevation(const ulong index, const T azimuth) noexcept
+        inline void setElevation(const ulong index, const T elevation) noexcept
         {
-            m_encoders[index]->setElevation(azimuth);
+            m_encoders[index]->setElevation(elevation);
         }
         
         //! This method set the radius of a source.
