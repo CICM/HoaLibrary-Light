@@ -60,7 +60,7 @@ namespace hoa
         //! The harmonics destructor.
         /** The harmonics destructor.
          */
-        ~Harmonics() noexcept
+        virtual ~Harmonics() noexcept
         {
             m_harmonics.clear();
         }
@@ -268,7 +268,7 @@ namespace hoa
         //! The planewaves destructor.
         /** The planewaves destructor.
          */
-        ~Planewaves() noexcept
+        virtual ~Planewaves() noexcept
         {
             m_planewaves.clear();
         }

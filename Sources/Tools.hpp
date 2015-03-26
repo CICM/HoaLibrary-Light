@@ -288,8 +288,8 @@ namespace hoa
         
         inline void setElevation(const ulong index, const T elevation) noexcept
         {
-            m_values_new[index + m_number_of_sources * 2] = Math<T>::wrap_twopi(elevation);
-            m_values_old[index + m_number_of_sources * 2] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources * 2]);
+            m_values_new[index + m_number_of_sources * 2] = Math<T>::wrap_pi(elevation);
+            m_values_old[index + m_number_of_sources * 2] = Math<T>::wrap_pi(m_values_old[index + m_number_of_sources * 2]);
             
             double distance;
             if(m_values_old[index + m_number_of_sources * 2] > m_values_new[index + m_number_of_sources * 2])
