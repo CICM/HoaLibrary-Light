@@ -176,6 +176,11 @@ namespace hoa
                 }
             }
         }
+        
+        void process(const T* input, T* outputs) noexcept override
+        {
+            process(input);
+        }
     };
     
     template <typename T> class Meter<Hoa3d, T> : public Processor<Hoa3d, T>::Planewaves
@@ -286,6 +291,11 @@ namespace hoa
                     }
                 }
             }
+        }
+        
+        void process(const T* input, T* outputs) noexcept override
+        {
+            process(input);
         }
         
         void computeRendering()
