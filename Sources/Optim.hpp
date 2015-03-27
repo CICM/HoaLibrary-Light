@@ -248,7 +248,7 @@ namespace hoa
             *outputs    = *inputs;
             *(++outputs)  = *(++inputs) * *weights;
             *(++outputs)  = *(++inputs) * *weights;
-            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 const T weight = *(++weights);
                 *(++outputs) = *(++inputs) * weight;
@@ -302,7 +302,7 @@ namespace hoa
             *outputs    = *inputs;
             *(++outputs)  = *(++inputs) * *weights;
             *(++outputs)  = *(++inputs) * *weights;
-            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 const T weight = *(++weights);
                 *(++outputs) = *(++inputs) * weight;
