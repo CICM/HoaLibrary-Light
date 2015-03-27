@@ -207,8 +207,16 @@ namespace hoa
     template <typename T> class Optim<Hoa2d, T>::MaxRe : public  Optim<Hoa2d, T>
     {
     private:
-        const T   m_cosmaxRe;
-        const T   m_sinmaxRe;
+        static T* generate(const ulong order)
+        {
+            T* vector = new T(order);
+            for(ulong i = 1; i <= order; i++)
+            {
+                vector[i-1] = cos(T(i) *  T(HOA_PI) / (T)(2. * order + 2.));
+            }
+            return vector;
+        }
+        const T*  m_weights;
     public:
         
         //! The optimization constructor.
@@ -216,8 +224,7 @@ namespace hoa
          @param     order	The order.
          */
         MaxRe(const ulong order) noexcept :  Optim<Hoa2d, T>(order),
-        m_cosmaxRe(cos(HOA_PI / (T)(2. * order + 2.))),
-        m_sinmaxRe(sin(HOA_PI / (T)(2. * order + 2.)))
+        m_weights(generate(order))
         {
             ;
         }
@@ -227,7 +234,7 @@ namespace hoa
          */
         ~MaxRe() noexcept
         {
-            ;
+            delete [] m_weights;
         }
         
         //! This method performs the max-re optimization.
@@ -237,20 +244,15 @@ namespace hoa
          */
         inline void process(T const* inputs, T* outputs) noexcept
         {
-            T cos_re = m_cosmaxRe;
-            T sin_re = m_sinmaxRe;
-            T tcos_re = m_cosmaxRe;
-            (*outputs++)  = (*inputs++);
-            (*outputs++)  = (*inputs++) * cos_re;
-            (*outputs++)  = (*inputs++) * cos_re;
-            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            const T* weights = m_weights;
+            *outputs    = *inputs;
+            *(++outputs)  = *(++inputs) * *weights;
+            *(++outputs)  = *(++inputs) * *weights;
+            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                cos_re  = tcos_re * m_cosmaxRe - sin_re * m_sinmaxRe;
-                sin_re  = tcos_re * m_sinmaxRe + sin_re * m_cosmaxRe;
-                tcos_re  = cos_re;
-                
-                (*outputs++)  = (*inputs++) * cos_re;
-                (*outputs++)  = (*inputs++) * cos_re;
+                const T weight = *(++weights);
+                *(++outputs) = *(++inputs) * weight;
+                *(++outputs) = *(++inputs) * weight;
             }
         }
     };
@@ -258,10 +260,17 @@ namespace hoa
     template <typename T> class Optim<Hoa2d, T>::InPhase : public  Optim<Hoa2d, T>
     {
     private:
-        const T   m_facorder;
-        const T   m_facinphase;
-        const T   m_facorder1;
-        const T   m_facorder2;
+        static T* generate(const ulong order)
+        {
+            T* vector = new T(order);
+            const T facn = Math<T>::factorial(order);
+            for(ulong i = 1; i <= order; i++)
+            {
+                vector[i-1] = facn / Math<T>::factorial(order - i) * facn / Math<T>::factorial(order + i);
+            }
+            return vector;
+        }
+        const T*  m_weights;
     public:
         
         //! The optimization constructor.
@@ -269,10 +278,7 @@ namespace hoa
          @param     order	The order.
          */
         InPhase(const ulong order) noexcept :  Optim<Hoa2d, T>(order),
-        m_facorder(Math<T>::factorial(order)),
-        m_facinphase(m_facorder * m_facorder * order),
-        m_facorder1(m_facorder * (order + 2) * order),
-        m_facorder2(m_facorder / order)
+        m_weights(generate(order))
         {
             ;
         }
@@ -282,7 +288,7 @@ namespace hoa
          */
         ~InPhase() noexcept
         {
-            ;
+            delete [] m_weights;
         }
         
         //! This method performs the in-phase optimization.
@@ -292,23 +298,15 @@ namespace hoa
          */
         inline void process(T const* inputs, T* outputs) noexcept
         {
-            T order1 = Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() + 3;
-            T order2 = Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - 1;
-            T factor1 = m_facorder1;
-            T factor2 = m_facorder2;
-            T factor  = m_facinphase / (factor1 * factor2);
-            
-            (*outputs++)  = (*inputs++);
-            (*outputs++)  = (*inputs++) * factor;
-            (*outputs++)  = (*inputs++) * factor;
-            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            const T* weights = m_weights;
+            *outputs    = *inputs;
+            *(++outputs)  = *(++inputs) * *weights;
+            *(++outputs)  = *(++inputs) * *weights;
+            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                factor1 *= order1++;
-                factor2 /= order2--;
-                factor = m_facinphase / (factor1 * factor2);
-                
-                (*outputs++)  = (*inputs++) * factor;
-                (*outputs++)  = (*inputs++) * factor;
+                const T weight = *(++weights);
+                *(++outputs) = *(++inputs) * weight;
+                *(++outputs) = *(++inputs) * weight;
             }
         }
     };
@@ -402,8 +400,16 @@ namespace hoa
     template <typename T> class Optim<Hoa3d, T>::MaxRe : public Optim<Hoa3d, T>
     {
     private:
-        const T   m_cosmaxRe;
-        const T   m_sinmaxRe;
+        static T* generate(const ulong order)
+        {
+            T* vector = new T(order);
+            for(ulong i = 1; i <= order; i++)
+            {
+                vector[i-1] = cos(T(i) *  T(HOA_PI) / (T)(2. * order + 2.));
+            }
+            return vector;
+        }
+        const T*  m_weights;
     public:
         
         //! The optimization constructor.
@@ -411,8 +417,7 @@ namespace hoa
          @param     order	The order.
          */
         MaxRe(const ulong order) noexcept : Optim<Hoa3d, T>(order),
-        m_cosmaxRe(cos(HOA_PI / (T)(2. * order + 2.))),
-        m_sinmaxRe(sin(HOA_PI / (T)(2. * order + 2.)))
+        m_weights(generate(order))
         {
             ;
         }
@@ -422,7 +427,7 @@ namespace hoa
          */
         ~MaxRe() noexcept
         {
-            ;
+            delete [] m_weights;
         }
         
         //! This method performs the max-re optimization.
@@ -432,21 +437,17 @@ namespace hoa
          */
         inline void process(T const* inputs, T* outputs) noexcept
         {
-            T cos_re = m_cosmaxRe;
-            T sin_re = m_cosmaxRe;
-            T tcos_re= cos_re;
-            (*outputs++)  = (*inputs++);
-            (*outputs++)  = (*inputs++) * cos_re;
-            (*outputs++)  = (*inputs++) * cos_re;
-            (*outputs++)  = (*inputs++) * cos_re;
+            const T* weights = m_weights;
+            *outputs    = *inputs;
+            *(++outputs)  = *(++inputs) * *weights;
+            *(++outputs)  = *(++inputs) * *weights;
+            *(++outputs)  = *(++inputs) * *weights;
             for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                cos_re  = tcos_re * m_cosmaxRe - sin_re * m_sinmaxRe;
-                sin_re  = tcos_re * m_sinmaxRe + sin_re * m_cosmaxRe;
-                tcos_re  = cos_re;
+                const T weight = *(++weights);
                 for(ulong j = 0; j < 2 * i + 1; j++)
                 {
-                    (*outputs++)    = (*inputs++) * cos_re;    // Hamonic [i, [-i...i]]
+                    *(++outputs) = *(++inputs) * weight;    // Hamonic [i, [-i...i]]
                 }
             }
         }
@@ -455,10 +456,17 @@ namespace hoa
     template <typename T> class Optim<Hoa3d, T>::InPhase : public Optim<Hoa3d, T>
     {
     private:
-        const T   m_facorder;
-        const T   m_facinphase;
-        const T   m_facorder1;
-        const T   m_facorder2;
+        static T* generate(const ulong order)
+        {
+            T* vector = new T(order);
+            const T facn = Math<T>::factorial(order);
+            for(ulong i = 1; i <= order; i++)
+            {
+                vector[i-1] = facn / Math<T>::factorial(order - i) * facn / Math<T>::factorial(order + i);
+            }
+            return vector;
+        }
+        const T*  m_weights;
     public:
         
         //! The optimization constructor.
@@ -466,10 +474,7 @@ namespace hoa
          @param     order	The order.
          */
         InPhase(const ulong order) noexcept : Optim<Hoa3d, T>(order),
-        m_facorder(Math<T>::factorial(order)),
-        m_facinphase(m_facorder * m_facorder * order),
-        m_facorder1(m_facorder * (order + 2) * order),
-        m_facorder2(m_facorder / order)
+        m_weights(generate(order))
         {
             ;
         }
@@ -479,7 +484,7 @@ namespace hoa
          */
         ~InPhase() noexcept
         {
-            ;
+            delete [] m_weights;
         }
         
         //! This method performs the in-phase optimization.
@@ -489,25 +494,17 @@ namespace hoa
          */
         inline void process(T const* inputs, T* outputs) noexcept
         {
-            T order1 = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() + 3;
-            T order2 = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() - 1;
-            T factor1 = m_facorder1;
-            T factor2 = m_facorder2;
-            T factor  = m_facinphase / (factor1 * factor2);
-            
-            (*outputs++)  = (*inputs++);
-            (*outputs++)  = (*inputs++) * factor;
-            (*outputs++)  = (*inputs++) * factor;
-            (*outputs++)  = (*inputs++) * factor;
+            const T* weights = m_weights;
+            *outputs    = *inputs;
+            *(++outputs)  = *(++inputs) * *weights;
+            *(++outputs)  = *(++inputs) * *weights;
+            *(++outputs)  = *(++inputs) * *weights;
             for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                factor1 *= order1++;
-                factor2 /= order2--;
-                factor = m_facinphase / (factor1 * factor2);
-                
+                const T weight = *(++weights);
                 for(ulong j = 0; j < 2 * i + 1; j++)
                 {
-                    (*outputs++)    = (*inputs++) * factor;    // Hamonic [i, ~j]
+                    *(++outputs) = *(++inputs) * weight;    // Hamonic [i, [-i...i]]
                 }
             }
         }
