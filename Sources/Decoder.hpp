@@ -807,7 +807,7 @@ namespace hoa
          @param     inputs	The input samples.
          @param     outputs  The output array that contains samples destinated to channels.
          */
-        void process(const T* inputs, T* outputs) noexcept  override
+        void process(const T* inputs, T* outputs) noexcept override
         {
             
             for(ulong i = 0; i < Decoder<Hoa3d, T>::getNumberOfHarmonics() && i < HOA_NBIN_H; i++)

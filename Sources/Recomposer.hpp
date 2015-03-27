@@ -107,7 +107,7 @@ namespace hoa
             }
         }
         
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             m_encoders[0]->process(inputs, outputs);
             for(ulong i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
@@ -162,7 +162,7 @@ namespace hoa
             return m_encoders[index]->getRadius();
         }
 
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             m_encoders[0]->process(inputs, outputs);
             for(ulong i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)

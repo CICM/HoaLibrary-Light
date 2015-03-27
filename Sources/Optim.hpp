@@ -191,7 +191,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept
+        inline void process(T const* inputs, T* outputs) noexcept override
         {
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
@@ -235,7 +235,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept
+        inline void process(T const* inputs, T* outputs) noexcept override
         {
             T cos_re = m_cosmaxRe;
             T sin_re = m_sinmaxRe;
@@ -290,7 +290,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept
+        inline void process(T const* inputs, T* outputs) noexcept override
         {
             T order1 = Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() + 3;
             T order2 = Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - 1;
@@ -383,7 +383,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept
+        inline void process(T const* inputs, T* outputs) noexcept override
         {
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
@@ -430,7 +430,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept
+        inline void process(T const* inputs, T* outputs) noexcept override
         {
             T cos_re = m_cosmaxRe;
             T sin_re = m_cosmaxRe;
@@ -487,7 +487,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept
+        inline void process(T const* inputs, T* outputs) noexcept override
         {
             T order1 = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() + 3;
             T order2 = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() - 1;

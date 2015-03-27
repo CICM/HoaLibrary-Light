@@ -108,7 +108,7 @@ namespace hoa
          @param     inputs   The input array.
          @param     outputs  The output array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             T cos_x = m_cosx;
             T sin_x = m_sinx;

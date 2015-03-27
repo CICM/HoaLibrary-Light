@@ -56,7 +56,7 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to channels.
          */
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }

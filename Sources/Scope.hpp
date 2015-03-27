@@ -147,7 +147,7 @@ namespace hoa
         /**	You should use this method to compute the projection of the circular harmonics over an ambisonics circle. The inputs array contains the circular harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
             m_maximum = fabs(Signal<T>::vector_max(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
@@ -321,7 +321,7 @@ namespace hoa
          
          @param     inputs   The inputs array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             Signal<T>::matrix_vector_mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
             m_maximum = fabs(Signal<T>::vector_max(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));

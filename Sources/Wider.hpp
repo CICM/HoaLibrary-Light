@@ -113,7 +113,7 @@ namespace hoa
          @param     inputs	The input array.
          @param     outputs The output array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             T gain   = (m_gain * Processor<Hoa2d, T>::Harmonics::getDecompositionOrder());
             T factor = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain - m_gain) + 1.);
@@ -183,7 +183,7 @@ namespace hoa
          @param     inputs	The input array.
          @param     outputs The output array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             T gain   = (m_gain * Processor<Hoa3d, T>::Harmonics::getDecompositionOrder());
             T factor = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain - m_gain) + 1.);

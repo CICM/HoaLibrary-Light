@@ -100,7 +100,7 @@ namespace hoa
             @param     inputs   The inputs array.
             @param     outputs  The outputs array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             processVelocity(inputs, outputs);
             processEnergy(inputs, outputs+2);
@@ -206,7 +206,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             processVelocity(inputs, outputs);
             processEnergy(inputs, outputs+3);

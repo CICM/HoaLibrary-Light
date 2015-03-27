@@ -422,7 +422,7 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        inline void process(const T* input, T* outputs) noexcept 
+        inline void process(const T* input, T* outputs) noexcept override
         {
             if(!m_muted)
             {
@@ -588,7 +588,7 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        inline void process(const T* input, T* outputs) noexcept
+        inline void process(const T* input, T* outputs) noexcept override
         {
             if(!m_muted)
             {
@@ -779,7 +779,7 @@ namespace hoa
          @param     input  The input array.
          @param     outputs The outputs array.
          */
-        inline void process(const T* input, T* outputs) noexcept
+        inline void process(const T* input, T* outputs) noexcept override
         {
             m_encoders[0]->process(input, outputs);
             for(ulong i = 1; i < m_number_of_sources; i++)
@@ -953,7 +953,7 @@ namespace hoa
          @param     input    The input sample.
          @param     outputs  The outputs array.
          */
-        void process(const T* input, T* outputs) noexcept
+        void process(const T* input, T* outputs) noexcept override
         {
             if(!m_muted)
             {
@@ -1306,7 +1306,7 @@ namespace hoa
          @param     input	The input sample.
          @param     outputs The output array.
          */
-        void process(const T* input, T* outputs) noexcept
+        void process(const T* input, T* outputs) noexcept override
         {
             if(!m_muted)
             {
@@ -1625,7 +1625,7 @@ namespace hoa
          @param     input  The input array.
          @param     outputs The outputs array.
          */
-        inline void process(const T* input, T* outputs) noexcept
+        inline void process(const T* input, T* outputs) noexcept override
         {
             m_encoders[0]->process(input, outputs);
             for(ulong i = 1; i < m_number_of_sources; i++)
