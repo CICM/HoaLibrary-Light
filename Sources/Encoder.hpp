@@ -104,7 +104,7 @@ namespace hoa
              \f[P_{l,l+1}(x) = x(2l+1)P_{(l,l)}(x) \f]
              \f[P_{l+1,m}(x) = \frac{x(2l+1)P_{(l,m)}(x) - (l+m)P_{(l-1,m)}(x)}{l-m+1} \f]
              and with \f[P_{0, 0}(x) = 1\f]
-             The normalization part k_{l, m} is equivalent to :\n
+             The normalization part \f$k_{l, m}\f$ is equivalent to :\n
              if \f$m = 0\f$ then
              \f[k_{l, m} = 1\f]
              else
@@ -784,7 +784,7 @@ namespace hoa
             m_encoders[0]->process(input, outputs);
             for(ulong i = 1; i < m_number_of_sources; i++)
             {
-                m_encoders[i]->processAdd(input++, outputs);
+                m_encoders[i]->processAdd(++input, outputs);
             }
         }
     };
@@ -1630,7 +1630,7 @@ namespace hoa
             m_encoders[0]->process(input, outputs);
             for(ulong i = 1; i < m_number_of_sources; i++)
             {
-                m_encoders[i]->processAdd(input++, outputs);
+                m_encoders[i]->processAdd(++input, outputs);
             }
         }
     };
