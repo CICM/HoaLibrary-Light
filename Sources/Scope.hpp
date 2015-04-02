@@ -54,7 +54,33 @@ namespace hoa
         {
             m_matrix = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
             m_vector = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
-            
+            computeRendering();
+        }
+        
+        //! The scope destructor.
+        /**	The scope destructor free the memory.
+         */
+        ~Scope() noexcept
+        {
+            delete [] m_matrix;
+            delete [] m_vector;
+        }
+        
+        //! Set the offset.
+        /**	Set the rotation of the spherical harmonics in radian.
+         */
+        inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) noexcept
+        {
+            Processor<Hoa2d, T>::Planewaves::setPlanewavesRotation(x_axe, y_axe, z_axe);
+        }
+        
+        inline T getViewRotationZ() const noexcept
+        {
+            return Processor<Hoa2d, T>::Planewaves::getPlanewavesRotationZ();
+        }
+        
+        void computeRendering() noexcept
+        {
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
@@ -67,15 +93,6 @@ namespace hoa
                 m_vector[i] = 0.;
             }
             m_maximum = 0;
-        }
-        
-        //! The scope destructor.
-        /**	The scope destructor free the memory.
-         */
-        ~Scope() noexcept
-        {
-            delete [] m_matrix;
-            delete [] m_vector;
         }
         
         //! Retrieve the number of points.
@@ -207,24 +224,7 @@ namespace hoa
             
             m_matrix = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa3d, T>::getNumberOfHarmonics()];
             m_vector = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
-            
-            const T factor = 12.5 / (T)(Encoder<Hoa3d, T>::getNumberOfHarmonics());
-            for(ulong i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
-            {
-                Encoder<Hoa3d, T>::Basic::setAzimuth(Processor<Hoa3d, T>::Planewaves::getPlanewaveAzimuth(i));
-                Encoder<Hoa3d, T>::Basic::setElevation(Processor<Hoa3d, T>::Planewaves::getPlanewaveElevation(i));
-                Encoder<Hoa3d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa3d, T>::getNumberOfHarmonics());
-                for(ulong j = 0; j < Encoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
-                {
-                    const ulong l = Encoder<Hoa3d, T>::getHarmonicDegree(j);
-                    m_matrix[i * Encoder<Hoa3d, T>::getNumberOfHarmonics() + j] *= (2. * l + 1.) / (4. * HOA_PI);
-                }
-            }
-            for(ulong i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
-            {
-                m_vector[i] = 0.;
-            }
-            m_maximum = 0;
+            computeRendering();
         }
         
         //! The scope destructor.
@@ -314,6 +314,51 @@ namespace hoa
         inline T getPointElevation(const ulong rowIndex) const noexcept
         {
             return (T)rowIndex * HOA_PI / (T)(m_number_of_rows - 1) - HOA_PI2;
+        }
+        
+        
+        //! Set the offset.
+        /**	Set the rotation of the spherical harmonics in radian.
+         */
+        inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) noexcept
+        {
+            Processor<Hoa3d, T>::Planewaves::setPlanewavesRotation(x_axe, y_axe, z_axe);
+        }
+        
+        inline T getViewRotationX() const noexcept
+        {
+            return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationX();
+        }
+        
+        inline T getViewRotationY() const noexcept
+        {
+            return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationY();
+        }
+        
+        inline T getViewRotationZ() const noexcept
+        {
+            return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationZ();
+        }
+        
+        void computeRendering() noexcept
+        {
+            const T factor = 12.5 / (T)(Encoder<Hoa3d, T>::getNumberOfHarmonics());
+            for(ulong i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            {
+                Encoder<Hoa3d, T>::Basic::setAzimuth(Processor<Hoa3d, T>::Planewaves::getPlanewaveAzimuth(i));
+                Encoder<Hoa3d, T>::Basic::setElevation(Processor<Hoa3d, T>::Planewaves::getPlanewaveElevation(i));
+                Encoder<Hoa3d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa3d, T>::getNumberOfHarmonics());
+                for(ulong j = 0; j < Encoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
+                {
+                    const ulong l = Encoder<Hoa3d, T>::getHarmonicDegree(j);
+                    m_matrix[i * Encoder<Hoa3d, T>::getNumberOfHarmonics() + j] *= (2. * l + 1.) / (4. * HOA_PI);
+                }
+            }
+            for(ulong i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            {
+                m_vector[i] = 0.;
+            }
+            m_maximum = 0;
         }
         
         //! This method performs the spherical harmonics projection with single precision.
