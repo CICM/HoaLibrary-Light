@@ -33,6 +33,7 @@
 #if (__cplusplus <= 199711L)
 #define noexcept
 #define nullptr NULL
+#define override
 #endif
 
 #define HOA_PI  3.14159265358979323846264338327950288
