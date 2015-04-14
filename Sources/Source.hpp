@@ -312,16 +312,11 @@ namespace hoa
             //! Remove the groups which have exactly the same sources
             inline void cleanDuplicatedGroup() noexcept
             {
-                for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+                for(group_iterator it = m_groups.begin() ; it != m_groups.end(); ++it)
                 {
-                    group_iterator ti = it;
-                    ti ++;
-                    for (ti ; ti != m_groups.end() ; ti ++)
+                    for(group_iterator ti = it; ti != m_groups.end(); ++ti)
                     {
-                        if (it->first == ti->first)
-                            continue;
-
-                        if (*it->second == *ti->second)
+                        if(it->first != ti->first && *it->second == *ti->second)
                         {
                             delete ti->second;
                             m_groups.erase(ti->first);

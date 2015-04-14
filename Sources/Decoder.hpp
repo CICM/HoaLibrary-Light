@@ -296,7 +296,7 @@ namespace hoa
         {
             typename Encoder<Hoa2d, T>::Basic encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
             Signal<T>::vector_clear(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
-            T vector_harmonics[Decoder<Hoa2d, T>::getNumberOfHarmonics()];
+            T* vector_harmonics =  new T[Decoder<Hoa2d, T>::getNumberOfHarmonics()];
 
             if(Decoder<Hoa2d, T>::getNumberOfPlanewaves() == 1)
             {
@@ -437,6 +437,7 @@ namespace hoa
                 }
                 channels.clear();
             }
+            delete [] vector_harmonics;
         }
     };
 
