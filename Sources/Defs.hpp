@@ -1,5 +1,5 @@
 /*
-// Copyright (c) 2012-2015 Eliott Paris, Julien Colafrancesco, Thomas Le Meur & Pierre Guillot, CICM, Universite Paris 8.
+// Copyright (c) 2012-2015 Eliott Paris, Julien Colafrancesco & Pierre Guillot, CICM, Universite Paris 8.
 // For information on usage and redistribution, and for a DISCLAIMER OF ALL
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
@@ -19,6 +19,7 @@
 #include <cmath>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #ifdef PD_DEBUG
 #include "../../CicmWrapper/Sources/cicm_wrapper.h"
@@ -33,7 +34,6 @@
 #if (__cplusplus <= 199711L)
 #define noexcept
 #define nullptr NULL
-#define override
 #endif
 
 #define HOA_PI  3.14159265358979323846264338327950288
@@ -56,7 +56,7 @@ namespace hoa
         return floor(val + 0.5);
     }
 #endif
-    
+
     //! The dimension of class.
     /** Most of the classes are specialized for 2d or 3d.
      */

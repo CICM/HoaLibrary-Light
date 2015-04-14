@@ -11,55 +11,377 @@
 
 namespace hoa
 {
-    class SourcesManager;
-    class SourcesGroup;
-    
-	class Source
-	{
-	private:
-		
-		double					m_radius;
-		double					m_azimuth;
-        double                  m_elevation;
-		double*					m_color;
-		string                  m_description;
-		bool                    m_exist;
-		vector <long>           m_groups;
-		double                  m_maximum_radius;
-		bool                    m_mute;
-		
-	public:
-		
-		//! The source constructor.
-		/**	The source constructor allocates and initialize the member values for a source.
-		 
-			@param     existence		The existence state of the source.
-			@param     radius			The radius of the source.
-			@param     azimuth			The azimuth of the source.
-            @param     elevation		The elevation of the source.
-		 */
-		Source(bool existence = true, double radius = 0., double azimuth = 0., double elevation = 0.);
-		
-		//! The source destructor.
-        /**	The source destructor free the memory.
-         */
-		~Source();
-		
-		//! Set the existence state of the source.
-		/**
-			@param     state		The existence state of the source.
-			@see getExistence
-         */
-		void setExistence(bool state);
-		
-        //! Set the position of the source with polar coordinates.
-		/**
-            @param     radius			The radius of the source.
-            @param     azimuth			The azimuth of the source.
-            @see setCoordinatesCartesian
-         */
-		void setCoordinatesPolar(double radius, double azimuth);
-        
+    class Source
+    {
+    public:
+        class Group;
+
+        typedef  map<ulong, Source*>::const_iterator  const_source_iterator;
+        typedef  map<ulong, Source*>::iterator source_iterator;
+        typedef  map<ulong, Group*>::const_iterator  const_group_iterator;
+        typedef  map<ulong, Group*>::iterator group_iterator;
+
+        class Manager
+        {
+        private:
+            const double         m_maximum_radius;
+            map<ulong, Source*>  m_sources;
+            map<ulong, Group*>   m_groups;
+            double               m_zoom;
+
+        public:
+
+            //! The first manager constructor.
+            /**	The manager constructor allocates and initialize the member values.
+             *
+             * @param     maximumRadius		The maximum radius the sources or groups in the source manager could have
+             */
+            Manager(const double maximumRadius = 1.) :
+                m_maximum_radius(maximumRadius)
+            {
+                m_zoom = 1;
+            }
+
+            //! The second manager constructor.
+            /**	The manager constructor allocates and initialize the member values.
+             *
+             * @param     other		It's a contructor by copy an 'other' manager
+             */
+            Manager(const Manager& other) :
+                m_maximum_radius(other.getMaximumRadius())
+            {
+                m_zoom = other.getZoom();
+
+                for(const_source_iterator it = other.m_sources.begin() ; it != other.m_sources.end() ; it ++)
+                {
+                    m_sources[it->first] = new Source(*it->second);
+                }
+                for(const_group_iterator it = other.m_groups.begin() ; it != other.m_groups.end() ; it ++)
+                {
+                    m_groups[it->first] = new Group(*it->second);
+
+                    map<ulong, Source*>& tmp = it->second->getSources();
+                    for (source_iterator ti = tmp.begin() ; ti != tmp.end() ; ti ++)
+                    {
+                        m_groups[it->first]->addSource(m_sources[ti->first]);
+                    }
+                }
+            }
+
+            //! The source manager destructor free the memory.
+            ~Manager() noexcept
+            {
+                clear();
+            }
+
+            //! Clear (and free) the memory
+            inline void clear()
+            {
+                for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+                {
+                    delete it->second;
+                    m_groups.erase(it->first);
+                }
+                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                {
+                    delete it->second;
+                    m_sources.erase(it->first);
+                }
+                m_groups.clear();
+                m_sources.clear();
+            }
+
+            //! Set the zoom factor.
+            /** Set the zoom factor between 0 and 1.
+             @param     zoom		The zoom factor.
+             */
+            inline void setZoom(const double zoom)
+            {
+                m_zoom = Math<double>::clip(zoom, 1. / m_maximum_radius, 1.);
+            }
+
+            //! Get the maximum radius of the sources and groups.
+            /**
+             @return		The maximum radius.
+             */
+            inline const double getMaximumRadius() const noexcept
+            {
+                return m_maximum_radius;
+            }
+
+            //! Get the zoom factor value.
+            /**
+             @return		The zoom factor value.
+             */
+            inline const double getZoom() const noexcept
+            {
+                return m_zoom;
+            }
+
+            //! Add a new Source
+            /**
+             @param     index       The index of the new source
+             @param     radius      The radius of the new source
+             @param     azimuth     The azimuth of the new source
+             @param     elevation   The elevation of the new source
+             @return	            The success of the creation of the source
+             */
+            inline bool newSource (const ulong index, const double radius = 0., const double azimuth = 0., const double elevation = 0.) noexcept
+            {
+                source_iterator it = m_sources.find(index);
+                if(it == m_sources.end())
+                {
+                    m_sources[index] = new Source(m_maximum_radius, index, radius, azimuth, elevation);
+                    return true;
+                }
+                return false;
+            }
+
+            //! Remove a Source
+            /**
+             @param     index   The index of the source
+             */
+            inline void removeSource (const ulong index) noexcept
+            {
+                source_iterator it = m_sources.find(index);
+                if(it != m_sources.end())
+                {
+                    ulong index = it->second->getIndex();
+                    delete it->second;
+                    m_sources.erase(index);;
+                }
+            }
+
+            //! Get the Sources map size
+            /**
+             @return     The sources map size
+             */
+            inline ulong getSourcesSize() const noexcept
+            {
+                return m_sources.size();
+            }
+
+            //! Check if the Sources map is empty
+            /**
+             @return    The state of the source map content
+             */
+            inline bool isSourcesEmpty() const noexcept
+            {
+                if (m_sources.size())
+                    return false;
+                else
+                    return true;
+            }
+
+            //! Get the Groups map size
+            /**
+             @return     The groups map size
+             */
+            inline ulong getGroupsSize() const noexcept
+            {
+                return m_groups.size();
+            }
+
+            //! Check if the Groups map is empty
+            /**
+             @return    The state of the groups map content
+             */
+            inline bool isGroupsEmpty() const noexcept
+            {
+                if (m_groups.size())
+                    return false;
+                else
+                    return true;
+            }
+
+            //! Add a new Group
+            /**
+             @param     index       The index of the new group
+             @return	            The success of the creation of the group
+             */
+            inline bool newGroup (const ulong index) noexcept
+            {
+                group_iterator it = m_groups.find(index);
+                if(it == m_groups.end())
+                {
+                    m_groups[index] = new Group(this, index);
+                    return true;
+                }
+                return false;
+            }
+
+            //! Remove a Group
+            /**
+             @param     index   The index of the group
+             */
+            inline void removeGroup (const ulong index) noexcept
+            {
+                group_iterator it = m_groups.find(index);
+                if(it != m_groups.end())
+                {
+                    ulong index = it->second->getIndex();
+                    delete it->second;
+                    m_groups.erase(index);
+                }
+            }
+
+            //! Remove a Group with its sources
+            /**
+             @param     index   The index of the group
+             */
+            inline void removeGroupWithSources (const ulong index) noexcept
+            {
+                group_iterator it = m_groups.find(index);
+                if(it != m_groups.end())
+                {
+                    map<ulong, Source*>& sources = it->second->getSources();
+                    for (source_iterator ti = sources.begin() ; ti != sources.end() ; ti ++)
+                    {
+                        m_sources.erase(ti->first);
+                        delete ti->second;
+                    }
+                    m_groups.erase(it->first);
+                    delete it->second;
+                }
+            }
+
+            //! Get one source
+            /**
+             @param     index   The index of the source
+             @return            A pointer on the source
+             */
+            inline Source* getSource(const ulong index)
+            {
+                source_iterator it = m_sources.find(index);
+                if(it != m_sources.end())
+                {
+                    return it->second;
+                }
+                return NULL;
+            }
+
+            //! Get the first const iterator of the Sources map
+            /**
+             @return        The first const iterator of the sources map
+             */
+            inline const_source_iterator getFirstSource() const noexcept
+            {
+                return m_sources.begin();
+            }
+
+            //! Get the first iterator of the Sources map
+            /**
+             @return        The const iterator of the sources map
+             */
+            inline source_iterator getFirstSource() noexcept
+            {
+                return m_sources.begin();
+            }
+
+            //! Get the last const iterator of the Sources map
+            /**
+             @return        The last const iterator of the sources map
+             */
+            inline const_source_iterator  getLastSource() const noexcept
+            {
+                return m_sources.end();
+            }
+
+            //! Get the last iterator of the Sources map
+            /**
+             @return        The last iterator of the sources map
+             */
+            inline source_iterator  getLastSource() noexcept
+            {
+                return m_sources.end();
+            }
+
+            //! Remove the groups which have less 2 sources
+            inline void cleanEmptyGroup() noexcept
+            {
+                for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+                {
+                    if (it->second->m_sources.size() < 2)
+                    {
+                        m_groups.erase(it->first);
+                        delete it->second;
+                    }
+                }
+            }
+
+            //! Remove the groups which have exactly the same sources
+            inline void cleanDuplicatedGroup() noexcept
+            {
+                for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+                {
+                    group_iterator ti = it;
+                    ti ++;
+                    for (ti ; ti != m_groups.end() ; ti ++)
+                    {
+                        if (it->first == ti->first)
+                            continue;
+
+                        if (*it->second == *ti->second)
+                        {
+                            delete ti->second;
+                            m_groups.erase(ti->first);
+                        }
+                    }
+                }
+            }
+
+            //! Get one group
+            /**
+             @param     index   The index of the group
+             @return            A pointer on the group
+             */
+            inline Group* getGroup(const ulong index)
+            {
+                group_iterator it = m_groups.find(index);
+                if(it != m_groups.end())
+                {
+                    return it->second;
+                }
+                return NULL;
+            }
+
+            //! Get the first const iterator of the Groups map
+            /**
+             @return        The first const iterator of the groups map
+             */
+            inline const_group_iterator getFirstGroup() const noexcept
+            {
+                return m_groups.begin();
+            }
+
+            //! Get the first iterator of the Groups map
+            /**
+             @return        The first iterator of the groups map
+             */
+            inline group_iterator getFirstGroup() noexcept
+            {
+                return m_groups.begin();
+            }
+
+            //! Get the last const iterator of the Groups map
+            /**
+             @return        The last const iterator of the groups map
+             */
+            inline const_group_iterator  getLastGroup() const noexcept
+            {
+                return m_groups.end();
+            }
+
+            //! Get the last iterator of the Groups map
+            /**
+             @return        The last iterator of the groups map
+             */
+            inline group_iterator  getLastGroup() noexcept
+            {
+                return m_groups.end();
+            }
+        };
+
 		//! Set the position of the source with polar coordinates.
 		/**
 			@param     radius			The radius of the source.
@@ -67,60 +389,94 @@ namespace hoa
             @param     elevation        The elevation of the source.
 			@see setCoordinatesCartesian
          */
-		void setCoordinatesPolar(double radius, double azimuth, double elevation);
-		
+		inline void setCoordinatesPolar(const double radius, const double azimuth, const double elevation = 0.)
+		{
+			setRadius(radius);
+		    setAzimuth(azimuth);
+		    setElevation(elevation);
+       	}
+
 		//! Set the radius of the source.
 		/**
 			@param     radius			The radius of the source.
 			@see getRadius
          */
-		void setRadius(double radius);
-		
+		inline void setRadius(const double radius)
+		{
+			if(m_maximum_radius >= 0)
+		    {
+		        if(radius < -m_maximum_radius || radius > m_maximum_radius)
+		            return;
+		    }
+		    m_radius = max(radius, (double)0.);
+		    notifyCoordinates();
+		}
+
 		//! Set the azimuth of the source.
 		/**
 			@param     azimuth			The azimuth of the source.
          */
-		void setAzimuth(double azimuth);
-        
+		inline void setAzimuth(const double azimuth)
+		{
+			m_azimuth = Math<double>::wrap_twopi(azimuth);
+			notifyCoordinates();
+		}
+
         //! Set the elevation of the source.
 		/**
          @param     elevation			The elevation of the source.
          */
-		void setElevation(double elevation);
-		
-		//! Set the position of the source with cartesians coordinates.
-		/**
-			@param     abscissa		The abscissa of the source.
-			@param     ordinate		The ordinate of the source.
-         */
-		void setCoordinatesCartesian(double abscissa, double ordinate);
-        
+		inline void setElevation(const double elevation)
+		{
+			m_elevation = Math<double>::wrap_pi(elevation);
+		    if(m_elevation > HOA_PI2 || m_elevation < -HOA_PI2)
+		    {
+		        m_azimuth = Math<double>::wrap_twopi(m_azimuth + HOA_PI);
+		        m_elevation = -elevation;
+		    }
+		    notifyCoordinates();
+		}
+
         //! Set the position of the source with cartesians coordinates.
 		/**
             @param     abscissa		The abscissa of the source.
             @param     ordinate		The ordinate of the source.
             @param     height		The height of the source.
          */
-		void setCoordinatesCartesian(double abscissa, double ordinate, double height);
-		
+		inline void setCoordinatesCartesian(const double abscissa, const double ordinate, const double height = 0.)
+		{
+			setRadius(Math<double>::radius(abscissa, ordinate, height));
+        	setAzimuth(Math<double>::azimuth(abscissa, ordinate, height));
+        	setElevation(Math<double>::elevation(abscissa, ordinate, height));
+        }
+
 		//! Set the abscissa of the source.
 		/**
 			@param     abscissa		The abscissa of the source.
          */
-		void setAbscissa(double abscissa);
-		
+		inline void setAbscissa(const double abscissa)
+		{
+            setCoordinatesCartesian(abscissa, getOrdinate(), getHeight());
+		}
+
 		//! Set the ordinate of the source.
 		/**
 			@param     ordinate		The ordinate of the source.
          */
-		void setOrdinate(double ordinate);
-        
+		inline void setOrdinate(const double ordinate)
+		{
+            setCoordinatesCartesian(getAbscissa(), ordinate, getHeight());
+        }
+
         //! Set the height of the source.
 		/**
          @param     height		The height of the source.
          */
-		void setHeight(double height);
-		
+		inline void setHeight(const double height)
+		{
+            setCoordinatesCartesian(getAbscissa(), getOrdinate(), height);
+		}
+
 		//! Set the color of the source.
 		/**
 		 * @param     red		The red component of the color.
@@ -128,1047 +484,954 @@ namespace hoa
 		 * @param     blue		The blue component of the color
 		 * @param     alpha		The alpha component of the color
          */
-		void setColor(double red, double green, double blue, double alpha);
-		
+		inline void setColor(const double red, const double green, const double blue, const double alpha)
+		{
+			m_color[0]	=  Math<double>::clip(red, 0., 1.);
+		    m_color[1]	=  Math<double>::clip(green, 0., 1.);
+		    m_color[2]	=  Math<double>::clip(blue, 0., 1.);
+		    m_color[3]	=  Math<double>::clip(alpha, 0., 1.);
+        }
+
 		//! Set the description of the source.
 		/**
 		 * @param     description		The text description of the source.
          */
-		void setDescription(string description);
-		
-		//! Add source to an indexed group.
-		/**
-			@param     groupIndex		The index of the group.
-         */
-		void setGroup(long groupIndex);
-		
-		//! Remove source from an indexed group.
-		/**
-			@param     groupIndex		The index of the group.
-         */
-		void removeGroup(long groupIndex);
-		
-		//! Set the maximum radius of the source
-		/**
-			@param     limitValue		The radius limit value.
-         */
-		void setMaximumRadius(double limitValue);
-		
+		inline void setDescription(const string description)
+		{
+			m_description = description;
+		}
+
 		//! Set the mute state of the source
 		/**
 			@param     state		The mute state of the source.
 			@see getMute
          */
-		void setMute(bool state);
-		
-		//! Get the existence state of the source.
+		inline void setMute(const bool state)
+		{
+			m_mute = state;
+			notifyMute();
+		}
+
+        //! Get the maximum radius of the source.
 		/**
-			@return		The existence state of the source.
-			@see setExistence
+			@return		The maximum radius of the source.
          */
-		bool			getExistence()		const {return m_exist;}
-		
+        inline const double getMaximumRadius() const noexcept
+        {
+            return m_maximum_radius;
+        }
+
+        //! Get the index of the source.
+		/**
+			@return		The index of the source.
+         */
+        inline const ulong getIndex() const noexcept
+        {
+            return m_index;
+        }
+
 		//! Get the radius of the source.
 		/**
 			@return		The radius of the source.
 			@see setRadius, setCoordinatesPolar
          */
-		double			getRadius()			const {return m_radius;}
-		
+		inline const double	getRadius()	const noexcept
+		{
+			return m_radius;
+		}
+
 		//! Get the azimuth of the source.
 		/**
 			@return		The azimuth of the source.
 			@see setAzimuth, setCoordinatesPolar
          */
-		double			getAzimuth()		const {return m_azimuth;}
-        
+		inline const double	getAzimuth() const noexcept
+		{
+			return m_azimuth;
+		}
+
         //! Get the elevation of the source.
 		/**
             @return		The elevation of the source.
             @see setElevation, setCoordinatesPolar
          */
-		double			getElevation()		const {return m_elevation;}
-		
+		inline const double	getElevation() const noexcept
+		{
+			return m_elevation;
+		}
+
 		//! Get the abscissa of the source.
 		/**
 			@return		The abscissa of the source.
 			@see setAbscissa, setCoordinatesCartesian
          */
-		double			getAbscissa()		const {return Math<double>::abscissa(m_radius, m_azimuth, m_elevation);}
-		
-		
+		inline const double	getAbscissa() const
+		{
+			return Math<double>::abscissa(m_radius, m_azimuth, m_elevation);
+		}
+
 		//! Get the ordinate of the source.
 		/**
 			@return		The ordinate of the source.
 			@see setOrdinate, setCoordinatesCartesian
          */
-		double			getOrdinate()		const {return Math<double>::ordinate(m_radius, m_azimuth, m_elevation);}
-        
+		inline const double	getOrdinate() const
+		{
+			return Math<double>::ordinate(m_radius, m_azimuth, m_elevation);
+		}
+
         //! Get the height of the source.
 		/**
          @return		The height of the source.
          @see setHeight, setCoordinatesCartesian
          */
-		double			getHeight()		const {return Math<double>::height(m_radius, m_azimuth, m_elevation);}
-		
+		inline const double	getHeight() const
+		{
+			return Math<double>::height(m_radius, m_azimuth, m_elevation);
+		}
+
 		//! Get the color of the source.
 		/**
 			@return		The rgba color of the source as an array of 4 double.
 			@see setColor
          */
-		double*			getColor()			const {return m_color;}
-		
+		inline const double* getColor() const noexcept
+		{
+			return m_color;
+		}
+
 		//! Get the description of the source.
 		/**
 			@return		The description of the source.
 			@see setDescription
          */
-		string		getDescription()	const {return m_description;}
-		
-		//! Get the number of group the source is owned by.
-		/**
-			@return		The number of group.
-			@see setDescription
-         */
-		long			getNumberOfGroups() const {return m_groups.size();}
-		
-		//! Get the the group index the source is owned by at a particular index.
-		/**
-			@param			index			The index of the group
-			@return		The group index.
-         */
-		long			getGroupIndex(long index);
-		
-		//! Determine if the source is owned by a particular group
-		/**
-			@param			groupIndex		The index of the group
-			@return		true if the source is in the group, false otherwise.
-         */
-		bool			isOwnedByGroup(long groupIndex);
-		
+		inline const string	getDescription() const noexcept
+		{
+			return m_description;
+		}
+
 		//! Get the mute state of the source
 		/**
 			@return		The mute state of the source.
 			@see setMute
          */
-		bool			getMute()			const {return m_mute;}
-	};
-    
-    class SourcesGroup
-    {
-        
-    private:
-        
-        vector <long>           m_sources;
-        string                  m_description;
-        long                    m_exist;
-        double*					m_color;
-        double					m_centroid_x;
-        double					m_centroid_y;
-        double					m_centroid_z;
-        SourcesManager*         m_source_manager;
-        double                  m_maximum_radius;
-        long                    m_mute;
-        
-        void computeCentroid();
-        void shiftPolar(double radius, double azimuth);
-        void shiftPolar(double radius, double azimuth, double elevation);
-        void shiftRadius(double radius);
-        void shiftAzimuth(double azimuth);
-        void shiftElevation(double elevation);
-        void shiftCartesian(double abscissa, double ordinate);
-        void shiftCartesian(double abscissa, double ordinate, double height);
-        void shiftAbscissa(double abscissa);
-        void shiftOrdinate(double ordinate);
-        void shiftHeight(double ordinate);
-        
-    public:
-        
-        //! The source group constructor.
-        /**	The source group constructor allocates and initialize the member values for a source group.
-         
-         @param     sourcesManager		A SourceManager object's pointer.
-         @param     existence			The existence state of the source.
-         */
-        SourcesGroup(SourcesManager* sourcesManager, bool existence);
-        
-        //! The source group destructor.
-        /**	The source group destructor free the memory.
-         */
-        ~SourcesGroup();
-        
-        //! Set the existence state of the group.
+		inline const bool getMute() const noexcept
+		{
+			return m_mute;
+		}
+
+        //! Get the size of the Groups map
         /**
-         @param     state		The existence state of the group.
-         @see getExistence
+         @return    The group map size
          */
-        void setExistence(bool state);
-        
-        //! Set the position of the group with polar coordinates.
-        /**
-         @param     radius			The radius of the group.
-         @param     azimuth			The azimuth of the group.
-         @see setRelativeCoordinatesPolar, setCoordinatesCartesian
-         */
-        void setCoordinatesPolar(double radius, double azimuth);
-        
-        //! Set the position of the group with polar coordinates.
-        /**
-         @param     radius			The radius of the group.
-         @param     azimuth			The azimuth of the group.
-         @param     elevation			The elevation of the group.
-         @see setRelativeCoordinatesPolar, setCoordinatesCartesian
-         */
-        void setCoordinatesPolar(double radius, double azimuth, double elevation);
-        
-        //! Set the radius of the group.
-        /**
-         @param     radius			The radius of the group.
-         @see getRadius
-         */
-        void setRadius(double radius);
-        
-        //! Set the azimuth of the group.
-        /**
-         @param     azimuth			The azimuth of the group.
-         */
-        void setAzimuth(double azimuth);
-        
-        //! Set the elevation of the group.
-        /**
-         @param     elevation			The elevation of the group.
-         */
-        void setElevation(double elevation);
-        
-        //! Set the position of the group with cartesians coordinates.
-        /**
-         @param     abscissa		The abscissa of the group.
-         @param     ordinate		The ordinate of the group.
-         */
-        void setCoordinatesCartesian(double abscissa, double ordinate);
-        
-        //! Set the position of the group with cartesians coordinates.
-        /**
-         @param     abscissa		The abscissa of the group.
-         @param     ordinate		The ordinate of the group.
-         @param     height		The height of the group.
-         */
-        void setCoordinatesCartesian(double abscissa, double ordinate, double height);
-        
-        //! Set the abscissa of the group.
-        /**
-         @param     abscissa		The abscissa of the group.
-         */
-        void setAbscissa(double abscissa);
-        
-        //! Set the ordinate of the group.
-        /**
-         @param     ordinate		The ordinate of the group.
-         */
-        void setOrdinate(double ordinate);
-        
-        //! Set the height of the group.
-        /**
-         @param     height		The height of the group.
-         */
-        void setHeight(double height);
-        
-        //! Set the color of the group.
-        /**
-         @param     red			The red component of the color.
-         @param     green		The green component of the color
-         @param     blue			The blue component of the color
-         @param     alpha		The alpha component of the color
-         */
-        void setColor(double red, double green, double blue, double alpha);
-        
-        //! Set the description of the group.
-        /**
-         @param     description		The text description of the group.
-         */
-        void setDescription(string description);
-        
-        //! Set the maximum radius of the group
-        /**
-         @param     limitValue		The radius limit value.
-         */
-        void setMaximumRadius(double limitValue);
-        
-        //! Store a new source in this group
-        /**
-         @param     sourceIndex		The index of the source to store.
-         */
-        void addSource(long sourceIndex);
-        
-        //! Remove a source from this group
-        /**
-         @param     sourceIndex		The index of the source to store.
-         */
-        void removeSource(long sourceIndex);
-        
-        //! Notify the group that a source has moved
-        /** You need to call this function whenever a source has moved to update group information.
-         @param     sourceIndex		The index of the source to store.
-         */
-        void sourceHasMoved();
-        
-        //! Set the mute state of the group
-        /**
-         @param     state		The mute state of the group.
-         @see getMute
-         */
-        void setMute(long aValue);
-        
-        //! Set the position of the group with relative polar coordinates.
-        /**
-         @param     radius			The relative radius value.
-         @param     azimuth			The relative azimuth value.
-         @see setCoordinatesPolar, setRelativeRadius
-         */
-        void setRelativeCoordinatesPolar(double radius, double azimuth);
-        
-        //! Set the position of the group with relative polar coordinates.
-        /**
-         @param     radius			The relative radius value.
-         @param     azimuth			The relative azimuth value.
-         @param     elevation		The relative elevation value.
-         @see setCoordinatesPolar, setRelativeRadius
-         */
-        void setRelativeCoordinatesPolar(double radius, double azimuth, double elevation);
-        
-        //! Set the radius of the group with a relative value.
-        /**
-         @param     radius			The relative radius value.
-         @see setCoordinatesPolar, setRelativeRadius
-         */
-        void setRelativeRadius(double radius);
-        
-        //! Set the azimuth of the group with a relative value.
-        /**
-         @param     azimuth			The relative azimuth value.
-         @see setCoordinatesPolar, setRelativeRadius
-         */
-        void setRelativeAzimuth(double azimuth);
-        
-        //! Set the elevation of the group with a relative value.
-        /**
-         @param     elevation			The relative elevation value.
-         @see setCoordinatesPolar, setRelativeRadius
-         */
-        void setRelativeElevation(double elevation);
-        
-        //! Get the existence state of the group.
-        /**
-         @return		The existence state of the group.
-         @see setExistence
-         */
-        bool			getExistence()		const {return m_exist;}
-        
-        //! Get the radius of the group.
-        /**
-         @return		The radius of the group.
-         @see setRadius, setCoordinatesPolar
-         */
-        double			getRadius()			const { return Math<double>::radius(m_centroid_x, m_centroid_y, m_centroid_z);}
-        
-        //! Get the azimuth of the group.
-        /**
-         @return		The azimuth of the group.
-         @see setAzimuth, setCoordinatesPolar
-         */
-        double			getAzimuth()		const {return Math<double>::azimuth(m_centroid_x, m_centroid_y, m_centroid_z) + HOA_PI2;}
-        
-        //! Get the elevation of the group.
-        /**
-         @return		The elevation of the group.
-         @see setAzimuth, setCoordinatesPolar
-         */
-        double			getElevation()		const {return Math<double>::elevation(m_centroid_x, m_centroid_y, m_centroid_z);}
-        
-        //! Get the abscissa of the group.
-        /**
-         @return		The abscissa of the group.
-         @see setAbscissa, setCoordinatesCartesian
-         */
-        double			getAbscissa()		const {return m_centroid_x;}
-        
-        //! Get the ordinate of the group.
-        /**
-         @return		The ordinate of the group.
-         @see setOrdinate, setCoordinatesCartesian
-         */
-        double			getOrdinate()		const {return m_centroid_y;}
-        
-        //! Get the height of the group.
-        /**
-         @return		The height of the group.
-         @see setOrdinate, setCoordinatesCartesian
-         */
-        double			getHeight()		const {return m_centroid_z;}
-        
-        //! Get the color of the group.
-        /**
-         @return		The rgba color of the group as an array of 4 double.
-         @see setColor
-         */
-        double*			getColor()			const {return m_color;}
-        
-        //! Get the description of the group.
-        /**
-         @return		The description of the group.
-         @see setDescription
-         */
-        string		getDescription()	const {return m_description;}
-        
-        //! Get the number of sources owned by this group.
-        /**
-         @return		The number of sources.
-         @see setDescription
-         */
-        long			getNumberOfSources() const {return m_sources.size();}
-        
-        //! Get the mute state of the group
-        /**
-         @return		The mute state of the group.
-         @see setMute
-         */
-        bool			getMute()			const {return m_mute;}
-        
-        //! Get the the index of a source stored at a particular index by the group.
-        /**
-         @param			index			The index of the source.
-         @return			The index of the source if it exists, -1 otherwise.
-         */
-        long   getSourceIndex(long index)	const
+        inline ulong getGroupsSize() const noexcept
         {
-            if(index < m_sources.size() && index >= 0)
-                return m_sources[index];
+            return m_groups.size();
+        }
+
+        //! Check if the Groups map is empty
+        /**
+         @return    The state of the groups map content
+         */
+        inline bool isGroupsEmpty() const noexcept
+        {
+            if (m_groups.size())
+                return false;
             else
-                return -1;
+                return true;
+        }
+
+        //! Get the Groups map
+        /**
+         @return    A reference of the groups map
+         */
+        inline map<ulong, Group*>& getGroups() noexcept
+        {
+            return m_groups;
+        }
+
+        class Group
+        {
+        friend class Source;
+        friend class Manager;
+
+        private:
+            ulong                   m_index;
+            map<ulong, Source*>     m_sources;
+            string                  m_description;
+            double			        m_color[4];
+            double			        m_centroid_x;
+            double			        m_centroid_y;
+            double			        m_centroid_z;
+            double                  m_maximum_radius;
+            bool                    m_mute;
+            bool                    m_subMute;
+            const Manager*          m_manager;
+
+            //! The first source group constructor.
+            /**	The source group constructor allocates and initialize the member values for a source group.
+             @param     manager		A pointer on a manager object
+             @param     index       The index of the group
+             */
+            Group(const Manager* manager, const ulong index)
+            {
+                m_manager = manager;
+                m_maximum_radius = m_manager->getMaximumRadius();
+                m_index = index;
+                setColor(0.2, 0.2, 0.2, 1.);
+                m_description = "";
+                computeCentroid();
+                m_mute = false;
+            }
+
+            //! The second source group constructor.
+            /**	The source group constructor allocates and initialize the member values for a source group.
+             @param     other		It's a contructor by copy an 'other' group
+             */
+            Group(const Group& other)
+            {
+                m_manager = other.getManager();
+                m_maximum_radius = m_manager->getMaximumRadius();
+                m_index = other.getIndex();
+                const double* color = other.getColor();
+                setColor(color[0], color[1], color[2], color[3]);
+                m_description = other.getDescription();
+                computeCentroid();
+                m_mute = other.getMute();
+            }
+
+            //! The source group destructor.
+            /**	The source group destructor free the memory.
+             */
+            ~Group() noexcept
+            {
+                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                {
+                    m_sources[it->first]->removeGroup(m_index);
+                }
+                m_sources.clear();
+            }
+
+            //! Compute the group position for each moving of its sources
+            inline void notifyCoordinates() noexcept
+            {
+                computeCentroid();
+            }
+
+            //! Check the group mute state for each change of mute state of its sources
+            inline void notifyMute() noexcept
+            {
+                ulong numberOfMutedSources = 0;
+                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                {
+                    if (it->second->getMute())
+                        numberOfMutedSources ++;
+                }
+                if (numberOfMutedSources)
+                    m_subMute = true;
+                else
+                    m_subMute = false;
+                if (numberOfMutedSources == m_sources.size())
+                    m_mute = true;
+                else
+                    m_mute = false;
+            }
+
+            //! Compute the group position
+            inline void computeCentroid()
+            {
+                m_centroid_x = 0.;
+                m_centroid_y = 0.;
+                m_centroid_z = 0.;
+                if(m_sources.size())
+                {
+                    for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                    {
+                        m_centroid_x += it->second->getAbscissa();
+                        m_centroid_y += it->second->getOrdinate();
+                        m_centroid_z += it->second->getHeight();
+                    }
+                    m_centroid_x /= m_sources.size();
+                    m_centroid_y /= m_sources.size();
+                    m_centroid_z /= m_sources.size();
+                }
+            }
+
+            //! Compute the new polar coordinates of the Group
+            /**
+             @param     radius      The radius factor of shifting
+             @param     azimuth     The azimuth factor of shifting
+             @param     elevation   The elevation factor of shifting
+             */
+            inline void shiftPolar(const double radius, const double azimuth, const double elevation = 0.)
+            {
+                shiftRadius(radius);
+                shiftAzimuth(azimuth);
+                shiftElevation(elevation);
+            }
+
+            //! Compute the new radius of the Group
+            /**
+             @param     radius      The radius factor of shifting
+             */
+            void shiftRadius(double radius)
+            {
+                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                {
+                    it->second->setRadius(radius + it->second->getRadius());
+                }
+            }
+
+            //! Compute the new azimuth of the Group
+            /**
+             @param     azimuth     The azimuth factor of shifting
+             */
+            inline void shiftAzimuth(double azimuth)
+            {
+                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                {
+                    it->second->setAzimuth(azimuth + it->second->getAzimuth());
+                }
+            }
+
+            //! Compute the elevation of the Group
+            /**
+             @param     elevation   The elevation factor of shifting
+             */
+            inline void shiftElevation(double elevation)
+            {
+                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                {
+                    it->second->setElevation(elevation + it->second->getElevation());
+                }
+            }
+
+            //! Compute the new carthesian coordinates of the Group
+            /**
+             @param     abscissa    The abscissa factor of shifting
+             @param     ordinate    The ordinate factor of shifting
+             @param     height      The height factor of shifting
+             */
+            inline void shiftCartesian(const double abscissa, const double ordinate, const double height = 0.)
+            {
+                shiftAbscissa(abscissa);
+                shiftOrdinate(ordinate);
+                shiftHeight(height);
+            }
+
+            //! Compute the new abscissa of the Group
+            /**
+             @param     abscissa    The abscissa factor of shifting
+             */
+            void shiftAbscissa(double abscissa)
+            {
+                if(m_maximum_radius >= 0)
+                {
+                    if(abscissa < 0.)
+                    {
+                        double refValue = -m_maximum_radius * 2.;
+                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        {
+                            double circleValue = -sqrt(m_maximum_radius * m_maximum_radius - it->second->getOrdinate() * it->second->getOrdinate());
+                            if(circleValue - it->second->getAbscissa() > refValue)
+                                refValue = circleValue - it->second->getAbscissa();
+                        }
+                        if(abscissa < refValue)
+                        {
+                            abscissa = refValue;
+                        }
+                    }
+                    else if(abscissa >= 0.)
+                    {
+                        double refValue = m_maximum_radius * 2.;
+                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        {
+                            double circleValue = sqrt(m_maximum_radius * m_maximum_radius - it->second->getOrdinate() * it->second->getOrdinate());
+                            if(circleValue - it->second->getAbscissa() < refValue)
+                                refValue = circleValue - it->second->getAbscissa();
+                        }
+                    }
+                }
+                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                {
+                    it->second->setAbscissa(abscissa + it->second->getAbscissa());
+                }
+            }
+
+            //! Compute the new ordinate of the Group
+            /**
+             @param     ordinate    The ordinate factor of shifting
+             */
+            void shiftOrdinate(double ordinate)
+            {
+                if(m_maximum_radius >= 0)
+                {
+                    if(ordinate < 0.)
+                    {
+                        double refValue = -m_maximum_radius * 2.;
+                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        {
+                            double circleValue = -sqrt(m_maximum_radius * m_maximum_radius - it->second->getAbscissa() * it->second->getAbscissa());
+                            if(circleValue - it->second->getOrdinate() > refValue)
+                                refValue = circleValue - it->second->getOrdinate();
+                        }
+                        if(ordinate < refValue)
+                        {
+                            ordinate = refValue;
+                        }
+                    }
+                    else if(ordinate >= 0.)
+                    {
+                        double refValue = m_maximum_radius * 2.;
+                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        {
+                            double circleValue = sqrt(m_maximum_radius * m_maximum_radius - it->second->getAbscissa() * it->second->getAbscissa());
+                            if(circleValue - it->second->getOrdinate() < refValue)
+                                refValue = circleValue - it->second->getOrdinate();
+                        }
+                    }
+                }
+                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                {
+                    it->second->setOrdinate(ordinate + it->second->getOrdinate());
+                }
+            }
+
+            //! Compute the new height of the Group
+            /**
+             @param     height      The height factor of shifting
+             */
+            void shiftHeight(double height)
+            {
+                if(m_maximum_radius >= 0)
+                {
+                    if(height < 0.)
+                    {
+                        double refValue = -m_maximum_radius * 2.;
+                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        {
+                            double circleValue = -sqrt(m_maximum_radius * m_maximum_radius - it->second->getAbscissa() * it->second->getAbscissa());
+                            if(circleValue - it->second->getHeight() > refValue)
+                                refValue = circleValue - it->second->getHeight();
+                        }
+                        if(height < refValue)
+                        {
+                            height = refValue;
+                        }
+                    }
+                    else if(height >= 0.)
+                    {
+                        double refValue = m_maximum_radius * 2.;
+                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        {
+                            double circleValue = sqrt(m_maximum_radius * m_maximum_radius - it->second->getAbscissa() * it->second->getAbscissa());
+                            if(circleValue - it->second->getHeight() < refValue)
+                                refValue = circleValue - it->second->getHeight();
+                        }
+                    }
+                }
+                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                {
+                    it->second->setHeight(height + it->second->getHeight());
+                }
+            }
+
+        public:
+
+            //! Add a new Source (and add the group to the source)
+            /**
+             @param     source  The source to add
+             @return            The state of the addition of the source
+             */
+            inline bool addSource(Source* source) noexcept
+            {
+                source_iterator it = m_sources.find(source->getIndex());
+                if(it == m_sources.end() && source)
+                {
+                    source->addGroup(this);
+                    m_sources[source->getIndex()] = source;
+                    computeCentroid();
+                    return true;
+                }
+                return false;
+            }
+
+            //! Remove a Source
+            /**
+             @param     index   The index of the source
+             */
+            inline void removeSource(const ulong index) noexcept
+            {
+                m_sources.erase(index);
+                computeCentroid();
+            }
+
+            //! Set the position of the group with polar coordinates.
+            /**
+             @param     radius			The radius of the group.
+             @param     azimuth			The azimuth of the group.
+             @param     elevation			The elevation of the group.
+             @see setRelativeCoordinatesPolar, setCoordinatesCartesian
+             */
+            inline void setCoordinatesPolar(const double radius, const double azimuth, const double elevation = 0.)
+            {
+                setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth, elevation), Math<double>::ordinate(radius, azimuth, elevation));
+            }
+
+            //! Set the radius of the group.
+            /**
+             @param     radius			The radius of the group.
+             @see getRadius
+             */
+            inline void setRadius(const double radius)
+            {
+                setCoordinatesCartesian(Math<double>::abscissa(radius, getAzimuth(), getElevation()), Math<double>::ordinate(radius, getAzimuth(), getElevation()), Math<double>::height(radius, getAzimuth(), getElevation()));
+            }
+
+            //! Set the azimuth of the group.
+            /**
+             @param     azimuth			The azimuth of the group.
+             */
+            inline void setAzimuth(const double azimuth)
+            {
+                setCoordinatesCartesian(Math<double>::abscissa(getRadius(), azimuth, getElevation()), Math<double>::ordinate(getRadius(), azimuth, getElevation()), Math<double>::height(getRadius(), azimuth, getElevation()));
+            }
+
+            //! Set the elevation of the group.
+            /**
+             @param     elevation			The elevation of the group.
+             */
+            inline void setElevation(const double elevation)
+            {
+                setCoordinatesCartesian(Math<double>::abscissa(getRadius(), getAzimuth(), elevation), Math<double>::ordinate(getRadius(), getAzimuth(), elevation), Math<double>::height(getRadius(), getAzimuth(), elevation));
+            }
+
+            //! Set the position of the group with cartesians coordinates.
+            /**
+             @param     abscissa		The abscissa of the group.
+             @param     ordinate		The ordinate of the group.
+             @param     height		The height of the group.
+             */
+            inline void setCoordinatesCartesian(double abscissa, double ordinate, double height = 0.)
+            {
+                abscissa = abscissa - getAbscissa();
+                ordinate = ordinate - getOrdinate();
+                height = height - getHeight();
+                shiftCartesian(abscissa, ordinate, height);
+                computeCentroid();
+            }
+
+            //! Set the abscissa of the group.
+            /**
+             @param     abscissa		The abscissa of the group.
+             */
+            inline void setAbscissa(const double abscissa)
+            {
+                double aAbscissaOffset = abscissa - getAbscissa();
+                shiftAbscissa(aAbscissaOffset);
+                computeCentroid();
+            }
+
+            //! Set the ordinate of the group.
+            /**
+             @param     ordinate		The ordinate of the group.
+             */
+            inline void setOrdinate(const double ordinate)
+            {
+                double aOrdinateOffset = ordinate - getOrdinate();
+                shiftOrdinate(aOrdinateOffset);
+                computeCentroid();
+            }
+
+            //! Set the height of the group.
+            /**
+             @param     height		The height of the group.
+             */
+            inline void setHeight(const double height)
+            {
+                double aHeightOffset = height - getHeight();
+                shiftHeight(aHeightOffset);
+                computeCentroid();
+            }
+
+            //! Set the color of the group.
+            /**
+             @param     red			The red component of the color.
+             @param     green		The green component of the color
+             @param     blue			The blue component of the color
+             @param     alpha		The alpha component of the color
+             */
+            inline void setColor(const double red, const double green, const double blue, const double alpha)
+            {
+                m_color[0]	=  Math<double>::clip(red, 0., 1.);
+                m_color[1]	=  Math<double>::clip(green, 0., 1.);
+                m_color[2]	=  Math<double>::clip(blue, 0., 1.);
+                m_color[3]	=  Math<double>::clip(alpha, 0., 1.);
+            }
+
+            //! Set the description of the group.
+            /**
+             @param     description		The text description of the group.
+             */
+            inline void setDescription(const string description)
+            {
+                m_description = description;
+            }
+
+            //! Set the mute state of the group
+            /**
+             @param     state		The mute state of the group.
+             @see getMute
+             */
+            inline void setMute(const bool state)
+            {
+                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                {
+                    it->second->setMute(state);
+                }
+                m_mute = state;
+            }
+
+            //! Set the position of the group with relative polar coordinates.
+            /**
+             @param     radius			The relative radius value.
+             @param     azimuth			The relative azimuth value.
+             @param     elevation		The relative elevation value.
+             @see setCoordinatesPolar, setRelativeRadius
+             */
+            inline void setRelativeCoordinatesPolar(const double radius, const double azimuth, const double elevation = -HOA_PI2)
+            {
+                setRelativeRadius(radius);
+                setRelativeAzimuth(azimuth);
+                setRelativeElevation(elevation);
+            }
+
+            //! Set the radius of the group with a relative value.
+            /**
+             @param     radius			The relative radius value.
+             @see setCoordinatesPolar, setRelativeRadius
+             */
+
+            inline void setRelativeRadius(const double radius)
+            {
+                double aRadiusOffset = max(radius, (double)0.) - getRadius();
+                shiftRadius(aRadiusOffset);
+                computeCentroid();
+            }
+
+            //! Set the azimuth of the group with a relative value.
+            /**
+             @param     azimuth			The relative azimuth value.
+             @see setCoordinatesPolar, setRelativeRadius
+             */
+            inline void setRelativeAzimuth(double azimuth)
+            {
+                azimuth +=  HOA_PI2;
+                while (azimuth > HOA_2PI)
+                    azimuth -= HOA_2PI;
+                while (azimuth < 0.)
+                    azimuth += HOA_2PI;
+
+                double aAngleOffset = azimuth  - getAzimuth();
+                shiftAzimuth(aAngleOffset);
+                computeCentroid();
+            }
+
+            //! Set the elevation of the group with a relative value.
+            /**
+             @param     elevation			The relative elevation value.
+             @see setCoordinatesPolar, setRelativeRadius
+             */
+            inline void setRelativeElevation(double elevation)
+            {
+                elevation +=  HOA_PI2;
+                while (elevation > HOA_2PI)
+                    elevation -= HOA_2PI;
+                while (elevation < 0.)
+                    elevation += HOA_2PI;
+
+                double aAngleOffset = elevation  - getElevation();
+                shiftElevation(aAngleOffset);
+                computeCentroid();
+            }
+
+            //! Get the manager of the Group
+            /**
+                @return     A pointer on the manager of the group
+                */
+            inline const Manager* getManager() const noexcept
+            {
+                return m_manager;
+            }
+
+            //! Get the maximum radius of the Group
+            /**
+             @return    The maximum radius of the group
+             */
+            inline const double getMaximumRadius() const noexcept
+            {
+                return m_maximum_radius;
+            }
+
+            //! Get the indexs of the Group
+            /**
+             @return    The index of the group
+             */
+            inline const ulong getIndex() const noexcept
+            {
+                return m_index;
+            }
+
+            //! Get the radius of the group.
+            /**
+             @return		The radius of the group.
+             @see setRadius, setCoordinatesPolar
+             */
+            inline const double	getRadius()	const noexcept
+            {
+                return Math<double>::radius(m_centroid_x, m_centroid_y, m_centroid_z);
+            }
+
+            //! Get the azimuth of the group.
+            /**
+             @return		The azimuth of the group.
+             @see setAzimuth, setCoordinatesPolar
+             */
+            inline const double	getAzimuth() const noexcept
+            {
+                return Math<double>::azimuth(m_centroid_x, m_centroid_y, m_centroid_z) + HOA_PI2;
+            }
+
+            //! Get the elevation of the group.
+            /**
+             @return		The elevation of the group.
+             @see setAzimuth, setCoordinatesPolar
+             */
+            inline const double	getElevation() const noexcept
+            {
+                return Math<double>::elevation(m_centroid_x, m_centroid_y, m_centroid_z);
+            }
+
+            //! Get the abscissa of the group.
+            /**
+             @return		The abscissa of the group.
+             @see setAbscissa, setCoordinatesCartesian
+             */
+            inline const double	getAbscissa() const noexcept
+            {
+                return m_centroid_x;
+            }
+
+            //! Get the ordinate of the group.
+            /**
+             @return		The ordinate of the group.
+             @see setOrdinate, setCoordinatesCartesian
+             */
+            inline const double	getOrdinate() const noexcept
+            {
+                return m_centroid_y;
+            }
+
+            //! Get the height of the group.
+            /**
+             @return		The height of the group.
+             @see setOrdinate, setCoordinatesCartesian
+             */
+            inline const double	getHeight() const noexcept
+            {
+                return m_centroid_z;
+            }
+
+            //! Get the color of the group.
+            /**
+             @return		The rgba color of the group as an array of 4 double.
+             @see setColor
+             */
+            inline const double*	getColor()	const noexcept
+            {
+                return m_color;
+            }
+
+            //! Get the description of the group.
+            /**
+             @return		The description of the group.
+             @see setDescription
+             */
+            inline const string	getDescription() const noexcept
+            {
+                return m_description;
+            }
+
+            //! Get the mute state of the group
+            /**
+             @return		The mute state of the group.
+             @see setMute
+             */
+            inline const bool getMute()	const noexcept
+            {
+                return m_mute;
+            }
+
+            //! Get the general mute state of sources of the group
+            /**
+             @return        The sub general mute state of sources of the group
+             */
+            inline const bool getSubMute()	const noexcept
+            {
+                return m_subMute;
+            }
+
+            //! Get the size of the Sources map
+            /**
+             @return    The sources map size
+             */
+            inline ulong getSourcesSize() const noexcept
+            {
+                return m_sources.size();
+            }
+
+            //! Check if the Sources map is empty
+            /**
+             @return    The state of the sources map content
+             */
+            inline bool isSourcesEmpty() const noexcept
+            {
+                if (m_sources.size())
+                    return false;
+                else
+                    return true;
+            }
+
+            //! Get the Sources map
+            /**
+             @return    A reference of the sources map
+             */
+            inline map<ulong, Source*>& getSources() noexcept
+            {
+                return m_sources;
+            }
+
+            inline bool operator== (Group& other)
+            {
+                if (m_sources.size() == other.m_sources.size())
+                {
+                    ulong clones = 0;
+                    for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                    {
+                        source_iterator ti = other.m_sources.find(it->first);
+                        if (ti != other.m_sources.end())
+                            clones ++;
+                    }
+                    if (clones == m_sources.size())
+                        return true;
+                }
+                return false;
+            }
+        };
+
+    private:
+        ulong                m_index;
+        double		         m_radius;
+		double		         m_azimuth;
+        double               m_elevation;
+		double		         m_color[4];
+		string               m_description;
+		map<ulong, Group*>   m_groups;
+		double               m_maximum_radius;
+		bool                 m_mute;
+
+		//! The first source constructor.
+		/**	The source constructor allocates and initialize the member values for a source.
+            @param     maximumRadius    The maximum radius of the source
+            @param     index            The index of the source
+			@param     radius			The radius of the source.
+			@param     azimuth			The azimuth of the source.
+            @param     elevation		The elevation of the source.
+		 */
+		Source(const double maximumRadius, const ulong index, const double radius = 0., const double azimuth = 0., const double elevation = 0.)
+		{
+            m_maximum_radius = maximumRadius;
+            m_index = index;
+            m_radius = radius;
+            m_azimuth = azimuth;
+            m_elevation = elevation;
+            setColor(0.2, 0.2, 0.2, 1.);
+            m_description = "";
+            m_mute = false;
+      	}
+
+        //! The second source constructor.
+		/**	The source constructor allocates and initialize the member values for a source.
+            @param     othe    It's a constructor by copy an 'other' source
+		 */
+      	Source(const Source& other)
+		{
+            m_maximum_radius = other.getIndex();
+            m_index = other.getIndex();
+			m_radius = other.getRadius();
+			m_azimuth = other.getAzimuth();
+			m_elevation = other.getElevation();
+			const double* color = other.getColor();
+			setColor(color[0], color[1], color[2], color[3]);
+			m_description = other.getDescription();
+			m_mute = other.getMute();
+      	}
+
+      	//! The source destructor.
+        /**	The source destructor free the memory.
+         */
+		~Source() noexcept
+		{
+        	for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+		    {
+                m_groups[it->first]->removeSource(m_index);
+            }
+        	m_groups.clear();
+        }
+
+		//! Add a new group
+		/**
+		 @param     group   The group to add
+		 @return            The state of the addition of the group
+		 */
+        inline bool addGroup(Group* group) noexcept
+        {
+            group_iterator it = m_groups.find(group->getIndex());
+            if(it == m_groups.end() && group)
+            {
+                m_groups[group->getIndex()] = group;
+                return true;
+            }
+            return false;
+        }
+
+        //! Remove a group
+        /**
+         @param     index   The index of the group
+         */
+        inline void removeGroup(const ulong index) noexcept
+        {
+            m_groups.erase(index);
+        }
+
+        //! Call the groups of the source for each moving to compute their new position
+        inline void notifyCoordinates() noexcept
+        {
+            for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+		    {
+                it->second->notifyCoordinates();
+            }
+        }
+
+        //! Call the groups of the source for each change of its mute state to check their mute state
+        inline void notifyMute() noexcept
+        {
+            for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+		    {
+                it->second->notifyMute();
+            }
         }
     };
-    
-    class SourcesManager
-    {
-        
-    private:
-        
-        double                      m_maximum_radius;
-        vector <Source*>            m_sources;
-        vector <SourcesGroup*>      m_groups;
-        bool                        m_exist;
-        double                      m_zoom;
-        
-        void checkMute();
-        
-    public:
-        
-        //! The source manager constructor.
-        /**	The source manager constructor allocates and initialize the member values.
-         *
-         * @param     maximumRadius		The maximum radius the sources or groups in the source manager could have
-         * @param     existence			The existence state of the source manager.
-         */
-        SourcesManager(double maximumRadius = 1., bool existence = true);
-        
-        //! The source manager destructor free the memory.
-        ~SourcesManager();
-        
-        //! Make a copy of this SourcesManager into an other
-        void copyTo(SourcesManager* sourcesManagerDestination);
-        
-        //! Clear all the sources and groups.
-        void clearAll();
-        
-        //! Set the maximum radius the sources and groups can have
-        /**
-         * @param     limitValue		The radius limit value.
-         */
-        void setMaximumRadius(double limitValue);
-        
-        //! Set the existence state of the sources manager
-        /** If the existence state is false it will delete all sources and groups already stored.
-         *
-         * @param     state		The existence state.
-         */
-        void setExistence(bool state);
-        
-        //! Set the zoom factor.
-        /** Set the zoom factor between 0 and 1.
-         
-         @param     zoom		The zoom factor.
-         */
-        void setZoom(double zoom);
-        
-        //! Get the maximum index of sources.
-        /**
-         @return		The maximum index of source.
-         */
-        long getMaximumIndexOfSource();
-        
-        //! Get the number of sources actually managed.
-        /**
-         @return		The number of sources.
-         */
-        long getNumberOfSources();
-        
-        //! Get the maximum index of the sources actually managed.
-        /**
-         @return		The maximum index.
-         */
-        long getMaximumIndexOfGroup();
-        
-        //! Get the number of groups actually managed.
-        /**
-         @return		The number of group.
-         */
-        long getNumberOfGroups();
-        
-        //! Get the maximum radius of the sources and groups.
-        /**
-         @return		The maximum radius.
-         */
-        double getLimitMaximum();
-        
-        //! Get the existence state of the source manager.
-        /**
-         @return		The existence state.
-         */
-        bool getExistence();
-        
-        //! Get the zoom factor value.
-        /**
-         @return		The zoom factor value.
-         */
-        double getZoom();
-        
-        /* ------------------------------------------------------------------------ */
-        /* ------------------------------- Sources -------------------------------- */
-        /* ------------------------------------------------------------------------ */
-        
-        //! Add a new source with polar coordinates.
-        /**
-         * @param     radius			The radius of the source.
-         * @param     azimuth			The azimuth of the source.
-         * @see sourceNewCartesian
-         */
-        void sourceNewPolar(double radius, double azimuth);
-        
-        //! Add a new source with polar coordinates.
-        /**
-         * @param     radius			The radius of the source.
-         * @param     azimuth			The azimuth of the source.
-         * @param     elevation			The elevation of the source.
-         * @see sourceNewCartesian
-         */
-        void sourceNewPolar(double radius, double azimuth, double elevation);
-        
-        //! Add a new source with cartesian coordinates.
-        /**
-         * @param     abscissa			The abscissa of the source.
-         * @param     ordinate			The ordinate of the source.
-         * @see sourceNewPolar
-         */
-        void sourceNewCartesian(double abscissa, double ordinate);
-        
-        //! Add a new source with cartesian coordinates.
-        /**
-         * @param     abscissa			The abscissa of the source.
-         * @param     ordinate			The ordinate of the source.
-         * @param     height			The height of the source.
-         * @see sourceNewPolar
-         */
-        void sourceNewCartesian(double abscissa, double ordinate, double height);
-        
-        //! Set position of a source with polar coordinates.
-        /**
-         * @param     index				The index of the source.
-         * @param     radius			The radius of the source.
-         * @param     azimuth			The azimuth of the source.
-         * @see sourceSetRadius, sourceSetAzimuth, sourceSetCartesian
-         */
-        void sourceSetPolar(long index, double radius, double azimuth);
-        
-        //! Set position of a source with polar coordinates.
-        /**
-         * @param     index				The index of the source.
-         * @param     radius			The radius of the source.
-         * @param     azimuth			The azimuth of the source.
-         * @param     elevation			The elevation of the source.
-         * @see sourceSetRadius, sourceSetAzimuth, sourceSetCartesian
-         */
-        void sourceSetPolar(long index, double radius, double azimuth, double elevation);
-        
-        //! Set radius of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     radius			The radius of the source.
-         * @see sourceSetPolar, sourceSetAzimuth
-         */
-        void sourceSetRadius(long index, double radius);
-        
-        //! Set azimuth of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     azimuth			The azimuth of the source.
-         * @see sourceSetRadius, sourceSetAzimuth
-         */
-        void sourceSetAzimuth(long index, double azimuth);
-        
-        //! Set elevation of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     elevation			The elevation of the source.
-         * @see sourceSetRadius, sourceSetAzimuth
-         */
-        void sourceSetElevation(long index, double elevation);
-        
-        //! Set position of a source with cartesian coordinates.
-        /**
-         * @param     index				The index of the source.
-         * @param     abscissa			The abscissa of the source.
-         * @param     ordinate			The ordinate of the source.
-         * @see sourceSetAbscissa, sourceSetOrdinate, sourceSetPolar
-         */
-        void sourceSetCartesian(long index, double abscissa, double ordinate);
-        
-        //! Set position of a source with cartesian coordinates.
-        /**
-         * @param     index				The index of the source.
-         * @param     abscissa			The abscissa of the source.
-         * @param     ordinate			The ordinate of the source.
-         * @param     height			The height of the source.
-         * @see sourceSetAbscissa, sourceSetOrdinate, sourceSetPolar
-         */
-        void sourceSetCartesian(long index, double abscissa, double ordinate, double height);
-        
-        //! Set abscissa of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     abscissa			The abscissa of the source.
-         * @see sourceSetOrdinate, sourceSetHeight
-         */
-        void sourceSetAbscissa(long index, double abscissa);
-        
-        //! Set ordinate of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     ordinate			The ordinate of the source.
-         * @see sourceSetAbscissa, sourceSetHeight
-         */
-        void sourceSetOrdinate(long index, double ordinate);
-        
-        //! Set height of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     height			The height of the source.
-         * @see sourceSetOrdinate, sourceSetAbscissa
-         */
-        void sourceSetHeight(long index, double height);
-        
-        //! Set the rgba color of a source.
-        /** All values are clipped between 0 and 1.
-         * @param     index				The index of the source.
-         * @param     red				The red component of the color.
-         * @param     green				The green component of the color
-         * @param     blue				The blue component of the color
-         * @param     alpha				The alpha component of the color
-         */
-        void sourceSetColor(long index, double red, double green, double blue, double alpha);
-        
-        //! Add a description to a given source.
-        /**
-         * @param     index				The index of the source.
-         * @param     description		The text description of the source.
-         */
-        void sourceSetDescription(long index, string description);
-        
-        //! Remove a source.
-        /** This will also remove the source from all the group that the source is a part of.
-         * @param     index				The index of the source to remove.
-         */
-        void sourceRemove(long index);
-        
-        //! Set the mute state of a source.
-        /**
-         * @param     index				The index of the source.
-         * @param     state				The mute state of the source.
-         */
-        void sourceSetMute(long index, bool state);
-        
-        //! Retrieve the existence state of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The existence state of the source.
-         */
-        long sourceGetExistence(long index);
-        
-        //! Get the radius of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The radius of the source.
-         */
-        double sourceGetRadius(long index);
-        
-        //! Get the azimuth of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The azimuth of the source.
-         */
-        double sourceGetAzimuth(long index);
-        
-        //! Get the elevation of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The elevation of the source.
-         */
-        double sourceGetElevation(long index);
-        
-        //! Get the abscissa of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The abscissa of the source.
-         */
-        double sourceGetAbscissa(long index);
-        
-        //! Get the ordinate of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The ordinate of the source.
-         */
-        double sourceGetOrdinate(long index);
-        
-        //! Get the height of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The height of the source.
-         */
-        double sourceGetHeight(long index);
-        
-        //! Get the rgba color of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The rgba color of the source as an array of 4 values (red, green, blue, alpha).
-         */
-        double* sourceGetColor(long index);
-        
-        //! Get the text description of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The text description.
-         */
-        string sourceGetDescription(long index);
-        
-        //! Get the number of group a source is owned by.
-        /**
-         * @param     index				The index of the source.
-         * @return		The number of group.
-         */
-        long sourceGetNumberOfGroups(long index);
-        
-        //! Get the the group index the source is owned by at a particular index.
-        /**
-         * @param		sourceIndex			The index of the source.
-         * @param		groupIndex			The index of the group
-         * @return		The group index.
-         */
-        long sourceGetGroupIndex(long sourceIndex, long groupIndex);
-        
-        //! Retrieve the mute state of a source.
-        /**
-         * @param     index				The index of the source.
-         * @return						The mute state of the source.
-         */
-        long sourceGetMute(long index);
-        
-        /* ------------------------------------------------------------------------ */
-        /* -------------------------------- Groups -------------------------------- */
-        /* ------------------------------------------------------------------------ */
-        
-        //! Add a source to a group.
-        /**
-         * @param     groupIndex		The index of the group.
-         * @param     sourceIndex		The index of the source.
-         * @see groupRemoveSource
-         */
-        void groupSetSource(long groupIndex, long sourceIndex);
-        
-        //! Remove source from a group.
-        /**
-         * @param     groupIndex		The index of the group.
-         * @param     sourceIndex		The index of the source.
-         * @see groupSetSource
-         */
-        void groupRemoveSource(long groupIndex, long sourceIndex);
-        
-        //! Set position of a group with polar coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The radius of the group.
-         * @param     azimuth			The azimuth of the group.
-         * @see groupSetRadius, groupSetAzimuth, groupSetCartesian
-         */
-        void groupSetPolar(long index, double radius, double azimuth);
-        
-        //! Set position of a group with polar coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The radius of the group.
-         * @param     azimuth			The azimuth of the group.
-         * @param     elevation			The elevation of the group.
-         * @see groupSetRadius, groupSetAzimuth, groupSetCartesian
-         */
-        void groupSetPolar(long index, double radius, double azimuth, double elevation);
-        
-        //! Set radius of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The radius of the group.
-         * @see groupSetPolar, groupSetAzimuth
-         */
-        void groupSetRadius(long index, double radius);
-        
-        //! Set azimuth of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     azimuth			The azimuth of the group.
-         * @see groupSetRadius, groupSetAzimuth
-         */
-        void groupSetAzimuth(long index, double azimuth);
-        
-        //! Set elevation of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     elevation			The elevation of the group.
-         * @see groupSetRadius, groupSetAzimuth
-         */
-        void groupSetElevation(long index, double elevation);
-        
-        //! Set position of a group with cartesian coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     abscissa			The abscissa of the group.
-         * @param     ordinate			The ordinate of the group.
-         * @see groupSetAbscissa, groupSetOrdinate, groupSetPolar
-         */
-        void groupSetCartesian(long index, double abscissa, double ordinate);
-        
-        //! Set position of a group with cartesian coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     abscissa			The abscissa of the group.
-         * @param     ordinate			The ordinate of the group.
-         * @param     height			The height of the group.
-         * @see groupSetAbscissa, groupSetOrdinate, groupSetPolar
-         */
-        void groupSetCartesian(long index, double abscissa, double ordinate, double height);
-        
-        //! Set abscissa of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     abscissa			The abscissa of the group.
-         * @see groupSetOrdinate
-         */
-        void groupSetAbscissa(long index, double abscissa);
-        
-        //! Set ordinate of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     ordinate			The ordinate of the group.
-         * @see groupSetAbscissa
-         */
-        void groupSetOrdinate(long index, double ordinate);
-        
-        //! Set height of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     height			The height of the group.
-         * @see groupSetAbscissa
-         */
-        void groupSetHeight(long index, double height);
-        
-        //! Set position of a group with relative polar coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The relative radius of the group.
-         * @param     azimuth			The relative azimuth of the group.
-         * @see groupSetRadius, groupSetAzimuth, groupSetCartesian
-         */
-        void groupSetRelativePolar(long groupIndex, double radius, double azimuth);
-        
-        //! Set position of a group with relative polar coordinates.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The relative radius of the group.
-         * @param     azimuth			The relative azimuth of the group.
-         * @param     elevation			The relative elevation of the group.
-         * @see groupSetRadius, groupSetAzimuth, groupSetCartesian
-         */
-        void groupSetRelativePolar(long groupIndex, double radius, double azimuth, double elevation);
-        
-        //! Set radius of a group with relative value.
-        /**
-         * @param     index				The index of the group.
-         * @param     radius			The relative radius of the group.
-         * @see groupSetRadius, groupSetAzimuth, groupSetPolar
-         */
-        void groupSetRelativeRadius(long groupIndex, double radius);
-        
-        //! Set azimuth of a group with relative value.
-        /**
-         * @param     index				The index of the group.
-         * @param     azimuth			The relative azimuth of the group.
-         * @see groupSetAzimuth, groupSetRadius, groupSetPolar
-         */
-        void groupSetRelativeAzimuth(long groupIndex, double azimuth);
-        
-        //! Set elevation of a group with relative value.
-        /**
-         * @param     index				The index of the group.
-         * @param     azimuth			The relative elevation of the group.
-         * @see groupSetAzimuth, groupSetRadius, groupSetPolar
-         */
-        void groupSetRelativeElevation(long groupIndex, double elevation);
-        
-        //! Set the rgba color of a group.
-        /** All values are clipped between 0 and 1.
-         * @param     index				The index of the group.
-         * @param     red				The red component of the color.
-         * @param     green				The green component of the color
-         * @param     blue				The blue component of the color
-         * @param     alpha				The alpha component of the color
-         */
-        void groupSetColor(long index, double red, double green, double blue, double alpha);
-        
-        //! Add a description to a given group.
-        /**
-         * @param     index				The index of the group.
-         * @param     description		The text description of the group.
-         */
-        void groupSetDescription(long index, string description);
-        
-        //! Remove group.
-        /**
-         * @param     groupIndex		The index of the group.
-         * @see groupRemoveWithSources
-         */
-        void groupRemove(long groupIndex);
-        
-        //! Remove group and sources it contains.
-        /**
-         * @param     groupIndex		The index of the group.
-         * @see groupRemove
-         */
-        void groupRemoveWithSources(long groupIndex);
-        
-        //! Get the number of sources a group contains.
-        /**
-         * @param     groupIndex		The index of the group.
-         */
-        long groupGetNumberOfSources(long groupIndex);
-        
-        //! Get the the index of a source stored at a particular index by a group.
-        /**
-         * @param			groupIndex			The index of the group.
-         * @param			sourceIndex			The index of the source.
-         * @return			The index of the source if it exists, -1 otherwise.
-         */
-        long groupGetSourceIndex(long groupIndex, long sourceIndex);
-        
-        
-        //! Set the mute state of a group.
-        /**
-         * @param     index				The index of the group.
-         * @param     state				The mute state of the group.
-         */
-        void groupSetMute(long index, long state);
-        
-        //! Clean all groups
-        void groupClean();
-        
-        //! Retrieve the existence state of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The existence state of the group.
-         */
-        long groupGetExistence(long index);
-        
-        //! Get the radius of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The radius of the group.
-         */
-        double groupGetRadius(long index);
-        
-        //! Get the azimuth of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The azimuth of the group.
-         */
-        double groupGetAzimuth(long index);
-        
-        //! Get the elevation of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The elevation of the group.
-         */
-        double groupGetElevation(long index);
-        
-        //! Get the abscissa of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The abscissa of the group.
-         */
-        double groupGetAbscissa(long index);
-        
-        //! Get the ordinate of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The ordinate of the group.
-         */
-        double groupGetOrdinate(long index);
-        
-        //! Get the height of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The height of the group.
-         */
-        double groupGetHeight(long index);
-        
-        //! Get the rgba color of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The rgba color of the group as an array of 4 values (red, green, blue, alpha).
-         */
-        double* groupGetColor(long index);
-        
-        //! Get the text description of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The text description.
-         */
-        string groupGetDescription(long index);
-        
-        //! Retrieve the mute state of a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						The mute state of the group.
-         */
-        long groupGetMute(long index);
-        
-        //! Returns true if a source is is muted in a group.
-        /**
-         * @param     index				The index of the group.
-         * @return						True if a source is is muted in the group, false otherwise.
-         */
-        bool groupGetIfSourceMuted(long index);
-        
-        //! Retrieve the next free group index.
-        /**
-         * @return						The next free group index.
-         */
-        long groupGetNextIndex();
-    };
-   
+
 }
 #endif
