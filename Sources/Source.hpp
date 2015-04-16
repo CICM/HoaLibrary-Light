@@ -77,15 +77,14 @@ namespace hoa
             //! Clear (and free) the memory
             inline void clear()
             {
+                Group* toDel = NULL;
                 for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
                 {
                     delete it->second;
-                    m_groups.erase(it->first);
                 }
                 for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
                 {
                     delete it->second;
-                    m_sources.erase(it->first);
                 }
                 m_groups.clear();
                 m_sources.clear();
@@ -124,17 +123,17 @@ namespace hoa
              @param     radius      The radius of the new source
              @param     azimuth     The azimuth of the new source
              @param     elevation   The elevation of the new source
-             @return	            The success of the creation of the source
+             @return	            The created source
              */
-            inline bool newSource (const ulong index, const double radius = 0., const double azimuth = 0., const double elevation = 0.) noexcept
+            inline Source* newSource (const ulong index, const double radius = 0., const double azimuth = 0., const double elevation = 0.) noexcept
             {
                 source_iterator it = m_sources.find(index);
                 if(it == m_sources.end())
                 {
                     m_sources[index] = new Source(m_maximum_radius, index, radius, azimuth, elevation);
-                    return true;
+                    return m_sources[index];
                 }
-                return false;
+                return it->second;
             }
 
             //! Remove a Source
@@ -146,7 +145,6 @@ namespace hoa
                 source_iterator it = m_sources.find(index);
                 if(it != m_sources.end())
                 {
-                    ulong index = it->second->getIndex();
                     delete it->second;
                     m_sources.erase(index);;
                 }
@@ -197,17 +195,17 @@ namespace hoa
             //! Add a new Group
             /**
              @param     index       The index of the new group
-             @return	            The success of the creation of the group
+             @return	            The created group
              */
-            inline bool newGroup (const ulong index) noexcept
+            inline Group* newGroup (const ulong index) noexcept
             {
                 group_iterator it = m_groups.find(index);
                 if(it == m_groups.end())
                 {
                     m_groups[index] = new Group(this, index);
-                    return true;
+                    return m_groups[index];
                 }
-                return false;
+                return it->second;
             }
 
             //! Remove a Group
@@ -219,7 +217,6 @@ namespace hoa
                 group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
-                    ulong index = it->second->getIndex();
                     delete it->second;
                     m_groups.erase(index);
                 }
