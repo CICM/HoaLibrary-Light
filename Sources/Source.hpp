@@ -77,12 +77,11 @@ namespace hoa
             //! Clear (and free) the memory
             inline void clear()
             {
-                Group* toDel = NULL;
-                for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+                for(group_iterator it = m_groups.begin() ; it != m_groups.end() ; ++it)
                 {
                     delete it->second;
                 }
-                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                for(source_iterator it = m_sources.begin() ; it != m_sources.end() ; ++it)
                 {
                     delete it->second;
                 }
