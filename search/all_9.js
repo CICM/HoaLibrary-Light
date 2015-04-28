@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['math',['Math',['../classhoa_1_1_math.html',1,'hoa']]],
-  ['maxre',['MaxRe',['../classhoa_1_1_optim_1_1_max_re.html',1,'hoa::Optim']]],
-  ['maxre',['MaxRe',['../classhoa_1_1_optim_1_1_max_re.html#a8f6ab6c6e8dea677e383795a24802ae4',1,'hoa::Optim::MaxRe']]],
-  ['multi',['Multi',['../classhoa_1_1_encoder_1_1_multi.html',1,'hoa::Encoder']]],
-  ['multi',['Multi',['../classhoa_1_1_encoder_1_1_multi.html#afcb498ac6c682794c8582434b97ed73d',1,'hoa::Encoder::Multi']]]
+  ['lenght2',['lenght2',['../structhoa_1_1_voronoi_3_01_hoa3d_01_4_1_1_point.html#adea247f0ad24d41bf0038088793beaf2',1,'hoa::Voronoi&lt; Hoa3d &gt;::Point']]],
+  ['length',['length',['../structhoa_1_1_voronoi_3_01_hoa3d_01_4_1_1_point.html#a389f16fb3741c8a41c2acf832cff0531',1,'hoa::Voronoi&lt; Hoa3d &gt;::Point::length(Point const &amp;other) const noexcept'],['../structhoa_1_1_voronoi_3_01_hoa3d_01_4_1_1_point.html#a973694365268330726da07b9db31d14b',1,'hoa::Voronoi&lt; Hoa3d &gt;::Point::length() const noexcept']]]
 ];
