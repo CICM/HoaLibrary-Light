@@ -12,8 +12,8 @@
 
 namespace hoa
 {
-    //! The decoder class decodes a sound field in the harmonics domain through the planewave domain.
-    /** The decoder should be used to decode a set the harmonics domain to a set of planewave for loudspeakers. There are three types of decoder. Regular for a perfect circle or sphere of loudspeakers. Irregular when the loudspeakers are not equally spaced on the circle or the sphere. Binaural for headphone restitution.
+    //! The decoder class decodes a sound field in the harmonics domain through the planewaves domain.
+    /** The decoder should be used to decode a set the harmonics domain to a set of planewaves for loudspeakers. There are three types of decoder. Regular for a perfect circle or sphere of loudspeakers. Irregular when the loudspeakers are not equally spaced on the circle or the sphere. Binaural for headphone restitution.
      */
     template <Dimension D, typename T> class Decoder : public Processor<D, T>::Harmonics, public Processor<D, T>::Planewaves
     {
@@ -31,19 +31,19 @@ namespace hoa
         virtual ~Decoder();
 
         //! This method performs the decoding.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
         virtual void process(const T* inputs, T* outputs) noexcept;
 
-        //! This method computes the decoding matrice.
+        //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers and/or calling the process method.
          @param vectorsize The vector size for binaural decoding.
          */
         virtual void computeRendering(const ulong vectorsize = 64);
 
-        //! The regular decoder class decodes a sound field in the harmonics domain through the planewave domain for a perfect circle or sphere of loudspeakers.
+        //! The regular decoder class decodes a sound field in the harmonics domain through the planewaves domain for a perfect circle or sphere of loudspeakers.
         /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced on the circle or the sphere.
          */
         class Regular : public Decoder
@@ -63,20 +63,20 @@ namespace hoa
             virtual ~Regular();
 
             //! This method performs the decoding.
-            /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+            /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
              @param     inputs  The input array that contains the samples of the harmonics.
              @param     outputs The output array that contains samples destinated to channels.
              */
             virtual void process(const T* inputs, T* outputs) noexcept override;
 
-            //! This method computes the decoding matrice.
+            //! This method computes the decoding matrix.
             /**	You should use this method after changing the position of the loudspeakers.
              @param vectorsize The vector size for binaural decoding.
              */
             virtual void computeRendering(const ulong vectorsize = 64) override;
         };
 
-        //! The irregular decoder class decodes a sound field in the harmonics domain through the planewave domain for a irregular circle or sphere (2d only).
+        //! The irregular decoder class decodes a sound field in the harmonics domain through the planewaves domain for a irregular circle or sphere (2d only).
         /** The irregular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if less than the number of harmonics plus one or when the loudspeakers are not equally spaced on the circle or the sphere.
          */
         class Irregular : public Decoder
@@ -95,13 +95,13 @@ namespace hoa
             virtual ~Irregular();
 
             //! This method performs the decoding.
-            /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+            /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
              @param     inputs  The input array that contains the samples of the harmonics.
              @param     outputs The output array that contains samples destinated to the channels.
              */
             virtual void process(const T* inputs, T* outputs) noexcept override;
 
-            //! This method computes the decoding matrice.
+            //! This method computes the decoding matrix.
             /**	You should use this method after changing the position of the loudspeakers.
              @param vectorsize The vector size for binaural decoding.
              */
@@ -110,7 +110,7 @@ namespace hoa
         };
 
         //! The binaural decoder class decodes a sound field in the harmonics domain for headphones.
-        /** The binaural decoder should be used to decode an ambisonic sound field for headphones. It decodes the sound field through the planewave domain an convolves the results with HRTF from the IRCAM database.
+        /** The binaural decoder should be used to decode an ambisonic sound field for headphones. It decodes the sound field through the planewaves domain an convolves the results with HRTF from the IRCAM database.
          */
         class Binaural : public Decoder
         {
@@ -127,7 +127,7 @@ namespace hoa
              */
             virtual ~Binaural();
 
-            //! This method computes the decoding matrice.
+            //! This method computes the decoding matrix.
             /**	You should use this method after changing the position of the loudspeakers.
              @param vectorsize The vector size for binaural decoding.
              */
@@ -173,13 +173,13 @@ namespace hoa
         }
 
         //! This method performs the decoding.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
         inline virtual void process(const T* inputs, T* outputs) noexcept = 0;
 
-        //! This method computes the decoding matrice.
+        //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
@@ -227,7 +227,7 @@ namespace hoa
         }
 
         //! This method performs the decoding.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to channels.
          */
@@ -236,7 +236,7 @@ namespace hoa
             Signal<T>::matrix_vector_mul(Decoder<Hoa2d, T>::getNumberOfHarmonics(), Decoder<Hoa2d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
 
-        //! This method computes the decoding matrice.
+        //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
@@ -279,7 +279,7 @@ namespace hoa
         }
 
         //! This method performs the decoding.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
@@ -288,7 +288,7 @@ namespace hoa
             Signal<T>::matrix_vector_mul(Decoder<Hoa2d, T>::getNumberOfHarmonics(), Decoder<Hoa2d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
 
-        //! This method computes the decoding matrice.
+        //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
@@ -489,7 +489,7 @@ namespace hoa
                 delete [] m_output_right;
         }
 
-        //! This method computes the decoding matrice.
+        //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
@@ -529,11 +529,7 @@ namespace hoa
             Signal<T>::vector_clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_right);
         }
 
-        //! This method performs the binaural decoding.
-        /**	You should use this method for not-in-place processing and performs the binaural decoding on block of samples. The inputs matrix contains the spherical harmonics samples : inputs[number of harmonics][vector size] and the outputs matrix contains the headphones samples : outputs[2][vector size].
-         @param     inputs	The input samples.
-         @param     outputs  The output array that contains samples destinated to channels.
-         */
+        //! This method performs the binaural decoding and the convolution.
         void processBlock() noexcept
         {
 
@@ -610,13 +606,13 @@ namespace hoa
         }
 
         //! This method performs the decoding.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
         inline virtual void process(const T* inputs, T* outputs) noexcept = 0;
 
-        //! This method computes the decoding matrice.
+        //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
@@ -659,7 +655,7 @@ namespace hoa
         }
 
         //! This method performs the decoding.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to channels.
          */
@@ -668,6 +664,10 @@ namespace hoa
             Signal<T>::matrix_vector_mul(Decoder<Hoa3d, T>::getNumberOfHarmonics(), Decoder<Hoa3d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
 
+        //! This method computes the decoding matrix.
+        /**	You should use this method after changing the position of the loudspeakers.
+         @param vectorsize The vector size for binaural decoding.
+         */
         void computeRendering(const ulong vectorsize = 64)  override
         {
             typename Encoder<Hoa3d, T>::Basic encoder(Decoder<Hoa3d, T>::getDecompositionOrder());
@@ -734,7 +734,7 @@ namespace hoa
                 delete [] m_output_right;
         }
 
-        //! This method computes the decoding matrice.
+        //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
@@ -774,11 +774,7 @@ namespace hoa
             Signal<T>::vector_clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_right);
         }
 
-        //! This method performs the binaural decoding.
-        /**	You should use this method for not-in-place processing and performs the binaural decoding on block of samples. The inputs matrix contains the spherical harmonics samples : inputs[number of harmonics][vector size] and the outputs matrix contains the headphones samples : outputs[2][vector size].
-         @param     inputs	The input samples.
-         @param     outputs  The output array that contains samples destinated to channels.
-         */
+        //! This method performs the binaural decoding and the convolution.
         void processBlock() noexcept
         {
             Signal<T>::matrix_matrix_mul(HOA_NBIN_I * 2, m_vector_size, HOA_NBIN_H, Hrtf<Hoa3d, T>::getImpulse(), m_inputs, m_results);

@@ -17,13 +17,13 @@ namespace hoa
     /** The projector should be used to decode an ambisonic sound field for a set a channels on a circle depending on a order of decomposition or for headphones.
      */
     template <Dimension D, typename T> class Projector;
-    
+
     template <typename T> class Projector<Hoa2d, T> : public Encoder<Hoa2d, T>::Basic, public Processor<Hoa2d, T>::Planewaves
     {
     private:
         T*  m_matrix;
     public:
-        
+
         //! The regular constructor.
         /**	The regular constructor allocates and initialize the decoding matrix depending on a order of decomposition and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
          @param     order				The order
@@ -42,7 +42,7 @@ namespace hoa
                 m_matrix[i * Encoder<Hoa2d, T>::getNumberOfHarmonics()] = factor * 0.5;
             }
         }
-        
+
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
          */
@@ -50,9 +50,9 @@ namespace hoa
         {
             delete [] m_matrix;
         }
-        
+
         //! This method performs the decoding.
-        /**	You should use this method for in-place or not-in-place processing and performs the regular decoding sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimym size must be the number of channels.
+        /**	You should use this method for in-place or not-in-place processing and performs the regular decoding sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to channels.
          */

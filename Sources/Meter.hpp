@@ -13,8 +13,11 @@
 namespace hoa
 {
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+    //! The meter class.
+    /** The meter should be used to draw an hoa meter.
+     */
     template <Dimension D, typename T> class Meter;
-    
+
     template <typename T> class Meter<Hoa2d, T> : public Processor<Hoa2d, T>::Planewaves
     {
     private:
@@ -24,9 +27,12 @@ namespace hoa
         T*      m_channels_azimuth_mapped;
         T*      m_channels_azimuth_width;
         ulong*  m_over_leds;
-        
+
     public:
-        
+        //! The meter constructor.
+        /**	The meter constructor allocates and initialize the base classes.
+         @param     numberOfPlanewaves      The number of channels.
+         */
         Meter(ulong numberOfPlanewaves) noexcept :
         Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
         {
@@ -42,7 +48,10 @@ namespace hoa
                 m_over_leds[i]      = 0;
             }
         }
-        
+
+        //! The destructor.
+        /** The destructor free the memory.
+         */
         ~Meter()
         {
             delete [] m_channels_peaks;
@@ -50,18 +59,29 @@ namespace hoa
             delete [] m_channels_azimuth_mapped;
             delete [] m_over_leds;
         }
-        
+
+        //! Set the vector size.
+        /** Set the vector size.
+        @param vectorSize    The new vector size.
+         */
         inline void setVectorSize(ulong vectorSize) noexcept
         {
             m_vector_size   = vectorSize;
             m_ramp          = 0;
         }
-        
+
+        //! Get the vector size.
+        /** Get the vector size.
+        @return The vector size.
+         */
         inline ulong getVectorSize() const noexcept
         {
             return m_vector_size;
         }
-        
+
+        //! This method establish a model of a hoa meter.
+        /** This method establish a model of a hoa meter.
+         */
         void computeRendering()
         {
             if(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() == 1)
@@ -107,21 +127,34 @@ namespace hoa
                     m_channels_azimuth_mapped[channels[index].getIndex()]= Math<T>::wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[index].getIndex()] * 0.5);
                 }
                 channels.clear();
-    
             }
-            
         }
-        
+
+        //! Get the channel mapped azimuth.
+        /** Get the channel mapped azimuth.
+        @param index    The index of the channel.
+        @return The channel mapped azimuth.
+         */
         inline T getPlanewaveAzimuthMapped(const ulong index) const noexcept
         {
             return m_channels_azimuth_mapped[index];
         }
-        
+
+        //! Get the channel width.
+        /** Get the channel width.
+        @param index    The index of the channel.
+        @return The channel width.
+         */
         inline T getPlanewaveWidth(const ulong index) const noexcept
         {
             return m_channels_azimuth_width[index];
         }
-        
+
+        //! Get the channel energy.
+        /** Get the channel energy in dB.
+        @param index    The index of the channel.
+        @return The channel energy.
+         */
         inline T getPlanewaveEnergy(const ulong index) const noexcept
         {
             if(m_channels_peaks[index] > 0.)
@@ -133,12 +166,21 @@ namespace hoa
                 return -90.;
             }
         }
-        
+
+        //! Get the channel overLed state.
+        /** Get the channel overLed state.
+        @param index    The index of the channel. Return true if the channel meter have to be drawn.
+        @return The channel overLed state.
+         */
         inline bool getPlanewaveOverLed(const ulong index) const noexcept
         {
             return m_over_leds[index];
         }
-        
+
+        //! This method update the overLed state of the channels.
+        /** This method update the overLed state of the channels.
+        @param value    A no-NULL value to activate the overLed state of a channel
+         */
         inline void tick(const ulong time) noexcept
         {
             for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
@@ -153,7 +195,11 @@ namespace hoa
                 }
             }
         }
-        
+
+        //! This method update the signal values.
+        /** This method update the signal value for every channel to perform the meter calculation.
+        @param input  The input samples.
+         */
         inline void process(const T* inputs) noexcept
         {
             if(m_ramp++ == m_vector_size)
@@ -176,13 +222,18 @@ namespace hoa
                 }
             }
         }
-        
+
+        //! This method update the meter.
+        /** This method update the meter.
+        @param input  The input samples.
+        @param output The output samples.
+         */
         void process(const T* input, T* outputs) noexcept override
         {
             process(input);
         }
     };
-    
+
     template <typename T> class Meter<Hoa3d, T> : public Processor<Hoa3d, T>::Planewaves
     {
     public:
@@ -193,12 +244,15 @@ namespace hoa
         ulong   m_vector_size;
         T*      m_channels_peaks;
         ulong*  m_over_leds;
-        
+
         Path*   m_top;
         Path*   m_bottom;
-        
+
     public:
-        
+        //! The meter constructor.
+        /**	The meter constructor allocates and initialize the base classes.
+         @param     numberOfPlanewaves      The number of channels.
+         */
         Meter(const ulong numberOfPlanewaves) noexcept : Processor<Hoa3d, T>::Planewaves(numberOfPlanewaves)
         {
             m_ramp                      = 0;
@@ -213,7 +267,10 @@ namespace hoa
                 m_over_leds[i]      = 0;
             }
         }
-        
+
+        //! The destructor.
+        /** The destructor free the memory.
+         */
         ~Meter()
         {
             delete [] m_channels_peaks;
@@ -226,18 +283,31 @@ namespace hoa
             delete [] m_top;
             delete [] m_bottom;
         }
-        
+
+        //! Set the vector size.
+        /** Set the vector size.
+        @param vectorSize    The new vector size.
+         */
         inline void setVectorSize(const ulong vectorSize) noexcept
         {
             m_vector_size   = vectorSize;
             m_ramp          = 0;
         }
-        
+
+        //! Get the vector size.
+        /** Get the vector size.
+        @return The vector size.
+         */
         inline ulong getVectorSize() const noexcept
         {
             return m_vector_size;
         }
-        
+
+        //! Get the channel energy.
+        /** Get the channel energy in dB.
+        @param index    The index of the channel
+        @return The channel energy.
+         */
         inline T getPlanewaveEnergy(const ulong index) const noexcept
         {
             if(m_channels_peaks[index] > 0.)
@@ -249,12 +319,21 @@ namespace hoa
                 return -90.;
             }
         }
-        
+
+        //! Get the channel overLed state.
+        /** Get the channel overLed state.
+        @param index    The index of the channel. Return true if the channel meter have to be drawn.
+        @return The channel overLed state.
+         */
         inline bool getPlanewaveOverLed(const ulong index) const noexcept
         {
             return m_over_leds[index];
         }
-        
+
+        //! This method update the overLed state of the channels.
+        /** This method update the overLed state of the channels.
+        @param value    A no-NULL value to activate the overLed state of a channel
+         */
         inline void tick(const ulong time) noexcept
         {
             for(ulong i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
@@ -269,7 +348,11 @@ namespace hoa
                 }
             }
         }
-        
+
+        //! This method update the signal values.
+        /** This method update the signal value for every channel to perform the meter calculation.
+        @param input  The input samples.
+         */
         inline void process(const T* inputs) noexcept
         {
             if(m_ramp++ == m_vector_size)
@@ -292,16 +375,24 @@ namespace hoa
                 }
             }
         }
-        
+
+        //! This method update the meter.
+        /** This method update the meter.
+        @param input  The input samples.
+        @param output The output samples.
+         */
         void process(const T* input, T* outputs) noexcept override
         {
             process(input);
         }
-        
+
+        //! This method establish a model of a hoa meter.
+        /** This method establish a model of a hoa meter.
+         */
         void computeRendering()
         {
             Voronoi<Hoa3d> voronoi;
-            
+
             for(ulong i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
                 voronoi.add(Point(Processor<Hoa3d, T>::Planewaves::getPlanewaveAbscissa(i), Processor<Hoa3d, T>::Planewaves::getPlanewaveOrdinate(i), -Processor<Hoa3d, T>::Planewaves::getPlanewaveHeight(i)));
@@ -317,7 +408,7 @@ namespace hoa
                     m_bottom[i][j].z = -m_bottom[i][j].z;
                 }
             }
-            
+
             voronoi.clear();
             for(ulong i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
@@ -334,7 +425,13 @@ namespace hoa
                 }
             }
         }
-        
+
+        //! Get the Voronoi point of a channel.
+        /** Get the Voronoi point of a channel.
+        @param index      The index of the channel.
+        @param meterView  The meter view wanted (top or bottom).
+        @return
+         */
         inline Path const& getPlanewavePath(const ulong index, const bool top) const noexcept
         {
             if(top)
@@ -345,7 +442,7 @@ namespace hoa
             {
                 return m_bottom[index];
             }
-        }        
+        }
     };
 #endif
 }

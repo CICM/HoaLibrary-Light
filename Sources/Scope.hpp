@@ -18,23 +18,23 @@ namespace hoa
     template <Dimension D, typename T> class Scope : public Processor<D, T>::Harmonics
     {
     public:
-        
+
         //! The scope constructor.
         /**	The scope constructor allocates and initialize the member values to computes harmonics projection depending on a order of decomposition and a number of points. The order must be at least 1.
          @param     order            The order.
          @param     numberOfPoints   The number of points.
          */
         Scope(ulong order, ulong numberOfPoints) = 0;
-        
+
         //! The Scope destructor.
         /**	The Scope destructor free the memory.
          */
         ~Scope() noexcept = 0;
-        
+
     };
-    
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-    
+
     template <typename T> class Scope<Hoa2d, T> : public Encoder<Hoa2d, T>::Basic, protected Processor<Hoa2d, T>::Planewaves
     {
     private:
@@ -42,7 +42,7 @@ namespace hoa
         T*  m_vector;
         T   m_maximum;
     public:
-        
+
         //! The scope constructor.
         /**	The scope constructor allocates and initialize the member values to computes circular harmonics projection on a circle depending on a order of decomposition and a circle discretization. The circle is discretized by the number of points. The order must be at least 1. The number of points and column should be at least 3 (but it's very low).
          @param     order            The order.
@@ -56,7 +56,7 @@ namespace hoa
             m_vector = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
             computeRendering();
         }
-        
+
         //! The scope destructor.
         /**	The scope destructor free the memory.
          */
@@ -65,7 +65,7 @@ namespace hoa
             delete [] m_matrix;
             delete [] m_vector;
         }
-        
+
         //! Set the offset.
         /**	Set the rotation of the spherical harmonics in radian.
          */
@@ -73,12 +73,18 @@ namespace hoa
         {
             Processor<Hoa2d, T>::Planewaves::setPlanewavesRotation(x_axe, y_axe, z_axe);
         }
-        
+
+        //! Get the value of the z rotation.
+        /** Get the value of the z rotation. The value is in radian, between 0 and 2π.
+         */
         inline T getViewRotationZ() const noexcept
         {
             return Processor<Hoa2d, T>::Planewaves::getPlanewavesRotationZ();
         }
-        
+
+        //! Compute the values of the summation of every harmonic to the representation of the sound field
+        /** Compute the values of the summation of every harmonic to the representation of the sound field
+         */
         void computeRendering() noexcept
         {
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
@@ -94,7 +100,7 @@ namespace hoa
             }
             m_maximum = 0;
         }
-        
+
         //! Retrieve the number of points.
         /**	Retrieve the number of points used to discretize the ambisonic circle.
          @return     This method returns the number of points used to discretize the circle.
@@ -103,7 +109,7 @@ namespace hoa
         {
             return Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves();
         }
-        
+
         //! Retrieve the value of a point of the circular harmonics projection.
         /**	Retrieve the result value of the circular harmonics projection for a given point defined by an index. The absolute of the value can be used as the radius of the point for a 2 dimentionnal representation. For the index, 0 is the 0 azimtuh of the circle. The maximum index must be the number of points - 1.
          @param     index   The point index of the point.
@@ -113,7 +119,7 @@ namespace hoa
         {
             return m_vector[index];
         }
-        
+
         //! Retrieve the radius of a point of the circular harmonics projection.
         /**	Retrieve the radius of the circular harmonics projection for a given point defined by an index. This the absolute of the result of the projection. For the index, 0 is the 0 azimtuh of the circle. The maximum index must be the number of points - 1.
          @param     pointIndex   The point index of the point.
@@ -123,7 +129,7 @@ namespace hoa
         {
             return fabs(m_vector[index]);
         }
-        
+
         //! Retrieve the azimuth of a point of the circular harmonics projection.
         /**	Retrieve the azimuth of the circular harmonics projection for a given point defined by an index.The maximum index must be the number of points - 1.
          @param     pointIndex   The point index of the point.
@@ -133,33 +139,33 @@ namespace hoa
         {
             return Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(index);
         }
-        
+
         //! Retrieve the abscissa of a point of the circular harmonics projection.
         /**	Retrieve the abscissa of the circular harmonics projection for a given point defined by an index.The maximum index must be the number of points - 1.
-         
+
          @param     pointIndex   The point index of the point.
          @return    This method returns the abscissa of a point of the ambisonic circle.
-         
+
          @see       getOrdinate
          */
         inline double getPointAbscissa(const ulong index) const noexcept
         {
             return fabs(m_vector[index]) * Processor<Hoa2d, T>::Planewaves::getPlanewaveAbscissa(index);
         }
-        
+
         //! Retrieve the ordinate of a point of the circular harmonics projection.
         /**	Retrieve the ordinate of the circular harmonics projection for a given point defined by an index.The maximum index must be the number of points - 1.
-         
+
          @param     pointIndex   The point index of the point.
          @return    This method returns the ordinate of a point of the ambisonic circle.
-         
+
          @see       getAbscissa
          */
         inline double getPointOrdinate(const ulong index) const noexcept
         {
             return fabs(m_vector[index]) * Processor<Hoa2d, T>::Planewaves::getPlanewaveOrdinate(index);
         }
-        
+
         //! This method performs the circular harmonics projection.
         /**	You should use this method to compute the projection of the circular harmonics over an ambisonics circle. The inputs array contains the circular harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -173,7 +179,7 @@ namespace hoa
                 Signal<T>::vector_scale(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
             }
         }
-        
+
         //! This method performs the circular harmonics projection.
         /**	You should use this method to compute the projection of the circular harmonics over an ambisonics circle. The inputs array contains the circular harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -198,10 +204,10 @@ namespace hoa
         T*  m_vector;
         T   m_maximum;
     public:
-        
+
         //! The Scope constructor.
         /**	The Scope constructor allocates and initialize the member values to computes spherical harmonics projection on a sphere depending on a order of decomposition and a sphere discretization. The sphere discretization is done by a set of points defined by rows and columns then the precision will be lower at the elevation center (0 radian) than at the top (1/2 Pi) or the bottom (-1/2 Pi) of the sphere. The number of row discretize the elevation then it set how many points are used between the bottom and the top. The number of column discretize the azimuth circle then it set how many points are used to make the turn from the front (O radian). Then the sphere is discretized by number of rows * number of columns points. The order must be at least 1. The number of rows and column should be at least 3 (but it's very low).
-         
+
          @param     order            The order.
          @param     numberOfRow      The number of rows.
          @param     numberOfColumn	The number of columns.
@@ -221,12 +227,12 @@ namespace hoa
                     Processor<Hoa3d, T>::Planewaves::setPlanewaveElevation(i * m_number_of_columns + j, elevation);
                 }
             }
-            
+
             m_matrix = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa3d, T>::getNumberOfHarmonics()];
             m_vector = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
             computeRendering();
         }
-        
+
         //! The scope destructor.
         /**	The scope destructor free the memory.
          */
@@ -235,30 +241,30 @@ namespace hoa
             delete [] m_matrix;
             delete [] m_vector;
         }
-        
+
         //! Retrieve the number of rows.
         /**	Retrieve the number of rows used to discretize the ambisonic sphere.
-         
+
          @return     This method returns the number of rows used to discretize the sphere.
          */
         inline ulong getNumberOfRows() const noexcept
         {
             return m_number_of_rows;
         }
-        
+
         //! Retrieve the number of column.
         /**	Retrieve the number of column used to discretize the ambisonic sphere.
-         
+
          @return     This method returns the number of column used to discretize the sphere.
          */
         inline ulong getNumberOfColumns() const noexcept
         {
             return m_number_of_columns;
         }
-        
+
         //! Retrieve the value of a point of the spherical harmonics projection.
-        /**	Retrieve the result value of the spherical harmonics projection for a given point defined by a row index and a column index. The absolute of the value can be used as the radius of the point for a 3 dimentionnal representation. For the row index, 0 is the bottom of the sphere, number of rows / 2 is at the center of the elevation and number of rows - 1 is at the top of the sphere. For the column index, 0 is the front (0 radian) and number of columns / 2 is the rear of the sphere. The maximum row index must be the number of row - 1 and the maximum column index must be the number of columns - 1.
-         
+        /**	Retrieve the result value of the spherical harmonics projection for a given point defined by a row index and a column index. The absolute of the value can be used as the radius of the point for a 3 dimensional representation. For the row index, 0 is the bottom of the sphere, number of rows / 2 is at the center of the elevation and number of rows - 1 is at the top of the sphere. For the column index, 0 is the front (0 radian) and number of columns / 2 is the rear of the sphere. The maximum row index must be the number of row - 1 and the maximum column index must be the number of columns - 1.
+
          @param     rowIndex     The row index of the point.
          @param     columnIndex  The column index of the point.
          @return    This method returns the value of a point of the ambisonic sphere.
@@ -270,10 +276,10 @@ namespace hoa
         {
             return m_vector[rowIndex * m_number_of_columns + columnIndex];
         }
-        
+
         //! Retrieve the radius of a point of the spherical harmonics projection.
         /**	Retrieve the radius of the spherical harmonics projection for a given point defined by a row index and a column index. This the absolute of the result of the projection. For the row index, 0 is the bottom of the sphere, number of rows / 2 is at the center of the elevation and number of rows - 1 is at the top of the sphere. For the column index, 0 is the front (0 radian) and number of columns / 2 is the rear of the sphere. The maximum row index must be the number of row - 1 and the maximum column index must be the number of columns - 1.
-         
+
          @param     rowIndex     The row index of the point.
          @param     columnIndex  The column index of the point.
          @return    This method returns the radius of a point of the ambisonic sphere.
@@ -285,10 +291,10 @@ namespace hoa
         {
             return fabs(m_vector[rowIndex * m_number_of_columns + columnIndex]);
         }
-        
+
         //! Retrieve the azimuth of a point of the spherical harmonics projection.
         /**	Retrieve the azimuth of the spherical harmonics projection for a given point defined by a row index and a column index. For the column index, 0 is the front (0 radian) and number of columns / 2 is the rear of the sphere. The maximum column index must be the number of columns - 1.
-         
+
          @param     rowIndex     The row index of the point.
          @param     columnIndex  The column index of the point.
          @return    This method returns the azimuth of a point of the ambisonic sphere.
@@ -300,10 +306,10 @@ namespace hoa
         {
             return (T)columnIndex * HOA_2PI / (T)m_number_of_columns;
         }
-        
+
         //! Retrieve the elevation of a point of the spherical harmonics projection.
         /**	Retrieve the elevation of the spherical harmonics projection for a given point defined by a row index. For the row index, 0 is the bottom of the sphere, number of rows / 2 is at the center of the elevation and number of rows - 1 is at the top of the sphere. The maximum row index must be the number of row - 1.
-         
+
          @param     rowIndex     The row index of the point.
          @param     columnIndex  The column index of the point.
          @return    This method returns the elevation of a point of the ambisonic sphere.
@@ -315,8 +321,8 @@ namespace hoa
         {
             return (T)rowIndex * HOA_PI / (T)(m_number_of_rows - 1) - HOA_PI2;
         }
-        
-        
+
+
         //! Set the offset.
         /**	Set the rotation of the spherical harmonics in radian.
          */
@@ -324,22 +330,34 @@ namespace hoa
         {
             Processor<Hoa3d, T>::Planewaves::setPlanewavesRotation(x_axe, y_axe, z_axe);
         }
-        
+
+        //! Get the value of the x rotation.
+        /** Get the value of the x rotation. The value is in radian, between 0 and 2π.
+         */
         inline T getViewRotationX() const noexcept
         {
             return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationX();
         }
-        
+
+        //! Get the value of the y rotation.
+        /** Get the value of the y rotation. The value is in radian, between 0 and 2π.
+         */
         inline T getViewRotationY() const noexcept
         {
             return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationY();
         }
-        
+
+        //! Get the value of the z rotation.
+        /** Get the value of the z rotation. The value is in radian, between 0 and 2π.
+         */
         inline T getViewRotationZ() const noexcept
         {
             return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationZ();
         }
-        
+
+        //! Compute the values of the summation of every harmonic to the representation of the sound field
+        /** Compute the values of the summation of every harmonic to the representation of the sound field
+         */
         void computeRendering() noexcept
         {
             const T factor = 12.5 / (T)(Encoder<Hoa3d, T>::getNumberOfHarmonics());
@@ -360,10 +378,10 @@ namespace hoa
             }
             m_maximum = 0;
         }
-        
+
         //! This method performs the spherical harmonics projection with single precision.
-        /**	You should use this method to compute the projection of the spherical harmonics over an ambisonics sphere. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         
+        /**	You should use this method to compute the projection of the spherical harmonics over an ambisonic sphere. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+
          @param     inputs   The inputs array.
          */
         inline void process(const T* inputs, T* outputs) noexcept override
@@ -375,10 +393,10 @@ namespace hoa
                 Signal<T>::vector_scale(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
             }
         }
-        
+
         //! This method performs the spherical harmonics projection with single precision.
-        /**	You should use this method to compute the projection of the spherical harmonics over an ambisonics sphere. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         
+        /**	You should use this method to compute the projection of the spherical harmonics over an ambisonic sphere. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+
          @param     inputs   The inputs array.
          */
         inline void process(const T* inputs) noexcept
@@ -391,7 +409,7 @@ namespace hoa
             }
         }
     };
-    
+
 #endif
 
 }
