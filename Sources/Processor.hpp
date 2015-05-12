@@ -18,33 +18,33 @@ namespace hoa
     template <Dimension D, typename T> class Processor
     {
     public:
-        
+
         //! This method performs the processing.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array and the outputs array depends of the template and the processing.
          @param     input  The input array.
          @param     outputs The outputs array.
          */
         virtual void process(const T* input, T* outputs) noexcept = 0;
-        
+
         class Harmonics;
-        
+
         class Planewaves;
     };
-    
+
     //! The harmonic processor.
     /** The harmonic processor owns a set of harmonics depending on the order of decomposition.
      */
     template <Dimension D, typename T> class Processor<D, T>::Harmonics : virtual public Processor<D, T>
     {
     private:
-        
+
         const ulong                 m_order_of_decomposition;
         const ulong                 m_number_of_harmonics;
         vector< Harmonic<D, T> >    m_harmonics;
     public:
-        
+
         //! The harmonics constructor.
-        /** The harmonics constructor allocates and initializes the generale member values depending on a order of decomposition \f$N\f$.
+        /** The harmonics constructor allocates and initializes the general member values depending on a order of decomposition \f$N\f$.
          @param order    The order of decomposition \f$N\f$, must be at least 1.
          */
         Harmonics(const ulong order) noexcept :
@@ -56,7 +56,7 @@ namespace hoa
                 m_harmonics.push_back(Harmonic<D, T>(i));
             }
         }
-        
+
         //! The harmonics destructor.
         /** The harmonics destructor.
          */
@@ -64,7 +64,7 @@ namespace hoa
         {
             m_harmonics.clear();
         }
-        
+
         //! Retrieve the order of decomposition.
         /** Retrieve the order of decomposition \f$N\f$.
          @return The order.
@@ -73,7 +73,7 @@ namespace hoa
         {
             return m_order_of_decomposition;
         }
-        
+
         //! Retrieve the number of harmonics.
         /** Retrieve the number of harmonics.
          @return The number of harmonics.
@@ -82,7 +82,7 @@ namespace hoa
         {
             return m_number_of_harmonics;
         }
-        
+
         //! Retrieve the degree of an harmonic.
         /** The method retrieves the degrees \f$l\f$of the harmonics are in the range \f$0\f$ to \f$N\f$.
          @param     index	The index of an harmonic.
@@ -94,7 +94,7 @@ namespace hoa
         {
             return m_harmonics[index].getDegree();
         }
-        
+
         //! Retrieve the order of an harmonic.
         /** The method retrieves the orders \f$m\f$ of the harmonic are in the range \f$-l\f$ to \f$l\f$.
          @param     index	The index of an harmonic.
@@ -106,7 +106,7 @@ namespace hoa
         {
             return m_harmonics[index].getOrder();
         }
-        
+
         //! Retrieve the index of an harmonic.
         /** The method retrieves the index of an harmonic in the range \f$0\f$ to number of harmonics - 1.
          @param     order	The order an harmonic.
@@ -118,7 +118,7 @@ namespace hoa
         {
             return Harmonic<D, T>::getHarmonicIndex(order, order);
         }
-        
+
         //! Retrieve the name of an harmonic.
         /** Retrieve the name of an harmonic.
          @param     index	The index of an harmonic.
@@ -130,7 +130,7 @@ namespace hoa
         {
             return m_harmonics[index].getName();
         }
-        
+
         //! This method performs the processing.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array and the outputs array depends of the template and the processing.
          @param     input  The input array.
@@ -142,7 +142,7 @@ namespace hoa
         }
     };
 
-    
+
     //! The planewave processor.
     /** The planewave processor owns a set of planewaves.
      */
@@ -154,9 +154,9 @@ namespace hoa
         T                           m_rotation_z;
         T                           m_rotation_y;
         T                           m_rotation_x;
-        
+
     public:
-        
+
         //! The planewaves constructor.
         /** The planewaves constructor allocates and initializes the general member values depending on a number of planewaves. The number of planewaves must be a least 1.
          @param     numberOfPlanewaves	The number of planewaves.
@@ -202,7 +202,7 @@ namespace hoa
                     m_planewaves.push_back(Planewave<D, T>(2ul, -1., 1., 1.));
                     m_planewaves.push_back(Planewave<D, T>(3ul, -1., -1., 1.));
                     m_planewaves.push_back(Planewave<D, T>(4ul, 1., -1., 1.));
-                    
+
                     m_planewaves.push_back(Planewave<D, T>(5ul, 1., 1., -1.));
                     m_planewaves.push_back(Planewave<D, T>(6ul, -1., 1., -1.));
                     m_planewaves.push_back(Planewave<D, T>(7ul, -1., -1., -1.));
@@ -264,7 +264,7 @@ namespace hoa
             }
 #endif
         }
-        
+
         //! The planewaves destructor.
         /** The planewaves destructor.
          */
@@ -272,7 +272,7 @@ namespace hoa
         {
             m_planewaves.clear();
         }
-        
+
         //! Retrieve the order of decomposition.
         /** Retrieve the order of decomposition.
          @return The order.
@@ -281,7 +281,7 @@ namespace hoa
         {
             return m_number_of_planewaves;
         }
-        
+
         //! Set the offset of the planewaves.
         /**	Set the azimuth offset of the planewaves in radian.
          @param     offset		An azimuth value.
@@ -292,133 +292,133 @@ namespace hoa
             m_rotation_y = Math<T>::wrap_twopi(y_axe);
             m_rotation_z = Math<T>::wrap_twopi(z_axe);
         }
-        
+
         //! Get the offset of the planewaves.
-        /**	Retreive the azimuth offset of the planewaves in radian.
+        /**	Retrieve the azimuth offset of the planewaves in radian.
          @return    The offset of the planewaves.
          */
         inline T getPlanewavesRotationX() const noexcept
         {
             return m_rotation_x;
         }
-        
+
         //! Get the offset of the planewaves.
-        /**	Retreive the azimuth offset of the planewaves in radian.
+        /**	Retrieve the azimuth offset of the planewaves in radian.
          @return    The offset of the planewaves.
          */
         inline T getPlanewavesRotationY() const noexcept
         {
             return m_rotation_y;
         }
-        
+
         //! Get the offset of the planewaves.
-        /**	Retreive the azimuth offset of the planewaves in radian.
+        /**	Retrieve the azimuth offset of the planewaves in radian.
          @return    The offset of the planewaves.
          */
         inline T getPlanewavesRotationZ() const noexcept
         {
             return m_rotation_z;
         }
-        
-        //! Retrieve the index of a planewaves.
-        /** Retrieve the index of a planewaves.
-         @param      index   The index of the planewaves.
-         @return     The index of the planewaves.
+
+        //! Get the index of a planewave.
+        /** Get the index of a planewave.
+         @param      index   The index of the planewave.
+         @return     The index of the planewave.
          */
         inline ulong getPlanewaveIndex(const ulong index) noexcept
         {
             return m_planewaves[index].getIndex();
         }
-        
-        //! Retrieve the azimuth of a planewaves.
-        /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
-         
-         @param      index   The index of the planewaves.
-         @return     The azimuth of the planewaves.
+
+        //! Set the azimuth of a planewave.
+        /** Set the azimuth of a planewave. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
+
+         @param     index   The index of the planewave.
+         @param     azimuth The new azimuth of the planewave.
          */
         inline void setPlanewaveAzimuth(const ulong index, const T azimuth) noexcept
         {
             m_planewaves[index].setAzimuth(Math<T>::wrap_twopi(azimuth));
         }
-        
-        //! Retrieve the azimuth of a planewaves.
-        /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
-         
-         @param      index   The index of the planewaves.
+
+        //! Get the azimuth of a planewave.
+        /** Get the azimuth of a planewave. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
+
+         @param      index   The index of the planewave.
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
-         @return     The azimuth of the planewaves.
+         @return     The azimuth of the planewave.
          */
         inline T getPlanewaveAzimuth(const ulong index, const bool rotation = true) const noexcept
         {
             return m_planewaves[index].getAzimuth(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
-        
-        //! Retrieve the azimuth of a planewaves.
-        /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
-         
-         @param      index   The index of the planewaves.
-         @return     The azimuth of the planewaves.
+
+        //! Set the elevation of a planewave.
+        /** Set the elevation of a planewave. The elevation of the planewaves is in radian. The maximum index must be the number of planewaves - 1.
+
+         @param      index    The index of the planewave.
+         @param      azimuth  The azimuth of the planewave.
          */
         inline void setPlanewaveElevation(const ulong index, const T azimuth) noexcept
         {
             m_planewaves[index].setElevation(Math<T>::wrap_pi(azimuth));
         }
-        
-        //! Retrieve the azimuth of a planewaves.
-        /** Retrieve the azimuth of a planewaves. The azimuth of the planewaves is in radian, 0 radian is at the front of the soundfield and π is at the back of the sound field. The maximum index must be the number of planewaves - 1.
-         
-         @param      index      The index of the planewaves.
+
+        //! Get the elevation of a planewave.
+        /** Get the elevation of a planewave. The elevation of the planewaves is in radian. The maximum index must be the number of planewaves - 1.
+
+         @param      index      The index of the planewave.
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
-         @return     The azimuth of the planewaves.
+         @return     The elevation of the planewave.
          */
         inline T getPlanewaveElevation(const ulong index, const bool rotation = true) const noexcept
         {
             return m_planewaves[index].getElevation(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
-        
-        //! Retrieve the abscissa of a planewaves.
-        /** Retrieve the abscissa of a planewaves. The abscissa is between -1 and 1, -1 is the left of the soundfield, 0 is the center of the soundfield and 1 is the right of the soundfield. The maximum index must be the number of planewaves - 1.
-         @param     index    The index of the planewaves.
+
+        //! Get the abscissa of a planewave.
+        /** Get the abscissa of a planewave. The abscissa is between -1 and 1, -1 is the left of the soundfield, 0 is the center of the soundfield and 1 is the right of the soundfield. The maximum index must be the number of planewaves - 1.
+         @param     index    The index of the planewave.
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
-         @return    The abscissa of the planewaves.
+         @return    The abscissa of the planewave.
          */
         inline T getPlanewaveAbscissa(const ulong index, const bool rotation = true) const noexcept
         {
             return m_planewaves[index].getAbscissa(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
-        
-        //! Retrieve the ordinate of a planewaves.
-        /** Retrieve the ordinate of a planewaves. The ordinate is between -1 and 1, -1 is the back of the soundfield, 0 is the center of the soundfield and 1 is the front of the soundfield. The maximum index must be the number of planewaves - 1.
-         @param     index	The index of the planewaves.
+
+        //! Get the ordinate of a planewave.
+        /** Get the ordinate of a planewave. The ordinate is between -1 and 1, -1 is the back of the soundfield, 0 is the center of the soundfield and 1 is the front of the soundfield. The maximum index must be the number of planewaves - 1.
+         @param     index	The index of the planewave.
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
-         @return    The ordinate of the planewaves.
+         @return    The ordinate of the planewave.
          */
         inline T getPlanewaveOrdinate(const ulong index, const bool rotation = true) const noexcept
         {
             return m_planewaves[index].getOrdinate(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
-        
-        //! Retrieve the height of a planewaves.
-        /** Retrieve the ordinate of a planewaves. The height is between -1 and 1, -1 is the back of the soundfield, 0 is the center of the soundfield and 1 is the front of the soundfield. The maximum index must be the number of planewaves - 1.
-         @param     index	The index of the planewaves.
+
+        //! Get the height of a planewave.
+        /** Get the ordinate of a planewave. The height is between -1 and 1, -1 is the back of the soundfield, 0 is the center of the soundfield and 1 is the front of the soundfield. The maximum index must be the number of planewaves - 1.
+         @param     index	The index of the planewave.
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
-         @return    The height of the planewaves.
+         @return    The height of the planewave.
          */
         inline T getPlanewaveHeight(const ulong index, const bool rotation = true) const noexcept
         {
             return m_planewaves[index].getHeight(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
-        
-        //! Retrieve a name for a planewaves.
-        /** Retrieve a name for a planewaves in a string format that will be "Planewave index azimuth (in degrees)".
-         @param     index	The index of a planewaves.
-         @return    The method returns a name for the planewaves.
+
+        //! Get a name for a planewave.
+        /** Get a name for a planewave in a string format that will be "Planewave index azimuth (in degrees)".
+         @param     index	The index of a planewave.
+         @return    The method returns a name for the planewave.
          */
         inline string getPlanewaveName(const ulong index) const noexcept
         {
             return m_planewaves[index].getName();
         }
-        
+
         //! This method performs the processing.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array and the outputs array depends of the template and the processing.
          @param     input  The input array.

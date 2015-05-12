@@ -11,6 +11,9 @@
 
 namespace hoa
 {
+    //! Source class is used to simulate punctual sources.
+    /** Source class is used to simulate punctual sources and control its.
+     */
     class Source
     {
     public:
@@ -21,6 +24,9 @@ namespace hoa
         typedef  map<ulong, Group*>::const_iterator  const_group_iterator;
         typedef  map<ulong, Group*>::iterator group_iterator;
 
+        //! Manager class is used to control punctual sources and group of sources.
+        /** Manager class is used to control punctual sources and group of sources.
+         */
         class Manager
         {
         private:
@@ -31,7 +37,7 @@ namespace hoa
 
         public:
 
-            //! The first manager constructor.
+            //! The manager constructor.
             /**	The manager constructor allocates and initialize the member values.
              *
              * @param     maximumRadius		The maximum radius the sources or groups in the source manager could have
@@ -42,7 +48,7 @@ namespace hoa
                 m_zoom = 1;
             }
 
-            //! The second manager constructor.
+            //! The manager constructor by copy.
             /**	The manager constructor allocates and initialize the member values.
              *
              * @param     other		It's a contructor by copy an 'other' manager
@@ -68,13 +74,17 @@ namespace hoa
                 }
             }
 
-            //! The source manager destructor free the memory.
+            //! The source manager destructor.
+            /** The source manager destructor free the memory.
+             */
             ~Manager() noexcept
             {
                 clear();
             }
 
-            //! Clear (and free) the memory
+            //! Clear and free the memory
+            /** Clear and free the memory
+             */
             inline void clear()
             {
                 for(group_iterator it = m_groups.begin() ; it != m_groups.end() ; ++it)
@@ -99,7 +109,7 @@ namespace hoa
             }
 
             //! Get the maximum radius of the sources and groups.
-            /**
+            /** Get the maximum radius of the sources and groups.
              @return		The maximum radius.
              */
             inline const double getMaximumRadius() const noexcept
@@ -108,7 +118,7 @@ namespace hoa
             }
 
             //! Get the zoom factor value.
-            /**
+            /** Get the zoom factor value.
              @return		The zoom factor value.
              */
             inline const double getZoom() const noexcept
@@ -116,13 +126,13 @@ namespace hoa
                 return m_zoom;
             }
 
-            //! Add a new Source
-            /**
-             @param     index       The index of the new source
-             @param     radius      The radius of the new source
-             @param     azimuth     The azimuth of the new source
-             @param     elevation   The elevation of the new source
-             @return	            The created source
+            //! Add a new Source.
+            /** Add a new Source.
+             @param     index       The index of the new source.
+             @param     radius      The radius of the new source.
+             @param     azimuth     The azimuth of the new source.
+             @param     elevation   The elevation of the new source.
+             @return	            The created source.
              */
             inline Source* newSource (const ulong index, const double radius = 0., const double azimuth = 0., const double elevation = 0.) noexcept
             {
@@ -135,9 +145,9 @@ namespace hoa
                 return it->second;
             }
 
-            //! Remove a Source
-            /**
-             @param     index   The index of the source
+            //! Remove a Source.
+            /** Remove a Source.
+             @param     index   The index of the source.
              */
             inline void removeSource (const ulong index) noexcept
             {
@@ -149,18 +159,18 @@ namespace hoa
                 }
             }
 
-            //! Get the Sources map size
-            /**
-             @return     The sources map size
+            //! Get the Sources map size.
+            /** Get the Sources map size.
+             @return     The sources map size.
              */
             inline ulong getSourcesSize() const noexcept
             {
                 return m_sources.size();
             }
 
-            //! Check if the Sources map is empty
-            /**
-             @return    The state of the source map content
+            //! Check if the Sources map is empty.
+            /** Check if the Sources map is empty.
+             @return    The state of the source map content.
              */
             inline bool isSourcesEmpty() const noexcept
             {
@@ -170,18 +180,18 @@ namespace hoa
                     return true;
             }
 
-            //! Get the Groups map size
-            /**
-             @return     The groups map size
+            //! Get the Groups map size.
+            /** Get the Groups map size.
+             @return     The groups map size.
              */
             inline ulong getGroupsSize() const noexcept
             {
                 return m_groups.size();
             }
 
-            //! Check if the Groups map is empty
-            /**
-             @return    The state of the groups map content
+            //! Check if the Groups map is empty.
+            /** Check if the Groups map is empty.
+             @return    The state of the groups map content.
              */
             inline bool isGroupsEmpty() const noexcept
             {
@@ -191,10 +201,10 @@ namespace hoa
                     return true;
             }
 
-            //! Add a new Group
-            /**
-             @param     index       The index of the new group
-             @return	            The created group
+            //! Add a new Group.
+            /** Add a new Group.
+             @param     index       The index of the new group.
+             @return	            The created group.
              */
             inline Group* newGroup (const ulong index) noexcept
             {
@@ -207,9 +217,9 @@ namespace hoa
                 return it->second;
             }
 
-            //! Remove a Group
-            /**
-             @param     index   The index of the group
+            //! Remove a Group.
+            /** Remove a Group.
+             @param     index   The index of the group.
              */
             inline void removeGroup (const ulong index) noexcept
             {
@@ -221,9 +231,9 @@ namespace hoa
                 }
             }
 
-            //! Remove a Group with its sources
-            /**
-             @param     index   The index of the group
+            //! Remove a Group with its sources.
+            /** Remove a Group with its sources.
+             @param     index   The index of the group.
              */
             inline void removeGroupWithSources (const ulong index) noexcept
             {
@@ -241,10 +251,10 @@ namespace hoa
                 }
             }
 
-            //! Get one source
-            /**
-             @param     index   The index of the source
-             @return            A pointer on the source
+            //! Get one source.
+            /** Get one source.
+             @param     index   The index of the source.
+             @return            A pointer on the source.
              */
             inline Source* getSource(const ulong index)
             {
@@ -256,36 +266,36 @@ namespace hoa
                 return NULL;
             }
 
-            //! Get the first const iterator of the Sources map
-            /**
-             @return        The first const iterator of the sources map
+            //! Get the first const iterator of the Sources map.
+            /** Get the first const iterator of the Sources map.
+             @return        The first const iterator of the sources map.
              */
             inline const_source_iterator getFirstSource() const noexcept
             {
                 return m_sources.begin();
             }
 
-            //! Get the first iterator of the Sources map
-            /**
-             @return        The const iterator of the sources map
+            //! Get the first iterator of the Sources map.
+            /** Get the first iterator of the Sources map.
+             @return        The const iterator of the sources map.
              */
             inline source_iterator getFirstSource() noexcept
             {
                 return m_sources.begin();
             }
 
-            //! Get the last const iterator of the Sources map
-            /**
-             @return        The last const iterator of the sources map
+            //! Get the last const iterator of the Sources map.
+            /** Get the last const iterator of the Sources map.
+             @return        The last const iterator of the sources map.
              */
             inline const_source_iterator  getLastSource() const noexcept
             {
                 return m_sources.end();
             }
 
-            //! Get the last iterator of the Sources map
-            /**
-             @return        The last iterator of the sources map
+            //! Get the last iterator of the Sources map.
+            /** Get the last iterator of the Sources map.
+             @return        The last iterator of the sources map.
              */
             inline source_iterator  getLastSource() noexcept
             {
@@ -293,6 +303,8 @@ namespace hoa
             }
 
             //! Remove the groups which have less 2 sources
+            /** Remove the groups which have less 2 sources
+             */
             inline void cleanEmptyGroup() noexcept
             {
                 for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
@@ -305,7 +317,9 @@ namespace hoa
                 }
             }
 
-            //! Remove the groups which have exactly the same sources
+            //! Remove the groups which have exactly the same sources.
+            /** Remove the groups which have exactly the same sources.
+             */
             inline void cleanDuplicatedGroup() noexcept
             {
                 for(group_iterator it = m_groups.begin() ; it != m_groups.end(); ++it)
@@ -321,10 +335,10 @@ namespace hoa
                 }
             }
 
-            //! Get one group
-            /**
-             @param     index   The index of the group
-             @return            A pointer on the group
+            //! Get one group.
+            /** Get one group.
+             @param     index   The index of the group.
+             @return            A pointer on the group.
              */
             inline Group* getGroup(const ulong index)
             {
@@ -336,36 +350,36 @@ namespace hoa
                 return NULL;
             }
 
-            //! Get the first const iterator of the Groups map
-            /**
-             @return        The first const iterator of the groups map
+            //! Get the first const iterator of the Groups map.
+            /** Get the first const iterator of the Groups map.
+             @return        The first const iterator of the groups map.
              */
             inline const_group_iterator getFirstGroup() const noexcept
             {
                 return m_groups.begin();
             }
 
-            //! Get the first iterator of the Groups map
-            /**
-             @return        The first iterator of the groups map
+            //! Get the first iterator of the Groups map.
+            /** Get the first iterator of the Groups map.
+             @return        The first iterator of the groups map.
              */
             inline group_iterator getFirstGroup() noexcept
             {
                 return m_groups.begin();
             }
 
-            //! Get the last const iterator of the Groups map
-            /**
-             @return        The last const iterator of the groups map
+            //! Get the last const iterator of the Groups map.
+            /** Get the last const iterator of the Groups map.
+             @return        The last const iterator of the groups map.
              */
             inline const_group_iterator  getLastGroup() const noexcept
             {
                 return m_groups.end();
             }
 
-            //! Get the last iterator of the Groups map
-            /**
-             @return        The last iterator of the groups map
+            //! Get the last iterator of the Groups map.
+            /** Get the last iterator of the Groups map.
+             @return        The last iterator of the groups map.
              */
             inline group_iterator  getLastGroup() noexcept
             {
@@ -374,7 +388,7 @@ namespace hoa
         };
 
 		//! Set the position of the source with polar coordinates.
-		/**
+		/** Set the position of the source with polar coordinates.
 			@param     radius			The radius of the source.
 			@param     azimuth			The azimuth of the source.
             @param     elevation        The elevation of the source.
@@ -388,7 +402,7 @@ namespace hoa
        	}
 
 		//! Set the radius of the source.
-		/**
+		/** Set the radius of the source.
 			@param     radius			The radius of the source.
 			@see getRadius
          */
@@ -404,7 +418,7 @@ namespace hoa
 		}
 
 		//! Set the azimuth of the source.
-		/**
+		/** Set the azimuth of the source.
 			@param     azimuth			The azimuth of the source.
          */
 		inline void setAzimuth(const double azimuth)
@@ -414,7 +428,7 @@ namespace hoa
 		}
 
         //! Set the elevation of the source.
-		/**
+		/** Set the elevation of the source.
          @param     elevation			The elevation of the source.
          */
 		inline void setElevation(const double elevation)
@@ -428,8 +442,8 @@ namespace hoa
 		    notifyCoordinates();
 		}
 
-        //! Set the position of the source with cartesians coordinates.
-		/**
+        //! Set the position of the source with cartesian coordinates.
+		/** Set the position of the source with cartesian coordinates.
             @param     abscissa		The abscissa of the source.
             @param     ordinate		The ordinate of the source.
             @param     height		The height of the source.
@@ -442,7 +456,7 @@ namespace hoa
         }
 
 		//! Set the abscissa of the source.
-		/**
+		/** Set the abscissa of the source.
 			@param     abscissa		The abscissa of the source.
          */
 		inline void setAbscissa(const double abscissa)
@@ -451,7 +465,7 @@ namespace hoa
 		}
 
 		//! Set the ordinate of the source.
-		/**
+		/** Set the ordinate of the source.
 			@param     ordinate		The ordinate of the source.
          */
 		inline void setOrdinate(const double ordinate)
@@ -460,7 +474,7 @@ namespace hoa
         }
 
         //! Set the height of the source.
-		/**
+		/** Set the height of the source.
          @param     height		The height of the source.
          */
 		inline void setHeight(const double height)
@@ -469,11 +483,11 @@ namespace hoa
 		}
 
 		//! Set the color of the source.
-		/**
+		/** Set the color of the source.
 		 * @param     red		The red component of the color.
-		 * @param     green		The green component of the color
-		 * @param     blue		The blue component of the color
-		 * @param     alpha		The alpha component of the color
+		 * @param     green		The green component of the color.
+		 * @param     blue		The blue component of the color.
+		 * @param     alpha		The alpha component of the color.
          */
 		inline void setColor(const double red, const double green, const double blue, const double alpha)
 		{
@@ -484,7 +498,7 @@ namespace hoa
         }
 
 		//! Set the description of the source.
-		/**
+		/** Set the description of the source.
 		 * @param     description		The text description of the source.
          */
 		inline void setDescription(const string description)
@@ -492,8 +506,8 @@ namespace hoa
 			m_description = description;
 		}
 
-		//! Set the mute state of the source
-		/**
+		//! Set the mute state of the source.
+		/** Set the mute state of the source.
 			@param     state		The mute state of the source.
 			@see getMute
          */
@@ -504,7 +518,7 @@ namespace hoa
 		}
 
         //! Get the maximum radius of the source.
-		/**
+		/** Get the maximum radius of the source.
 			@return		The maximum radius of the source.
          */
         inline const double getMaximumRadius() const noexcept
@@ -513,7 +527,7 @@ namespace hoa
         }
 
         //! Get the index of the source.
-		/**
+		/** Get the index of the source.
 			@return		The index of the source.
          */
         inline const ulong getIndex() const noexcept
@@ -522,7 +536,7 @@ namespace hoa
         }
 
 		//! Get the radius of the source.
-		/**
+		/** Get the radius of the source.
 			@return		The radius of the source.
 			@see setRadius, setCoordinatesPolar
          */
@@ -532,7 +546,7 @@ namespace hoa
 		}
 
 		//! Get the azimuth of the source.
-		/**
+		/** Get the azimuth of the source.
 			@return		The azimuth of the source.
 			@see setAzimuth, setCoordinatesPolar
          */
@@ -542,7 +556,7 @@ namespace hoa
 		}
 
         //! Get the elevation of the source.
-		/**
+		/** Get the elevation of the source.
             @return		The elevation of the source.
             @see setElevation, setCoordinatesPolar
          */
@@ -552,7 +566,7 @@ namespace hoa
 		}
 
 		//! Get the abscissa of the source.
-		/**
+		/** Get the abscissa of the source.
 			@return		The abscissa of the source.
 			@see setAbscissa, setCoordinatesCartesian
          */
@@ -562,7 +576,7 @@ namespace hoa
 		}
 
 		//! Get the ordinate of the source.
-		/**
+		/** Get the ordinate of the source.
 			@return		The ordinate of the source.
 			@see setOrdinate, setCoordinatesCartesian
          */
@@ -572,7 +586,7 @@ namespace hoa
 		}
 
         //! Get the height of the source.
-		/**
+		/** Get the height of the source.
          @return		The height of the source.
          @see setHeight, setCoordinatesCartesian
          */
@@ -582,7 +596,7 @@ namespace hoa
 		}
 
 		//! Get the color of the source.
-		/**
+		/** Get the color of the source.
 			@return		The rgba color of the source as an array of 4 double.
 			@see setColor
          */
@@ -592,7 +606,7 @@ namespace hoa
 		}
 
 		//! Get the description of the source.
-		/**
+		/** Get the description of the source.
 			@return		The description of the source.
 			@see setDescription
          */
@@ -601,8 +615,8 @@ namespace hoa
 			return m_description;
 		}
 
-		//! Get the mute state of the source
-		/**
+		//! Get the mute state of the source.
+		/** Get the mute state of the source.
 			@return		The mute state of the source.
 			@see setMute
          */
@@ -611,8 +625,8 @@ namespace hoa
 			return m_mute;
 		}
 
-        //! Get the size of the Groups map
-        /**
+        //! Get the size of the Groups map.
+        /** Get the size of the Groups map.
          @return    The group map size
          */
         inline ulong getGroupsSize() const noexcept
@@ -620,9 +634,9 @@ namespace hoa
             return m_groups.size();
         }
 
-        //! Check if the Groups map is empty
-        /**
-         @return    The state of the groups map content
+        //! Check if the Groups map is empty.
+        /** Check if the Groups map is empty.
+         @return    The state of the groups map content.
          */
         inline bool isGroupsEmpty() const noexcept
         {
@@ -632,15 +646,18 @@ namespace hoa
                 return true;
         }
 
-        //! Get the Groups map
-        /**
-         @return    A reference of the groups map
+        //! Get the Groups map.
+        /** Get the Groups map.
+         @return    A reference of the groups map.
          */
         inline map<ulong, Group*>& getGroups() noexcept
         {
             return m_groups;
         }
 
+        //! Group class is used to control punctual sources.
+        /** Group class is used to control punctual sources.
+         */
         class Group
         {
         friend class Source;
@@ -659,8 +676,8 @@ namespace hoa
             bool                    m_subMute;
             const Manager*          m_manager;
 
-            //! The first source group constructor.
-            /**	The source group constructor allocates and initialize the member values for a source group.
+            //! The group constructor.
+            /**	The group constructor allocates and initialize the member values for a source group.
              @param     manager		A pointer on a manager object
              @param     index       The index of the group
              */
@@ -675,8 +692,8 @@ namespace hoa
                 m_mute = false;
             }
 
-            //! The second source group constructor.
-            /**	The source group constructor allocates and initialize the member values for a source group.
+            //! The group constructor by copy.
+            /**	The group constructor allocates and initialize the member values for a source group.
              @param     other		It's a contructor by copy an 'other' group
              */
             Group(const Group& other)
@@ -703,13 +720,17 @@ namespace hoa
                 m_sources.clear();
             }
 
-            //! Compute the group position for each moving of its sources
+            //! Compute the group position for each moving of its sources.
+            /** Compute the group position for each moving of its sources.
+             */
             inline void notifyCoordinates() noexcept
             {
                 computeCentroid();
             }
 
-            //! Check the group mute state for each change of mute state of its sources
+            //! Check the group mute state for each change of mute state of its sources.
+            /** Check the group mute state for each change of mute state of its sources.
+             */
             inline void notifyMute() noexcept
             {
                 ulong numberOfMutedSources = 0;
@@ -728,7 +749,9 @@ namespace hoa
                     m_mute = false;
             }
 
-            //! Compute the group position
+            //! Compute the group position.
+            /** Compute the group position.
+             */
             inline void computeCentroid()
             {
                 m_centroid_x = 0.;
@@ -748,11 +771,11 @@ namespace hoa
                 }
             }
 
-            //! Compute the new polar coordinates of the Group
-            /**
-             @param     radius      The radius factor of shifting
-             @param     azimuth     The azimuth factor of shifting
-             @param     elevation   The elevation factor of shifting
+            //! Compute the new polar coordinates of the Group.
+            /** Compute the new polar coordinates of the Group.
+             @param     radius      The radius factor of shifting.
+             @param     azimuth     The azimuth factor of shifting.
+             @param     elevation   The elevation factor of shifting.
              */
             inline void shiftPolar(const double radius, const double azimuth, const double elevation = 0.)
             {
@@ -761,9 +784,9 @@ namespace hoa
                 shiftElevation(elevation);
             }
 
-            //! Compute the new radius of the Group
-            /**
-             @param     radius      The radius factor of shifting
+            //! Compute the new radius of the Group.
+            /** Compute the new radius of the Group.
+             @param     radius      The radius factor of shifting.
              */
             void shiftRadius(double radius)
             {
@@ -773,9 +796,9 @@ namespace hoa
                 }
             }
 
-            //! Compute the new azimuth of the Group
-            /**
-             @param     azimuth     The azimuth factor of shifting
+            //! Compute the new azimuth of the Group.
+            /** Compute the new azimuth of the Group.
+             @param     azimuth     The azimuth factor of shifting.
              */
             inline void shiftAzimuth(double azimuth)
             {
@@ -785,9 +808,9 @@ namespace hoa
                 }
             }
 
-            //! Compute the elevation of the Group
-            /**
-             @param     elevation   The elevation factor of shifting
+            //! Compute the elevation of the Group.
+            /** Compute the elevation of the Group.
+             @param     elevation   The elevation factor of shifting.
              */
             inline void shiftElevation(double elevation)
             {
@@ -797,11 +820,11 @@ namespace hoa
                 }
             }
 
-            //! Compute the new carthesian coordinates of the Group
-            /**
-             @param     abscissa    The abscissa factor of shifting
-             @param     ordinate    The ordinate factor of shifting
-             @param     height      The height factor of shifting
+            //! Compute the new cartesian coordinates of the Group.
+            /** Compute the new cartesian coordinates of the Group.
+             @param     abscissa    The abscissa factor of shifting.
+             @param     ordinate    The ordinate factor of shifting.
+             @param     height      The height factor of shifting.
              */
             inline void shiftCartesian(const double abscissa, const double ordinate, const double height = 0.)
             {
@@ -810,9 +833,9 @@ namespace hoa
                 shiftHeight(height);
             }
 
-            //! Compute the new abscissa of the Group
-            /**
-             @param     abscissa    The abscissa factor of shifting
+            //! Compute the new abscissa of the Group.
+            /** Compute the new abscissa of the Group.
+             @param     abscissa    The abscissa factor of shifting.
              */
             void shiftAbscissa(double abscissa)
             {
@@ -849,9 +872,9 @@ namespace hoa
                 }
             }
 
-            //! Compute the new ordinate of the Group
-            /**
-             @param     ordinate    The ordinate factor of shifting
+            //! Compute the new ordinate of the Group.
+            /** Compute the new ordinate of the Group.
+             @param     ordinate    The ordinate factor of shifting.
              */
             void shiftOrdinate(double ordinate)
             {
@@ -888,9 +911,9 @@ namespace hoa
                 }
             }
 
-            //! Compute the new height of the Group
-            /**
-             @param     height      The height factor of shifting
+            //! Compute the new height of the Group.
+            /** Compute the new height of the Group.
+             @param     height      The height factor of shifting.
              */
             void shiftHeight(double height)
             {
@@ -929,10 +952,10 @@ namespace hoa
 
         public:
 
-            //! Add a new Source (and add the group to the source)
-            /**
-             @param     source  The source to add
-             @return            The state of the addition of the source
+            //! Add a new Source.
+            /** Add a new Source (and add the group to the source).
+             @param     source  The source to add.
+             @return            The state of the addition of the source.
              */
             inline bool addSource(Source* source) noexcept
             {
@@ -947,9 +970,9 @@ namespace hoa
                 return false;
             }
 
-            //! Remove a Source
-            /**
-             @param     index   The index of the source
+            //! Remove a Source.
+            /** Remove a Source.
+             @param     index   The index of the source.
              */
             inline void removeSource(const ulong index) noexcept
             {
@@ -958,7 +981,7 @@ namespace hoa
             }
 
             //! Set the position of the group with polar coordinates.
-            /**
+            /** Set the position of the group with polar coordinates.
              @param     radius			The radius of the group.
              @param     azimuth			The azimuth of the group.
              @param     elevation			The elevation of the group.
@@ -970,7 +993,7 @@ namespace hoa
             }
 
             //! Set the radius of the group.
-            /**
+            /** Set the radius of the group.
              @param     radius			The radius of the group.
              @see getRadius
              */
@@ -980,7 +1003,7 @@ namespace hoa
             }
 
             //! Set the azimuth of the group.
-            /**
+            /** Set the azimuth of the group.
              @param     azimuth			The azimuth of the group.
              */
             inline void setAzimuth(const double azimuth)
@@ -989,7 +1012,7 @@ namespace hoa
             }
 
             //! Set the elevation of the group.
-            /**
+            /** Set the elevation of the group.
              @param     elevation			The elevation of the group.
              */
             inline void setElevation(const double elevation)
@@ -997,8 +1020,8 @@ namespace hoa
                 setCoordinatesCartesian(Math<double>::abscissa(getRadius(), getAzimuth(), elevation), Math<double>::ordinate(getRadius(), getAzimuth(), elevation), Math<double>::height(getRadius(), getAzimuth(), elevation));
             }
 
-            //! Set the position of the group with cartesians coordinates.
-            /**
+            //! Set the position of the group with cartesian coordinates.
+            /** Set the position of the group with cartesian coordinates.
              @param     abscissa		The abscissa of the group.
              @param     ordinate		The ordinate of the group.
              @param     height		The height of the group.
@@ -1013,7 +1036,7 @@ namespace hoa
             }
 
             //! Set the abscissa of the group.
-            /**
+            /** Set the abscissa of the group.
              @param     abscissa		The abscissa of the group.
              */
             inline void setAbscissa(const double abscissa)
@@ -1024,7 +1047,7 @@ namespace hoa
             }
 
             //! Set the ordinate of the group.
-            /**
+            /** Set the ordinate of the group.
              @param     ordinate		The ordinate of the group.
              */
             inline void setOrdinate(const double ordinate)
@@ -1035,7 +1058,7 @@ namespace hoa
             }
 
             //! Set the height of the group.
-            /**
+            /** Set the height of the group.
              @param     height		The height of the group.
              */
             inline void setHeight(const double height)
@@ -1046,11 +1069,11 @@ namespace hoa
             }
 
             //! Set the color of the group.
-            /**
+            /** Set the color of the group.
              @param     red			The red component of the color.
-             @param     green		The green component of the color
-             @param     blue			The blue component of the color
-             @param     alpha		The alpha component of the color
+             @param     green		The green component of the color.
+             @param     blue			The blue component of the color.
+             @param     alpha		The alpha component of the color.
              */
             inline void setColor(const double red, const double green, const double blue, const double alpha)
             {
@@ -1061,7 +1084,7 @@ namespace hoa
             }
 
             //! Set the description of the group.
-            /**
+            /** Set the description of the group.
              @param     description		The text description of the group.
              */
             inline void setDescription(const string description)
@@ -1069,8 +1092,8 @@ namespace hoa
                 m_description = description;
             }
 
-            //! Set the mute state of the group
-            /**
+            //! Set the mute state of the group.
+            /** Set the mute state of the group.
              @param     state		The mute state of the group.
              @see getMute
              */
@@ -1084,7 +1107,7 @@ namespace hoa
             }
 
             //! Set the position of the group with relative polar coordinates.
-            /**
+            /** Set the position of the group with relative polar coordinates.
              @param     radius			The relative radius value.
              @param     azimuth			The relative azimuth value.
              @param     elevation		The relative elevation value.
@@ -1098,7 +1121,7 @@ namespace hoa
             }
 
             //! Set the radius of the group with a relative value.
-            /**
+            /** Set the radius of the group with a relative value.
              @param     radius			The relative radius value.
              @see setCoordinatesPolar, setRelativeRadius
              */
@@ -1111,7 +1134,7 @@ namespace hoa
             }
 
             //! Set the azimuth of the group with a relative value.
-            /**
+            /** Set the azimuth of the group with a relative value.
              @param     azimuth			The relative azimuth value.
              @see setCoordinatesPolar, setRelativeRadius
              */
@@ -1129,7 +1152,7 @@ namespace hoa
             }
 
             //! Set the elevation of the group with a relative value.
-            /**
+            /** Set the elevation of the group with a relative value.
              @param     elevation			The relative elevation value.
              @see setCoordinatesPolar, setRelativeRadius
              */
@@ -1146,27 +1169,27 @@ namespace hoa
                 computeCentroid();
             }
 
-            //! Get the manager of the Group
-            /**
-                @return     A pointer on the manager of the group
-                */
+            //! Get the manager of the Group.
+            /** Get the manager of the Group.
+                @return     A pointer on the manager of the group.
+             */
             inline const Manager* getManager() const noexcept
             {
                 return m_manager;
             }
 
-            //! Get the maximum radius of the Group
-            /**
-             @return    The maximum radius of the group
+            //! Get the maximum radius of the Group.
+            /** Get the maximum radius of the Group.
+             @return    The maximum radius of the group.
              */
             inline const double getMaximumRadius() const noexcept
             {
                 return m_maximum_radius;
             }
 
-            //! Get the indexs of the Group
-            /**
-             @return    The index of the group
+            //! Get the index of the Group.
+            /** Get the index of the Group.
+             @return    The index of the group.
              */
             inline const ulong getIndex() const noexcept
             {
@@ -1174,7 +1197,7 @@ namespace hoa
             }
 
             //! Get the radius of the group.
-            /**
+            /** Get the radius of the group.
              @return		The radius of the group.
              @see setRadius, setCoordinatesPolar
              */
@@ -1184,7 +1207,7 @@ namespace hoa
             }
 
             //! Get the azimuth of the group.
-            /**
+            /** Get the azimuth of the group.
              @return		The azimuth of the group.
              @see setAzimuth, setCoordinatesPolar
              */
@@ -1194,7 +1217,7 @@ namespace hoa
             }
 
             //! Get the elevation of the group.
-            /**
+            /** Get the elevation of the group.
              @return		The elevation of the group.
              @see setAzimuth, setCoordinatesPolar
              */
@@ -1204,7 +1227,7 @@ namespace hoa
             }
 
             //! Get the abscissa of the group.
-            /**
+            /** Get the abscissa of the group.
              @return		The abscissa of the group.
              @see setAbscissa, setCoordinatesCartesian
              */
@@ -1214,7 +1237,7 @@ namespace hoa
             }
 
             //! Get the ordinate of the group.
-            /**
+            /** Get the ordinate of the group.
              @return		The ordinate of the group.
              @see setOrdinate, setCoordinatesCartesian
              */
@@ -1224,7 +1247,7 @@ namespace hoa
             }
 
             //! Get the height of the group.
-            /**
+            /** Get the height of the group.
              @return		The height of the group.
              @see setOrdinate, setCoordinatesCartesian
              */
@@ -1234,8 +1257,8 @@ namespace hoa
             }
 
             //! Get the color of the group.
-            /**
-             @return		The rgba color of the group as an array of 4 double.
+            /** Get the color of the group.
+             @return		The rgba color of the group as an array of 4 double numbers.
              @see setColor
              */
             inline const double*	getColor()	const noexcept
@@ -1244,7 +1267,7 @@ namespace hoa
             }
 
             //! Get the description of the group.
-            /**
+            /** Get the description of the group.
              @return		The description of the group.
              @see setDescription
              */
@@ -1253,8 +1276,8 @@ namespace hoa
                 return m_description;
             }
 
-            //! Get the mute state of the group
-            /**
+            //! Get the mute state of the group.
+            /** Get the mute state of the group.
              @return		The mute state of the group.
              @see setMute
              */
@@ -1263,27 +1286,27 @@ namespace hoa
                 return m_mute;
             }
 
-            //! Get the general mute state of sources of the group
-            /**
-             @return        The sub general mute state of sources of the group
+            //! Get the general mute state of sources of the group.
+            /** Get the general mute state of sources of the group.
+             @return        The sub general mute state of sources of the group.
              */
             inline const bool getSubMute()	const noexcept
             {
                 return m_subMute;
             }
 
-            //! Get the size of the Sources map
-            /**
-             @return    The sources map size
+            //! Get the size of the Sources map.
+            /** Get the size of the Sources map.
+             @return    The sources map size.
              */
             inline ulong getSourcesSize() const noexcept
             {
                 return m_sources.size();
             }
 
-            //! Check if the Sources map is empty
-            /**
-             @return    The state of the sources map content
+            //! Check if the Sources map is empty.
+            /** Check if the Sources map is empty.
+             @return    The state of the sources map content.
              */
             inline bool isSourcesEmpty() const noexcept
             {
@@ -1293,9 +1316,9 @@ namespace hoa
                     return true;
             }
 
-            //! Get the Sources map
-            /**
-             @return    A reference of the sources map
+            //! Get the Sources map.
+            /** Get the Sources map.
+             @return    A reference of the sources map.
              */
             inline map<ulong, Source*>& getSources() noexcept
             {
@@ -1331,10 +1354,10 @@ namespace hoa
 		double               m_maximum_radius;
 		bool                 m_mute;
 
-		//! The first source constructor.
+		//! The source constructor.
 		/**	The source constructor allocates and initialize the member values for a source.
-            @param     maximumRadius    The maximum radius of the source
-            @param     index            The index of the source
+            @param     maximumRadius    The maximum radius of the source.
+            @param     index            The index of the source.
 			@param     radius			The radius of the source.
 			@param     azimuth			The azimuth of the source.
             @param     elevation		The elevation of the source.
@@ -1351,9 +1374,9 @@ namespace hoa
             m_mute = false;
       	}
 
-        //! The second source constructor.
+        //! The source constructor by copy.
 		/**	The source constructor allocates and initialize the member values for a source.
-            @param     othe    It's a constructor by copy an 'other' source
+            @param     othe    It's a constructor by copy an 'other' source.
 		 */
       	Source(const Source& other)
 		{
@@ -1380,10 +1403,10 @@ namespace hoa
         	m_groups.clear();
         }
 
-		//! Add a new group
-		/**
-		 @param     group   The group to add
-		 @return            The state of the addition of the group
+		//! Add a new group.
+		/** Add a new group.
+		 @param     group   The group to add.
+		 @return            The state of the addition of the group.
 		 */
         inline bool addGroup(Group* group) noexcept
         {
@@ -1396,16 +1419,18 @@ namespace hoa
             return false;
         }
 
-        //! Remove a group
-        /**
-         @param     index   The index of the group
+        //! Remove a group.
+        /** Remove a group.
+         @param     index   The index of the group.
          */
         inline void removeGroup(const ulong index) noexcept
         {
             m_groups.erase(index);
         }
 
-        //! Call the groups of the source for each moving to compute their new position
+        //! Call the groups of the source for each moving to compute their new position.
+        /** Call the groups of the source for each moving to compute their new position.
+         */
         inline void notifyCoordinates() noexcept
         {
             for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
@@ -1414,7 +1439,9 @@ namespace hoa
             }
         }
 
-        //! Call the groups of the source for each change of its mute state to check their mute state
+        //! Call the groups of the source for each change of its mute state to check their mute state.
+        /** Call the groups of the source for each change of its mute state to check their mute state.
+         */
         inline void notifyMute() noexcept
         {
             for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
