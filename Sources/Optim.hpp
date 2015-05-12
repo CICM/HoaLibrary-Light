@@ -209,7 +209,7 @@ namespace hoa
     private:
         static T* generate(const ulong order)
         {
-            T* vector = new T(order);
+            T* vector = new T[order];
             for(ulong i = 1; i <= order; i++)
             {
                 vector[i-1] = cos(T(i) *  T(HOA_PI) / (T)(2. * order + 2.));
@@ -262,7 +262,7 @@ namespace hoa
     private:
         static T* generate(const ulong order)
         {
-            T* vector = new T(order);
+            T* vector = new T[order];
             const T facn = Math<T>::factorial(order);
             for(ulong i = 1; i <= order; i++)
             {
@@ -402,7 +402,7 @@ namespace hoa
     private:
         static T* generate(const ulong order)
         {
-            T* vector = new T(order);
+            T* vector = new T[order];
             for(ulong i = 1; i <= order; i++)
             {
                 vector[i-1] = cos(T(i) *  T(HOA_PI) / (T)(2. * order + 2.));
@@ -458,7 +458,7 @@ namespace hoa
     private:
         static T* generate(const ulong order)
         {
-            T* vector = new T(order);
+            T* vector = new T[order];
             const T facn = Math<T>::factorial(order);
             for(ulong i = 1; i <= order; i++)
             {
