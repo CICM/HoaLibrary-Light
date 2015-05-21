@@ -223,7 +223,7 @@ namespace hoa
              */
             inline void removeGroup (const ulong index) noexcept
             {
-                group_iterator it = m_groups.find(index);
+                const_group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
                     delete it->second;
@@ -258,7 +258,7 @@ namespace hoa
              */
             inline Source* getSource(const ulong index)
             {
-                source_iterator it = m_sources.find(index);
+                const_source_iterator it = m_sources.find(index);
                 if(it != m_sources.end())
                 {
                     return it->second;
