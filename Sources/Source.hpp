@@ -67,7 +67,7 @@ namespace hoa
                     m_groups[it->first] = new Group(*it->second);
 
                     map<ulong, Source*>& tmp = it->second->getSources();
-                    for (source_iterator ti = tmp.begin() ; ti != tmp.end() ; ti ++)
+                    for (const_source_iterator ti = tmp.cbegin() ; ti != tmp.cend() ; ti ++)
                     {
                         m_groups[it->first]->addSource(m_sources[ti->first]);
                     }
@@ -87,11 +87,11 @@ namespace hoa
              */
             inline void clear()
             {
-                for(group_iterator it = m_groups.begin() ; it != m_groups.end() ; ++it)
+                for(const_group_iterator it = m_groups.cbegin() ; it != m_groups.cend() ; ++it)
                 {
                     delete it->second;
                 }
-                for(source_iterator it = m_sources.begin() ; it != m_sources.end() ; ++it)
+                for(const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; ++it)
                 {
                     delete it->second;
                 }
@@ -136,8 +136,8 @@ namespace hoa
              */
             inline Source* newSource (const ulong index, const double radius = 0., const double azimuth = 0., const double elevation = 0.) noexcept
             {
-                source_iterator it = m_sources.find(index);
-                if(it == m_sources.end())
+                const_source_iterator it = m_sources.find(index);
+                if(it == m_sources.cend())
                 {
                     m_sources[index] = new Source(m_maximum_radius, index, radius, azimuth, elevation);
                     return m_sources[index];
@@ -151,8 +151,8 @@ namespace hoa
              */
             inline void removeSource (const ulong index) noexcept
             {
-                source_iterator it = m_sources.find(index);
-                if(it != m_sources.end())
+                const_source_iterator it = m_sources.find(index);
+                if(it != m_sources.cend())
                 {
                     delete it->second;
                     m_sources.erase(index);;
@@ -208,8 +208,8 @@ namespace hoa
              */
             inline Group* newGroup (const ulong index) noexcept
             {
-                group_iterator it = m_groups.find(index);
-                if(it == m_groups.end())
+                const_group_iterator it = m_groups.find(index);
+                if(it == m_groups.cend())
                 {
                     m_groups[index] = new Group(this, index);
                     return m_groups[index];
@@ -224,7 +224,7 @@ namespace hoa
             inline void removeGroup (const ulong index) noexcept
             {
                 const_group_iterator it = m_groups.find(index);
-                if(it != m_groups.end())
+                if(it != m_groups.cend())
                 {
                     delete it->second;
                     m_groups.erase(index);
@@ -237,11 +237,11 @@ namespace hoa
              */
             inline void removeGroupWithSources (const ulong index) noexcept
             {
-                group_iterator it = m_groups.find(index);
+                const_group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
                     map<ulong, Source*>& sources = it->second->getSources();
-                    for (source_iterator ti = sources.begin() ; ti != sources.end() ; ti ++)
+                    for (const_source_iterator ti = sources.cbegin() ; ti != sources.cend() ; ti ++)
                     {
                         m_sources.erase(ti->first);
                         delete ti->second;
@@ -259,7 +259,7 @@ namespace hoa
             inline Source* getSource(const ulong index)
             {
                 const_source_iterator it = m_sources.find(index);
-                if(it != m_sources.end())
+                if(it != m_sources.cend())
                 {
                     return it->second;
                 }
@@ -272,7 +272,7 @@ namespace hoa
              */
             inline const_source_iterator getFirstSource() const noexcept
             {
-                return m_sources.begin();
+                return m_sources.cbegin();
             }
 
             //! Get the first iterator of the Sources map.
@@ -288,16 +288,16 @@ namespace hoa
             /** Get the last const iterator of the Sources map.
              @return        The last const iterator of the sources map.
              */
-            inline const_source_iterator  getLastSource() const noexcept
+            inline const_source_iterator getLastSource() const noexcept
             {
-                return m_sources.end();
+                return m_sources.cend();
             }
 
             //! Get the last iterator of the Sources map.
             /** Get the last iterator of the Sources map.
              @return        The last iterator of the sources map.
              */
-            inline source_iterator  getLastSource() noexcept
+            inline source_iterator getLastSource() noexcept
             {
                 return m_sources.end();
             }
@@ -307,7 +307,7 @@ namespace hoa
              */
             inline void cleanEmptyGroup() noexcept
             {
-                for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+                for (const_group_iterator it = m_groups.cbegin() ; it != m_groups.cend() ; it ++)
                 {
                     if (it->second->m_sources.size() < 2)
                     {
@@ -322,9 +322,9 @@ namespace hoa
              */
             inline void cleanDuplicatedGroup() noexcept
             {
-                for(group_iterator it = m_groups.begin() ; it != m_groups.end(); ++it)
+                for(const_group_iterator it = m_groups.cbegin() ; it != m_groups.cend(); ++it)
                 {
-                    for(group_iterator ti = it; ti != m_groups.end(); ++ti)
+                    for(const_group_iterator ti = it; ti != m_groups.cend(); ++ti)
                     {
                         if(it->first != ti->first && *it->second == *ti->second)
                         {
@@ -342,8 +342,8 @@ namespace hoa
              */
             inline Group* getGroup(const ulong index)
             {
-                group_iterator it = m_groups.find(index);
-                if(it != m_groups.end())
+                const_group_iterator it = m_groups.find(index);
+                if(it != m_groups.cend())
                 {
                     return it->second;
                 }
@@ -356,7 +356,7 @@ namespace hoa
              */
             inline const_group_iterator getFirstGroup() const noexcept
             {
-                return m_groups.begin();
+                return m_groups.cbegin();
             }
 
             //! Get the first iterator of the Groups map.
@@ -372,16 +372,16 @@ namespace hoa
             /** Get the last const iterator of the Groups map.
              @return        The last const iterator of the groups map.
              */
-            inline const_group_iterator  getLastGroup() const noexcept
+            inline const_group_iterator getLastGroup() const noexcept
             {
-                return m_groups.end();
+                return m_groups.cend();
             }
 
             //! Get the last iterator of the Groups map.
             /** Get the last iterator of the Groups map.
              @return        The last iterator of the groups map.
              */
-            inline group_iterator  getLastGroup() noexcept
+            inline group_iterator getLastGroup() noexcept
             {
                 return m_groups.end();
             }
@@ -713,7 +713,7 @@ namespace hoa
              */
             ~Group() noexcept
             {
-                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                 {
                     m_sources[it->first]->removeGroup(m_index);
                 }
@@ -734,7 +734,7 @@ namespace hoa
             inline void notifyMute() noexcept
             {
                 ulong numberOfMutedSources = 0;
-                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                 {
                     if (it->second->getMute())
                         numberOfMutedSources ++;
@@ -759,7 +759,7 @@ namespace hoa
                 m_centroid_z = 0.;
                 if(m_sources.size())
                 {
-                    for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                    for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                     {
                         m_centroid_x += it->second->getAbscissa();
                         m_centroid_y += it->second->getOrdinate();
@@ -790,7 +790,7 @@ namespace hoa
              */
             void shiftRadius(double radius)
             {
-                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                 {
                     it->second->setRadius(radius + it->second->getRadius());
                 }
@@ -802,7 +802,7 @@ namespace hoa
              */
             inline void shiftAzimuth(double azimuth)
             {
-                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                 {
                     it->second->setAzimuth(azimuth + it->second->getAzimuth());
                 }
@@ -814,7 +814,7 @@ namespace hoa
              */
             inline void shiftElevation(double elevation)
             {
-                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                 {
                     it->second->setElevation(elevation + it->second->getElevation());
                 }
@@ -844,7 +844,7 @@ namespace hoa
                     if(abscissa < 0.)
                     {
                         double refValue = -m_maximum_radius * 2.;
-                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                         {
                             double circleValue = -sqrt(m_maximum_radius * m_maximum_radius - it->second->getOrdinate() * it->second->getOrdinate());
                             if(circleValue - it->second->getAbscissa() > refValue)
@@ -858,7 +858,7 @@ namespace hoa
                     else if(abscissa >= 0.)
                     {
                         double refValue = m_maximum_radius * 2.;
-                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                         {
                             double circleValue = sqrt(m_maximum_radius * m_maximum_radius - it->second->getOrdinate() * it->second->getOrdinate());
                             if(circleValue - it->second->getAbscissa() < refValue)
@@ -866,7 +866,7 @@ namespace hoa
                         }
                     }
                 }
-                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                 {
                     it->second->setAbscissa(abscissa + it->second->getAbscissa());
                 }
@@ -883,7 +883,7 @@ namespace hoa
                     if(ordinate < 0.)
                     {
                         double refValue = -m_maximum_radius * 2.;
-                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                         {
                             double circleValue = -sqrt(m_maximum_radius * m_maximum_radius - it->second->getAbscissa() * it->second->getAbscissa());
                             if(circleValue - it->second->getOrdinate() > refValue)
@@ -897,7 +897,7 @@ namespace hoa
                     else if(ordinate >= 0.)
                     {
                         double refValue = m_maximum_radius * 2.;
-                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                         {
                             double circleValue = sqrt(m_maximum_radius * m_maximum_radius - it->second->getAbscissa() * it->second->getAbscissa());
                             if(circleValue - it->second->getOrdinate() < refValue)
@@ -905,7 +905,7 @@ namespace hoa
                         }
                     }
                 }
-                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                 {
                     it->second->setOrdinate(ordinate + it->second->getOrdinate());
                 }
@@ -922,7 +922,7 @@ namespace hoa
                     if(height < 0.)
                     {
                         double refValue = -m_maximum_radius * 2.;
-                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                         {
                             double circleValue = -sqrt(m_maximum_radius * m_maximum_radius - it->second->getAbscissa() * it->second->getAbscissa());
                             if(circleValue - it->second->getHeight() > refValue)
@@ -936,7 +936,7 @@ namespace hoa
                     else if(height >= 0.)
                     {
                         double refValue = m_maximum_radius * 2.;
-                        for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                        for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                         {
                             double circleValue = sqrt(m_maximum_radius * m_maximum_radius - it->second->getAbscissa() * it->second->getAbscissa());
                             if(circleValue - it->second->getHeight() < refValue)
@@ -944,7 +944,7 @@ namespace hoa
                         }
                     }
                 }
-                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                 {
                     it->second->setHeight(height + it->second->getHeight());
                 }
@@ -1099,7 +1099,7 @@ namespace hoa
              */
             inline void setMute(const bool state)
             {
-                for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                 {
                     it->second->setMute(state);
                 }
@@ -1330,9 +1330,9 @@ namespace hoa
                 if (m_sources.size() == other.m_sources.size())
                 {
                     ulong clones = 0;
-                    for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
+                    for (const_source_iterator it = m_sources.cbegin() ; it != m_sources.cend() ; it ++)
                     {
-                        source_iterator ti = other.m_sources.find(it->first);
+                        const_source_iterator ti = other.m_sources.find(it->first);
                         if (ti != other.m_sources.end())
                             clones ++;
                     }
@@ -1396,7 +1396,7 @@ namespace hoa
          */
 		~Source() noexcept
 		{
-        	for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+        	for (const_group_iterator it = m_groups.cbegin() ; it != m_groups.cend() ; it ++)
 		    {
                 m_groups[it->first]->removeSource(m_index);
             }
@@ -1410,8 +1410,8 @@ namespace hoa
 		 */
         inline bool addGroup(Group* group) noexcept
         {
-            group_iterator it = m_groups.find(group->getIndex());
-            if(it == m_groups.end() && group)
+            const_group_iterator it = m_groups.find(group->getIndex());
+            if(it == m_groups.cend() && group)
             {
                 m_groups[group->getIndex()] = group;
                 return true;
@@ -1433,7 +1433,7 @@ namespace hoa
          */
         inline void notifyCoordinates() noexcept
         {
-            for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+            for (const_group_iterator it = m_groups.cbegin() ; it != m_groups.cend() ; it ++)
 		    {
                 it->second->notifyCoordinates();
             }
@@ -1444,7 +1444,7 @@ namespace hoa
          */
         inline void notifyMute() noexcept
         {
-            for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
+            for (const_group_iterator it = m_groups.cbegin() ; it != m_groups.cend() ; it ++)
 		    {
                 it->second->notifyMute();
             }
