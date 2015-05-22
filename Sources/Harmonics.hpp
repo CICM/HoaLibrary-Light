@@ -172,7 +172,7 @@ namespace hoa
          @param order   The order of the harmonic.
          @return        The index.
          */
-        static inline ulong getIndex(const ulong degree, const long order) noexcept
+        static inline long getIndex(const ulong degree, const long order) noexcept
         {
             return abs(order) *  2 - ulong(order < 0);
         }
@@ -263,7 +263,7 @@ namespace hoa
          @param index  The index of the harmonic.
          @return        The order.
          */
-        static inline ulong getOrder(const ulong index) noexcept
+        static inline long getOrder(const ulong index) noexcept
         {
             return index - (ulong(sqrt(index)) * (ulong(sqrt(index)) + 1));
         }
