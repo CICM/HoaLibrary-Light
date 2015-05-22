@@ -61,6 +61,20 @@ namespace hoa
          @return        The index.
          */
         static ulong getHarmonicIndex(const ulong degree, const long order) noexcept;
+        
+        //! Get the degree of an harmonic with an index.
+        /** The method returns the degree of the harmonic.
+         @param index  The index of the harmonic.
+         @return        The degree.
+         */
+        static ulong getHarmonicDegree(const ulong index) noexcept;
+        
+        //! Get the order of an harmonic with an index.
+        /** The method returns the order of the harmonic.
+         @param index  The index of the harmonic.
+         @return        The degree.
+         */
+        static ulong getHarmonicOrder(const ulong index) noexcept;
 
         //! Get the number of harmonics for an order of decomposition.
         /** The method returns the number of harmonics for a order of decomposition \f$N\f$.
@@ -132,13 +146,33 @@ namespace hoa
             return "Harmonic " + to_string(getDegree()) + " " + to_string(getOrder());
         }
 
+        //! Get the degree of an harmonic with an index.
+        /** The method returns the degree of the harmonic.
+         @param index  The index of the harmonic.
+         @return        The degree.
+         */
+        static inline ulong getDegree(const ulong index) noexcept
+        {
+            return (index + index % 2) * 0.5;
+        }
+        
+        //! Get the order of an harmonic with an index.
+        /** The method returns the order of the harmonic.
+         @param index  The index of the harmonic.
+         @return        The order.
+         */
+        static inline ulong getOrder(const ulong index) noexcept
+        {
+            return (index + index % 2) * 0.5 * (1 - (index % 2) * 2);
+        }
+        
         //! Get the index of an harmonic with its degree and its order.
         /** The method returns the index of the harmonic.
          @param degree  The degree of the harmonic.
          @param order   The order of the harmonic.
          @return        The index.
          */
-        static inline ulong getHarmonicIndex(const ulong degree, const long order) noexcept
+        static inline ulong getIndex(const ulong degree, const long order) noexcept
         {
             return abs(order) *  2 - ulong(order < 0);
         }
@@ -214,13 +248,33 @@ namespace hoa
             return "Harmonic " + to_string(getDegree()) + " " + to_string(getOrder());
         }
 
+        //! Get the degree of an harmonic with an index.
+        /** The method returns the degree of the harmonic.
+         @param index  The index of the harmonic.
+         @return        The degree.
+         */
+        static inline ulong getDegree(const ulong index) noexcept
+        {
+            return ulong(sqrt(index));
+        }
+        
+        //! Get the order of an harmonic with an index.
+        /** The method returns the order of the harmonic.
+         @param index  The index of the harmonic.
+         @return        The order.
+         */
+        static inline ulong getOrder(const ulong index) noexcept
+        {
+            return index - (ulong(sqrt(index)) * (ulong(sqrt(index)) + 1));
+        }
+        
         //! Get the index of an harmonic with its degree and its order.
         /** The method returns the index of the harmonic.
          @param degree  The degree of the harmonic.
          @param order   The order of the harmonic.
          @return        The index.
          */
-        static inline ulong getHarmonicIndex(const ulong degree, const long order) noexcept
+        static inline ulong getIndex(const ulong degree, const long order) noexcept
         {
             return degree * (degree + 1) + order;
         }

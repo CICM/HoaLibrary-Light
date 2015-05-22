@@ -116,7 +116,7 @@ namespace hoa
          */
         inline ulong getHarmonicIndex(const ulong degree, long order) const noexcept
         {
-            return Harmonic<D, T>::getHarmonicIndex(order, order);
+            return Harmonic<D, T>::getIndex(order, order);
         }
 
         //! Retrieve the name of an harmonic.
