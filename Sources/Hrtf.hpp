@@ -23,7 +23,14 @@ namespace hoa
     //! Hrtf class gives the impulse responses to decode in the binaural mode.
     /** Hrtf class gives the impulse responses to decode in the binaural mode in 2d / 3d / simple and double precision.
      */
-    template <Dimension D, typename T> class Hrtf;
+    template <Dimension D, typename T> class Hrtf
+    {
+    public:
+        //! Get the impulse response of the HRTFs
+        /** The impulse response may be 2d/3d with simple /double precision.
+         */
+        virtual const float* getImpulse() noexcept = 0;
+    };
 
     template<> class Hrtf <Hoa2d, float>
     {

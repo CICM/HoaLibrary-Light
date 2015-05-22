@@ -16,6 +16,7 @@ namespace hoa
      */
     template <Dimension D, typename T> class Vector : public Processor<D, T>::Planewaves
     {
+    public:
         //! The vector constructor.
         /**	The vector constructor allocates and initialize the member values to computes vectors. The number of channels must be at least 1.
          @param     numberOfChannels	The number of channels.

@@ -108,7 +108,7 @@ namespace hoa
              if \f$m = 0\f$ then
              \f[k_{l, m} = 1\f]
              else
-             \f[k_{l, m} = \sqrt{\frac{(l - \left|m\right|)!}{(l + \left|m\right|})!}\sqrt{2} \f]
+             \f[k_{l, m} = \sqrt{\frac{(l - \left|m\right|)!}{(l + \left|m\right|)!}}\sqrt{2} \f]
 
              @param     input    The pointer to the input sample.
              @param     outputs  The outputs array.
@@ -238,21 +238,21 @@ namespace hoa
             virtual ulong getNumberOfSources() const noexcept;
 
             //! Set the azimuth of a signal.
-            /**	This method  sets the azimuth \f$\theta_index\f$ of a signal in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
+            /**	This method  sets the azimuth \f$\theta_{index}\f$ of a signal in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
              @param index   The index of the signal.
              @param azimuth	The azimuth.
              */
             virtual void setAzimuth(const ulong index, const T azimuth) noexcept;
 
             //! Set the elevation  of a signal.
-            /**	This method  sets the elevation \f$\varphi_index\f$  of a signal in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
+            /**	This method  sets the elevation \f$\varphi_{index}\f$  of a signal in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
              @param index       The index of the signal.
              @param elevation   The elevation.
              */
             virtual void setElevation(const ulong index, const T elevation) noexcept;
 
             //! Set the radius.
-            /**	This method  sets the radius \f$\rho_index\f$ between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the center of the soundfield, \f$1\f$ is the radius of the ambisonic circle or sphere, beyond this limit the gain decreases and before the sound field is widened.
+            /**	This method  sets the radius \f$\rho_{index}\f$ between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the center of the soundfield, \f$1\f$ is the radius of the ambisonic circle or sphere, beyond this limit the gain decreases and before the sound field is widened.
              @param index   The index of the signal.
              @param radius  The radius.
              */
@@ -266,21 +266,21 @@ namespace hoa
             virtual void setMute(const ulong index, const bool muted) noexcept;
 
             //! Get the azimuth of a signal.
-            /** The method returns the azimuth \f$\theta_index\f$ between \f$0\f$ and \f$2\pi\f$.
+            /** The method returns the azimuth \f$\theta_{index}\f$ between \f$0\f$ and \f$2\pi\f$.
              @param index The index of the signal.
              @return    The azimuth.
              */
             virtual T getAzimuth(const ulong index) const noexcept;
 
             //!	Get the elevation of a signal.
-            /** The method returns the elevation \f$\varphi_index\f$ between \f$-\pi\f$ and \f$\pi\f$.
+            /** The method returns the elevation \f$\varphi_{index}\f$ between \f$-\pi\f$ and \f$\pi\f$.
              @param index The index of the signal.
              @return     The elevation.
              */
             virtual T getElevation(const ulong index) const noexcept;
 
             //! Get the radius of a signal.
-            /** The method returns the radius \f$\rho_index\f$ between \f$0\f$ and \f$+\infty\f$.
+            /** The method returns the radius \f$\rho_{index}\f$ between \f$0\f$ and \f$+\infty\f$.
              @param index The index of the signal.
              @return     The radius.
              */

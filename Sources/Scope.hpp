@@ -31,6 +31,30 @@ namespace hoa
          */
         ~Scope() noexcept = 0;
 
+        //! Set the offset.
+        /**	Set the rotation of the spherical harmonics in radian.
+         */
+        virtual inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) noexcept = 0;
+
+        //! Compute the values of the summation of every harmonic to the representation of the sound field
+        /** Compute the values of the summation of every harmonic to the representation of the sound field
+         */
+        virtual void computeRendering() noexcept = 0;
+
+        //! This method performs the spherical/circular harmonics projection with single precision.
+        /**	You should use this method to compute the projection of the spherical/circular harmonics over an ambisonic sphere. The inputs array contains the spherical/circular harmonics samples and the minimum size must be the number of harmonics.
+
+         @param     inputs   The inputs array.
+         */
+        virtual inline void process(const T* inputs, T* outputs) noexcept override = 0;
+
+        //! This method performs the spherical harmonics projection with single precision.
+        /**	You should use this method to compute the projection of the spherical harmonics over an ambisonic sphere. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+
+         @param     inputs   The inputs array.
+         */
+        virtual inline void process(const T* inputs) noexcept = 0;
+
     };
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -321,7 +345,6 @@ namespace hoa
         {
             return (T)rowIndex * HOA_PI / (T)(m_number_of_rows - 1) - HOA_PI2;
         }
-
 
         //! Set the offset.
         /**	Set the rotation of the spherical harmonics in radian.
