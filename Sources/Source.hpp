@@ -231,7 +231,7 @@ namespace hoa
              */
             void removeGroupWithSources (const ulong index) noexcept
             {
-                const_group_iterator it = m_groups.find(index);
+                group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
                     map<ulong, Source*> sources = it->second->getSources();
@@ -302,13 +302,16 @@ namespace hoa
              */
             inline void cleanEmptyGroup() noexcept
             {
-                const_group_iterator it = m_groups.begin();
+                group_iterator it = m_groups.begin();
                 while (it != m_groups.end())
                 {
                     if (it->second->m_sources.size() < 2)
                     {
+                        group_iterator to = it;
+                        ++to;
                         delete it->second;
-                        it = m_groups.erase(it);
+                        m_groups.erase(it);
+                        it  = to;
                     }
                     else
                     {
@@ -322,15 +325,18 @@ namespace hoa
              */
             inline void cleanDuplicatedGroup() noexcept
             {
-                for(const_group_iterator it = m_groups.begin() ; it != m_groups.end(); ++it)
+                for(group_iterator it = m_groups.begin() ; it != m_groups.end(); ++it)
                 {
-                    const_group_iterator ti = it;
+                    group_iterator ti = it;
                     while(ti != m_groups.end())
                     {
                         if(it->first != ti->first && *it->second == *ti->second)
                         {
+                            group_iterator to = ti;
+                            ++to;
                             delete ti->second;
-                            ti = m_groups.erase(ti);
+                            m_groups.erase(ti);
+                            ti = to;
                         }
                         else
                         {
