@@ -969,6 +969,7 @@ namespace hoa
                     source->addGroup(this);
                     m_sources[source->getIndex()] = source;
                     computeCentroid();
+                    notifyMute();
                     return true;
                 }
                 return false;
