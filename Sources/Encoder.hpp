@@ -101,7 +101,7 @@ namespace hoa
              \f[e^{+im\theta} = sin{(\left|m\right|\theta)}\f]
              The elevation part \f$P_{l, \left|m\right|}(x)\f$ can be expressed with recursives formulas :
              \f[P_{l+1,l+1}(x) = -(2l+1)\sqrt{(1-x^2)}P_{(l,l)}(x) \f]
-             \f[P_{l,l+1}(x) = x(2l+1)P_{(l,l)}(x) \f]
+             \f[P_{l+1,l}(x) = x(2l+1)P_{(l,l)}(x) \f]
              \f[P_{l+1,m}(x) = \frac{x(2l+1)P_{(l,m)}(x) - (l+m)P_{(l-1,m)}(x)}{l-m+1} \f]
              and with \f[P_{0, 0}(x) = 1\f]
              The normalization part \f$k_{l, m}\f$ is equivalent to :\n
