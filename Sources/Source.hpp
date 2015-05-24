@@ -220,6 +220,16 @@ namespace hoa
                 const_group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
+                    map<ulong, Source*>& sources = it->second->getSources();
+                    for (source_iterator ti = sources.begin() ; ti != sources.end() ; ++ti)
+                    {
+                        Source* src = ti->second;
+                        if(src)
+                        {
+                            src->removeGroup(index);
+                        }
+                    }
+                    
                     delete it->second;
                     m_groups.erase(index);
                 }
@@ -235,7 +245,7 @@ namespace hoa
                 if(it != m_groups.end())
                 {
                     map<ulong, Source*> sources = it->second->getSources();
-                    for (const_source_iterator ti = sources.begin() ; ti != sources.end() ; ++ti)
+                    for (source_iterator ti = sources.begin() ; ti != sources.end() ; ++ti)
                     {
                         delete ti->second;
                         m_sources.erase(ti->first);
@@ -651,10 +661,7 @@ namespace hoa
          */
         inline bool isGroupsEmpty() const noexcept
         {
-            if (m_groups.size())
-                return false;
-            else
-                return true;
+            return m_groups.empty();
         }
 
         //! Get the Groups map.
@@ -706,16 +713,16 @@ namespace hoa
             /**	The group constructor allocates and initialize the member values for a source group.
              @param     other		It's a contructor by copy an 'other' group
              */
-            Group(const Group& other)
+            Group(const Group& other) : m_manager(other.m_manager)
             {
-                m_manager = other.getManager();
                 m_maximum_radius = m_manager->getMaximumRadius();
                 m_index = other.getIndex();
                 const double* color = other.getColor();
                 setColor(color[0], color[1], color[2], color[3]);
                 m_description = other.getDescription();
-                computeCentroid();
                 m_mute = other.getMute();
+                m_sources = other.m_sources;
+                computeCentroid();
             }
 
             //! The source group destructor.
@@ -969,14 +976,17 @@ namespace hoa
              */
             inline bool addSource(Source* source) noexcept
             {
-                const_source_iterator it = m_sources.find(source->getIndex());
-                if(it == m_sources.end() && source)
+                if(source)
                 {
-                    source->addGroup(this);
-                    m_sources[source->getIndex()] = source;
-                    computeCentroid();
-                    notifyMute();
-                    return true;
+                    const_source_iterator it = m_sources.find(source->getIndex());
+                    if(it == m_sources.end())
+                    {
+                        source->addGroup(this);
+                        m_sources[source->getIndex()] = source;
+                        computeCentroid();
+                        notifyMute();
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -1321,10 +1331,7 @@ namespace hoa
              */
             inline bool isSourcesEmpty() const noexcept
             {
-                if (m_sources.size())
-                    return false;
-                else
-                    return true;
+                return m_sources.empty();
             }
 
             //! Get the Sources map.
@@ -1400,6 +1407,7 @@ namespace hoa
 			setColor(color[0], color[1], color[2], color[3]);
 			m_description = other.getDescription();
 			m_mute = other.getMute();
+            m_groups = other.m_groups;
       	}
 
       	//! The source destructor.
