@@ -244,15 +244,20 @@ namespace hoa
                 group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
-                    map<ulong, Source*> sources = it->second->getSources();
-                    for (source_iterator ti = sources.begin() ; ti != sources.end() ; ++ti)
+                    map<ulong, Source*>& sources = it->second->getSources();
+                    source_iterator si = sources.begin();
+                    while (si != sources.end())
                     {
-                        delete ti->second;
-                        m_sources.erase(ti->first);
+                        source_iterator to = si;
+                        ++to;
+                        delete si->second;
+                        sources.erase(si->first);
+                        m_sources.erase(si->first);
+                        si = to;
                     }
                     
+                    m_groups.erase(it->first);
                     delete it->second;
-                    m_groups.erase(it);
                 }
             }
 
