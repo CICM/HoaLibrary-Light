@@ -156,6 +156,8 @@ namespace hoa
                 {
                     delete it->second;
                     m_sources.erase(index);
+                    cleanDuplicatedGroup();
+                    cleanEmptyGroup();
                 }
             }
 
@@ -202,13 +204,23 @@ namespace hoa
              */
             inline Group* newGroup (const ulong index) noexcept
             {
-                const_group_iterator it = m_groups.find(index);
-                if(it == m_groups.end())
+                return new Group(index);
+            }
+
+            //! Add a Group.
+            /** Add a Group.
+             @param     group       The group to add.
+             */
+            inline void addGroup (Group* group) noexcept
+            {
+                if (group && m_groups.find(group->m_index) == m_groups.end())
                 {
-                    m_groups[index] = new Group(this, index);
-                    return m_groups[index];
+                    m_groups[group->m_index] = group;
+                    group->m_maximum_radius = m_maximum_radius;
+                    group->setManager(this);
+                    cleanDuplicatedGroup();
+                    cleanEmptyGroup();
                 }
-                return it->second;
             }
 
             //! Remove a Group.
@@ -315,7 +327,7 @@ namespace hoa
             //! Removes the groups which have less than 2 sources
             /** Removes the groups which have less than 2 sources
              */
-            inline void cleanEmptyGroup() noexcept
+            inline bool cleanEmptyGroup() noexcept
             {
                 group_iterator it = m_groups.begin();
                 while (it != m_groups.end())
@@ -352,6 +364,7 @@ namespace hoa
                             delete ti->second;
                             m_groups.erase(ti);
                             ti = to;
+                            it->second->computeCentroid();
                         }
                         else
                         {
@@ -722,7 +735,7 @@ namespace hoa
             double                  m_maximum_radius;
             bool                    m_mute;
             bool                    m_subMute;
-            const Manager*          m_manager;
+            Manager*                m_manager;
 
             //! The group constructor.
             /**	The group constructor allocates and initialize the member values for a source group.
@@ -998,6 +1011,20 @@ namespace hoa
             }
 
         public:
+            //! The group constructor.
+            /**	The group constructor allocates and initialize the member values for a source group.
+             @param     index       The index of the group
+             */
+            Group(const ulong index)
+            {
+                m_maximum_radius = 1.;
+                m_manager = NULL;
+                m_index = index;
+                setColor(0.2, 0.2, 0.2, 1.);
+                m_description = "";
+                computeCentroid();
+                m_mute = false;
+            }
 
             //! Add a new Source.
             /** Add a new Source (and add the group to the source).
@@ -1028,11 +1055,6 @@ namespace hoa
             inline void removeSource(const ulong index) noexcept
             {
                 m_sources.erase(index);
-                /*if (!m_manager->cleanEmptyGroup(m_index))
-                {
-                    if ()
-                }
-                m_manager->cleanDuplicatedGroup(m_index);*/
                 computeCentroid();
             }
 
@@ -1257,6 +1279,12 @@ namespace hoa
             inline const Manager* getManager() const noexcept
             {
                 return m_manager;
+            }
+
+
+            inline void setManager(const Manager* manager) noexcept
+            {
+                m_manager = manager;
             }
 
             //! Get the maximum radius of the Group.
