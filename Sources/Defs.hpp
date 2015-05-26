@@ -10,9 +10,13 @@
 #ifdef __APPLE__
 #include <Accelerate/Accelerate.h>
 #elif _WINDOWS
+#ifdef HOA_USE_CBLAS
 #include <gsl_cblas.h>
+#endif
 #else
+#ifdef HOA_USE_CBLAS
 #include <cblas.h>
+#endif
 #endif
 
 #include <string>
