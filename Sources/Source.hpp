@@ -229,7 +229,7 @@ namespace hoa
                             src->removeGroup(index);
                         }
                     }
-                    
+
                     delete it->second;
                     m_groups.erase(index);
                 }
@@ -244,15 +244,20 @@ namespace hoa
                 group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
-                    map<ulong, Source*> sources = it->second->getSources();
-                    for (source_iterator ti = sources.begin() ; ti != sources.end() ; ++ti)
+                    map<ulong, Source*>& sources = it->second->getSources();
+                    source_iterator si = sources.begin();
+                    while (si != sources.end())
                     {
-                        delete ti->second;
-                        m_sources.erase(ti->first);
+                        source_iterator to = si;
+                        ++to;
+                        delete si->second;
+                        sources.erase(si->first);
+                        m_sources.erase(si->first);
+                        si = to;
                     }
-                    
+
+                    m_groups.erase(it->first);
                     delete it->second;
-                    m_groups.erase(it);
                 }
             }
 
@@ -408,6 +413,18 @@ namespace hoa
             }
         };
 
+        //! Set the position of the source with polar coordinates.
+		/** Set the position of the source with polar coordinates.
+			@param     radius			The radius of the source.
+			@param     azimuth			The azimuth of the source.
+			@see setCoordinatesCartesian
+         */
+        inline void setCoordinatesPolar(const double radius, const double azimuth)
+		{
+			setRadius(radius);
+		    setAzimuth(azimuth);
+       	}
+
 		//! Set the position of the source with polar coordinates.
 		/** Set the position of the source with polar coordinates.
 			@param     radius			The radius of the source.
@@ -415,7 +432,7 @@ namespace hoa
             @param     elevation        The elevation of the source.
 			@see setCoordinatesCartesian
          */
-		inline void setCoordinatesPolar(const double radius, const double azimuth, const double elevation = 0.)
+		inline void setCoordinatesPolar(const double radius, const double azimuth, const double elevation)
 		{
 			setRadius(radius);
 		    setAzimuth(azimuth);
@@ -463,13 +480,26 @@ namespace hoa
 		    notifyCoordinates();
 		}
 
+		//! Set the position of the source with cartesian coordinates.
+		/** Set the position of the source with cartesian coordinates.
+            @param     abscissa		The abscissa of the source.
+            @param     ordinate		The ordinate of the source.
+         */
+		inline void setCoordinatesCartesian(const double abscissa, const double ordinate)
+		{
+		    const double height = getHeight();
+			setRadius(Math<double>::radius(abscissa, ordinate, height));
+        	setAzimuth(Math<double>::azimuth(abscissa, ordinate, height));
+        	setElevation(Math<double>::elevation(abscissa, ordinate, height));
+        }
+
         //! Set the position of the source with cartesian coordinates.
 		/** Set the position of the source with cartesian coordinates.
             @param     abscissa		The abscissa of the source.
             @param     ordinate		The ordinate of the source.
             @param     height		The height of the source.
          */
-		inline void setCoordinatesCartesian(const double abscissa, const double ordinate, const double height = 0.)
+		inline void setCoordinatesCartesian(const double abscissa, const double ordinate, const double height)
 		{
 			setRadius(Math<double>::radius(abscissa, ordinate, height));
         	setAzimuth(Math<double>::azimuth(abscissa, ordinate, height));
@@ -998,7 +1028,24 @@ namespace hoa
             inline void removeSource(const ulong index) noexcept
             {
                 m_sources.erase(index);
+                /*if (!m_manager->cleanEmptyGroup(m_index))
+                {
+                    if ()
+                }
+                m_manager->cleanDuplicatedGroup(m_index);*/
                 computeCentroid();
+            }
+
+            //! Set the position of the group with polar coordinates.
+            /** Set the position of the group with polar coordinates.
+             @param     radius			The radius of the group.
+             @param     azimuth			The azimuth of the group.
+             @see setRelativeCoordinatesPolar, setCoordinatesCartesian
+             */
+            inline void setCoordinatesPolar(const double radius, const double azimuth)
+            {
+                const double elevation = getElevation();
+                setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth, elevation), Math<double>::ordinate(radius, azimuth, elevation));
             }
 
             //! Set the position of the group with polar coordinates.
@@ -1008,7 +1055,7 @@ namespace hoa
              @param     elevation			The elevation of the group.
              @see setRelativeCoordinatesPolar, setCoordinatesCartesian
              */
-            inline void setCoordinatesPolar(const double radius, const double azimuth, const double elevation = 0.)
+            inline void setCoordinatesPolar(const double radius, const double azimuth, const double elevation)
             {
                 setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth, elevation), Math<double>::ordinate(radius, azimuth, elevation));
             }
@@ -1045,9 +1092,22 @@ namespace hoa
             /** Set the position of the group with cartesian coordinates.
              @param     abscissa		The abscissa of the group.
              @param     ordinate		The ordinate of the group.
+             */
+            inline void setCoordinatesCartesian(double abscissa, double ordinate)
+            {
+                abscissa = abscissa - getAbscissa();
+                ordinate = ordinate - getOrdinate();
+                shiftCartesian(abscissa, ordinate);
+                computeCentroid();
+            }
+
+            //! Set the position of the group with cartesian coordinates.
+            /** Set the position of the group with cartesian coordinates.
+             @param     abscissa		The abscissa of the group.
+             @param     ordinate		The ordinate of the group.
              @param     height		The height of the group.
              */
-            inline void setCoordinatesCartesian(double abscissa, double ordinate, double height = 0.)
+            inline void setCoordinatesCartesian(double abscissa, double ordinate, double height)
             {
                 abscissa = abscissa - getAbscissa();
                 ordinate = ordinate - getOrdinate();
