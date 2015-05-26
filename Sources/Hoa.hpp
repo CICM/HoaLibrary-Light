@@ -20,6 +20,7 @@
 #include "Scope.hpp"
 #include "Wider.hpp"
 #include "Source.hpp"
+#include "Exchanger.hpp"
 #include "Tools.hpp"
 
 #endif
