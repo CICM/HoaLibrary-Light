@@ -11,8 +11,8 @@
 
 namespace hoa
 {
-    //! Source class is used to simulate punctual sources.
-    /** Source class is used to simulate punctual sources and control its.
+    //! The source class is used to simulate punctual sources.
+    /** The source class is used to simulate punctual sources and control its.
      */
     class Source
     {
@@ -24,8 +24,8 @@ namespace hoa
         typedef  map<ulong, Group*>::const_iterator  const_group_iterator;
         typedef  map<ulong, Group*>::iterator group_iterator;
 
-        //! Manager class is used to control punctual sources and group of sources.
-        /** Manager class is used to control punctual sources and group of sources.
+        //! The manager class is used to control punctual sources and group of sources.
+        /** The manager class is used to control punctual sources and group of sources.
          */
         class Manager
         {
@@ -126,8 +126,8 @@ namespace hoa
                 return m_zoom;
             }
 
-            //! Add a new Source.
-            /** Add a new Source.
+            //! Add a new Source to the manager.
+            /** Add a new Source to the map container of the manager.
              @param     index       The index of the new source.
              @param     radius      The radius of the new source.
              @param     azimuth     The azimuth of the new source.
@@ -145,8 +145,8 @@ namespace hoa
                 return it->second;
             }
 
-            //! Remove a Source.
-            /** Remove a Source.
+            //! Remove a Source from the manager.
+            /** Remove a Source from the map container of the manager.
              @param     index   The index of the source.
              */
             inline void removeSource (const ulong index) noexcept
@@ -161,8 +161,8 @@ namespace hoa
                 }
             }
 
-            //! Get the Sources map size.
-            /** Get the Sources map size.
+            //! Get the Sources map size of the manager.
+            /** Get the Sources map size of the manager.
              @return     The sources map size.
              */
             inline ulong getSourcesSize() const noexcept
@@ -170,8 +170,8 @@ namespace hoa
                 return m_sources.size();
             }
 
-            //! Check if the Sources map is empty.
-            /** Check if the Sources map is empty.
+            //! Check if the Sources map of the manager is empty.
+            /** Check if the Sources map of the manager is empty.
              @return    The state of the source map content.
              */
             inline bool isSourcesEmpty() const noexcept
@@ -179,8 +179,8 @@ namespace hoa
                 return m_sources.empty();
             }
 
-            //! Get the Groups map size.
-            /** Get the Groups map size.
+            //! Get the Groups map size of the manager.
+            /** Get the Groups map size of the manager.
              @return     The groups map size.
              */
             inline ulong getGroupsSize() const noexcept
@@ -197,18 +197,8 @@ namespace hoa
                 return m_groups.empty();
             }
 
-            //! Add a new Group.
-            /** Add a new Group.
-             @param     index       The index of the new group.
-             @return	            The created group.
-             */
-            inline Group* newGroup (const ulong index) noexcept
-            {
-                return new Group(index);
-            }
-
-            //! Add a Group.
-            /** Add a Group.
+            //! Add a Group to the manager.
+            /** Add a Group to the map container of the manager.
              @param     group       The group to add.
              */
             inline void addGroup (Group* group) noexcept
@@ -223,8 +213,8 @@ namespace hoa
                 }
             }
 
-            //! Remove a Group.
-            /** Remove a Group.
+            //! Remove a Group from the manager.
+            /** Remove a Group from the map container of the manager.
              @param     index   The index of the group.
              */
             inline void removeGroup (const ulong index) noexcept
@@ -247,8 +237,8 @@ namespace hoa
                 }
             }
 
-            //! Remove a Group with its sources.
-            /** Remove a Group with its sources.
+            //! Remove a Group from the manager with its sources.
+            /** Remove a Group from the map container of the manager with its sources.
              @param     index   The index of the group.
              */
             void removeGroupWithSources (const ulong index) noexcept
@@ -270,6 +260,7 @@ namespace hoa
 
                     m_groups.erase(it->first);
                     delete it->second;
+                    cleanEmptyGroup();
                 }
             }
 
@@ -288,8 +279,8 @@ namespace hoa
                 return NULL;
             }
 
-            //! Get the first const iterator of the Sources map.
-            /** Get the first const iterator of the Sources map.
+            //! Get the first const iterator of the Sources map of the manager.
+            /** Get the first const iterator of the Sources map of the manager.
              @return        The first const iterator of the sources map.
              */
             inline const_source_iterator getFirstSource() const noexcept
@@ -297,8 +288,8 @@ namespace hoa
                 return m_sources.begin();
             }
 
-            //! Get the first iterator of the Sources map.
-            /** Get the first iterator of the Sources map.
+            //! Get the first iterator of the Sources map of the manager.
+            /** Get the first iterator of the Sources map of the manager.
              @return        The const iterator of the sources map.
              */
             inline source_iterator getFirstSource() noexcept
@@ -306,8 +297,8 @@ namespace hoa
                 return m_sources.begin();
             }
 
-            //! Get the last const iterator of the Sources map.
-            /** Get the last const iterator of the Sources map.
+            //! Get the last const iterator of the Sources map of the manager.
+            /** Get the last const iterator of the Sources map of the manager.
              @return        The last const iterator of the sources map.
              */
             inline const_source_iterator getLastSource() const noexcept
@@ -315,8 +306,8 @@ namespace hoa
                 return m_sources.end();
             }
 
-            //! Get the last iterator of the Sources map.
-            /** Get the last iterator of the Sources map.
+            //! Get the last iterator of the Sources map of the manager.
+            /** Get the last iterator of the Sources map of the manager.
              @return        The last iterator of the sources map.
              */
             inline source_iterator getLastSource() noexcept
@@ -324,8 +315,8 @@ namespace hoa
                 return m_sources.end();
             }
 
-            //! Removes the groups which have less than 2 sources
-            /** Removes the groups which have less than 2 sources
+            //! Remove the groups which have less than 2 sources from the manager.
+            /** Remove the groups which have less than 2 sources from the map container of the manager.
              */
             inline bool cleanEmptyGroup() noexcept
             {
@@ -347,8 +338,8 @@ namespace hoa
                 }
             }
 
-            //! Removes the groups which have exactly the same sources.
-            /** Removes the groups which have exactly the same sources.
+            //! Remove the group which have exactly the same sources from the manager.
+            /** Remove the group which have exactly the same sources from the map container of the manager.
              */
             inline void cleanDuplicatedGroup() noexcept
             {
@@ -389,8 +380,8 @@ namespace hoa
                 return NULL;
             }
 
-            //! Get the first const iterator of the Groups map.
-            /** Get the first const iterator of the Groups map.
+            //! Get the first const iterator of the Groups map of the manager.
+            /** Get the first const iterator of the Groups map of the manager.
              @return        The first const iterator of the groups map.
              */
             inline const_group_iterator getFirstGroup() const noexcept
@@ -398,8 +389,8 @@ namespace hoa
                 return m_groups.begin();
             }
 
-            //! Get the first iterator of the Groups map.
-            /** Get the first iterator of the Groups map.
+            //! Get the first iterator of the Groups map of the manager.
+            /** Get the first iterator of the Groups map of the manager.
              @return        The first iterator of the groups map.
              */
             inline group_iterator getFirstGroup() noexcept
@@ -407,8 +398,8 @@ namespace hoa
                 return m_groups.begin();
             }
 
-            //! Get the last const iterator of the Groups map.
-            /** Get the last const iterator of the Groups map.
+            //! Get the last const iterator of the Groups map of the manager.
+            /** Get the last const iterator of the Groups map of the manager.
              @return        The last const iterator of the groups map.
              */
             inline const_group_iterator getLastGroup() const noexcept
@@ -416,8 +407,8 @@ namespace hoa
                 return m_groups.end();
             }
 
-            //! Get the last iterator of the Groups map.
-            /** Get the last iterator of the Groups map.
+            //! Get the last iterator of the Groups map of the manager.
+            /** Get the last iterator of the Groups map of the manager.
              @return        The last iterator of the groups map.
              */
             inline group_iterator getLastGroup() noexcept
@@ -689,8 +680,8 @@ namespace hoa
 			return m_mute;
 		}
 
-        //! Get the size of the Groups map.
-        /** Get the size of the Groups map.
+        //! Get the size of the Groups map of the source.
+        /** Get the size of the Groups map of the source.
          @return    The group map size
          */
         inline ulong getGroupsSize() const noexcept
@@ -698,8 +689,8 @@ namespace hoa
             return m_groups.size();
         }
 
-        //! Check if the Groups map is empty.
-        /** Check if the Groups map is empty.
+        //! Check if the Groups map of the source is empty.
+        /** Check if the Groups map of the source is empty.
          @return    The state of the groups map content.
          */
         inline bool isGroupsEmpty() const noexcept
@@ -707,8 +698,8 @@ namespace hoa
             return m_groups.empty();
         }
 
-        //! Get the Groups map.
-        /** Get the Groups map.
+        //! Get the Groups map of the source.
+        /** Get the Groups map of the source.
          @return    A reference of the groups map.
          */
         inline map<ulong, Group*>& getGroups() noexcept
@@ -716,8 +707,8 @@ namespace hoa
             return m_groups;
         }
 
-        //! Group class is used to control punctual sources.
-        /** Group class is used to control punctual sources.
+        //! The group class is used to control punctual sources.
+        /** The group class is used to control punctual sources.
          */
         class Group
         {
@@ -768,8 +759,8 @@ namespace hoa
                 computeCentroid();
             }
 
-            //! The source group destructor.
-            /**	The source group destructor free the memory.
+            //! The group destructor.
+            /**	The group destructor free the memory.
              */
             ~Group() noexcept
             {
@@ -778,6 +769,14 @@ namespace hoa
                     m_sources[it->first]->removeGroup(m_index);
                 }
                 m_sources.clear();
+            }
+
+            //! Set the manager of the Group.
+            /** Set the manager of the Group.
+             */
+            inline void setManager(const Manager* manager) noexcept
+            {
+                m_manager = manager;
             }
 
             //! Compute the group position for each moving of its sources.
@@ -1026,8 +1025,8 @@ namespace hoa
                 m_mute = false;
             }
 
-            //! Add a new Source.
-            /** Add a new Source (and add the group to the source).
+            //! Add a new Source to the group.
+            /** Add a new Source to the map container of the group (and add the group to the source).
              @param     source  The source to add.
              @return            The state of the addition of the source.
              */
@@ -1048,8 +1047,8 @@ namespace hoa
                 return false;
             }
 
-            //! Remove a Source.
-            /** Remove a Source.
+            //! Remove a Source from the group.
+            /** Remove a Source from the map container of the group.
              @param     index   The index of the source.
              */
             inline void removeSource(const ulong index) noexcept
@@ -1228,7 +1227,6 @@ namespace hoa
              @param     radius			The relative radius value.
              @see setCoordinatesPolar, setRelativeRadius
              */
-
             inline void setRelativeRadius(const double radius)
             {
                 double aRadiusOffset = max(radius, (double)0.) - getRadius();
@@ -1279,12 +1277,6 @@ namespace hoa
             inline const Manager* getManager() const noexcept
             {
                 return m_manager;
-            }
-
-
-            inline void setManager(const Manager* manager) noexcept
-            {
-                m_manager = manager;
             }
 
             //! Get the maximum radius of the Group.
@@ -1404,8 +1396,8 @@ namespace hoa
                 return m_subMute;
             }
 
-            //! Get the size of the Sources map.
-            /** Get the size of the Sources map.
+            //! Get the size of the Sources map of the group.
+            /** Get the size of the Sources map of the group.
              @return    The sources map size.
              */
             inline ulong getSourcesSize() const noexcept
@@ -1413,8 +1405,8 @@ namespace hoa
                 return m_sources.size();
             }
 
-            //! Check if the Sources map is empty.
-            /** Check if the Sources map is empty.
+            //! Check if the Sources map of the group is empty.
+            /** Check if the Sources map of the group is empty.
              @return    The state of the sources map content.
              */
             inline bool isSourcesEmpty() const noexcept
@@ -1422,8 +1414,8 @@ namespace hoa
                 return m_sources.empty();
             }
 
-            //! Get the Sources map.
-            /** Get the Sources map.
+            //! Get the Sources map of the group.
+            /** Get the Sources map of the group.
              @return    A reference of the sources map.
              */
             inline map<ulong, Source*>& getSources() noexcept
@@ -1510,8 +1502,8 @@ namespace hoa
         	m_groups.clear();
         }
 
-		//! Add a new group.
-		/** Add a new group.
+		//! Add a new group to the source.
+		/** Add a new group to the map container of the source.
 		 @param     group   The group to add.
 		 @return            The state of the addition of the group.
 		 */
@@ -1526,8 +1518,8 @@ namespace hoa
             return false;
         }
 
-        //! Remove a group.
-        /** Remove a group.
+        //! Remove a group from the source.
+        /** Remove a group from the map container of the source.
          @param     index   The index of the group.
          */
         inline void removeGroup(const ulong index) noexcept

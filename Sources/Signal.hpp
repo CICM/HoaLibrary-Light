@@ -29,12 +29,12 @@ namespace hoa
 
         //! Multiply a matrix by a matrix.
         /** Multiply a matrix by a matrix.
-        @param nbOfInRow   The matrix number of in row.
-        @param nbOfOutCol  The matrix number of out column.
-        @param nbOfInCol   The matrix number of in column.
-        @param in1         The first matrix.
-        @param in2         The second matrix.
-        @param out         The final matrix.
+        @param innrow     The matrix number of in row.
+        @param outcolumn  The matrix number of out column.
+        @param incolumn   The matrix number of in column.
+        @param in1        The first matrix.
+        @param in2        The second matrix.
+        @param out        The final matrix.
          */
         virtual inline void matrix_matrix_mul(const ulong innrow, const ulong outcolumn, const ulong incolumn, const T* in1, const T* in2, T* out) = 0;
 
@@ -56,9 +56,9 @@ namespace hoa
 
         //! Multiply each element of a vector by a factor.
         /** Multiply each element of a vector by a factor.
-        @param   vectorSize   The size of the vector.
-        @param   factor       The factor of the scale.
-        @param   vector       The vector.
+        @param   vectorSize  The size of the vector.
+        @param   value       The factor of the scale.
+        @param   vector      The vector.
          */
         virtual inline void vector_scale(const ulong vectorsize, const T value, T* vector) = 0;
 
@@ -72,34 +72,36 @@ namespace hoa
         //! Copy a vector into an other.
         /** Copy a vector into an other.
         @param   vectorSize   The size of the vector.
-        @param   srcVector    The source vector.
-        @param   destVector   The destination vector.
+        @param   source       The source vector.
+        @param   dest         The destination vector.
          */
         virtual inline void vector_copy(const ulong vectorsize, const T* source, T* dest) = 0;
-        
+
         //! Copy a vector into an other.
         /** Copy a vector into an other.
          @param   vectorSize   The size of the vector.
-         @param   srcVector    The source vector.
-         @param   destVector   The destination vector.
+         @param   source       The source vector.
+         @param   incs         Number of columns of the source vector.
+         @param   dest         Number of columns of the source vector.
+         @param   incd         Number of columns of the destination vector.
          */
-        static inline void vector_copy(const ulong vectorsize, const double* source, const ulong incs, double* dest, const ulong incd) = 0;
+        virtual inline void vector_copy(const ulong vectorsize, const double* source, const ulong incs, double* dest, const ulong incd) = 0;
 
         //! Add a vector to an other.
         /** Add a vector to an other value by value.
         @param   vectorSize   The size of the vector.
-        @param   vectortoAdd  The vector to add.
-        @param   destVector   The destination vector.
+        @param   source       The vector to add.
+        @param   dest         The destination vector.
          */
         virtual inline void vector_add(const ulong vectorsize, const T* source, T* dest) = 0;
 
         //! Add a vector to an other.
         /** Add a vector to an other with a fixed step.
-        @param   vectorSize      The size of the vector.
-        @param   vectorToAdd     The vector to add.
-        @param   vectorToAddStep The step of the vector to add to select the value to add.
-        @param   destVector      The destination vector.
-        @param   destVectorStep  The step of the destination vector to select the value to add.
+        @param   vectorSize  The size of the vector.
+        @param   source      The vector to add.
+        @param   incs        Number of columns of the source vector.
+        @param   dest        Number of columns of the source vector.
+        @param   incd        Number of columns of the destination vector.
          */
         virtual inline void vector_add(const ulong vectorsize, const T* source, const ulong incs, T* dest, const ulong incd) = 0;
 
@@ -139,12 +141,12 @@ namespace hoa
 
         //! Multiply a matrix by a matrix.
         /** Multiply a matrix by a matrix.
-        @param nbOfInRow   The matrix number of in row.
-        @param nbOfOutCol  The matrix number of out column.
-        @param nbOfInCol   The matrix number of in column.
-        @param in1         The first matrix.
-        @param in2         The second matrix.
-        @param out         The final matrix.
+        @param innrow     The matrix number of in row.
+        @param outcolumn  The matrix number of out column.
+        @param incolumn   The matrix number of in column.
+        @param in1        The first matrix.
+        @param in2        The second matrix.
+        @param out        The final matrix.
          */
         static inline void matrix_matrix_mul(const ulong innrow, const ulong outcolumn, const ulong incolumn, const float* in1, const float* in2, float* out)
         {
@@ -221,9 +223,9 @@ namespace hoa
 
         //! Multiply each element of a vector by a factor.
         /** Multiply each element of a vector by a factor.
-        @param   vectorSize   The size of the vector.
-        @param   factor       The factor of the scale.
-        @param   vector       The vector.
+        @param   vectorSize  The size of the vector.
+        @param   value       The factor of the scale.
+        @param   vector      The vector.
          */
         static inline void vector_scale(const ulong vectorsize, const float value, float* vector)
         {
@@ -254,8 +256,8 @@ namespace hoa
         //! Copy a vector into an other.
         /** Copy a vector into an other.
         @param   vectorSize   The size of the vector.
-        @param   srcVector    The source vector.
-        @param   destVector   The destination vector.
+        @param   source       The source vector.
+        @param   dest         The destination vector.
          */
         static inline void vector_copy(const ulong vectorsize, const float* source, float* dest)
         {
@@ -265,12 +267,14 @@ namespace hoa
             memcpy(dest, source, vectorsize * sizeof(float));
 #endif
         }
-        
+
         //! Copy a vector into an other.
         /** Copy a vector into an other.
          @param   vectorSize   The size of the vector.
-         @param   srcVector    The source vector.
-         @param   destVector   The destination vector.
+         @param   source       The source vector.
+         @param   incs         Number of columns of the source vector.
+         @param   dest         Number of columns of the source vector.
+         @param   incd         Number of columns of the destination vector.
          */
         static inline void vector_copy(const ulong vectorsize, const float* source, const ulong incs, float* dest, const ulong incd)
         {
@@ -292,8 +296,8 @@ namespace hoa
         //! Add a vector to an other.
         /** Add a vector to an other value by value.
         @param   vectorSize   The size of the vector.
-        @param   vectortoAdd  The vector to add.
-        @param   destVector   The destination vector.
+        @param   source       The vector to add.
+        @param   dest         The destination vector.
          */
         static inline void vector_add(const ulong vectorsize, const float* source, float* dest)
         {
@@ -309,11 +313,11 @@ namespace hoa
 
         //! Add a vector to an other.
         /** Add a vector to an other with a fixed step.
-        @param   vectorSize      The size of the vector.
-        @param   vectorToAdd     The vector to add.
-        @param   vectorToAddStep The step of the vector to add to select the value to add.
-        @param   destVector      The destination vector.
-        @param   destVectorStep  The step of the destination vector to select the value to add.
+        @param   vectorSize  The size of the vector.
+        @param   source      The vector to add.
+        @param   incs        Number of columns of the source vector.
+        @param   dest        Number of columns of the source vector.
+        @param   incd        Number of columns of the destination vector.
          */
         static inline void vector_add(const ulong vectorsize, const float* source, const ulong incs, float* dest, const ulong incd)
         {
@@ -330,7 +334,7 @@ namespace hoa
                 id += incd;
             }
 #endif
-            
+
         }
 
         //! Compute the dot product of two vectors.
@@ -352,7 +356,7 @@ namespace hoa
             }
             return sum;
 #endif
-            
+
         }
     };
 
@@ -382,12 +386,12 @@ namespace hoa
 
         //! Multiply a matrix by a matrix.
         /** Multiply a matrix by a matrix.
-        @param nbOfInRow   The matrix number of in row.
-        @param nbOfOutCol  The matrix number of out column.
-        @param nbOfInCol   The matrix number of in column.
-        @param in1         The first matrix.
-        @param in2         The second matrix.
-        @param out         The final matrix.
+        @param innrow     The matrix number of in row.
+        @param outcolumn  The matrix number of out column.
+        @param incolumn   The matrix number of in column.
+        @param in1        The first matrix.
+        @param in2        The second matrix.
+        @param out        The final matrix.
          */
         static inline void matrix_matrix_mul(const ulong innrow, const ulong outcolumn, const ulong incolumn, const double* in1, const double* in2, double* out)
         {
@@ -464,9 +468,9 @@ namespace hoa
 
         //! Multiply each element of a vector by a factor.
         /** Multiply each element of a vector by a factor.
-        @param   vectorSize   The size of the vector.
-        @param   factor       The factor of the scale.
-        @param   vector       The vector.
+        @param   vectorSize  The size of the vector.
+        @param   value       The factor of the scale.
+        @param   vector      The vector.
          */
         static inline void vector_scale(const ulong vectorsize, const double value, double* vector)
         {
@@ -497,8 +501,8 @@ namespace hoa
         //! Copy a vector into an other.
         /** Copy a vector into an other.
         @param   vectorSize   The size of the vector.
-        @param   srcVector    The source vector.
-        @param   destVector   The destination vector.
+        @param   source       The source vector.
+        @param   dest         The destination vector.
          */
         static inline void vector_copy(const ulong vectorsize, const double* source, double* dest)
         {
@@ -508,12 +512,14 @@ namespace hoa
             memcpy(dest, source, vectorsize * sizeof(double));
 #endif
         }
-        
+
         //! Copy a vector into an other.
         /** Copy a vector into an other.
          @param   vectorSize   The size of the vector.
-         @param   srcVector    The source vector.
-         @param   destVector   The destination vector.
+         @param   source       The source vector.
+         @param   incs         Number of columns of the source vector.
+         @param   dest         Number of columns of the source vector.
+         @param   incd         Number of columns of the destination vector.
          */
         static inline void vector_copy(const ulong vectorsize, const double* source, const ulong incs, double* dest, const ulong incd)
         {
@@ -535,8 +541,8 @@ namespace hoa
         //! Add a vector to an other.
         /** Add a vector to an other value by value.
         @param   vectorSize   The size of the vector.
-        @param   vectortoAdd  The vector to add.
-        @param   destVector   The destination vector.
+        @param   source       The vector to add.
+        @param   dest         The destination vector.
          */
         static inline void vector_add(const ulong vectorsize, const double* source, double* dest)
         {
@@ -552,11 +558,11 @@ namespace hoa
 
         //! Add a vector to an other.
         /** Add a vector to an other with a fixed step.
-        @param   vectorSize      The size of the vector.
-        @param   vectorToAdd     The vector to add.
-        @param   vectorToAddStep The step of the vector to add to select the value to add.
-        @param   destVector      The destination vector.
-        @param   destVectorStep  The step of the destination vector to select the value to add.
+        @param   vectorSize  The size of the vector.
+        @param   source      The vector to add.
+        @param   incs        Number of columns of the source vector.
+        @param   dest        Number of columns of the source vector.
+        @param   incd        Number of columns of the destination vector.
          */
         static inline void vector_add(const ulong vectorsize, const double* source, const ulong incs, double* dest, const ulong incd)
         {
