@@ -1028,6 +1028,11 @@ namespace hoa
             inline void removeSource(const ulong index) noexcept
             {
                 m_sources.erase(index);
+                /*if (!m_manager->cleanEmptyGroup(m_index))
+                {
+                    if ()
+                }
+                m_manager->cleanDuplicatedGroup(m_index);*/
                 computeCentroid();
             }
 
@@ -1092,8 +1097,7 @@ namespace hoa
             {
                 abscissa = abscissa - getAbscissa();
                 ordinate = ordinate - getOrdinate();
-                const double height = getHeight();
-                shiftCartesian(abscissa, ordinate, height);
+                shiftCartesian(abscissa, ordinate);
                 computeCentroid();
             }
 
