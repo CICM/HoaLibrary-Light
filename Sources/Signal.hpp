@@ -161,9 +161,11 @@ namespace hoa
                 {
                     *out = 0.f;
                     const float* a2 = a;
+                    const float* b2 = b;
                     for(ulong k = 0; k < incolumn; k++)
                     {
-                        *out += *(a2++) * *(b + k * outcolumn);
+                        *out += *(a2++) * *(b2);
+                        b2+= outcolumn;
                     }
                     ++out;
                     ++b;
