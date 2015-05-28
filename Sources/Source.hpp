@@ -53,23 +53,21 @@ namespace hoa
              *
              * @param     other		It's a contructor by copy an 'other' manager
              */
-            Manager(const Manager& other) :
-                m_maximum_radius(other.getMaximumRadius())
+            Manager(const Manager& other) : m_maximum_radius(other.m_maximum_radius), m_zoom(other.m_zoom)
             {
-                m_zoom = other.getZoom();
-
                 for(const_source_iterator it = other.m_sources.begin() ; it != other.m_sources.end() ; it ++)
                 {
                     m_sources[it->first] = new Source(*it->second);
                 }
                 for(const_group_iterator it = other.m_groups.begin() ; it != other.m_groups.end() ; it ++)
                 {
-                    m_groups[it->first] = new Group(*it->second);
+                    Group* grp = new Group(*it->second);
+                    m_groups[it->first] = grp;
 
                     map<ulong, Source*>& tmp = it->second->getSources();
                     for (source_iterator ti = tmp.begin() ; ti != tmp.end() ; ti ++)
                     {
-                        m_groups[it->first]->addSource(m_sources[ti->first]);
+                        grp->addSource(m_sources[ti->first]);
                     }
                 }
             }
@@ -747,6 +745,7 @@ namespace hoa
         friend class Manager;
 
         private:
+            const Manager*          m_manager;
             ulong                   m_index;
             map<ulong, Source*>     m_sources;
             string                  m_description;
@@ -757,7 +756,6 @@ namespace hoa
             double                  m_maximum_radius;
             bool                    m_mute;
             bool                    m_subMute;
-            const Manager*          m_manager;
             
             //! The group constructor.
             /**	The group constructor allocates and initialize the member values for a source group.
@@ -778,16 +776,19 @@ namespace hoa
             /**	The group constructor allocates and initialize the member values for a source group.
              @param     other		It's a contructor by copy an 'other' group
              */
-            Group(const Group& other) : m_manager(other.m_manager)
+            Group(const Group& other) :
+            m_manager(other.m_manager),
+            m_index(other.m_index),
+            m_description(other.m_description),
+            m_color{other.m_color[0], other.m_color[1], other.m_color[2], other.m_color[3]},
+            m_centroid_x(other.m_centroid_x),
+            m_centroid_y(other.m_centroid_y),
+            m_centroid_z(other.m_centroid_z),
+            m_maximum_radius(other.m_maximum_radius),
+            m_mute(other.m_mute),
+            m_subMute(other.m_subMute)
             {
-                m_maximum_radius = m_manager->getMaximumRadius();
-                m_index = other.getIndex();
-                const double* color = other.getColor();
-                setColor(color[0], color[1], color[2], color[3]);
-                m_description = other.getDescription();
-                m_mute = other.getMute();
-                m_sources = other.m_sources;
-                computeCentroid();
+                ;
             }
             
             //! Compute the group position for each moving of its sources.
@@ -1485,18 +1486,17 @@ namespace hoa
 		/**	The source constructor allocates and initialize the member values for a source.
             @param     othe    It's a constructor by copy an 'other' source.
 		 */
-      	Source(const Source& other)
+        Source(const Source& other) :
+        m_index(other.m_index),
+        m_radius(other.m_radius),
+        m_azimuth(other.m_azimuth),
+        m_elevation(other.m_elevation),
+        m_color{other.m_color[0], other.m_color[1], other.m_color[2], other.m_color[3]},
+        m_description(other.m_description),
+        m_maximum_radius(other.m_maximum_radius),
+        m_mute(other.m_mute)
 		{
-            m_maximum_radius = other.getIndex();
-            m_index = other.getIndex();
-			m_radius = other.getRadius();
-			m_azimuth = other.getAzimuth();
-			m_elevation = other.getElevation();
-			const double* color = other.getColor();
-			setColor(color[0], color[1], color[2], color[3]);
-			m_description = other.getDescription();
-			m_mute = other.getMute();
-            m_groups = other.m_groups;
+            ;
       	}
 
       	//! The source destructor.
