@@ -396,11 +396,12 @@ namespace hoa
         {
             if(order == 0)
             {
-                return sqrt(Math<T>::factorial(T(degree) - T(abs(order))) / Math<T>::factorial(T(order) + T(abs(order)))) * sqrt(1.);
+                return sqrt(Math<T>::factorial(T(degree) - T(abs(order))) / Math<T>::factorial(T(order) + T(abs(order)))) * sqrt(T(1.) / T(4. * HOA_PI));
             }
             else
             {
-                return sqrt(Math<T>::factorial(T(degree) - T(abs(order))) / Math<T>::factorial(T(order) + T(abs(order)))) * sqrt(2.);
+                return sqrt(Math<T>::factorial(long(degree) - abs(order)) / Math<T>::factorial(long(degree) + abs(order))) *
+                sqrt(T(2.) / T(4. * HOA_PI));
             }
         }
     };
