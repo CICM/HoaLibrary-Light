@@ -533,7 +533,7 @@ namespace hoa
         void processBlock() noexcept
         {
 
-            Signal<T>::matrix_matrix_mul(HOA_NBIN_I * 2, m_vector_size, HOA_NBIN_H, Hrtf<Hoa2d, T>::getImpulse(), m_inputs, m_results);
+            Signal<T>::matrix_matrix_mul(HOA_NBIN_I * 2, m_vector_size, 9, Hrtf<Hoa2d, T>::getImpulse(), m_inputs, m_results);
 
             for(ulong i = 0; i < m_vector_size; i++)
             {

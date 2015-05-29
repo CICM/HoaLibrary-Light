@@ -855,16 +855,7 @@ namespace hoa
             m_normalization = new T[Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics()];
             for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
             {
-                ulong l = Processor<Hoa3d, T>::Harmonics::getHarmonicDegree(i);
-                long m = Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(i);
-                if(m == 0)
-                {
-                    m_normalization[i] = 1.;
-                }
-                else
-                {
-                    m_normalization[i] = sqrt(Math<T>::factorial(l - abs(m)) / Math<T>::factorial(l + abs(m))) * sqrt(2.);
-                }
+                m_normalization[i] = Processor<Hoa3d, T>::Harmonics::getHarmonicSemiNormalization(i);
             }
             setMute(false);
             setAzimuth(0.);
@@ -1166,16 +1157,7 @@ namespace hoa
             m_normalization = new T[Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics()];
             for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
             {
-                ulong l = Processor<Hoa3d, T>::Harmonics::getHarmonicDegree(i);
-                long m = abs(Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(i));
-                if(m == 0)
-                {
-                    m_normalization[i] = 1.;
-                }
-                else
-                {
-                    m_normalization[i] = sqrt(Math<T>::factorial(l - abs(m)) / Math<T>::factorial(l + abs(m))) * sqrt(2.);
-                }
+                m_normalization[i] = Processor<Hoa3d, T>::Harmonics::getHarmonicSemiNormalization(i);
             }
             m_distance = new T[Processor<Hoa3d, T>::Harmonics::getDecompositionOrder()];
             setMute(false);

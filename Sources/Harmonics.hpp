@@ -53,6 +53,18 @@ namespace hoa
          @return     The name.
          */
         string getName() const noexcept;
+        
+        //! Get the normalization of the harmonic.
+        /** The method returns the normalization of the harmonics.
+         @return        The normalization of the harmonics.
+         */
+        T getNormalization() const noexcept;
+        
+        //! Get the semi-normalization of the harmonic.
+        /** The method returns the semi-normalization of the harmonics.
+         @return        The semi-normalization of the harmonics.
+         */
+        T getSemiNormalization() const noexcept;
 
         //! Get the index of an harmonic with its degree and its order.
         /** The method returns the index of the harmonic.
@@ -82,6 +94,22 @@ namespace hoa
          @return        The number of harmonics.
          */
         static ulong getNumberOfHarmonics(const ulong order) noexcept;
+        
+        //! Get the normalization of an harmonic.
+        /** The method returns the normalization of an harmonics.
+         @param degree  The degree of the harmonic.
+         @param order   The order of the harmonic.
+         @return        The normalization of the harmonics.
+         */
+        static T getNormalization(const ulong degree, const long order) noexcept;
+        
+        //! Get the semi-normalization of an harmonic.
+        /** The method returns the semi-normalization of an harmonics.
+         @param degree  The degree of the harmonic.
+         @param order   The order of the harmonic.
+         @return        The semi-normalization of the harmonics.
+         */
+        static T getSemiNormalization(const ulong degree, const long order) noexcept;
     };
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -145,6 +173,24 @@ namespace hoa
         {
             return "Harmonic " + to_string(getDegree()) + " " + to_string(getOrder());
         }
+        
+        //! Get the normalization of the harmonic.
+        /** The method returns the normalization of the harmonics.
+         @return        The normalization of the harmonics.
+         */
+        inline T getNormalization() const noexcept
+        {
+            return 1.;
+        }
+        
+        //! Get the semi-normalization of the harmonic.
+        /** The method returns the semi-normalization of the harmonics.
+         @return        The semi-normalization of the harmonics.
+         */
+        inline T getSemiNormalization() const noexcept
+        {
+            return 1.;
+        }
 
         //! Get the degree of an harmonic with an index.
         /** The method returns the degree of the harmonic.
@@ -185,6 +231,28 @@ namespace hoa
         static inline ulong getNumberOfHarmonics(const ulong order) noexcept
         {
             return order * 2 + 1;
+        }
+        
+        //! Get the normalization of an harmonic.
+        /** The method returns the normalization of an harmonics.
+         @param degree  The degree of the harmonic.
+         @param order   The order of the harmonic.
+         @return        The normalization of the harmonics.
+         */
+        static inline T getNormalization(const ulong degree, const long order) noexcept
+        {
+            return 1.;
+        }
+        
+        //! Get the semi-normalization of an harmonic.
+        /** The method returns the semi-normalization of an harmonics.
+         @param degree  The degree of the harmonic.
+         @param order   The order of the harmonic.
+         @return        The semi-normalization of the harmonics.
+         */
+        static inline T getSemiNormalization(const ulong degree, const long order) noexcept
+        {
+            return 1.;
         }
     };
 
@@ -247,6 +315,24 @@ namespace hoa
         {
             return "Harmonic " + to_string(getDegree()) + " " + to_string(getOrder());
         }
+        
+        //! Get the normalization of the harmonic.
+        /** The method returns the normalization of the harmonics.
+         @return        The normalization of the harmonics.
+         */
+        inline T getNormalization() const noexcept
+        {
+            return getNormalization(getDegree(), getOrder());
+        }
+        
+        //! Get the semi-normalization of the harmonic.
+        /** The method returns the semi-normalization of the harmonics.
+         @return        The semi-normalization of the harmonics.
+         */
+        inline T getSemiNormalization() const noexcept
+        {
+            return getSemiNormalization(getDegree(), getOrder());
+        }
 
         //! Get the degree of an harmonic with an index.
         /** The method returns the degree of the harmonic.
@@ -287,6 +373,35 @@ namespace hoa
         static inline ulong getNumberOfHarmonics(const ulong order) noexcept
         {
             return (order + 1) * (order + 1);
+        }
+        
+        //! Get the normalization of an harmonic.
+        /** The method returns the normalization of an harmonics.
+         @param degree  The degree of the harmonic.
+         @param order   The order of the harmonic.
+         @return        The normalization of the harmonics.
+         */
+        static inline T getNormalization(const ulong degree, const long order) noexcept
+        {
+            return getSemiNormalization(degree, order) * sqrt(2. * double(degree) + 1.);
+        }
+        
+        //! Get the semi-normalization of an harmonic.
+        /** The method returns the semi-normalization of an harmonics.
+         @param degree  The degree of the harmonic.
+         @param order   The order of the harmonic.
+         @return        The semi-normalization of the harmonics.
+         */
+        static inline T getSemiNormalization(const ulong degree, const long order) noexcept
+        {
+            if(order == 0)
+            {
+                return sqrt(Math<T>::factorial(T(degree) - T(abs(order))) / Math<T>::factorial(T(order) + T(abs(order)))) * sqrt(1.);
+            }
+            else
+            {
+                return sqrt(Math<T>::factorial(T(degree) - T(abs(order))) / Math<T>::factorial(T(order) + T(abs(order)))) * sqrt(2.);
+            }
         }
     };
 
