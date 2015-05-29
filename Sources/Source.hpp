@@ -30,10 +30,10 @@ namespace hoa
         class Manager
         {
         private:
-            const double         m_maximum_radius;
-            map<ulong, Source*>  m_sources;
-            map<ulong, Group*>   m_groups;
-            double               m_zoom;
+            const double        m_maximum_radius;
+            map<ulong, Source*> m_sources;
+            map<ulong, Group*>  m_groups;
+            double              m_zoom;
 
         public:
 
@@ -42,10 +42,9 @@ namespace hoa
              *
              * @param     maximumRadius		The maximum radius the sources or groups in the source manager could have
              */
-            Manager(const double maximumRadius = 1.) :
-                m_maximum_radius(maximumRadius)
+            Manager(const double maximumRadius = 1.) : m_maximum_radius(maximumRadius), m_zoom(1)
             {
-                m_zoom = 1;
+                ;
             }
 
             //! The manager constructor by copy.
@@ -149,8 +148,9 @@ namespace hoa
                 source_iterator it = m_sources.find(index);
                 if(it == m_sources.end())
                 {
-                    m_sources[index] = new Source(m_maximum_radius, index, radius, azimuth, elevation);
-                    return m_sources[index];
+                    Source* src = new Source(m_maximum_radius, index, radius, azimuth, elevation);
+                    m_sources[index] = src;
+                    return src;
                 }
                 return it->second;
             }
@@ -384,7 +384,6 @@ namespace hoa
                             delete ti->second;
                             m_groups.erase(ti);
                             ti = to;
-                            //it->second->computeCentroid();
                         }
                         else
                         {

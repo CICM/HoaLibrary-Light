@@ -143,7 +143,7 @@ namespace hoa
         /** Multiply a matrix by a matrix.
         @param m          The number of in row in the first matrix and the number of column in the second matrix.
         @param n          The matrix number of out column.
-        @param l   The matrix number of in column.
+        @param l          The matrix number of in column.
         @param in1        The first matrix.
         @param in2        The second matrix.
         @param out        The final matrix.
@@ -155,21 +155,21 @@ namespace hoa
 #else
             
             const float* a = in1;
-            for(ulong c = 0; c < innrow; c++)
+            for(ulong c = 0; c < m; c++)
             {
                 const float* b = in2;
-                for(ulong d = 0; d < outcolumn; d++)
+                for(ulong d = 0; d < n; d++)
                 {
                     *out = 0.f;
                     const float* a2 = a;
-                    for(ulong k = 0; k < incolumn; k++)
+                    for(ulong k = 0; k < l; k++)
                     {
-                        *out += *(a2++) * *(b + k * outcolumn);
+                        *out += *(a2++) * *(b + k * n);
                     }
                     ++out;
                     ++b;
                 }
-                a += incolumn;
+                a += l;
             }
             /*
             for(ulong i = 0; i < n; i++)
