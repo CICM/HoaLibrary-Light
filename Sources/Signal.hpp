@@ -141,18 +141,19 @@ namespace hoa
 
         //! Multiply a matrix by a matrix.
         /** Multiply a matrix by a matrix.
-        @param innrow     The matrix number of in row.
-        @param outcolumn  The matrix number of out column.
-        @param incolumn   The matrix number of in column.
+        @param m          The number of in row in the first matrix and the number of column in the second matrix.
+        @param n          The matrix number of out column.
+        @param l   The matrix number of in column.
         @param in1        The first matrix.
         @param in2        The second matrix.
         @param out        The final matrix.
          */
-        static inline void matrix_matrix_mul(const ulong innrow, const ulong outcolumn, const ulong incolumn, const float* in1, const float* in2, float* out)
+        static inline void matrix_matrix_mul(const ulong m, const ulong n, const ulong l, const float* in1, float* in2, float* out)
         {
 #ifdef HOA_USE_CBLAS
-            cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, (const int)innrow, (const int)outcolumn, (const int)incolumn, 1., in1, incolumn, in2, outcolumn, 0., out,  outcolumn);
+            cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, (const int)m, (const int)n, (const int)l, 1., in1, l, in2, n, 0., out,  n);
 #else
+            
             const float* a = in1;
             for(ulong c = 0; c < innrow; c++)
             {
@@ -170,6 +171,60 @@ namespace hoa
                 }
                 a += incolumn;
             }
+            /*
+            for(ulong i = 0; i < n; i++)
+            {
+                for(ulong j = i + 1; j < l; j++)
+                {
+                    std::swap(in2[i*l+j], in2[j*n+i]);
+                }
+            }
+            const float* a = in1;
+            for(ulong i = 0; i < n; i++)
+            {
+                const float* b = in2;
+                for(ulong j = 0; j < l; j++)
+                {
+                    __m128 c = _mm_setzero_ps();
+                    //const float* a2 = a;
+                    for(ulong k = 0; k < m; k += 4)
+                    {
+                        _mm_add_ps(_mm_load_ps(&a[k]), _mm_load_ps(b));
+                        b+=4;
+                    }
+                    c = _mm_hadd_ps(c, c);
+                    c = _mm_hadd_ps(c, c);
+                    _mm_store_ss(out, c);
+                    out++;
+                }
+                a += m;
+            }
+            
+            const float* a = in1;
+            for(ulong c = 0; c < m; c++)
+            {
+                const float* b = in2;
+                for(ulong d = 0; d < n; d++)
+                {
+                    *out = 0.f;
+                    const float* a2 = a;
+                    //const float* b2 = b;
+                    for(ulong k = 0; k < l; k++)
+                    {
+                        *out += *(a2++) * *(b++);
+                    }
+                    ++out;
+                    //++b;
+                }
+                a += l;
+            }
+            for(ulong i = 0; i < n; i++)
+            {
+                for(ulong j = i + 1; j < l; j++)
+                {
+                    std::swap(in2[i*l+j], in2[j*n+i]);
+                }
+            }*/
 #endif
         }
 

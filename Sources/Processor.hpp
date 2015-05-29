@@ -130,6 +130,26 @@ namespace hoa
         {
             return m_harmonics[index].getName();
         }
+        
+        //! Get the normalization of an harmonic.
+        /** The method returns the normalization of an harmonics.
+         @param     index	The index of an harmonic.
+         @return     The normalization of an harmonics.
+         */
+        inline T getHarmonicNormalization(const ulong index) const noexcept
+        {
+            return m_harmonics[index].getNormalization();
+        }
+        
+        //! Get the semi-normalization of an harmonic.
+        /** The method returns the semi-normalization of an harmonics.
+         @param     index	The index of an harmonic.
+         @return    The semi-normalization of the harmonics.
+         */
+        inline T getHarmonicSemiNormalization(const ulong index) const noexcept
+        {
+            return m_harmonics[index].getSemiNormalization();
+        }
 
         //! This method performs the processing.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array and the outputs array depends of the template and the processing.
