@@ -286,22 +286,15 @@ namespace hoa
          */
         void numberToSID(T const* inputs, T* outputs) noexcept
         {
-            int todo;
             T temp = inputs[1];
             *(outputs++) = inputs[0]; // 0 -> 0
             *(outputs++) = inputs[2]; // 2 -> 1
             *(outputs++) = temp;      // 1 -> 2
-            if(Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() > 1ul)
+            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                temp       = inputs[3];
-                *(outputs++) = inputs[4]; // 4 -> 3
-                *(outputs++) = temp;      // 3 -> 4
-                if(Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() > 2ul)
-                {
-                    temp       = inputs[5];
-                    *(outputs++) = inputs[6]; // 6 -> 5
-                    *(outputs++) = temp;      // 5 -> 6
-                }
+                temp         = inputs[(i-1)*2+1];
+                *(outputs++) = inputs[(i-1)*2+2];
+                *(outputs++) = temp;
             }
         }
     };
@@ -646,6 +639,7 @@ namespace hoa
                     outputs[15] = inputs[15] * sqrt(35. / 8.);
                 }
             }
+            normalizeFromN3D(outputs, outputs);
         }
         
         //! This method normalizes the channels from SN3D to MaxN.
@@ -677,6 +671,7 @@ namespace hoa
                     outputs[15] = inputs[15] / sqrt(35. / 8.);
                 }
             }
+            normalizeToN3D(outputs, outputs);
         }
         
         //! This method normalizes the channels from N3D to SN3D.
