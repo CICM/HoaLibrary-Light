@@ -224,12 +224,12 @@ namespace hoa
             *(outputs++) = temp;      // X -> 2
             if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
             {
-                T temp       = inputs[3];
+                temp       = inputs[3];
                 *(outputs++) = inputs[4]; // V -> 3
                 *(outputs++) = temp;      // U -> 4
                 if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
                 {
-                    T temp       = inputs[5];
+                    temp       = inputs[5];
                     *(outputs++) = inputs[6]; // Q -> 5
                     *(outputs++) = temp;      // U -> 6
                 }
@@ -244,20 +244,260 @@ namespace hoa
         void numberFromSID(T const* inputs, T* outputs) noexcept
         {
             T temp = inputs[1];
-            *(outputs++) = inputs[0]; // W -> 0
+            *(outputs++) = inputs[0]; // 0 -> 0
+            *(outputs++) = inputs[2]; // 2 -> 1
+            *(outputs++) = temp;      // 1 -> 2
+            for(ulong i = 2; i < Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            {
+                temp         = inputs[(i-1)*2+1];
+                *(outputs++) = inputs[(i-1)*2+2];
+                *(outputs++) = temp;
+            }
+        }
+        
+        //! This method number the channels from ACN to Furse-Malham.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs   The inputs array.
+         @param     outputs  The outputs array.
+         */
+        void numberToFurseMalham(T const* inputs, T* outputs) noexcept
+        {
+            T temp = inputs[1];
+            *(outputs++) = inputs[0]; // 0 -> W
+            *(outputs++) = inputs[2]; // 2 -> X
+            *(outputs++) = temp;      // 1 -> Y
+            if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
+            {
+                temp       = inputs[3];
+                *(outputs++) = inputs[4]; // 4 -> U
+                *(outputs++) = temp;      // 3 -> V
+                if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
+                {
+                    temp       = inputs[5];
+                    *(outputs++) = inputs[6]; // 6 -> U
+                    *(outputs++) = temp;      // 5 -> Q
+                }
+            }
+        }
+        
+        //! This method number the channels from ACN to SID.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs   The inputs array.
+         @param     outputs  The outputs array.
+         */
+        void numberToSID(T const* inputs, T* outputs) noexcept
+        {
+            T temp = inputs[1];
+            *(outputs++) = inputs[0]; // 0 -> 0
             *(outputs++) = inputs[2]; // 2 -> 1
             *(outputs++) = temp;      // 1 -> 2
             if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
             {
-                T temp       = inputs[3];
+                temp       = inputs[3];
                 *(outputs++) = inputs[4]; // 4 -> 3
                 *(outputs++) = temp;      // 3 -> 4
                 if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
                 {
-                    T temp       = inputs[5];
+                    temp       = inputs[5];
                     *(outputs++) = inputs[6]; // 6 -> 5
                     *(outputs++) = temp;      // 5 -> 6
                 }
+            }
+        }
+    };
+    
+    template <typename T> class Exchanger<Hoa3d, T> : public Processor<Hoa2d, T>::Harmonics
+    {
+    public:
+        //! The numbering conversion.
+        /** The enum defines the numbering conversion.
+         */
+        enum Numbering
+        {
+            ACN             = 0, /*!<  The numbering is considered as ACN. */
+            fromFurseMalham = 1, /*!<  From Furse-Malham (B-format) to ACN. */
+            fromSID         = 2, /*!<  From SID to ACN. */
+            toFurseMalham   = 3, /*!<  To Furse-Malham (B-format) from ACN. */
+            toSID           = 4  /*!<  To SID from ACN. */
+        };
+        
+        //! The numbering conversion.
+        /** The enum defines the numbering conversion.
+         */
+        enum Normalization
+        {
+            SN3D            = 0, /*!<  The normalization is considered as semi-normalization. */
+            fromN3D         = 0, /*!<  From N3D to SN2D. */
+            fromMaxN        = 1, /*!<  From MaxN (B-format) to SN3D. */
+            toN3D           = 2, /*!<  To N3D from SN3D. */
+            toMaxN          = 3  /*!<  To MaxN (B-format) from SN3D. */
+        };
+        
+    private:
+        Numbering       m_numbering;
+        Normalization   m_normalization;
+    public:
+        
+        //! The exchanger constructor.
+        /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
+         @param     order	The order.
+         */
+        inline Exchanger(const ulong order) noexcept : Processor<Hoa2d, T>::Harmonics(order),
+        m_numbering(ACN),
+        m_normalization(SN3D)
+        {
+            ;
+        }
+        
+        //! The exchanger destructor.
+        /**	The exchanger destructor free the memory.
+         */
+        inline ~Exchanger() noexcept
+        {
+            ;
+        }
+        
+        //! Sets the numbering and the normalization conversion from B-Format.
+        /**	This method the numbering and the normalization conversion from B-Format. Similar to from Furse-Malham numebring and from MaxN normalization.
+         */
+        inline void setFromBFormat() noexcept
+        {
+            m_numbering = fromFurseMalham;
+            m_normalization = fromMaxN;
+        }
+        
+        //! Sets the numbering and the normalization conversion to B-Format.
+        /**	This method the numbering and the normalization conversion from B-Format. Similar to to Furse-Malham numebring and to MaxN normalization.
+         */
+        inline void setToBFormat() noexcept
+        {
+            m_numbering = toFurseMalham;
+            m_normalization = toMaxN;
+        }
+        
+        //! Sets the numbering conversion.
+        /**	This method sets the numbering conversion.
+         @param mode The numbering convertion.
+         */
+        inline void setNumbering(const Numbering mode) noexcept
+        {
+            m_numbering = mode;
+        }
+        
+        //! Gets the numbering conversion.
+        /**	This method gets the numbering conversion.
+         @return The numbering convertion.
+         */
+        inline Numbering getNumbering() const noexcept
+        {
+            return m_numbering;
+        }
+        
+        //! Sets the normalization conversion.
+        /**	This method sets the normalization conversion.
+         @param mode The normalization convertion.
+         */
+        inline void setNormalization(const Normalization mode) noexcept
+        {
+            m_normalization = mode;
+        }
+        
+        //! Gets the normalization conversion.
+        /**	This method gets the normalization conversion.
+         @return The normalization convertion.
+         */
+        inline Normalization getNormalization() const noexcept
+        {
+            return m_normalization;
+        }
+        
+        //! This method performs the numbering and the normalization.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs   The inputs array.
+         @param     outputs  The outputs array.
+         */
+        void process(T const* inputs, T* outputs) noexcept
+        {
+            switch(m_normalization)
+            {
+                    
+            }
+            switch(m_numbering)
+            {
+                case fromFurseMalham:
+                    numberFromFurseMalham(inputs, outputs);
+                    break;
+                case fromSID:
+                    numberFromSID(inputs, outputs);
+                    break;
+                case toFurseMalham:
+                    numberToFurseMalham(inputs, outputs);
+                    break;
+                case toSID:
+                    numberToSID(inputs, outputs);
+                    break;
+            }
+        }
+        
+        //! This method number the channels from Furse-Malham to ACN.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs   The inputs array.
+         @param     outputs  The outputs array.
+         */
+        void numberFromFurseMalham(T const* inputs, T* outputs) noexcept
+        {
+            T temp = inputs[1];
+            outputs[0] = inputs[0]; // W(0) -> 0
+            outputs[1] = inputs[2]; // Y(2) -> 1
+            outputs[2] = inputs[3]; // Z(3) -> 2
+            outputs[3] = temp;      // X(1) -> 3
+            if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
+            {
+                temp         = inputs[4];
+                T temp2      = inputs[5];
+                T temp3      = inputs[7];
+                outputs[4] = inputs[8]; // V(8) -> 4
+                outputs[5] = inputs[6]; // T(6) -> 5
+                outputs[6] = temp;      // R(4) -> 6
+                outputs[7] = temp2;     // S(5) -> 7
+                outputs[8] = temp3;     // U(7) -> 8
+                if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
+                {
+                    temp      = inputs[9];
+                    temp2     = inputs[10];
+                    temp3     = inputs[12];
+                    T temp4   = inputs[14];
+                    outputs[9]  = inputs[15];// Q(15) -> 9
+                    outputs[10] = inputs[13];// O(13) -> 10
+                    outputs[11] = inputs[11];// M(11) -> 11
+                    outputs[12] = temp;      // K(9)  -> 12
+                    outputs[13] = temp2;     // L(10) -> 13
+                    outputs[14] = temp3;     // N(12) -> 14
+                    outputs[15] = temp4;     // P(14) -> 15
+                }
+            }
+        }
+        
+        //! This method number the channels from SID to ACN.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @param     inputs   The inputs array.
+         @param     outputs  The outputs array.
+         */
+        void numberFromSID(T const* inputs, T* outputs) noexcept
+        {
+            T temp = inputs[1];
+            *(outputs++) = inputs[0]; // 0 -> 0
+            *(outputs++) = inputs[2]; // 2 -> 1
+            *(outputs++) = inputs[3]; // 3 -> 2
+            *(outputs++) = temp;      // 1 -> 3
+            for(ulong i = 2; i < Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            {
+                for(ulong j = 0; j < j*2+1; j++)
+                {
+                }
+                temp         = inputs[(i-1)*2+1];
+                *(outputs++) = inputs[(i-1)*2+2];
+                *(outputs++) = temp;
             }
         }
         
