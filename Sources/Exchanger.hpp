@@ -337,6 +337,7 @@ namespace hoa
         
         Numbering       m_numbering;
         Normalization   m_normalization;
+        T*              m_harmonics;
     public:
         
         //! The exchanger constructor.
@@ -347,7 +348,7 @@ namespace hoa
         m_numbering(ACN),
         m_normalization(SN3D)
         {
-            ;
+            m_harmonics = new T[order*2+1];
         }
         
         //! The exchanger destructor.
@@ -355,7 +356,7 @@ namespace hoa
          */
         inline ~Exchanger() noexcept
         {
-            ;
+            delete [] m_harmonics;
         }
         
         //! Sets the numbering and the normalization conversion from B-Format.
@@ -440,39 +441,41 @@ namespace hoa
             if(m_numbering == fromFurseMalham)
             {
                 numberFromFurseMalham(inputs, outputs);
+                inputs = outputs;
             }
             else if(m_numbering == fromSID)
             {
                 numberFromSID(inputs, outputs);
-            }
-            else
-            {
-                Signal<T>::vector_copy(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(), inputs, outputs);
+                inputs = outputs;
             }
             switch(m_normalization)
             {
                 case fromMaxN:
-                    normalizeFromMaxN(outputs, outputs);
+                    normalizeFromMaxN(inputs, outputs);
+                    inputs = outputs;
                     break;
                 case fromN3D:
-                    normalizeFromN3D(outputs, outputs);
+                    normalizeFromN3D(inputs, outputs);
+                    inputs = outputs;
                     break;
                 case toMaxN:
-                    normalizeToMaxN(outputs, outputs);
+                    normalizeToMaxN(inputs, outputs);
+                    inputs = outputs;
                     break;
                 case toN3D:
-                    normalizeToN3D(outputs, outputs);
+                    normalizeToN3D(inputs, outputs);
+                    inputs = outputs;
                     break;
                 default:
                     break;
             }
             if(m_numbering == toFurseMalham)
             {
-                numberToFurseMalham(outputs, outputs);
+                numberToFurseMalham(inputs, outputs);
             }
             else if(m_numbering == toSID)
             {
-                numberToSID(outputs, outputs);
+                numberToSID(inputs, outputs);
             }
         }
         
@@ -567,22 +570,27 @@ namespace hoa
          */
         void numberFromSID(T const* inputs, T* outputs) noexcept
         {
-            int todo;
-            T temp = inputs[1];
-            *(outputs++) = inputs[0]; // 0 -> 0
-            *(outputs++) = inputs[2]; // 2 -> 1
-            *(outputs++) = inputs[3]; // 3 -> 2
-            *(outputs++) = temp;      // 1 -> 3
-            for(ulong i = 2; i < Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            *(outputs++) = *(inputs++); // 0 -> 0
+            for(ulong i = 1ul; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                for(ulong j = 0; j < j*2+1; j++)
+                Signal<T>::vector_clear(i * 2ul + 1ul, m_harmonics);
+                ulong j = 1ul;
+                while(j < i * 2ul)
                 {
+                    m_harmonics[j += 2ul] = *(inputs++);
                 }
-                temp         = inputs[(i-1)*2+1];
-                *(outputs++) = inputs[(i-1)*2+2];
-                *(outputs++) = temp;
+                j = i * 2ul;
+                while(j)
+                {
+                    m_harmonics[j -= 2ul] = *(inputs++);
+                }
+                m_harmonics[0] = *(inputs++);
+                Signal<T>::vector_copy(i * 2ul + 1ul, m_harmonics, outputs);
+                outputs += i * 2ul + 1ul;
             }
         }
+        
+        int zaza = true;
         
         //! This method number the channels from ACN to SID.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -591,23 +599,57 @@ namespace hoa
          */
         void numberToSID(T const* inputs, T* outputs) noexcept
         {
-            int todo;
-            T temp = inputs[1];
-            *(outputs++) = inputs[0]; // 0 -> W
-            *(outputs++) = inputs[2]; // 2 -> 1
-            *(outputs++) = temp;      // 1 -> 2
-            if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
+            if(zaza)
             {
-                T temp       = inputs[3];
-                *(outputs++) = inputs[4]; // 4 -> 3
-                *(outputs++) = temp;      // 3 -> 4
-                if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
+                for(int i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
-                    T temp       = inputs[5];
-                    *(outputs++) = inputs[6]; // 6 -> 5
-                    *(outputs++) = temp;      // 5 -> 6
+                    post("%i ", inputs[i]);
                 }
+                post("");
             }
+            *(outputs++) = *(inputs++); // 0 -> 0
+            for(ulong i = 1ul; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            {
+                if(zaza)
+                {
+                    post("order %i", int(i));
+                }
+                ulong j = 1ul;
+                while(j < i * 2ul)
+                {
+                    m_harmonics[j += 2ul] = *(inputs++);
+                    if(zaza)
+                    {
+                        post("%i : %f", j - 2, m_harmonics[j-2]);
+                    }
+                }
+                j = i * 2ul;
+                while(j)
+                {
+                    m_harmonics[j -= 2ul] = *(inputs++);
+                    if(zaza)
+                    {
+                        post("%i : %f", j + 2, m_harmonics[j+2]);
+                    }
+                }
+                m_harmonics[0] = *(inputs++);
+                if(zaza)
+                {
+                    post("%i : %f", 0, m_harmonics[0]);
+                }
+                if(zaza)
+                {
+                    post("result :");
+                    for(int k = 0; k < i * 2ul + 1ul; k++)
+                    {
+                        post("%i : %f", (i -1) * 2ul + 1ul + k, m_harmonics[k]);
+                    }
+                    post("");
+                }
+                Signal<T>::vector_copy(i * 2ul + 1ul, m_harmonics, outputs);
+                outputs += i * 2ul + 1ul;
+            }
+            zaza = false;
         }
         
         //! This method normalizes the channels from MaxN to SN3D.
