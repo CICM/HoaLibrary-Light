@@ -121,8 +121,8 @@ namespace hoa
             for(ulong i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
                 veclocitySum += (*inputs++);
 
-            const T velocityAbscissa = Signal<T>::vectors_dot_product(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_abscissa);
-            const T velocityOrdinate = Signal<T>::vectors_dot_product(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_ordinate);
+            const T velocityAbscissa = Signal<T>::dot(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_abscissa);
+            const T velocityOrdinate = Signal<T>::dot(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_ordinate);
             if(veclocitySum)
             {
                 (*outputs++) = velocityAbscissa / veclocitySum;
@@ -146,9 +146,9 @@ namespace hoa
             for(ulong i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
                 m_channels_square[i] = inputs[i] * inputs[i];
 
-            T energySum = Signal<T>::vector_sum(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square);
-            const T energyAbscissa = Signal<T>::vectors_dot_product(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square, m_channels_abscissa);
-            const T energyOrdinate = Signal<T>::vectors_dot_product(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square, m_channels_ordinate);
+            T energySum = Signal<T>::sum(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square);
+            const T energyAbscissa = Signal<T>::dot(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square, m_channels_abscissa);
+            const T energyOrdinate = Signal<T>::dot(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square, m_channels_ordinate);
 
             if(energySum)
             {
@@ -230,9 +230,9 @@ namespace hoa
             for(ulong i = 1; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
                 veclocitySum += (*inputs++);
 
-                const T velocityAbscissa    = Signal<T>::vectors_dot_product(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_abscissa);
-                const T velocityOrdinate    = Signal<T>::vectors_dot_product(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_ordinate);
-                const T velocityHeight      = Signal<T>::vectors_dot_product(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_height);
+                const T velocityAbscissa    = Signal<T>::dot(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_abscissa);
+                const T velocityOrdinate    = Signal<T>::dot(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_ordinate);
+                const T velocityHeight      = Signal<T>::dot(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_height);
 
                 if(veclocitySum)
                 {
@@ -259,10 +259,10 @@ namespace hoa
             for(ulong i = 1; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
                 m_channels_square[i] = inputs[i] * inputs[i];
 
-                T energySum = Signal<T>::vector_sum(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square);
-                const T energyAbscissa  = Signal<T>::vectors_dot_product(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square, m_channels_abscissa);
-                const T energyOrdinate  = Signal<T>::vectors_dot_product(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square, m_channels_ordinate);
-                const T energyHeight    = Signal<T>::vectors_dot_product(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square, m_channels_height);
+                T energySum = Signal<T>::sum(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square);
+                const T energyAbscissa  = Signal<T>::dot(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square, m_channels_abscissa);
+                const T energyOrdinate  = Signal<T>::dot(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square, m_channels_ordinate);
+                const T energyHeight    = Signal<T>::dot(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_channels_square, m_channels_height);
 
                 if(energySum)
                 {

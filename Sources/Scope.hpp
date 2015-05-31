@@ -196,11 +196,11 @@ namespace hoa
          */
         inline void process(const T* inputs, T* outputs) noexcept override
         {
-            Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
-            m_maximum = fabs(Signal<T>::vector_max(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
+            Signal<T>::mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
+            m_maximum = fabs(Signal<T>::max(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
             if(m_maximum > 1.)
             {
-                Signal<T>::vector_scale(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
+                Signal<T>::scale(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
             }
         }
 
@@ -210,11 +210,11 @@ namespace hoa
          */
         inline void process(const T* inputs) noexcept
         {
-            Signal<T>::matrix_vector_mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
-            m_maximum = fabs(Signal<T>::vector_max(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
+            Signal<T>::mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
+            m_maximum = fabs(Signal<T>::max(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
             if(m_maximum > 1.)
             {
-                Signal<T>::vector_scale(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
+                Signal<T>::scale(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
             }
         }
     };
@@ -416,11 +416,11 @@ namespace hoa
          */
         inline void process(const T* inputs, T* outputs) noexcept override
         {
-            Signal<T>::matrix_vector_mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
-            m_maximum = fabs(Signal<T>::vector_max(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
+            Signal<T>::mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
+            m_maximum = fabs(Signal<T>::max(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
             if(m_maximum > 1.)
             {
-                Signal<T>::vector_scale(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
+                Signal<T>::scale(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
             }
         }
 
@@ -431,11 +431,11 @@ namespace hoa
          */
         inline void process(const T* inputs) noexcept
         {
-            Signal<T>::matrix_vector_mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
-            m_maximum = fabs(Signal<T>::vector_max(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
+            Signal<T>::mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
+            m_maximum = fabs(Signal<T>::max(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
             if(m_maximum > 1.)
             {
-                Signal<T>::vector_scale(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
+                Signal<T>::scale(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
             }
         }
     };

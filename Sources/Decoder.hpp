@@ -233,7 +233,7 @@ namespace hoa
          */
         inline void process(const T* inputs, T* outputs) noexcept override
         {
-            Signal<T>::matrix_vector_mul(Decoder<Hoa2d, T>::getNumberOfHarmonics(), Decoder<Hoa2d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
+            Signal<T>::mul(Decoder<Hoa2d, T>::getNumberOfHarmonics(), Decoder<Hoa2d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
 
         //! This method computes the decoding matrix.
@@ -285,7 +285,7 @@ namespace hoa
          */
         inline void process(const T* inputs, T* outputs) noexcept override
         {
-            Signal<T>::matrix_vector_mul(Decoder<Hoa2d, T>::getNumberOfHarmonics(), Decoder<Hoa2d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
+            Signal<T>::mul(Decoder<Hoa2d, T>::getNumberOfHarmonics(), Decoder<Hoa2d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
 
         //! This method computes the decoding matrix.
@@ -295,7 +295,7 @@ namespace hoa
         void computeRendering(const ulong vectorsize = 64)  override
         {
             typename Encoder<Hoa2d, T>::Basic encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
-            Signal<T>::vector_clear(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
+            Signal<T>::clear(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
             T* vector_harmonics =  new T[Decoder<Hoa2d, T>::getNumberOfHarmonics()];
 
             if(Decoder<Hoa2d, T>::getNumberOfPlanewaves() == 1)
@@ -307,7 +307,7 @@ namespace hoa
                     encoder.setAzimuth(T(i) * HOA_2PI / T(nls));
                     encoder.process(&factor, vector_harmonics);
                     vector_harmonics[0] = factor * 0.5;
-                    Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix);
+                    Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix);
                 }
             }
             else
@@ -364,12 +364,12 @@ namespace hoa
                         encoder.setAzimuth(angle);
                         encoder.process(&factor1, vector_harmonics);
                         vector_harmonics[0] = factor1 * 0.5;
-                        Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
+                        Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
                         const T factor2 = ((channels[0].getAzimuth(0., 0., 0.) - angle) / portion) * factor;
                         encoder.process(&factor2, vector_harmonics);
                         vector_harmonics[0] = factor2 * 0.5;
-                        Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size() - 1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
+                        Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size() - 1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
                         //post("portion : %f", (float)portion / HOA_2PI * 360.f);
                         //post("channel %i (%f) : %f", (int)channels[channels.size()-1].getIndex(),
@@ -387,12 +387,12 @@ namespace hoa
                         encoder.setAzimuth(angle);
                         encoder.process(&factor1, vector_harmonics);
                         vector_harmonics[0] = factor1 * 0.5;
-                        Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size()-1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
+                        Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size()-1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
                         const T factor2 = ((angle - channels[channels.size()-1].getAzimuth(0., 0., 0.)) / portion) * factor;
                         encoder.process(&factor2, vector_harmonics);
                         vector_harmonics[0] = factor2 * 0.5;
-                        Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
+                        Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
                         //post("portion : %f", (float)portion / HOA_2PI * 360.f);
                         //post("channel %i (%f) : %f", (int)channels[channels.size()-1].getIndex(),
@@ -414,12 +414,12 @@ namespace hoa
                                 encoder.setAzimuth(angle);
                                 encoder.process(&factor1, vector_harmonics);
                                 vector_harmonics[0] = factor1 * 0.5;
-                                Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
+                                Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
                                 const T factor2 = ((channels[j].getAzimuth(0., 0., 0.) - angle) / portion) * factor;
                                 encoder.process(&factor2, vector_harmonics);
                                 vector_harmonics[0] = factor2 * 0.5;
-                                Signal<T>::vector_add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j-1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
+                                Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j-1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
                                 //post("portion : %f", (float)portion / HOA_2PI * 360.f);
                                 //post("channel %i (%f) : %f", (int)channels[j-1].getIndex(),
@@ -512,46 +512,46 @@ namespace hoa
 
             m_output_left = new T[m_vector_size];
             m_output_right = new T[m_vector_size];
-            Signal<T>::vector_clear(m_vector_size, m_output_left);
-            Signal<T>::vector_clear(m_vector_size, m_output_right);
+            Signal<T>::clear(m_vector_size, m_output_left);
+            Signal<T>::clear(m_vector_size, m_output_right);
 
             m_inputs  = new T[HOA_NBIN_H * m_vector_size];
-            Signal<T>::vector_clear(HOA_NBIN_H * m_vector_size, m_inputs);
+            Signal<T>::clear(HOA_NBIN_H * m_vector_size, m_inputs);
 
             m_results = new T[HOA_NBIN_I * 2 * m_vector_size];
-            Signal<T>::vector_clear(HOA_NBIN_I * 2 * m_vector_size, m_results);
+            Signal<T>::clear(HOA_NBIN_I * 2 * m_vector_size, m_results);
             m_result_matrix_left    = m_results;
             m_result_matrix_right   = m_results + m_vector_size  * HOA_NBIN_I;
 
             m_linear_vector_left    = new T[m_vector_size + HOA_NBIN_I - 1];
-            Signal<T>::vector_clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_left);
+            Signal<T>::clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_left);
             m_linear_vector_right   = new T[m_vector_size + HOA_NBIN_I - 1];
-            Signal<T>::vector_clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_right);
+            Signal<T>::clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_right);
         }
 
         //! This method performs the binaural decoding and the convolution.
         void processBlock() noexcept
         {
 
-            Signal<T>::matrix_matrix_mul(HOA_NBIN_I * 2, m_vector_size, 9, Hrtf<Hoa2d, T>::getImpulse(), m_inputs, m_results);
+            Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, 9, Hrtf<Hoa2d, T>::getImpulse(), m_inputs, m_results);
 
             for(ulong i = 0; i < m_vector_size; i++)
             {
-                Signal<T>::vector_add(HOA_NBIN_I, m_results + i, m_vector_size, m_linear_vector_left + i, 1);
+                Signal<T>::add(HOA_NBIN_I, m_results + i, m_vector_size, m_linear_vector_left + i, 1);
                 m_output_left[i] = m_linear_vector_left[i];
             }
 
             for(ulong i = 0; i < m_vector_size; i++)
             {
-                Signal<T>::vector_add(HOA_NBIN_I, m_results + i + m_vector_size * HOA_NBIN_I, m_vector_size, m_linear_vector_right + i, 1);
+                Signal<T>::add(HOA_NBIN_I, m_results + i + m_vector_size * HOA_NBIN_I, m_vector_size, m_linear_vector_right + i, 1);
                 m_output_right[i] = m_linear_vector_right[i];
             }
 
-            Signal<T>::vector_copy(HOA_NBIN_I - 1, m_linear_vector_left + m_vector_size, m_linear_vector_left);
-            Signal<T>::vector_copy(HOA_NBIN_I - 1, m_linear_vector_right + m_vector_size, m_linear_vector_right);
+            Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_left + m_vector_size, m_linear_vector_left);
+            Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_right + m_vector_size, m_linear_vector_right);
 
-            Signal<T>::vector_clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
-            Signal<T>::vector_clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
+            Signal<T>::clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
+            Signal<T>::clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
         }
 
         //! This method performs the binaural decoding.
@@ -661,7 +661,7 @@ namespace hoa
          */
         inline void process(const T* inputs, T* outputs) noexcept override
         {
-            Signal<T>::matrix_vector_mul(Decoder<Hoa3d, T>::getNumberOfHarmonics(), Decoder<Hoa3d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
+            Signal<T>::mul(Decoder<Hoa3d, T>::getNumberOfHarmonics(), Decoder<Hoa3d, T>::getNumberOfPlanewaves(), inputs, m_matrix, outputs);
         }
 
         //! This method computes the decoding matrix.
@@ -764,45 +764,45 @@ namespace hoa
 
             m_output_left = new T[m_vector_size];
             m_output_right = new T[m_vector_size];
-            Signal<T>::vector_clear(m_vector_size, m_output_left);
-            Signal<T>::vector_clear(m_vector_size, m_output_right);
+            Signal<T>::clear(m_vector_size, m_output_left);
+            Signal<T>::clear(m_vector_size, m_output_right);
 
             m_inputs  = new T[HOA_NBIN_H * m_vector_size];
-            Signal<T>::vector_clear(HOA_NBIN_H * m_vector_size, m_inputs);
+            Signal<T>::clear(HOA_NBIN_H * m_vector_size, m_inputs);
 
             m_results = new T[HOA_NBIN_I * 2 * m_vector_size];
-            Signal<T>::vector_clear(HOA_NBIN_I * 2 * m_vector_size, m_results);
+            Signal<T>::clear(HOA_NBIN_I * 2 * m_vector_size, m_results);
             m_result_matrix_left    = m_results;
             m_result_matrix_right   = m_results + m_vector_size  * HOA_NBIN_I;
 
             m_linear_vector_left    = new T[m_vector_size + HOA_NBIN_I - 1];
-            Signal<T>::vector_clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_left);
+            Signal<T>::clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_left);
             m_linear_vector_right   = new T[m_vector_size + HOA_NBIN_I - 1];
-            Signal<T>::vector_clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_right);
+            Signal<T>::clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_right);
         }
 
         //! This method performs the binaural decoding and the convolution.
         void processBlock() noexcept
         {
-            Signal<T>::matrix_matrix_mul(HOA_NBIN_I * 2, m_vector_size, HOA_NBIN_H, Hrtf<Hoa3d, T>::getImpulse(), m_inputs, m_results);
+            Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, HOA_NBIN_H, Hrtf<Hoa3d, T>::getImpulse(), m_inputs, m_results);
 
             for(ulong i = 0; i < m_vector_size; i++)
             {
-                Signal<T>::vector_add(HOA_NBIN_I, m_results + i, m_vector_size, m_linear_vector_left + i, 1);
+                Signal<T>::add(HOA_NBIN_I, m_results + i, m_vector_size, m_linear_vector_left + i, 1);
                 m_output_left[i] = m_linear_vector_left[i];
             }
 
             for(ulong i = 0; i < m_vector_size; i++)
             {
-                Signal<T>::vector_add(HOA_NBIN_I, m_results + i + m_vector_size * HOA_NBIN_I, m_vector_size, m_linear_vector_right + i, 1);
+                Signal<T>::add(HOA_NBIN_I, m_results + i + m_vector_size * HOA_NBIN_I, m_vector_size, m_linear_vector_right + i, 1);
                 m_output_right[i] = m_linear_vector_right[i];
             }
 
-            Signal<T>::vector_copy(HOA_NBIN_I - 1, m_linear_vector_left + m_vector_size, m_linear_vector_left);
-            Signal<T>::vector_copy(HOA_NBIN_I - 1, m_linear_vector_right + m_vector_size, m_linear_vector_right);
+            Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_left + m_vector_size, m_linear_vector_left);
+            Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_right + m_vector_size, m_linear_vector_right);
 
-            Signal<T>::vector_clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
-            Signal<T>::vector_clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
+            Signal<T>::clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
+            Signal<T>::clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
         }
 
         //! This method performs the binaural decoding.

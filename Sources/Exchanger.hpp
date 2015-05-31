@@ -205,7 +205,7 @@ namespace hoa
                     numberToSID(inputs, outputs);
                     break;
                 default:
-                    Signal<T>::vector_copy(Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(), inputs, outputs);
+                    Signal<T>::copy(Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(), inputs, outputs);
                     break;
             }
         }
@@ -510,7 +510,7 @@ namespace hoa
                     outputs[15] = temp4;     // P(14) -> 15
                     if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 3ul)
                     {
-                        Signal<T>::vector_copy(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics() - 16ul, inputs+16, outputs+16);
+                        Signal<T>::copy(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics() - 16ul, inputs+16, outputs+16);
                     }
                 }
             }
@@ -551,7 +551,7 @@ namespace hoa
                     outputs[15] = temp;      // 9  -> Q(15)
                     if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 3ul)
                     {
-                        Signal<T>::vector_copy(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics() - 16ul, inputs+16, outputs+16);
+                        Signal<T>::copy(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics() - 16ul, inputs+16, outputs+16);
                     }
                 }
             }
@@ -578,7 +578,7 @@ namespace hoa
                         m_harmonics[j] = inputs[2ul * i - ulong(j/2)];
                     }
                 }
-                Signal<T>::vector_copy(i * 2ul + 1ul, m_harmonics, outputs);
+                Signal<T>::copy(i * 2ul + 1ul, m_harmonics, outputs);
                 outputs += i * 2ul + 1ul;
                 inputs += i * 2ul + 1ul;
             }
@@ -605,7 +605,7 @@ namespace hoa
                         m_harmonics[2ul * i - ulong(j/2)] = *(inputs++);
                     }
                 }
-                Signal<T>::vector_copy(i * 2ul + 1ul, m_harmonics, outputs);
+                Signal<T>::copy(i * 2ul + 1ul, m_harmonics, outputs);
                 outputs += i * 2ul + 1ul;
             }
         }

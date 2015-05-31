@@ -262,14 +262,14 @@ namespace hoa
          */
         void process(T* vector) noexcept
         {
-            Signal<T>::vector_add(m_number_of_sources * 2, m_values_step, m_values_old);
+            Signal<T>::add(m_number_of_sources * 2, m_values_step, m_values_old);
             if(m_counter++ >= m_ramp)
             {
-                Signal<T>::vector_copy(m_number_of_sources * 2, m_values_new, m_values_old);
-                Signal<T>::vector_clear(m_number_of_sources * 2, m_values_step);
+                Signal<T>::copy(m_number_of_sources * 2, m_values_new, m_values_old);
+                Signal<T>::clear(m_number_of_sources * 2, m_values_step);
                 m_counter    = 0;
             }
-            Signal<T>::vector_copy(m_number_of_sources * 2, m_values_old, vector);
+            Signal<T>::copy(m_number_of_sources * 2, m_values_old, vector);
         }
     };
 
@@ -485,14 +485,14 @@ namespace hoa
          */
         void process(T* vector) noexcept
         {
-            Signal<T>::vector_add(m_number_of_sources * 3, m_values_step, m_values_old);
+            Signal<T>::add(m_number_of_sources * 3, m_values_step, m_values_old);
             if(m_counter++ >= m_ramp)
             {
-                Signal<T>::vector_copy(m_number_of_sources * 3, m_values_new, m_values_old);
-                Signal<T>::vector_clear(m_number_of_sources * 3, m_values_step);
+                Signal<T>::copy(m_number_of_sources * 3, m_values_new, m_values_old);
+                Signal<T>::clear(m_number_of_sources * 3, m_values_step);
                 m_counter    = 0;
             }
-            Signal<T>::vector_copy(m_number_of_sources * 3, m_values_old, vector);
+            Signal<T>::copy(m_number_of_sources * 3, m_values_old, vector);
         }
     };
 }

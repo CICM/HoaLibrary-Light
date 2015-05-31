@@ -1,5 +1,5 @@
 /*
-// Copyright (c) 2012-2015 Eliott Paris, Julien Colafrancesco, Thomas Le Meur & Pierre Guillot, CICM, Universite Paris 8.
+// Copiesright (c) 2012-2015 Eliott Paris, Julien Colafrancesco, Thomas Le Meur & Pierre Guillot, CICM, Universite Paris 8.
 // For information on usage and redistribution, and for a DISCLAIMER OF ALL
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
@@ -17,44 +17,44 @@ namespace hoa
     template<typename T> class Signal
     {
     public:
-        //! Multiply a matrix by a vector.
-        /** Multiply a matrix by a vector.
-        @param inputsize   The number of samples of the input.
-        @param outputsize  The number of samples of the input.
-        @param vector      The vector.
-        @param matrix      The matrix.
-        @param outputs     The outputs.
+        //! Multiplies a matrix by a vector.
+        /** Multiplies a matrix by a vector.
+        @param colsize  The size of the input vector and the number of columns.
+        @param rowsize  The size of the output vector and the number of rows.
+        @param vector      The input vector.
+        @param matrix      The input matrix.
+        @param output      The output vector.
          */
-        static inline void matrix_vector_mul(const ulong inputsize, const ulong outputsize, const T* vector, const T* matrix, T* outputs)
+        static inline void mul(const ulong colsize, const ulong rowsize, const T* input, const T* matrix, T* output) noexcept
         {
-            for(ulong i = 0ul; i < outputsize; i++)
+            for(ulong i = 0ul; i < rowsize; i++)
             {
                 T sum = 0.f;
-                for(ulong j = 0ul; j < inputsize; j++)
+                for(ulong j = 0ul; j < colsize; j++)
                 {
-                    sum += vector[j] * *(matrix++);
+                    sum += input[j] * *(matrix++);
                 }
-                outputs[i] = sum;
+                output[i] = sum;
             }
         }
 
-        //! Multiply a matrix by a matrix.
-        /** Multiply a matrix by a matrix.
-        @param m          The number of in row in the first matrix and the number of column in the second matrix.
-        @param n          The matrix number of out column.
-        @param l          The matrix number of in column.
+        //! Multiplies a matrix by a matrix.
+        /** Multiplies a matrix by a matrix.
+        @param m          The number of rows in the first matrix and the number of columns in the second matrix.
+        @param n          The number of rows in the second matrix and the number of column in the output matrix.
+        @param l          The number of columns in the first matrix and the number of rows in the output matrix.
         @param in1        The first matrix.
         @param in2        The second matrix.
-        @param out        The final matrix.
+        @param out        The output matrix.
          */
-        static inline void matrix_matrix_mul(const ulong m, const ulong n, const ulong l, const T* in1, const T* in2, T* out)
+        static inline void mul(const ulong m, const ulong n, const ulong l, const T* in1, const T* in2, T* output) noexcept
         {
             ulong i, j, k;
             for(i = 0; i < m; i++)
             {
                 for(j = 0; j < n; j++)
                 {
-                    out[n * i + j]      = 0.f;
+                    output[n * i + j] = 0.f;
                 }
             }
             for(k = 0; k < l; k++)
@@ -66,20 +66,20 @@ namespace hoa
                     {
                         for(j = 0; j < n; j++)
                         {
-                            out[n * i + j] += temp * in2[n * k + j];
+                            output[n * i + j] += temp * in2[n * k + j];
                         }
                     }
                 }
             }
         }
 
-        //! Get the max value of a vector.
-        /** Get the max value of a vector.
+        //! Gets the maximum of the absolute values of a vector.
+        /** Gets the maximum of the absolute values of a vector.
         @param   vectorsize   The size of the vector.
         @param   vector       The vector.
-        @return  The max value of the vector
+        @return  The maximum of the absolute values of the vector
          */
-        static inline T vector_max(const ulong vectorsize, const T* vector)
+        static inline T max(const ulong vectorsize, const T* vector) noexcept
         {
             T max = fabs(vector[0]);
             for(ulong i = 1ul; i < vectorsize; i++)
@@ -93,76 +93,76 @@ namespace hoa
             return max;
         }
 
-        //! Get the sum value of a vector.
-        /** Get the sum value of a vector.
-        @param   vectorsize   The size of the vector.
-        @param   vector       The vector.
-        @return  The sum value of the vector
+        //! Computes the sum of each element of a vector.
+        /** Computes the sum of each element of a vector.
+        @param   size   The size of the vector.
+        @param   vector The vector.
+        @return  The sum of each element of the vector
          */
-        static inline T vector_sum(const ulong vectorsize, const T* vector)
+        static inline T sum(const ulong size, const T* vector) noexcept
         {
             T sum = 0.f;
-            for(ulong i = 0ul; i < vectorsize; i++)
+            for(ulong i = 0ul; i < size; i++)
             {
                 sum += fabs(vector[i]);
             }
             return sum;
         }
 
-        //! Multiply each element of a vector by a factor.
-        /** Multiply each element of a vector by a factor.
-        @param   vectorsize  The size of the vector.
-        @param   value       The factor of the scale.
-        @param   vector      The vector.
+        //! Multiplies each element of a vector by a factor.
+        /** Multiplies each element of a vector by a factor.
+        @param   size   The size of the vector.
+        @param   factor The factor of the scale.
+        @param   vector The vector.
          */
-        static inline void vector_scale(const ulong vectorsize, const T value, T* vector)
+        static inline void scale(const ulong size, const T factor, T* vector) noexcept
         {
-            for(ulong i = 0ul; i < vectorsize; i++)
+            for(ulong i = 0ul; i < size; i++)
             {
-                vector[i]   *= value;
+                vector[i]   *= factor;
             }
         }
 
-        //! Clear a vector.
-        /** Clear a vector.
-        @param   vectorsize   The size of the vector.
-        @param   vector       The vector.
+        //! Clears a vector.
+        /** Clears a vector.
+        @param   size   The size of the vector.
+        @param   vector The vector.
          */
-        static inline void vector_clear(const ulong vectorsize, T* vector)
+        static inline void clear(const ulong size, T* vector) noexcept
         {
-            for(ulong i = 0ul; i < vectorsize; i++)
+            for(ulong i = 0ul; i < size; i++)
             {
                 vector[i]   = 0.f;
             }
         }
 
-        //! Copy a vector into an other.
-        /** Copy a vector into an other.
-        @param   vectorsize   The size of the vector.
-        @param   source       The source vector.
-        @param   dest         The destination vector.
+        //! Copies a vector into an other.
+        /** Copies a vector into an other.
+        @param   size   The size of the vectors.
+        @param   source The source vector.
+        @param   dest   The destination vector.
          */
-        static inline void vector_copy(const ulong vectorsize, const T* source, T* dest)
+        static inline void copy(const ulong size, const T* source, T* dest) noexcept
         {
-            for(ulong i = 0ul; i < vectorsize; i++)
+            for(ulong i = 0ul; i < size; i++)
             {
                 dest[i] = source[i];
             }
         }
 
-        //! Copy a vector into an other.
-        /** Copy a vector into an other.
-         @param   vectorsize   The size of the vector.
-         @param   source       The source vector.
-         @param   incs         Number of columns of the source vector.
-         @param   dest         Number of columns of the source vector.
-         @param   incd         Number of columns of the destination vector.
+        //! Copies a vector into an other.
+        /** Copies a vector into an other.
+         @param   size   The size of the vectors.
+         @param   source The source vector.
+         @param   incs   The increment of the source vector.
+         @param   dest   The destination vector.
+         @param   incd   The increment of the destination vector.
          */
-        static inline void vector_copy(const ulong vectorsize, const T* source, const ulong incs, T* dest, const ulong incd)
+        static inline void copy(const ulong size, const T* source, const ulong incs, T* dest, const ulong incd) noexcept
         {
             ulong is = 0ul;
             ulong id = 0ul;
-            for(ulong i = 0ul; i < vectorsize; i++)
+            for(ulong i = 0ul; i < size; i++)
             {
                 dest[id] = source[is];
                 is += incs;
@@ -170,33 +170,33 @@ namespace hoa
             }
         }
 
-        //! Add a vector to an other.
-        /** Add a vector to an other value by value.
-        @param   vectorsize   The size of the vector.
-        @param   source       The vector to add.
-        @param   dest         The destination vector.
+        //! Adds a vector to an other.
+        /** Adds a vector to an other value by value.
+        @param   size   The size of the vectors.
+        @param   source The source vector.
+        @param   dest   The destination vector.
          */
-        static inline void vector_add(const ulong vectorsize, const T* source, T* dest)
+        static inline void add(const ulong size, const T* source, T* dest) noexcept
         {
-            for(ulong i = 0ul; i < vectorsize; i++)
+            for(ulong i = 0ul; i < size; i++)
             {
-                dest[i]     += source[i];
+                dest[i] += source[i];
             }
         }
 
-        //! Add a vector to an other.
-        /** Add a vector to an other with a fixed step.
-        @param   vectorsize  The size of the vector.
-        @param   source      The vector to add.
-        @param   incs        Number of columns of the source vector.
-        @param   dest        Number of columns of the source vector.
-        @param   incd        Number of columns of the destination vector.
+        //! Adds a vector to an other.
+        /** Adds a vector to an other.
+         @param   size   The size of the vectors.
+         @param   source The source vector.
+         @param   incs   The increment of the source vector.
+         @param   dest   The destination vector.
+         @param   incd   The increment of the destination vector.
          */
-        static inline void vector_add(const ulong vectorsize, const T* source, const ulong incs, T* dest, const ulong incd)
+        static inline void add(const ulong size, const T* source, const ulong incs, T* dest, const ulong incd) noexcept
         {
             ulong is = 0ul;
             ulong id = 0ul;
-            for(ulong i = 0ul; i < vectorsize; i++)
+            for(ulong i = 0ul; i < size; i++)
             {
                 dest[id] += source[is];
                 is += incs;
@@ -204,19 +204,19 @@ namespace hoa
             }
         }
 
-        //! Compute the dot product of two vectors.
-        /** Compute the dot product of two vectors.
-        @param   vectorsize  The size of the vector.
-        @param   in1     The first vector.
-        @param   in2     The second vector.
+        //! Computes the dot product of two vectors.
+        /** Computes the dot product of two vectors.
+        @param   size   The size of the vectors.
+        @param   in1    The first vector.
+        @param   in2    The second vector.
         @return The dot product of the two vectors.
          */
-        static inline T vectors_dot_product(const ulong vectorsize, const T* in1, const T* in2)
+        static inline T dot(const ulong size, const T* in1, const T* in2) noexcept
         {
             T sum = 0.f;
-            for(ulong i = 0ul; i < vectorsize; i++)
+            for(ulong i = 0ul; i < size; i++)
             {
-                sum += in1[i]   * in2[i];
+                sum += in1[i] * in2[i];
             }
             return sum;
         }

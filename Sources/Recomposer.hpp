@@ -70,7 +70,7 @@ namespace hoa
          */
         void process(const T* inputs, T* outputs) noexcept override
         {
-            Signal<T>::matrix_vector_mul(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), Encoder<Hoa2d, T>::getNumberOfHarmonics(), inputs, m_matrix, outputs);
+            Signal<T>::mul(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), Encoder<Hoa2d, T>::getNumberOfHarmonics(), inputs, m_matrix, outputs);
         }
     };
 
