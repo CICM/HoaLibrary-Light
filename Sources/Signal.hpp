@@ -17,6 +17,7 @@ namespace hoa
     template<typename T> class Signal
     {
     public:
+        
         //! Multiplies a matrix by a vector.
         /** Multiplies a matrix by a vector.
         @param colsize  The size of the input vector and the number of columns.
@@ -40,33 +41,90 @@ namespace hoa
 
         //! Multiplies a matrix by a matrix.
         /** Multiplies a matrix by a matrix.
-        @param m          The number of rows in the first matrix and the number of columns in the second matrix.
-        @param n          The number of rows in the second matrix and the number of column in the output matrix.
-        @param l          The number of columns in the first matrix and the number of rows in the output matrix.
-        @param in1        The first matrix.
-        @param in2        The second matrix.
-        @param out        The output matrix.
+        @param m        The number of rows in the first matrix and the number of columns in the second matrix.
+        @param n        The number of rows in the second matrix and the number of column in the output matrix.
+        @param l        The number of columns in the first matrix and the number of rows in the output matrix.
+        @param in1      The first matrix.
+        @param in2      The second matrix.
+        @param output   The output matrix.
          */
         static inline void mul(const ulong m, const ulong n, const ulong l, const T* in1, const T* in2, T* output) noexcept
         {
+            /*
+            {
+                ulong i, j, k;
+                for(i = 0; i < m; i++)
+                {
+                    for(j = 0; j < n; j++)
+                    {
+                        output[n * i + j]      = 0.f;
+                    }
+                }
+                
+                for(i = 0; i < m; i++)
+                {
+                    for(j = 0; j < n; j++)
+                    {
+                        for(k = 0; k < l; k++)
+                        {
+                            output[n * i + j] += in1[l * i + k] * in2[n * j + k];
+                        }
+                    }
+                }
+            }*/
+            /*
+            const float* a = in1;
+            for(ulong i = 0; i < n; i++)
+            {
+                const float* b = in2;
+                for(ulong j = 0; j < l; j++)
+                {
+                    __m128 c = _mm_setzero_ps();
+                    //const float* a2 = a;
+                    for(ulong k = 0; k < m; k += 4)
+                    {
+                        _mm_add_ps(_mm_load_ps(&a[k]), _mm_load_ps(b));
+                        b+=4;
+                    }
+                    c = _mm_hadd_ps(c, c);
+                    c = _mm_hadd_ps(c, c);
+                    _mm_store_ss(output, c);
+                    output++;
+                }
+                a += m;
+            }
+            */
             ulong i, j, k;
+            T* out = output;
             for(i = 0; i < m; i++)
             {
-                for(j = 0; j < n; j++)
+                for(j = n; j; j -= 8, out += 8)
                 {
-                    output[n * i + j] = 0.f;
+                    out[0] = 0;
+                    out[1] = 0;
+                    out[2] = 0;
+                    out[3] = 0;
+                    out[4] = 0;
+                    out[5] = 0;
+                    out[6] = 0;
+                    out[7] = 0;
                 }
             }
             for(k = 0; k < l; k++)
             {
+                out = output;
                 for(i = 0; i < m; i++)
                 {
-                    const T temp = in1[l * i + k];
-                    if(temp != 0.f)
+                    const T g = in1[l * i + k];
+                    if(g != 0)
                     {
-                        for(j = 0; j < n; j++)
+                        const T* in = in2+n*k;
+                        for(j = n; j; j -= 8, out += 8, in += 8)
                         {
-                            output[n * i + j] += temp * in2[n * k + j];
+                            const T f0 = in[0] * g, f1 = in[1] * g, f2 = in[2] * g, f3 = in[3] * g;
+                            const T f4 = in[4] * g, f5 = in[5] * g, f6 = in[6] * g, f7 = in[7] * g;
+                            out[0] += f0; out[1] += f1; out[2] += f2; out[3] += f3;
+                            out[4] += f4; out[5] += f5; out[6] += f6; out[7] += f7;
                         }
                     }
                 }
@@ -101,7 +159,7 @@ namespace hoa
          */
         static inline T sum(const ulong size, const T* vector) noexcept
         {
-            T sum = 0.f;
+            T sum = 0;
             for(ulong i = 0ul; i < size; i++)
             {
                 sum += fabs(vector[i]);
@@ -213,7 +271,7 @@ namespace hoa
          */
         static inline T dot(const ulong size, const T* in1, const T* in2) noexcept
         {
-            T sum = 0.f;
+            T sum = 0;
             for(ulong i = 0ul; i < size; i++)
             {
                 sum += in1[i] * in2[i];
