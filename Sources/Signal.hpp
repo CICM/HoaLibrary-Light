@@ -1,5 +1,5 @@
 /*
-// Copiesright (c) 2012-2015 Eliott Paris, Julien Colafrancesco, Thomas Le Meur & Pierre Guillot, CICM, Universite Paris 8.
+// Copyright (c) 2012-2015 Eliott Paris, Julien Colafrancesco, Thomas Le Meur & Pierre Guillot, CICM, Universite Paris 8.
 // For information on usage and redistribution, and for a DISCLAIMER OF ALL
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
@@ -95,21 +95,8 @@ namespace hoa
             }
             */
             ulong i, j, k;
+            memset(output, 0, m * n * sizeof(T));
             T* out = output;
-            for(i = 0; i < m; i++)
-            {
-                for(j = n; j; j -= 8, out += 8)
-                {
-                    out[0] = 0;
-                    out[1] = 0;
-                    out[2] = 0;
-                    out[3] = 0;
-                    out[4] = 0;
-                    out[5] = 0;
-                    out[6] = 0;
-                    out[7] = 0;
-                }
-            }
             for(k = 0; k < l; k++)
             {
                 out = output;
