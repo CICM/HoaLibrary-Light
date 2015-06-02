@@ -680,13 +680,13 @@ namespace hoa
                 for(ulong j = 0; j < Decoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
                 {
                     const ulong l = Decoder<Hoa3d, T>::getHarmonicDegree(j);
-                    if(Encoder<Hoa3d, T>::getHarmonicOrder(j) == 0)
+                    if(encoder.getHarmonicOrder(j) == 0)
                     {
-                        m_matrix[i * Encoder<Hoa3d, T>::getNumberOfHarmonics() + j] *= (2. * l + 1.);
+                        m_matrix[i * encoder.getNumberOfHarmonics() + j] *= (2. * l + 1.);
                     }
                     else
                     {
-                        m_matrix[i * Encoder<Hoa3d, T>::getNumberOfHarmonics() + j] *= T(2. * l + 1.) * 4. * HOA_PI;
+                        m_matrix[i * encoder.getNumberOfHarmonics() + j] *= T(2. * l + 1.) * 4. * HOA_PI;
                     }
                 }
             }
