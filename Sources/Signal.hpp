@@ -129,7 +129,7 @@ namespace hoa
             T max = fabs(vector[0]);
             for(ulong i = 1ul; i < vectorsize; i++)
             {
-                const T temp = fabs(vector[1]);
+                const T temp = fabs(vector[i]);
                 if(temp > max)
                 {
                     max = temp;
@@ -164,7 +164,7 @@ namespace hoa
         {
             for(ulong i = 0ul; i < size; i++)
             {
-                vector[i]   *= factor;
+                vector[i] *= factor;
             }
         }
 
