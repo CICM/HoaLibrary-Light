@@ -50,50 +50,6 @@ namespace hoa
          */
         static inline void mul(const ulong m, const ulong n, const ulong l, const T* in1, const T* in2, T* output) noexcept
         {
-            /*
-            {
-                ulong i, j, k;
-                for(i = 0; i < m; i++)
-                {
-                    for(j = 0; j < n; j++)
-                    {
-                        output[n * i + j]      = 0.f;
-                    }
-                }
-                
-                for(i = 0; i < m; i++)
-                {
-                    for(j = 0; j < n; j++)
-                    {
-                        for(k = 0; k < l; k++)
-                        {
-                            output[n * i + j] += in1[l * i + k] * in2[n * j + k];
-                        }
-                    }
-                }
-            }*/
-            /*
-            const float* a = in1;
-            for(ulong i = 0; i < n; i++)
-            {
-                const float* b = in2;
-                for(ulong j = 0; j < l; j++)
-                {
-                    __m128 c = _mm_setzero_ps();
-                    //const float* a2 = a;
-                    for(ulong k = 0; k < m; k += 4)
-                    {
-                        _mm_add_ps(_mm_load_ps(&a[k]), _mm_load_ps(b));
-                        b+=4;
-                    }
-                    c = _mm_hadd_ps(c, c);
-                    c = _mm_hadd_ps(c, c);
-                    _mm_store_ss(output, c);
-                    output++;
-                }
-                a += m;
-            }
-            */
             ulong i, j, k;
             memset(output, 0, m * n * sizeof(T));
             T* out = output;
