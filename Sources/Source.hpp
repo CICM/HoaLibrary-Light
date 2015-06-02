@@ -779,7 +779,6 @@ namespace hoa
             m_manager(other.m_manager),
             m_index(other.m_index),
             m_description(other.m_description),
-            m_color{other.m_color[0], other.m_color[1], other.m_color[2], other.m_color[3]},
             m_centroid_x(other.m_centroid_x),
             m_centroid_y(other.m_centroid_y),
             m_centroid_z(other.m_centroid_z),
@@ -787,7 +786,7 @@ namespace hoa
             m_mute(other.m_mute),
             m_subMute(other.m_subMute)
             {
-                ;
+                memcpy(m_color, other.m_color, 4 * sizeof(double));
             }
             
             //! Compute the group position for each moving of its sources.
