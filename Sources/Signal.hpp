@@ -131,10 +131,7 @@ namespace hoa
          */
         static inline void clear(const ulong size, T* vector) noexcept
         {
-            for(ulong i = 0ul; i < size; i++)
-            {
-                vector[i]   = 0.f;
-            }
+            memset(vector, 0, size * sizeof(T));
         }
 
         //! Copies a vector into an other.
@@ -145,10 +142,7 @@ namespace hoa
          */
         static inline void copy(const ulong size, const T* source, T* dest) noexcept
         {
-            for(ulong i = 0ul; i < size; i++)
-            {
-                dest[i] = source[i];
-            }
+            memcpy(dest, source, size * sizeof(T));
         }
 
         //! Copies a vector into an other.
