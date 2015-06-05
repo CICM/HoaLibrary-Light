@@ -552,7 +552,7 @@ namespace hoa
             Signal<T>::clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
             Signal<T>::clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
         }
-        
+
         //! This method performs the binaural decoding and the convolution.
         inline void processBlock(const T* inputs, T** outputs) const noexcept
         {
@@ -626,7 +626,7 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
-        inline virtual void process(const T* inputs, T* outputs) noexcept = 0;
+        virtual void process(const T* inputs, T* outputs) noexcept = 0;
 
         //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.

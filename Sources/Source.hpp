@@ -95,7 +95,7 @@ namespace hoa
                 m_groups.clear();
                 m_sources.clear();
             }
-            
+
             //! Removes all groups.
             /** Removes all groups.
              */
@@ -206,7 +206,7 @@ namespace hoa
             {
                 return m_groups.empty();
             }
-            
+
             //! The group constructor.
             /**	The group constructor allocates and initialize the member values for a source group.
              @param     index       The index of the group
@@ -215,7 +215,7 @@ namespace hoa
             {
                 return new Source::Group(this, index);
             }
-            
+
             //! Add a Group to the manager.
             /** Add a Group to the map container of the manager.
              @param     group       The group to add.
@@ -234,7 +234,7 @@ namespace hoa
                                 return false;
                             }
                         }
-                        
+
                         m_groups[group->m_index] = group;
                         return true;
                     }
@@ -755,7 +755,7 @@ namespace hoa
             double                  m_maximum_radius;
             bool                    m_mute;
             bool                    m_subMute;
-            
+
             //! The group constructor.
             /**	The group constructor allocates and initialize the member values for a source group.
              @param     manager		A pointer on a manager object
@@ -770,7 +770,7 @@ namespace hoa
                 computeCentroid();
                 m_mute = false;
             }
-            
+
             //! The group constructor by copy.
             /**	The group constructor allocates and initialize the member values for a source group.
              @param     other		It's a contructor by copy an 'other' group
@@ -788,7 +788,7 @@ namespace hoa
             {
                 memcpy(m_color, other.m_color, 4 * sizeof(double));
             }
-            
+
             //! Compute the group position for each moving of its sources.
             /** Compute the group position for each moving of its sources.
              */
@@ -1020,7 +1020,7 @@ namespace hoa
             }
 
         public:
-            
+
             //! The group destructor.
             /**	The group destructor free the memory.
              */
@@ -1489,12 +1489,11 @@ namespace hoa
         m_radius(other.m_radius),
         m_azimuth(other.m_azimuth),
         m_elevation(other.m_elevation),
-        m_color{other.m_color[0], other.m_color[1], other.m_color[2], other.m_color[3]},
         m_description(other.m_description),
         m_maximum_radius(other.m_maximum_radius),
         m_mute(other.m_mute)
 		{
-            ;
+            memcpy(m_color, other.m_color, 4 * sizeof(double));
       	}
 
       	//! The source destructor.

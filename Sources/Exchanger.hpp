@@ -17,7 +17,7 @@ namespace hoa
     template <Dimension D, typename T> class Exchanger : public Processor<D, T>::Harmonics
     {
     public:
-        
+
         //! The numbering conversion.
         /** The enum defines the numbering conversion.
          */
@@ -29,7 +29,7 @@ namespace hoa
             toFurseMalham   = 3, /*!<  To Furse-Malham (B-format) from ACN. */
             toSID           = 4  /*!<  To SID from ACN. */
         };
-        
+
         //! The numbering conversion.
         /** The enum defines the numbering conversion.
          */
@@ -62,13 +62,13 @@ namespace hoa
          @param     outputs  The outputs array.
          */
         virtual void process(T const* inputs, T* outputs) noexcept;
-        
+
         //! Sets the numbering conversion.
         /**	This method sets the numbering conversion.
          @param mode The numbering convertion.
          */
         virtual void setNumbering(const Numbering mode) noexcept;
-        
+
         //! Gets the numbering conversion.
         /**	This method gets the numbering conversion.
          @return The numbering convertion.
@@ -92,7 +92,7 @@ namespace hoa
             toFurseMalham   = 3, /*!<  To Furse-Malham (B-format) from ACN. */
             toSID           = 4  /*!<  To SID from ACN. */
         };
-        
+
         //! The numbering conversion.
         /** The enum defines the numbering conversion.
          */
@@ -104,7 +104,7 @@ namespace hoa
             toN2D           = 2, /*!<  To N2D from SN2D. */
             toMaxN          = 3  /*!<  To MaxN (B-format) from SN2D. */
         };
-        
+
     private:
         Numbering       m_numbering;
         Normalization   m_normalization;
@@ -120,7 +120,7 @@ namespace hoa
         {
             ;
         }
-        
+
         //! The exchanger destructor.
         /**	The exchanger destructor free the memory.
          */
@@ -128,7 +128,7 @@ namespace hoa
         {
             ;
         }
-        
+
         //! Sets the numbering and the normalization conversion from B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to from Furse-Malham numebring and from MaxN normalization.
          */
@@ -137,7 +137,7 @@ namespace hoa
             m_numbering = fromFurseMalham;
             m_normalization = fromMaxN;
         }
-        
+
         //! Sets the numbering and the normalization conversion to B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to to Furse-Malham numebring and to MaxN normalization.
          */
@@ -146,7 +146,7 @@ namespace hoa
             m_numbering = toFurseMalham;
             m_normalization = toMaxN;
         }
-        
+
         //! Sets the numbering conversion.
         /**	This method sets the numbering conversion.
          @param mode The numbering convertion.
@@ -155,7 +155,7 @@ namespace hoa
         {
             m_numbering = mode;
         }
-        
+
         //! Gets the numbering conversion.
         /**	This method gets the numbering conversion.
          @return The numbering convertion.
@@ -164,7 +164,7 @@ namespace hoa
         {
             return m_numbering;
         }
-        
+
         //! Sets the normalization conversion.
         /**	This method sets the normalization conversion.
          @param mode The normalization convertion.
@@ -173,7 +173,7 @@ namespace hoa
         {
             m_normalization = mode;
         }
-        
+
         //! Gets the normalization conversion.
         /**	This method gets the normalization conversion.
          @return The normalization convertion.
@@ -182,7 +182,7 @@ namespace hoa
         {
             return m_normalization;
         }
-        
+
         //! This method performs the numbering and the normalization.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -209,7 +209,7 @@ namespace hoa
                     break;
             }
         }
-        
+
         //! This method number the channels from Furse-Malham to ACN.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -234,7 +234,7 @@ namespace hoa
                 }
             }
         }
-        
+
         //! This method number the channels from SID to ACN.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -253,7 +253,7 @@ namespace hoa
                 *(outputs++) = temp;
             }
         }
-        
+
         //! This method number the channels from ACN to Furse-Malham.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -278,7 +278,7 @@ namespace hoa
                 }
             }
         }
-        
+
         //! This method number the channels from ACN to SID.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -298,7 +298,7 @@ namespace hoa
             }
         }
     };
-    
+
     template <typename T> class Exchanger<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics
     {
     public:
@@ -313,7 +313,7 @@ namespace hoa
             toFurseMalham   = 3, /*!<  To Furse-Malham (B-format) from ACN. */
             toSID           = 4  /*!<  To SID from ACN. */
         };
-        
+
         //! The numbering conversion.
         /** The enum defines the numbering conversion.
          */
@@ -325,14 +325,14 @@ namespace hoa
             toN3D           = 3, /*!<  To N3D from SN3D. */
             toMaxN          = 4  /*!<  To MaxN (B-format) from SN3D. */
         };
-        
+
     private:
-        
+
         Numbering       m_numbering;
         Normalization   m_normalization;
         T*              m_harmonics;
     public:
-        
+
         //! The exchanger constructor.
         /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
          @param     order	The order.
@@ -343,7 +343,7 @@ namespace hoa
         {
             m_harmonics = new T[order*2+1];
         }
-        
+
         //! The exchanger destructor.
         /**	The exchanger destructor free the memory.
          */
@@ -351,7 +351,7 @@ namespace hoa
         {
             delete [] m_harmonics;
         }
-        
+
         //! Sets the numbering and the normalization conversion from B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to from Furse-Malham numebring and from MaxN normalization.
          */
@@ -360,7 +360,7 @@ namespace hoa
             m_numbering = fromFurseMalham;
             m_normalization = fromMaxN;
         }
-        
+
         //! Sets the numbering and the normalization conversion to B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to to Furse-Malham numebring and to MaxN normalization.
          */
@@ -369,7 +369,7 @@ namespace hoa
             m_numbering = toFurseMalham;
             m_normalization = toMaxN;
         }
-        
+
         //! Sets the numbering and the normalization conversion from B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to from Furse-Malham numebring and from MaxN normalization.
          */
@@ -378,7 +378,7 @@ namespace hoa
             m_numbering = fromSID;
             m_normalization = fromN3D;
         }
-        
+
         //! Sets the numbering and the normalization conversion to B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to to Furse-Malham numebring and to MaxN normalization.
          */
@@ -387,7 +387,7 @@ namespace hoa
             m_numbering = toSID;
             m_normalization = toN3D;
         }
-        
+
         //! Sets the numbering conversion.
         /**	This method sets the numbering conversion.
          @param mode The numbering convertion.
@@ -396,7 +396,7 @@ namespace hoa
         {
             m_numbering = mode;
         }
-        
+
         //! Gets the numbering conversion.
         /**	This method gets the numbering conversion.
          @return The numbering convertion.
@@ -405,7 +405,7 @@ namespace hoa
         {
             return m_numbering;
         }
-        
+
         //! Sets the normalization conversion.
         /**	This method sets the normalization conversion.
          @param mode The normalization convertion.
@@ -414,7 +414,7 @@ namespace hoa
         {
             m_normalization = mode;
         }
-        
+
         //! Gets the normalization conversion.
         /**	This method gets the normalization conversion.
          @return The normalization convertion.
@@ -423,7 +423,7 @@ namespace hoa
         {
             return m_normalization;
         }
-        int zozo = 5;
+
         //! This method performs the numbering and the normalization.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -472,7 +472,7 @@ namespace hoa
                 numberToSID(ins, outputs);
             }
         }
-        
+
         //! This method number the channels from Furse-Malham to ACN.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -515,7 +515,7 @@ namespace hoa
                 }
             }
         }
-        
+
         //! This method number the channels from ACN to Furse-Malham.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -556,7 +556,7 @@ namespace hoa
                 }
             }
         }
-        
+
         //! This method number the channels from SID to ACN.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -583,7 +583,7 @@ namespace hoa
                 inputs += i * 2ul + 1ul;
             }
         }
-        
+
         //! This method number the channels from ACN to SID.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -609,7 +609,7 @@ namespace hoa
                 outputs += i * 2ul + 1ul;
             }
         }
-        
+
         //! This method normalizes the channels from MaxN to SN3D.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -641,7 +641,7 @@ namespace hoa
             }
             normalizeFromN3D(outputs, outputs);
         }
-        
+
         //! This method normalizes the channels from SN3D to MaxN.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -673,7 +673,7 @@ namespace hoa
             }
             normalizeToN3D(outputs, outputs);
         }
-        
+
         //! This method normalizes the channels from N3D to SN3D.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
@@ -695,7 +695,7 @@ namespace hoa
                 }
             }
         }
-        
+
         //! This method normalizes the channels from SN3D to N3D.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
