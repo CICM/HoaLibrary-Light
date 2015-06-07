@@ -117,21 +117,20 @@ namespace hoa
          */
         inline void processVelocity(const T* inputs, T* outputs) noexcept
         {
-            T veclocitySum = (*inputs++);
+            T veclocitySum = inputs[0];
             for(ulong i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
-                veclocitySum += (*inputs++);
+                veclocitySum += inputs[i];
 
             const T velocityAbscissa = Signal<T>::dot(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_abscissa);
             const T velocityOrdinate = Signal<T>::dot(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_ordinate);
             if(veclocitySum)
             {
-                (*outputs++) = velocityAbscissa / veclocitySum;
-                (*outputs)  = velocityOrdinate / veclocitySum;
+                outputs[0] = velocityAbscissa / veclocitySum;
+                outputs[1] = velocityOrdinate / veclocitySum;
             }
             else
             {
-                (*outputs++) = 0.;
-                (*outputs) = 0.;
+                outputs[0] = outputs[1] = 0.;
             }
         }
 
@@ -152,13 +151,12 @@ namespace hoa
 
             if(energySum)
             {
-                (*outputs++) = energyAbscissa / energySum;
-                (*outputs) = energyOrdinate / energySum;
+                outputs[0] = energyAbscissa / energySum;
+                outputs[1] = energyOrdinate / energySum;
             }
             else
             {
-                (*outputs++) = 0.;
-                (*outputs) = 0.;
+                outputs[0] = outputs[1] = 0.;
             }
         }
     };
@@ -226,9 +224,9 @@ namespace hoa
          */
         inline void processVelocity(const T* inputs, T* outputs) noexcept
         {
-            T veclocitySum = (*inputs++);
+            T veclocitySum = inputs[0];
             for(ulong i = 1; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
-                veclocitySum += (*inputs++);
+                veclocitySum += inputs[i];
 
                 const T velocityAbscissa    = Signal<T>::dot(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_abscissa);
                 const T velocityOrdinate    = Signal<T>::dot(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_channels_ordinate);
@@ -236,15 +234,13 @@ namespace hoa
 
                 if(veclocitySum)
                 {
-                    (*outputs++) = velocityAbscissa / veclocitySum;
-                    (*outputs++) = velocityOrdinate / veclocitySum;
-                    (*outputs)   = velocityHeight / veclocitySum;
+                    outputs[0] = velocityAbscissa / veclocitySum;
+                    outputs[1] = velocityOrdinate / veclocitySum;
+                    outputs[2] = velocityHeight   / veclocitySum;
                 }
                 else
                 {
-                    (*outputs++) = 0.;
-                    (*outputs++) = 0.;
-                    (*outputs)  = 0.;
+                    outputs[0] = outputs[1] = outputs[2] = 0.;
                 }
         }
 
@@ -266,15 +262,13 @@ namespace hoa
 
                 if(energySum)
                 {
-                    (*outputs++) = energyAbscissa / energySum;
-                    (*outputs++) = energyOrdinate / energySum;
-                    (*outputs)   = energyHeight / energySum;
+                    outputs[0] = energyAbscissa / energySum;
+                    outputs[1] = energyOrdinate / energySum;
+                    outputs[2] = energyHeight   / energySum;
                 }
                 else
                 {
-                    (*outputs++) = 0.;
-                    (*outputs++) = 0.;
-                    (*outputs)   = 0.;
+                    outputs[0] = outputs[1] = outputs[2] = 0.;
                 }
         }
     };
