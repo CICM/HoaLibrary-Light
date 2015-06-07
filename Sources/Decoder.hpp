@@ -9,6 +9,7 @@
 
 #include "Encoder.hpp"
 #include "Hrtf.hpp"
+#include <typeinfo>
 
 namespace hoa
 {
@@ -184,6 +185,12 @@ namespace hoa
          @param vectorsize The vector size for binaural decoding.
          */
         virtual void computeRendering(const ulong vectorsize = 64) = 0;
+        
+        //! This method retrieves the mode of the decoder.
+        /** Retrieves the mode of the decoder.
+         @return The hash_code of the class.
+         */
+        inline virtual type_info const& getMode() const noexcept = 0;
 
         //! The ambisonic regular decoder.
         /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
@@ -224,6 +231,15 @@ namespace hoa
         ~Regular()
         {
             delete [] m_matrix;
+        }
+        
+        //! This method retrieves the mode of the decoder.
+        /** Retrieves the mode of the decoder.
+         @return The hash_code of the class.
+         */
+        inline type_info const& getMode() const noexcept override
+        {
+            return typeid(Decoder<Hoa2d, T>::Regular);
         }
 
         //! This method performs the decoding.
@@ -276,6 +292,15 @@ namespace hoa
         ~Irregular()
         {
             delete [] m_matrix;
+        }
+        
+        //! This method retrieves the mode of the decoder.
+        /** Retrieves the mode of the decoder.
+         @return The hash_code of the class.
+         */
+        inline type_info const& getMode() const noexcept override
+        {
+            return typeid(Decoder<Hoa2d, T>::Irregular);
         }
 
         //! This method performs the decoding.
@@ -488,6 +513,15 @@ namespace hoa
             if(m_output_right)
                 delete [] m_output_right;
         }
+        
+        //! This method retrieves the mode of the decoder.
+        /** Retrieves the mode of the decoder.
+         @return The hash_code of the class.
+         */
+        inline type_info const& getMode() const noexcept override
+        {
+            return typeid(Decoder<Hoa2d, T>::Binaural);
+        }
 
         //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.
@@ -554,7 +588,7 @@ namespace hoa
         }
 
         //! This method performs the binaural decoding and the convolution.
-        inline void processBlock(const T* inputs, T** outputs) const noexcept
+        inline void processBlock(T const* inputs, T* outputs) const noexcept
         {
             Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, 9, Hrtf<Hoa2d, T>::getImpulse(), inputs, m_results);
             for(ulong i = 0; i < m_vector_size; i++)
@@ -562,8 +596,8 @@ namespace hoa
                 Signal<T>::add(HOA_NBIN_I, m_results + i, m_vector_size, m_linear_vector_left + i, 1);
                 Signal<T>::add(HOA_NBIN_I, m_results + i + m_vector_size * HOA_NBIN_I, m_vector_size, m_linear_vector_right + i,1);
             }
-            Signal<T>::copy(m_vector_size, m_linear_vector_left, outputs[0]);
-            Signal<T>::copy(m_vector_size, m_linear_vector_right, outputs[1]);
+            Signal<T>::copy(m_vector_size, m_linear_vector_left, outputs);
+            Signal<T>::copy(m_vector_size, m_linear_vector_right, outputs+m_vector_size);
             Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_left + m_vector_size, m_linear_vector_left);
             Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_right + m_vector_size, m_linear_vector_right);
             Signal<T>::clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
