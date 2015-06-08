@@ -18,6 +18,49 @@ namespace hoa
     {
     public:
         
+        //! Allocates a vector.
+        /** Allocates a vector.
+         @param size  The size of the vector.
+         @return A pointer to a vector.
+         */
+        static inline T* alloc(const ulong size) noexcept
+        {
+#ifdef __APPLE__
+            T* vec = (T *)malloc(size * sizeof(T));
+            if(vec) {clear(size, vec);}
+            return vec;
+#elif _WINDOWS
+            T* vec = (T *)_aligned_malloc(size * sizeof(T), 16);
+            if(vec) {clear(size, vec);}
+            return vec;
+#else
+            T* vec = (T *)memalign(16, size * sizeof(T));
+            if(vec) {clear(size, vec);}
+            return vec;
+#endif
+        }
+        
+        //! Frees a vector.
+        /** Frees a vector.
+         @param vec A pointer to a vector.
+         @return A pointer to a vector.
+         */
+        static inline T* free(T* vec) noexcept
+        {
+#ifdef __APPLE__
+            if(vec) {free(vec);}
+            return nullptr;
+#elif _WINDOWS
+            if(vec) {_aligned_free(vec);}
+            return nullptr;
+#else
+            if(vec) {free(vec);}
+            return nullptr;
+#endif
+        }
+        
+        
+        
         //! Multiplies a matrix by a vector.
         /** Multiplies a matrix by a vector.
         @param colsize  The size of the input vector and the number of columns.
@@ -168,14 +211,19 @@ namespace hoa
         //! Adds a vector to an other.
         /** Adds a vector to an other value by value.
         @param   size   The size of the vectors.
-        @param   source The source vector.
-        @param   dest   The destination vector.
+        @param   in The source vector.
+        @param   out   The destination vector.
          */
-        static inline void add(const ulong size, const T* source, T* dest) noexcept
+        static inline void add(const ulong size, const T* in, T* out) noexcept
         {
-            for(ulong i = 0ul; i < size; i++)
+            for(size_t i = size>>3; i; --i, in += 8, out += 8)
             {
-                dest[i] += source[i];
+                out[0] += in[0]; out[1] += in[1]; out[2] += in[2]; out[3] += in[3];
+                out[4] += in[4]; out[5] += in[5]; out[6] += in[6]; out[7] += in[7];
+            }
+            for(size_t i = size&7; i; --i, in++, out++)
+            {
+                out[0] += in[0];
             }
         }
 

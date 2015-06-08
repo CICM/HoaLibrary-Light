@@ -9,6 +9,8 @@
 
 #ifdef __APPLE__
 #include <Accelerate/Accelerate.h>
+#else
+#include <malloc.h>
 #endif
 
 #include <string>

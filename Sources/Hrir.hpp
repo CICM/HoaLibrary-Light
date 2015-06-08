@@ -37,22 +37,22 @@ namespace hoa
             return 5ul;
         }
         
-        //! Gets the number rows of the matrices (or the harmonics used to compute the matrices).
-        /** Gets the number rows of the matrices (or the harmonics used to compute the matrices).
+        //! Gets the number rows of the matrices (or the size of the responses used to compute the matrices).
+        /** Gets the number rows of the matrices (or the size of the responses used to compute the matrices).
          @return The number rows of the matrices.
          */
         static ulong getNumberOfRows() noexcept
         {
-            return 11ul;
+            return 256ul;
         }
         
-        //! Gets the number columns of the matrices (or the size of the responses used to compute the matrices).
-        /** Gets the number columns of the matrices (or the size of the responses used to compute the matrices).
+        //! Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
+        /** Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
          @return The number columns of the matrices.
          */
         static ulong getNumberOfColumns() noexcept
         {
-            return 256ul;
+            return 11ul;
         }
         
         //! Gets the size of the matrices (rows * columns).

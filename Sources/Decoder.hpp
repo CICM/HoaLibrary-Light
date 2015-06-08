@@ -445,6 +445,7 @@ namespace hoa
     {
     private:
         ulong       m_vector_size;
+        T*          m_input;
         T*          m_matrix_left;
         T*          m_matrix_right;
         T*          m_vector_left;
@@ -452,10 +453,11 @@ namespace hoa
         
         void clear()
         {
-            if(m_matrix_left)  {delete [] m_matrix_left;}
-            if(m_matrix_right) {delete [] m_matrix_right;}
-            if(m_vector_left)  {delete [] m_vector_left;}
-            if(m_vector_right) {delete [] m_vector_right;}
+            m_input        = Signal<T>::free(m_input);
+            m_matrix_left  = Signal<T>::free(m_matrix_left);
+            m_matrix_right = Signal<T>::free(m_matrix_right);
+            m_vector_left  = Signal<T>::free(m_vector_left);
+            m_vector_right = Signal<T>::free(m_vector_right);
         }
     public:
 
@@ -465,6 +467,7 @@ namespace hoa
          */
         Binaural(const ulong order) : Decoder<Hoa2d, T>(order, 2),
         m_vector_size(0ul),
+        m_input(nullptr),
         m_matrix_left(nullptr),
         m_matrix_right(nullptr),
         m_vector_left(nullptr),
@@ -489,34 +492,60 @@ namespace hoa
         void computeRendering(const ulong vectorsize = 64)  override
         {
             clear();
-            m_vector_size = vectorsize;
-            m_matrix_left = new T[Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size];
-            Signal<T>::clear(Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size, m_matrix_left);
-            m_matrix_right = new T[Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size];
-            Signal<T>::clear(Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size, m_matrix_right);
-            m_vector_left = new T[Hrir<Hoa2d, T>::getNumberOfColumns() + m_vector_size];
-            Signal<T>::clear(Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size, m_vector_left);
-            m_vector_right = new T[Hrir<Hoa2d, T>::getNumberOfColumns() + m_vector_size];
-            Signal<T>::clear(Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size, m_vector_right);
+            m_vector_size  = vectorsize;
+            m_input        = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size);
+            m_matrix_left  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() * m_vector_size);
+            m_matrix_right = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() * m_vector_size);
+            m_vector_left  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
+            m_vector_right = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
         }
 
         //! This method performs the binaural decoding and the convolution.
         inline void processBlock(const T** inputs, T** outputs) noexcept
         {
-            /*
-            Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, 9, Hrtf<Hoa2d, T>::getLeftImpulses(), inputs, m_results);
-            for(ulong i = 0; i < m_vector_size; i++)
+            T* input = m_input;
+            for(ulong i = 0; i < Hrir<Hoa2d, T>::getNumberOfColumns() && i < Decoder<Hoa2d, T>::getNumberOfHarmonics(); i++)
             {
-                Signal<T>::add(HOA_NBIN_I, m_results + i, m_vector_size, m_linear_vector_left + i, 1);
-                Signal<T>::add(HOA_NBIN_I, m_results + i + m_vector_size * HOA_NBIN_I, m_vector_size, m_linear_vector_right + i,1);
+                Signal<t_sample>::copy(m_vector_size, inputs[i], input);
+                input += m_vector_size;
             }
-            Signal<T>::copy(m_vector_size, m_linear_vector_left, outputs[0]);
-            Signal<T>::copy(m_vector_size, m_linear_vector_right, outputs[1]);
-            Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_left + m_vector_size, m_linear_vector_left);
-            Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_right + m_vector_size, m_linear_vector_right);
-            Signal<T>::clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
-            Signal<T>::clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
-             */
+            if(Hrir<Hoa2d, T>::getNumberOfColumns() > Decoder<Hoa2d, T>::getNumberOfHarmonics())
+            {
+                Signal<t_sample>::clear(
+                m_vector_size * (Hrir<Hoa2d, T>::getNumberOfColumns() - Decoder<Hoa2d, T>::getNumberOfHarmonics()), input);
+            }
+            
+            Signal<T>::mul(Hrir<Hoa2d, T>::getNumberOfRows(),
+                           m_vector_size,
+                           Hrir<Hoa2d, T>::getNumberOfColumns(),
+                           Hrir<Hoa2d, T>::getLeftMatrix(),
+                           m_input,
+                           m_matrix_left);
+            const T* left = m_matrix_left;
+            for(ulong i = 0; i < m_vector_size; i ++)
+            {
+                Signal<T>::add(Hrir<Hoa2d, T>::getNumberOfRows(), left, m_vector_left + i);
+                left += Hrir<Hoa2d, T>::getNumberOfRows();
+            }
+            Signal<T>::copy(m_vector_size, m_vector_left, outputs[0]);
+            Signal<T>::copy(Hrir<Hoa2d, T>::getNumberOfRows(), m_vector_left + m_vector_size, m_vector_left);
+            Signal<T>::clear(m_vector_size, m_vector_left + Hrir<Hoa2d, T>::getNumberOfRows());
+            
+            Signal<T>::mul(Hrir<Hoa2d, T>::getNumberOfRows(),
+                           m_vector_size,
+                           Hrir<Hoa2d, T>::getNumberOfColumns(),
+                           Hrir<Hoa2d, T>::getLeftMatrix(),
+                           m_input,
+                           m_matrix_right);
+            const T* right = m_vector_right;
+            for(ulong i = 0; i < m_vector_size; i ++)
+            {
+                Signal<T>::add(Hrir<Hoa2d, T>::getNumberOfRows(), right + i, m_vector_right + i);
+                right += Hrir<Hoa2d, T>::getNumberOfRows();
+            }
+            Signal<T>::copy(m_vector_size, m_vector_right, outputs[1]);
+            Signal<T>::copy(Hrir<Hoa2d, T>::getNumberOfRows(), m_vector_right + m_vector_size, m_vector_right);
+            Signal<T>::clear(m_vector_size, m_vector_right +Hrir<Hoa2d, T>::getNumberOfRows());
         }
 
         inline virtual void process(const T* inputs, T* outputs) noexcept {}
