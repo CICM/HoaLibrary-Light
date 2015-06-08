@@ -8,7 +8,7 @@
 #define DEF_HOA_DECODER_LIGHT
 
 #include "Encoder.hpp"
-#include "Hrtf.hpp"
+#include "Hrir.hpp"
 
 namespace hoa
 {
@@ -532,6 +532,7 @@ namespace hoa
         //! This method performs the binaural decoding and the convolution.
         inline void processBlock() noexcept
         {
+            /*
             Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, 9, Hrtf<Hoa2d, T>::getImpulse(), m_inputs, m_results);
 
             for(ulong i = 0; i < m_vector_size; i++)
@@ -551,12 +552,14 @@ namespace hoa
 
             Signal<T>::clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
             Signal<T>::clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
+             */
         }
 
         //! This method performs the binaural decoding and the convolution.
         inline void processBlock(const T* inputs, T** outputs) const noexcept
         {
-            Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, 9, Hrtf<Hoa2d, T>::getImpulse(), inputs, m_results);
+            
+            Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, 9, Hrtf<Hoa2d, T>::getLeftImpulses(), inputs, m_results);
             for(ulong i = 0; i < m_vector_size; i++)
             {
                 Signal<T>::add(HOA_NBIN_I, m_results + i, m_vector_size, m_linear_vector_left + i, 1);
