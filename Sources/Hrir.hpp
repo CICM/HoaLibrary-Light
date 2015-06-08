@@ -28,8 +28,8 @@ namespace hoa
     {
     public:
         
-        //! Gets the order of decomposition used to compute the matrix.
-        /** Gets the order of decomposition used to compute the matrix.
+        //! Gets the order of decomposition used to compute the matrices.
+        /** Gets the order of decomposition used to compute the matrices.
          @return The order of decomposition.
          */
         static ulong getOrderOfDecomposition() noexcept
@@ -37,22 +37,31 @@ namespace hoa
             return 5ul;
         }
         
-        //! Gets the number rows of the matrix (or the harmonics used to compute the matrix).
-        /** Gets the number rows of the matrix (or the harmonics used to compute the matrix).
-         @return The number rows of the matrix.
+        //! Gets the number rows of the matrices (or the harmonics used to compute the matrices).
+        /** Gets the number rows of the matrices (or the harmonics used to compute the matrices).
+         @return The number rows of the matrices.
          */
         static ulong getNumberOfRows() noexcept
         {
             return 11ul;
         }
         
-        //! Gets the number columns of the matrix (or the size of the responses used to compute the matrix).
-        /** Gets the number columns of the matrix (or the size of the responses used to compute the matrix).
-         @return The number columns of the matrix.
+        //! Gets the number columns of the matrices (or the size of the responses used to compute the matrices).
+        /** Gets the number columns of the matrices (or the size of the responses used to compute the matrices).
+         @return The number columns of the matrices.
          */
-        static ulong getNumberOfcolumns() noexcept
+        static ulong getNumberOfColumns() noexcept
         {
-            return 256;
+            return 256ul;
+        }
+        
+        //! Gets the size of the matrices (rows * columns).
+        /** Gets the size of the matrices (rows * columns).
+         @return The nsize of the matrices.
+         */
+        static ulong getMatricesSize() noexcept
+        {
+            return 2816ul;
         }
         
         //! Get the HRIR matrix for the left ear.
