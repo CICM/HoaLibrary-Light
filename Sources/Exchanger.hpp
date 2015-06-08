@@ -73,7 +73,18 @@ namespace hoa
         /**	This method gets the numbering conversion.
          @return The numbering convertion.
          */
-        virtual Numbering getNumbering(const Numbering mode) const noexcept;
+        virtual Numbering getNumbering() const noexcept;
+        
+        //! Retrieve the name of an harmonic depending on the current numbering configuration.
+        /** Retrieve the name of an harmonic depending on the current numbering configuration.
+         This returns the name of the harmonic that contains its degree and its order for ACN and SID and harmonic name with letter code for FUMA.
+         @param     index	The index of an harmonic.
+         @param     isInput	Pass true to retrieve the input harmonic name, false for an output.
+         @return    The name of the harmonic.
+         @see       getHarmonicDegree()
+         @see       getHarmonicOrder()
+         */
+        virtual string getHarmonicName(const ulong index, const bool isInput) const noexcept;
     };
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -181,6 +192,50 @@ namespace hoa
         inline Normalization getNormalization() const noexcept
         {
             return m_normalization;
+        }
+        
+        //! Retrieve the name of an harmonic depending on the current numbering configuration.
+        /** Retrieve the name of an harmonic depending on the current numbering configuration.
+         This returns the name of the harmonic that contains its degree and its order for ACN and SID and harmonic name with letter code for FUMA.
+         @param     index	The index of an harmonic.
+         @param     isInput	Pass true to retrieve the input harmonic name, false for an output.
+         @return    The name of the harmonic.
+         @see       getHarmonicDegree()
+         @see       getHarmonicOrder()
+         */
+        string getHarmonicName(const ulong index, const bool isInput) const noexcept
+        {
+            const Numbering numb = getNumbering();
+            const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
+            const bool malham = !acn && ((isInput && numb == fromFurseMalham) || (!isInput && numb == toFurseMalham));
+            
+            if(acn)
+            {
+                // [0, 0], [1, -1], [1, 1], [2, -2], [2, 2], [3, -3], [3, 3]...
+                return Processor<Hoa2d, T>::Harmonics::getHarmonicName(index);
+            }
+            else if(malham)
+            {
+                if(index < 7)
+                {
+                    static const unsigned char FurseMalham_2D_Letterings[7] =
+                    {
+                        'W', 'X', 'Y', 'U', 'V', 'P', 'Q'
+                    };
+                    
+                    string name = "Harmonic ";
+                    return name += FurseMalham_2D_Letterings[index];
+                }
+                
+                return "?";
+            }
+            else
+            {
+                // [0, 0], [1, 1], [1, -1], [2, 2], [2, -2], [3, 3], [3, -3]...
+                ulong hdegree = Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index);
+                ulong horder  = Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * -1l;
+                return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
+            }
         }
 
         //! This method performs the numbering and the normalization.
@@ -715,6 +770,54 @@ namespace hoa
                 {
                     *(outputs++) = *(inputs++) * norm;
                 }
+            }
+        }
+        
+        //! Retrieve the name of an harmonic depending on the current numbering configuration.
+        /** Retrieve the name of an harmonic depending on the current numbering configuration.
+         This returns the name of the harmonic that contains its degree and its order for ACN and SID and harmonic name with letter code for FUMA.
+         @param     index	The index of an harmonic.
+         @param     isInput	Pass true to retrieve the input harmonic name, false for an output.
+         @return    The name of the harmonic.
+         @see       getHarmonicDegree()
+         @see       getHarmonicOrder()
+         */
+        string getHarmonicName(const ulong index, const bool isInput) const noexcept
+        {
+            const Numbering numb = getNumbering();
+            const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
+            const bool malham = !acn && ((isInput && numb == fromFurseMalham) || (!isInput && numb == toFurseMalham));
+            
+            if(acn)
+            {
+                // [0, 0], [1, -1], [1, 0], [1, 1], [2, -2], [2, -1], [2, 0], [2, 1], [2, 2] ...
+                return Processor<Hoa3d, T>::Harmonics::getHarmonicName(index);
+            }
+            else if(malham)
+            {
+                if(index < 16)
+                {
+                    static const unsigned char FurseMalham_3D_Letterings[16] =
+                    {
+                        'W', 'X', 'Y', 'Z',
+                        'R', 'S', 'T', 'U', 'V',
+                        'K', 'L', 'M', 'N', 'O', 'P', 'Q'
+                    };
+                    
+                    string name = "Harmonic ";
+                    return name += FurseMalham_3D_Letterings[index];
+                }
+                
+                return "?";
+            }
+            else
+            {
+                // [0, 0], [1, 1], [1, -1], [1, 0], [2, 2], [2, -2], [2, 1], [2, -1], [2, 0] ...
+                const ulong hdegree = sqrt(index);
+                const long tmp = index - (hdegree) * (hdegree);
+                const long sign = (tmp % 2) ? -1l : 1l;
+                const long horder = sign * (hdegree + 1l - ((tmp - 1l) / 2. + 1l));
+                return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
             }
         }
     };
