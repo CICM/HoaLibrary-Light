@@ -53,6 +53,40 @@ namespace hoa
         return floor(val + 0.5);
     }
 #endif
+#if (__cplusplus <= 199711L)
+inline string to_string(ulong val)
+{
+    char buffer[1024];
+#ifdef _WINDOWS
+    s_sprintf(buffer, "%lu", val);
+#else
+    sprintf(buffer, "%lu", val);
+#endif
+    return buffer;
+}
+
+inline string to_string(float val)
+{
+    char buffer[1024];
+#ifdef _WINDOWS
+    s_sprintf(buffer, "%f", val);
+#else
+    sprintf(buffer, "%f", val);
+#endif
+    return buffer;
+}
+
+inline string to_string(double val)
+{
+    char buffer[1024];
+#ifdef _WINDOWS
+    s_sprintf(buffer, "%lf", val);
+#else
+    sprintf(buffer, "%lf", val);
+#endif
+    return buffer;
+}
+#endif
 
     //! The dimension of class.
     /** Most of the classes are specialized for 2d or 3d.

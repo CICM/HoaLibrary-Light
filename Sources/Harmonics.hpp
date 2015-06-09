@@ -53,13 +53,13 @@ namespace hoa
          @return     The name.
          */
         string getName() const noexcept;
-        
+
         //! Get the normalization of the harmonic.
         /** The method returns the normalization of the harmonics.
          @return        The normalization of the harmonics.
          */
         T getNormalization() const noexcept;
-        
+
         //! Get the semi-normalization of the harmonic.
         /** The method returns the semi-normalization of the harmonics.
          @return        The semi-normalization of the harmonics.
@@ -73,14 +73,14 @@ namespace hoa
          @return        The index.
          */
         static ulong getHarmonicIndex(const ulong degree, const long order) noexcept;
-        
+
         //! Get the degree of an harmonic with an index.
         /** The method returns the degree of the harmonic.
          @param index  The index of the harmonic.
          @return        The degree.
          */
         static ulong getHarmonicDegree(const ulong index) noexcept;
-        
+
         //! Get the order of an harmonic with an index.
         /** The method returns the order of the harmonic.
          @param index  The index of the harmonic.
@@ -94,7 +94,7 @@ namespace hoa
          @return        The number of harmonics.
          */
         static ulong getNumberOfHarmonics(const ulong order) noexcept;
-        
+
         //! Get the normalization of an harmonic.
         /** The method returns the normalization of an harmonics.
          @param degree  The degree of the harmonic.
@@ -102,7 +102,7 @@ namespace hoa
          @return        The normalization of the harmonics.
          */
         static T getNormalization(const ulong degree, const long order) noexcept;
-        
+
         //! Get the semi-normalization of an harmonic.
         /** The method returns the semi-normalization of an harmonics.
          @param degree  The degree of the harmonic.
@@ -173,7 +173,7 @@ namespace hoa
         {
             return "Harmonic " + to_string(getDegree()) + " " + to_string(getOrder());
         }
-        
+
         //! Get the normalization of the harmonic.
         /** The method returns the normalization of the harmonics.
          @return        The normalization of the harmonics.
@@ -182,7 +182,7 @@ namespace hoa
         {
             return 1.;
         }
-        
+
         //! Get the semi-normalization of the harmonic.
         /** The method returns the semi-normalization of the harmonics.
          @return        The semi-normalization of the harmonics.
@@ -201,7 +201,7 @@ namespace hoa
         {
             return (index + index % 2) * 0.5;
         }
-        
+
         //! Get the order of an harmonic with an index.
         /** The method returns the order of the harmonic.
          @param index  The index of the harmonic.
@@ -209,9 +209,9 @@ namespace hoa
          */
         static inline ulong getOrder(const ulong index) noexcept
         {
-            return (index + index % 2) * 0.5 * (1 - (index % 2) * 2);
+            return long(index + index % 2) * 0.5 * (1 - long(index % 2) * 2);
         }
-        
+
         //! Get the index of an harmonic with its degree and its order.
         /** The method returns the index of the harmonic.
          @param degree  The degree of the harmonic.
@@ -232,7 +232,7 @@ namespace hoa
         {
             return order * 2 + 1;
         }
-        
+
         //! Get the normalization of an harmonic.
         /** The method returns the normalization of an harmonics.
          @param degree  The degree of the harmonic.
@@ -243,7 +243,7 @@ namespace hoa
         {
             return 1.;
         }
-        
+
         //! Get the semi-normalization of an harmonic.
         /** The method returns the semi-normalization of an harmonics.
          @param degree  The degree of the harmonic.
@@ -315,7 +315,7 @@ namespace hoa
         {
             return "Harmonic " + to_string(getDegree()) + " " + to_string(getOrder());
         }
-        
+
         //! Get the normalization of the harmonic.
         /** The method returns the normalization of the harmonics.
          @return        The normalization of the harmonics.
@@ -324,7 +324,7 @@ namespace hoa
         {
             return getNormalization(getDegree(), getOrder());
         }
-        
+
         //! Get the semi-normalization of the harmonic.
         /** The method returns the semi-normalization of the harmonics.
          @return        The semi-normalization of the harmonics.
@@ -343,7 +343,7 @@ namespace hoa
         {
             return ulong(sqrt(index));
         }
-        
+
         //! Get the order of an harmonic with an index.
         /** The method returns the order of the harmonic.
          @param index  The index of the harmonic.
@@ -353,7 +353,7 @@ namespace hoa
         {
             return index - (ulong(sqrt(index)) * (ulong(sqrt(index)) + 1));
         }
-        
+
         //! Get the index of an harmonic with its degree and its order.
         /** The method returns the index of the harmonic.
          @param degree  The degree of the harmonic.
@@ -374,7 +374,7 @@ namespace hoa
         {
             return (order + 1) * (order + 1);
         }
-        
+
         //! Get the normalization of an harmonic.
         /** The method returns the normalization of an harmonics.
          @param degree  The degree of the harmonic.
@@ -385,7 +385,7 @@ namespace hoa
         {
             return getSemiNormalization(degree, order) * sqrt(2. * double(degree) + 1.);
         }
-        
+
         //! Get the semi-normalization of an harmonic.
         /** The method returns the semi-normalization of an harmonics.
          @param degree  The degree of the harmonic.
