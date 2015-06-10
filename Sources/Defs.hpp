@@ -65,6 +65,17 @@ inline string to_string(ulong val)
     return buffer;
 }
 
+inline string to_string(long val)
+{
+    char buffer[1024];
+#ifdef _WINDOWS
+    s_sprintf(buffer, "%ld", val);
+#else
+    sprintf(buffer, "%ld", val);
+#endif
+    return buffer;
+}
+
 inline string to_string(float val)
 {
     char buffer[1024];

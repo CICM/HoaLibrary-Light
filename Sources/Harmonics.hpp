@@ -207,9 +207,9 @@ namespace hoa
          @param index  The index of the harmonic.
          @return        The order.
          */
-        static inline ulong getOrder(const ulong index) noexcept
+        static inline long getOrder(const ulong index) noexcept
         {
-            return long(index + index % 2) * 0.5 * (1 - long(index % 2) * 2);
+            return (index + index % 2) * 0.5 * (1 - (long)(index % 2) * 2);
         }
 
         //! Get the index of an harmonic with its degree and its order.

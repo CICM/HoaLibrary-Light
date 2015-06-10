@@ -616,9 +616,9 @@ namespace hoa
             {
                 // [0, 0], [1, 1], [1, -1], [1, 0], [2, 2], [2, -2], [2, 1], [2, -1], [2, 0] ...
                 const ulong hdegree = sqrt(index);
-                const ulong tmp = index - (hdegree) * (hdegree);
-                const ulong sign = (tmp % 2) ? -1l : 1l;
-                const ulong horder = sign * (hdegree + 1l - ((tmp - 1l) / 2. + 1l));
+                const long tmp = index - (hdegree) * (hdegree);
+                const long sign = (tmp % 2) ? -1l : 1l;
+                const long horder = sign * (hdegree + 1l - ((tmp - 1l) / 2. + 1l));
                 return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
             }
         }
