@@ -74,7 +74,6 @@ namespace hoa
         }
     };
 
-
     template <typename T> class Recomposer<Hoa2d, T, Fisheye> : public Processor<Hoa2d, T>::Harmonics, public Processor<Hoa2d, T>::Planewaves
     {
     private:
@@ -116,7 +115,7 @@ namespace hoa
             T factor = 1. - Math<T>::clip(fisheye, (T)0., (T)1.);
             for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
-                T azimuth = (T)i / (T)Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * HOA_2PI - HOA_PI;
+                T azimuth = (T)i / (T)Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * HOA_2PI;
                 if(azimuth < HOA_PI)
                 {
                     azimuth *= factor;
@@ -139,7 +138,7 @@ namespace hoa
             m_encoders[0]->process(inputs, outputs);
             for(ulong i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
-                m_encoders[i]->processAdd(inputs++, outputs);
+                m_encoders[i]->processAdd(++inputs, outputs);
             }
         }
     };
@@ -161,6 +160,7 @@ namespace hoa
             for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
                 m_encoders.push_back(new typename Encoder<Hoa2d, T>::DC(order));
+                m_encoders[i]->setAzimuth(i * (HOA_2PI / numberOfPlanewaves));
             }
         }
 
@@ -224,7 +224,7 @@ namespace hoa
             m_encoders[0]->process(inputs, outputs);
             for(ulong i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
-                m_encoders[i]->processAdd(inputs++, outputs);
+                m_encoders[i]->processAdd(++inputs, outputs);
             }
         }
     };
