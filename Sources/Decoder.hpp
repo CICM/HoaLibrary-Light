@@ -545,7 +545,7 @@ namespace hoa
             T* input = m_input;
             for(ulong i = 0; i < Hrir<Hoa2d, T>::getNumberOfColumns() && i < Decoder<Hoa2d, T>::getNumberOfHarmonics(); i++)
             {
-                Signal<t_sample>::copy(m_vector_size, inputs[i], input);
+                Signal<T>::copy(m_vector_size, inputs[i], input);
                 input += m_vector_size;
             }
             processChannel(m_input, Hrir<Hoa2d, T>::getLeftMatrix(), m_left, outputs[0]);
