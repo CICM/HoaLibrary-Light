@@ -18,6 +18,49 @@ namespace hoa
     {
     public:
         
+        //! Allocates a vector.
+        /** Allocates a vector.
+         @param size  The size of the vector.
+         @return A pointer to a vector.
+         */
+        static inline T* alloc(const ulong size) noexcept
+        {
+#ifdef __APPLE__
+            T* vec = (T *)malloc(size * sizeof(T));
+            if(vec) {clear(size, vec);}
+            return vec;
+#elif _WINDOWS
+            T* vec = (T *)_aligned_malloc(size * sizeof(T), 16);
+            if(vec) {clear(size, vec);}
+            return vec;
+#else
+            T* vec = (T *)memalign(16, size * sizeof(T));
+            if(vec) {clear(size, vec);}
+            return vec;
+#endif
+        }
+        
+        //! Frees a vector.
+        /** Frees a vector.
+         @param vec A pointer to a vector.
+         @return A pointer to a vector.
+         */
+        static inline T* free(T* vec) noexcept
+        {
+#ifdef __APPLE__
+            if(vec) {free(vec);}
+            return nullptr;
+#elif _WINDOWS
+            if(vec) {_aligned_free(vec);}
+            return nullptr;
+#else
+            if(vec) {free(vec);}
+            return nullptr;
+#endif
+        }
+        
+        
+        
         //! Multiplies a matrix by a vector.
         /** Multiplies a matrix by a vector.
         @param colsize  The size of the input vector and the number of columns.
@@ -26,16 +69,22 @@ namespace hoa
         @param matrix      The input matrix.
         @param output      The output vector.
          */
-        static inline void mul(const ulong colsize, const ulong rowsize, const T* input, const T* matrix, T* output) noexcept
+        static inline void mul(const ulong colsize, const ulong rowsize, const T* input, const T* in2, T* output) noexcept
         {
             for(ulong i = 0ul; i < rowsize; i++)
             {
-                T sum = 0.f;
-                for(ulong j = 0ul; j < colsize; j++)
+                T result = 0;
+                const T* in1 = input;
+                for(size_t i = colsize>>3; i; --i, in1 += 8, in2 += 8)
                 {
-                    sum += input[j] * *(matrix++);
+                    result += in1[0] * in2[0]; result += in1[1] * in2[1]; result += in1[2] * in2[2]; result += in1[3] * in2[3];
+                    result += in1[4] * in2[4]; result += in1[5] * in2[5]; result += in1[6] * in2[6]; result += in1[7] * in2[7];
                 }
-                output[i] = sum;
+                for(size_t i = colsize&7; i; --i, in1++, in2++)
+                {
+                    result += in1[0] * in2[0];
+                }
+                output[i] = result;
             }
         }
 
@@ -58,14 +107,14 @@ namespace hoa
                 out = output;
                 for(i = 0; i < m; i++)
                 {
-                    const T g = in1[l * i + k];
-                    if(g != 0)
+                    const T g0 = in1[l * i + k];
+                    if(g0 != 0)
                     {
                         const T* in = in2+n*k;
                         for(j = n; j; j -= 8, out += 8, in += 8)
                         {
-                            const T f0 = in[0] * g, f1 = in[1] * g, f2 = in[2] * g, f3 = in[3] * g;
-                            const T f4 = in[4] * g, f5 = in[5] * g, f6 = in[6] * g, f7 = in[7] * g;
+                            const T f0 = in[0] * g0, f1 = in[1] * g0, f2 = in[2] * g0, f3 = in[3] * g0;
+                            const T f4 = in[4] * g0, f5 = in[5] * g0, f6 = in[6] * g0, f7 = in[7] * g0;
                             out[0] += f0; out[1] += f1; out[2] += f2; out[3] += f3;
                             out[4] += f4; out[5] += f5; out[6] += f6; out[7] += f7;
                         }
@@ -168,14 +217,19 @@ namespace hoa
         //! Adds a vector to an other.
         /** Adds a vector to an other value by value.
         @param   size   The size of the vectors.
-        @param   source The source vector.
-        @param   dest   The destination vector.
+        @param   in The source vector.
+        @param   out   The destination vector.
          */
-        static inline void add(const ulong size, const T* source, T* dest) noexcept
+        static inline void add(const ulong size, const T* in, T* out) noexcept
         {
-            for(ulong i = 0ul; i < size; i++)
+            for(size_t i = size>>3; i; --i, in += 8, out += 8)
             {
-                dest[i] += source[i];
+                out[0] += in[0]; out[1] += in[1]; out[2] += in[2]; out[3] += in[3];
+                out[4] += in[4]; out[5] += in[5]; out[6] += in[6]; out[7] += in[7];
+            }
+            for(size_t i = size&7; i; --i, in++, out++)
+            {
+                out[0] += in[0];
             }
         }
 
@@ -208,12 +262,17 @@ namespace hoa
          */
         static inline T dot(const ulong size, const T* in1, const T* in2) noexcept
         {
-            T sum = 0;
-            for(ulong i = 0ul; i < size; i++)
+            T result = 0;
+            for(size_t i = size>>3; i; --i, in1 += 8, in2 += 8)
             {
-                sum += in1[i] * in2[i];
+                result += in1[0] * in2[0]; result += in1[1] * in2[1]; result += in1[2] * in2[2]; result += in1[3] * in2[3];
+                result += in1[4] * in2[4]; result += in1[5] * in2[5]; result += in1[6] * in2[6]; result += in1[7] * in2[7];
             }
-            return sum;
+            for(size_t i = size&7; i; --i, in1++, in2++)
+            {
+                result += in1[0] * in2[0];
+            }
+            return result;
         }
     };
 }

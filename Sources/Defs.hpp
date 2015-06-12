@@ -9,6 +9,8 @@
 
 #ifdef __APPLE__
 #include <Accelerate/Accelerate.h>
+#else
+#include <malloc.h>
 #endif
 
 #include <string>
@@ -52,6 +54,52 @@ namespace hoa
     {
         return floor(val + 0.5);
     }
+#endif
+#if (__cplusplus <= 199711L)
+    inline string to_string(const ulong& val)
+    {
+        char buffer[1024];
+#ifdef _WINDOWS
+        s_sprintf(buffer, "%lu", val);
+#else
+        sprintf(buffer, "%lu", val);
+#endif
+        return buffer;
+    }
+
+    inline string to_string(const long& val)
+    {
+        char buffer[1024];
+#ifdef _WINDOWS
+        s_sprintf(buffer, "%ld", val);
+#else
+        sprintf(buffer, "%ld", val);
+#endif
+        return buffer;
+    }
+
+    inline string to_string(const float& val)
+    {
+        char buffer[1024];
+#ifdef _WINDOWS
+        s_sprintf(buffer, "%f", val);
+#else
+        sprintf(buffer, "%f", val);
+#endif
+        return buffer;
+    }
+
+    inline string to_string(const double& val)
+    {
+        char buffer[1024];
+#ifdef _WINDOWS
+        s_sprintf(buffer, "%lf", val);
+#else
+        sprintf(buffer, "%lf", val);
+#endif
+        return buffer;
+    }
+    
 #endif
 
     //! The dimension of class.
