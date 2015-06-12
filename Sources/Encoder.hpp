@@ -542,15 +542,15 @@ namespace hoa
             m_radius = max(radius, (T)0.);
             if(m_radius < 1.)
             {
-                m_factor    = (1. - m_radius) * HOA_PI;
-                m_gain      = (sin(m_factor - HOA_PI2) + 1.) * 0.5;
+                m_factor    = T((1. - m_radius) * HOA_PI);
+                m_gain      = T((sin(m_factor - HOA_PI2) + 1.) * 0.5);
                 m_distance  = 1.;
             }
             else
             {
                 m_factor    = 0;
                 m_gain      = 0;
-                m_distance  = 1. / radius;
+                m_distance  = T(1. / radius);
             }
         }
 
@@ -596,7 +596,7 @@ namespace hoa
                 T sin_x = m_sinx;
                 T tcos_x = cos_x;
                 const T gain1   = (m_gain * Processor<Hoa2d, T>::Harmonics::getDecompositionOrder());
-                const T factor1 = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - m_gain) + m_distance);
+                const T factor1 = (cos(Math<T>::clip(m_factor, 0., T(HOA_PI))) + 1.) * T(0.5) * T((gain1 - m_gain) + m_distance);
 
                 (*outputs++) = (*input) * (gain1 + m_distance);            // Hamonic [0,0]
                 (*outputs++) = (*input) * sin_x * factor1;                 // Hamonic [1,-1]
@@ -604,7 +604,7 @@ namespace hoa
                 for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
                 {
                     const T gain    = (m_gain * (Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - i) + m_distance);
-                    const T factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
+                    const T factor  = (cos(Math<T>::clip(m_factor * i, 0., T(HOA_PI))) + 1.) * T(0.5);
 
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
                     sin_x   = tcos_x * m_sinx + sin_x * m_cosx;
@@ -917,8 +917,8 @@ namespace hoa
         inline void setElevation(const T elevation) noexcept
         {
             m_elevation = Math<T>::wrap_pi(elevation);
-            m_cos_theta = std::cos(HOA_PI2 + m_elevation);
-            m_sqrt_rmin = std::sqrt(1 - m_cos_theta * m_cos_theta);
+            m_cos_theta = T(std::cos(HOA_PI2 + m_elevation));
+            m_sqrt_rmin = T(std::sqrt(1 - m_cos_theta * m_cos_theta));
         }
 
         //!	Get the elevation angle

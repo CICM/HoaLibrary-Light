@@ -199,7 +199,7 @@ namespace hoa
          */
         static inline ulong getDegree(const ulong index) noexcept
         {
-            return (index + index % 2) * 0.5;
+            return (index + index % 2) / 2ul;
         }
 
         //! Get the order of an harmonic with an index.
@@ -209,7 +209,7 @@ namespace hoa
          */
         static inline long getOrder(const ulong index) noexcept
         {
-            return (index + index % 2) * 0.5 * (1 - (long)(index % 2) * 2);
+            return long(long(index + index % 2l) / 2l) * (1l - (long)(index % 2) * 2l);
         }
 
         //! Get the index of an harmonic with its degree and its order.

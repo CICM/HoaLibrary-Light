@@ -543,10 +543,10 @@ namespace hoa
             }
             else
             {
-                const ulong hdegree = sqrt(index);
+                const long hdegree = long(sqrt(index));
                 const long tmp = index - (hdegree) * (hdegree);
                 const long sign = (tmp % 2) ? -1l : 1l;
-                return sign * (hdegree + 1l - ((tmp - 1l) / 2. + 1l));
+                return sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
             }
         }
 
@@ -568,10 +568,10 @@ namespace hoa
             }
             else
             {
-                const ulong hdegree = sqrt(index);
+                const long hdegree = long(sqrt(index));
                 const long tmp = index - (hdegree) * (hdegree);
                 const long sign = (tmp % 2) ? -1l : 1l;
-                return sign * (hdegree + 1l - ((tmp - 1l) / 2. + 1l));
+                return sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
             }
         }
 
@@ -615,10 +615,10 @@ namespace hoa
             else
             {
                 // [0, 0], [1, 1], [1, -1], [1, 0], [2, 2], [2, -2], [2, 1], [2, -1], [2, 0] ...
-                const ulong hdegree = sqrt(index);
+                const long hdegree = long(sqrt(index));
                 const long tmp = index - (hdegree) * (hdegree);
                 const long sign = (tmp % 2) ? -1l : 1l;
-                const long horder = sign * (hdegree + 1l - ((tmp - 1l) / 2. + 1l));
+                const long horder = sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
                 return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
             }
         }
@@ -816,26 +816,26 @@ namespace hoa
          */
         void normalizeFromMaxN(T const* inputs, T* outputs) noexcept
         {
-            outputs[0] = inputs[0] * sqrt(2.);
-            outputs[1] = inputs[1] * sqrt(3.);
-            outputs[2] = inputs[2] * sqrt(3.);
-            outputs[3] = inputs[3] * sqrt(3.);
+            outputs[0] = inputs[0] * T(sqrt(2.));
+            outputs[1] = inputs[1] * T(sqrt(3.));
+            outputs[2] = inputs[2] * T(sqrt(3.));
+            outputs[3] = inputs[3] * T(sqrt(3.));
             if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
             {
-                outputs[4] = inputs[4] * (sqrt(15.) / 2.);
-                outputs[5] = inputs[5] * (sqrt(15.) / 2.);
-                outputs[6] = inputs[6] * sqrt(5.);
-                outputs[7] = inputs[7] * (sqrt(15.) / 2.);
-                outputs[8] = inputs[8] * (sqrt(15.) / 2.);
+                outputs[4] = inputs[4] * T(sqrt(15.) / 2.);
+                outputs[5] = inputs[5] * T(sqrt(15.) / 2.);
+                outputs[6] = inputs[6] * T(sqrt(5.));
+                outputs[7] = inputs[7] * T(sqrt(15.) / 2.);
+                outputs[8] = inputs[8] * T(sqrt(15.) / 2.);
                 if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
                 {
-                    outputs[9]  = inputs[9]  * sqrt(35. / 8.);
-                    outputs[10] = inputs[10] * (sqrt(35.) / 3.);
-                    outputs[11] = inputs[11] * sqrt(224. / 45);
-                    outputs[12] = inputs[12] * sqrt(7.);
-                    outputs[13] = inputs[13] * sqrt(224. / 45);
-                    outputs[14] = inputs[14] * (sqrt(35.) / 3.);
-                    outputs[15] = inputs[15] * sqrt(35. / 8.);
+                    outputs[9]  = inputs[9]  * T(sqrt(35. / 8.));
+                    outputs[10] = inputs[10] * T(sqrt(35.) / 3.);
+                    outputs[11] = inputs[11] * T(sqrt(224. / 45));
+                    outputs[12] = inputs[12] * T(sqrt(7.));
+                    outputs[13] = inputs[13] * T(sqrt(224. / 45));
+                    outputs[14] = inputs[14] * T(sqrt(35.) / 3.);
+                    outputs[15] = inputs[15] * T(sqrt(35. / 8.));
                 }
             }
             normalizeFromN3D(outputs, outputs);
@@ -848,26 +848,26 @@ namespace hoa
          */
         void normalizeToMaxN(T const* inputs, T* outputs) noexcept
         {
-            outputs[0] = inputs[0] / sqrt(2.);
-            outputs[1] = inputs[1] / sqrt(3.);
-            outputs[2] = inputs[2] / sqrt(3.);
-            outputs[3] = inputs[3] / sqrt(3.);
+            outputs[0] = inputs[0] / T(sqrt(2.));
+            outputs[1] = inputs[1] / T(sqrt(3.));
+            outputs[2] = inputs[2] / T(sqrt(3.));
+            outputs[3] = inputs[3] / T(sqrt(3.));
             if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
             {
-                outputs[4] = inputs[4] / (sqrt(15.) / 2.);
-                outputs[5] = inputs[5] / (sqrt(15.) / 2.);
-                outputs[6] = inputs[6] / sqrt(5.);
-                outputs[7] = inputs[7] / (sqrt(15.) / 2.);
-                outputs[8] = inputs[8] / (sqrt(15.) / 2.);
+                outputs[4] = inputs[4] / T(sqrt(15.) / 2.);
+                outputs[5] = inputs[5] / T(sqrt(15.) / 2.);
+                outputs[6] = inputs[6] / T(sqrt(5.));
+                outputs[7] = inputs[7] / T(sqrt(15.) / 2.);
+                outputs[8] = inputs[8] / T(sqrt(15.) / 2.);
                 if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
                 {
-                    outputs[9]  = inputs[9]  / sqrt(35. / 8.);
-                    outputs[10] = inputs[10] / (sqrt(35.) / 3.);
-                    outputs[11] = inputs[11] / sqrt(224. / 45);
-                    outputs[12] = inputs[12] / sqrt(7.);
-                    outputs[13] = inputs[13] / sqrt(224. / 45);
-                    outputs[14] = inputs[14] / (sqrt(35.) / 3.);
-                    outputs[15] = inputs[15] / sqrt(35. / 8.);
+                    outputs[9]  = inputs[9]  / T(sqrt(35. / 8.));
+                    outputs[10] = inputs[10] / T(sqrt(35.) / 3.);
+                    outputs[11] = inputs[11] / T(sqrt(224. / 45));
+                    outputs[12] = inputs[12] / T(sqrt(7.));
+                    outputs[13] = inputs[13] / T(sqrt(224. / 45));
+                    outputs[14] = inputs[14] / T(sqrt(35.) / 3.);
+                    outputs[15] = inputs[15] / T(sqrt(35. / 8.));
                 }
             }
             normalizeToN3D(outputs, outputs);
@@ -880,14 +880,14 @@ namespace hoa
          */
         void normalizeFromN3D(T const* inputs, T* outputs) noexcept
         {
-            T norm = sqrt(3.);
+            T norm = T(sqrt(3.));
             *(outputs++) = *(inputs++);
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
             for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                norm = sqrt(2. * T(i) + 1.);
+                norm = T(sqrt(2. * T(i) + 1.));
                 for(ulong j = 0; j < i * 2ul + 1ul; j++)
                 {
                     *(outputs++) = *(inputs++) * norm;
@@ -902,14 +902,14 @@ namespace hoa
          */
         void normalizeToN3D(T const* inputs, T* outputs) noexcept
         {
-            T norm = 1. / sqrt(3.);
+            T norm = T(1. / sqrt(3.));
             *(outputs++) = *(inputs++);
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
             for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                norm = 1. / sqrt(2. * T(i) + 1.);
+                norm = T(1. / sqrt(2. * T(i) + 1.));
                 for(ulong j = 0; j < i * 2ul + 1ul; j++)
                 {
                     *(outputs++) = *(inputs++) * norm;

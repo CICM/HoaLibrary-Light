@@ -59,7 +59,6 @@ namespace hoa
         //! Set the azimuth of the planewave.
         /** The method sets the azimuth \f$\theta\f$ of the planewave.
          @param azimuth The azimuth \f$\theta\f$.
-         @return     The azimuth.
          */
         virtual void setAzimuth(const T azimuth) noexcept;
 
@@ -75,7 +74,6 @@ namespace hoa
         //! Set the elevation of the planewave.
         /** The method sets the elevation \f$\varphi\f$ of the planewave.
          @param elevation The elevation \f$\varphi\f$.
-         @return     The elevation.
          */
         virtual void setElevation(const T elevation) noexcept;
 
@@ -124,9 +122,9 @@ namespace hoa
 
         //! The planewave constructor.
         /** The planewave constructor allocates and initializes the general member values depending on an index and a polar coordinate with an azimuth \f$\theta\f$ in radian assuming that the elevation \f$\varphi\f$ is always equal to \f$0\f$ and the radius \f$\rho\f$ is always equal to \f$1\f$.
-         @param index       The index must be at least 1.
-         @param azimuth     The azimuth \f$\theta\f$.
-         @param elevation   The elevation \f$\varphi\f$ (ignored).
+         @param _index       The index must be at least 1.
+         @param _azimuth     The azimuth \f$\theta\f$.
+         @param _elevation   The elevation \f$\varphi\f$ (ignored).
          */
         Planewave(const ulong _index, const T _azimuth, const T _elevation) noexcept :
         m_index(_index),
@@ -137,10 +135,10 @@ namespace hoa
 
         //! The planewave constructor.
         /** The planewave constructor allocates and initializes the general member values depending on an index and a cartesian coordinate with an abscissa \f$x\f$, an ordinate \f$y\f$ and an height \f$z\f$ assuming that the point is normalized over the unit circle or unit the sphere and the height \f$z\f$ is always equal to \f$0\f$.
-         @param index       The index must be at least 1.
-         @param abscissa    The abscissa \f$x\f$.
-         @param ordinate    The ordinate \f$y\f$.
-         @param height      The height \f$z\f$ (ignored).
+         @param _index       The index must be at least 1.
+         @param _abscissa    The abscissa \f$x\f$.
+         @param _ordinate    The ordinate \f$y\f$.
+         @param _height      The height \f$z\f$ (ignored).
          */
         Planewave(const ulong _index, const T _abscissa, const T _ordinate, const T _height) noexcept :
         m_index(_index),
@@ -181,7 +179,6 @@ namespace hoa
         //! Set the azimuth of the planewave.
         /** The method sets the azimuth \f$\theta\f$ of the planewave.
          @param azimuth The azimuth \f$\theta\f$.
-         @return     The azimuth.
          */
         inline void setAzimuth(const T azimuth) noexcept
         {
@@ -203,7 +200,6 @@ namespace hoa
         //! Set the elevation of the planewave.
         /** The method sets the elevation \f$\varphi\f$ of the planewave.
          @param elevation The elevation \f$\varphi\f$ (ignored).
-         @return     The elevation.
          */
         inline void setElevation(const T elevation) const noexcept
         {
