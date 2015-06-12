@@ -518,7 +518,7 @@ namespace hoa
         /**	This method sets the crop size of the responses.
          @param size The crop size.
          */
-        void setResponse(const ulong size)
+        inline void setCropSize(const ulong size) noexcept
         {
             if(!size || size > Hrir<Hoa2d, T>::getNumberOfRows())
                 m_crop_size = Hrir<Hoa2d, T>::getNumberOfRows();
@@ -526,18 +526,22 @@ namespace hoa
                 m_crop_size = size;
         }
         
-        //! This method sets the crop size of the responses.
-        /**	This method sets the crop size of the responses.
-         @param size The crop size.
+        //! This method gets the crop size of the responses.
+        /**	This method gets the crop size of the responses.
+         @return The crop size.
          */
-        void setCropSize(const ulong size)
+        inline ulong getCropSize() const noexcept
         {
-            if(!size || size > Hrir<Hoa2d, T>::getNumberOfRows())
-                m_crop_size = Hrir<Hoa2d, T>::getNumberOfRows();
+            if(m_crop_size == Hrir<Hoa2d, T>::getNumberOfRows())
+            {
+                return 0;
+            }
             else
-                m_crop_size = size;
+            {
+                return m_crop_size;
+            }
         }
-
+        
         //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
@@ -745,12 +749,28 @@ namespace hoa
         /**	This method sets the crop size of the responses.
          @param size The crop size.
          */
-        void setCropSize(const ulong size)
+        inline void setCropSize(const ulong size) noexcept
         {
-            if(!size || size > Hrir<Hoa3d, T>::getNumberOfRows())
-                m_crop_size = Hrir<Hoa3d, T>::getNumberOfRows();
+            if(!size || size > Hrir<Hoa2d, T>::getNumberOfRows())
+                m_crop_size = Hrir<Hoa2d, T>::getNumberOfRows();
+                else
+                    m_crop_size = size;
+                    }
+        
+        //! This method gets the crop size of the responses.
+        /**	This method gets the crop size of the responses.
+         @return The crop size.
+         */
+        inline ulong getCropSize() const noexcept
+        {
+            if(m_crop_size == Hrir<Hoa2d, T>::getNumberOfRows())
+            {
+                return 0;
+            }
             else
-                m_crop_size = size;
+            {
+                return m_crop_size;
+            }
         }
         
         //! This method computes the decoding matrix.
