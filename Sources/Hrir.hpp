@@ -43,7 +43,7 @@ namespace hoa
          */
         static ulong getNumberOfRows() noexcept
         {
-            return 256ul;
+            return 512ul;
         }
         
         //! Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
@@ -61,7 +61,7 @@ namespace hoa
          */
         static ulong getMatricesSize() noexcept
         {
-            return 2816ul;
+            return 5632ul;
         }
         
         //! Get the HRIR matrix for the left ear.

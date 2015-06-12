@@ -446,18 +446,16 @@ namespace hoa
     private:
         ulong       m_vector_size;
         T*          m_input;
-        T*          m_matrix_left;
-        T*          m_matrix_right;
-        T*          m_vector_left;
-        T*          m_vector_right;
+        T*          m_result;
+        T*          m_left;
+        T*          m_right;
         
         void clear()
         {
-            m_input        = Signal<T>::free(m_input);
-            m_matrix_left  = Signal<T>::free(m_matrix_left);
-            m_matrix_right = Signal<T>::free(m_matrix_right);
-            m_vector_left  = Signal<T>::free(m_vector_left);
-            m_vector_right = Signal<T>::free(m_vector_right);
+            m_input  = Signal<T>::free(m_input);
+            m_result = Signal<T>::free(m_result);
+            m_left   = Signal<T>::free(m_left);
+            m_right  = Signal<T>::free(m_right);
         }
     public:
 
@@ -468,10 +466,9 @@ namespace hoa
         Binaural(const ulong order) : Decoder<Hoa2d, T>(order, 2),
         m_vector_size(0ul),
         m_input(nullptr),
-        m_matrix_left(nullptr),
-        m_matrix_right(nullptr),
-        m_vector_left(nullptr),
-        m_vector_right(nullptr)
+        m_result(nullptr),
+        m_left(nullptr),
+        m_right(nullptr)
         {
             Decoder<Hoa2d, T>::setPlanewaveAzimuth(0, HOA_PI2*3.);
             Decoder<Hoa2d, T>::setPlanewaveAzimuth(1, HOA_PI2);
@@ -493,13 +490,29 @@ namespace hoa
         {
             clear();
             m_vector_size  = vectorsize;
-            m_input        = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size);
-            m_matrix_left  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() * m_vector_size);
-            m_matrix_right = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() * m_vector_size);
-            m_vector_left  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
-            m_vector_right = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
+            m_input  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size);
+            m_result = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() * m_vector_size);
+            m_left   = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
+            m_right  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
         }
-
+        
+    private:
+        inline void processChannel(const T* harmonics, const T* response, T* vector, T* output) noexcept
+        {
+            const ulong l = Hrir<Hoa2d, T>::getNumberOfColumns();   // Harmonics size aka 11
+            const ulong m = Hrir<Hoa2d, T>::getNumberOfRows();      // Impulses size
+            const ulong n = m_vector_size;                          // Vector size
+            Signal<T>::mul(m, n, l, response, harmonics, m_result);
+            for(ulong i = 0; i < n; i ++)
+            {
+                Signal<T>::add(m, m_result + i, n, vector + i, 1);
+            }
+            Signal<T>::copy(m_vector_size, vector, output);
+            Signal<T>::copy(m, vector + m_vector_size, vector);
+            Signal<T>::clear(m_vector_size, vector + m);
+        }
+    public:
+        
         //! This method performs the binaural decoding and the convolution.
         inline void processBlock(const T** inputs, T** outputs) noexcept
         {
@@ -509,46 +522,14 @@ namespace hoa
                 Signal<t_sample>::copy(m_vector_size, inputs[i], input);
                 input += m_vector_size;
             }
-            if(Hrir<Hoa2d, T>::getNumberOfColumns() > Decoder<Hoa2d, T>::getNumberOfHarmonics())
-            {
-                Signal<t_sample>::clear(
-                m_vector_size * (Hrir<Hoa2d, T>::getNumberOfColumns() - Decoder<Hoa2d, T>::getNumberOfHarmonics()), input);
-            }
-            
-            Signal<T>::mul(Hrir<Hoa2d, T>::getNumberOfRows(),
-                           m_vector_size,
-                           Hrir<Hoa2d, T>::getNumberOfColumns(),
-                           Hrir<Hoa2d, T>::getLeftMatrix(),
-                           m_input,
-                           m_matrix_left);
-            const T* left = m_matrix_left;
-            for(ulong i = 0; i < m_vector_size; i ++)
-            {
-                Signal<T>::add(Hrir<Hoa2d, T>::getNumberOfRows(), left, m_vector_left + i);
-                left += Hrir<Hoa2d, T>::getNumberOfRows();
-            }
-            Signal<T>::copy(m_vector_size, m_vector_left, outputs[0]);
-            Signal<T>::copy(Hrir<Hoa2d, T>::getNumberOfRows(), m_vector_left + m_vector_size, m_vector_left);
-            Signal<T>::clear(m_vector_size, m_vector_left + Hrir<Hoa2d, T>::getNumberOfRows());
-            
-            Signal<T>::mul(Hrir<Hoa2d, T>::getNumberOfRows(),
-                           m_vector_size,
-                           Hrir<Hoa2d, T>::getNumberOfColumns(),
-                           Hrir<Hoa2d, T>::getLeftMatrix(),
-                           m_input,
-                           m_matrix_right);
-            const T* right = m_vector_right;
-            for(ulong i = 0; i < m_vector_size; i ++)
-            {
-                Signal<T>::add(Hrir<Hoa2d, T>::getNumberOfRows(), right + i, m_vector_right + i);
-                right += Hrir<Hoa2d, T>::getNumberOfRows();
-            }
-            Signal<T>::copy(m_vector_size, m_vector_right, outputs[1]);
-            Signal<T>::copy(Hrir<Hoa2d, T>::getNumberOfRows(), m_vector_right + m_vector_size, m_vector_right);
-            Signal<T>::clear(m_vector_size, m_vector_right +Hrir<Hoa2d, T>::getNumberOfRows());
+            processChannel(m_input, Hrir<Hoa2d, T>::getLeftMatrix(),m_left, outputs[0]);
+            processChannel(m_input, Hrir<Hoa2d, T>::getRightMatrix(), m_right, outputs[1]);
         }
 
-        inline virtual void process(const T* inputs, T* outputs) noexcept {}
+        inline void process(const T* inputs, T* outputs) noexcept override
+        {
+            
+        }
     };
 
 
@@ -642,7 +623,7 @@ namespace hoa
         void computeRendering(const ulong vectorsize = 64)  override
         {
             typename Encoder<Hoa3d, T>::Basic encoder(Decoder<Hoa3d, T>::getDecompositionOrder());
-            const T factor = 12.5 / (T)(Decoder<Hoa3d, T>::getNumberOfHarmonics());
+            const T factor = 1. / (T)(Decoder<Hoa3d, T>::getNumberOfPlanewaves());
             for(ulong i = 0; i < Decoder<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
                 encoder.setAzimuth(Decoder<Hoa3d, T>::getPlanewaveAzimuth(i));
