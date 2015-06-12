@@ -8,7 +8,7 @@
 #define DEF_HOA_DECODER_LIGHT
 
 #include "Encoder.hpp"
-#include "Hrtf.hpp"
+#include "Hrir.hpp"
 
 namespace hoa
 {
@@ -441,22 +441,22 @@ namespace hoa
         }
     };
 
-#define HOA_NBIN_I 512
-#define HOA_NBIN_H 11
-
     template <typename T> class Decoder<Hoa2d, T>::Binaural : public Decoder<Hoa2d, T>
     {
     private:
         ulong       m_vector_size;
-        ulong       m_counter;
-        T*          m_inputs;
-        T*          m_results;
-        T*          m_result_matrix_left;
-        T*          m_result_matrix_right;
-        T*          m_linear_vector_left;
-        T*          m_linear_vector_right;
-        T*          m_output_left;
-        T*          m_output_right;
+        T*          m_input;
+        T*          m_result;
+        T*          m_left;
+        T*          m_right;
+        
+        void clear()
+        {
+            m_input  = Signal<T>::free(m_input);
+            m_result = Signal<T>::free(m_result);
+            m_left   = Signal<T>::free(m_left);
+            m_right  = Signal<T>::free(m_right);
+        }
     public:
 
         //! The binaural decoder constructor.
@@ -464,7 +464,11 @@ namespace hoa
          @param     order				The order
          */
         Binaural(const ulong order) : Decoder<Hoa2d, T>(order, 2),
-        m_vector_size(0ul), m_counter(0ul), m_inputs(nullptr), m_results(nullptr), m_linear_vector_left(nullptr), m_linear_vector_right(nullptr), m_output_left(nullptr), m_output_right(nullptr)
+        m_vector_size(0ul),
+        m_input(nullptr),
+        m_result(nullptr),
+        m_left(nullptr),
+        m_right(nullptr)
         {
             Decoder<Hoa2d, T>::setPlanewaveAzimuth(0, HOA_PI2*3.);
             Decoder<Hoa2d, T>::setPlanewaveAzimuth(1, HOA_PI2);
@@ -475,18 +479,7 @@ namespace hoa
          */
         ~Binaural()
         {
-            if(m_inputs)
-                delete [] m_inputs;
-            if(m_results)
-                delete [] m_results;
-            if(m_linear_vector_left)
-                delete [] m_linear_vector_left;
-            if(m_linear_vector_right)
-                delete [] m_linear_vector_right;
-            if(m_output_left)
-                delete [] m_output_left;
-            if(m_output_right)
-                delete [] m_output_right;
+            clear();
         }
 
         //! This method computes the decoding matrix.
@@ -495,107 +488,50 @@ namespace hoa
          */
         void computeRendering(const ulong vectorsize = 64)  override
         {
-            m_counter     = 0;
-            m_vector_size = vectorsize;
-            if(m_inputs)
-                delete [] m_inputs;
-            if(m_results)
-                delete [] m_results;
-            if(m_linear_vector_left)
-                delete [] m_linear_vector_left;
-            if(m_linear_vector_right)
-                delete [] m_linear_vector_right;
-            if(m_output_left)
-                delete [] m_output_left;
-            if(m_output_right)
-                delete [] m_output_right;
-
-            m_output_left = new T[m_vector_size];
-            m_output_right = new T[m_vector_size];
-            Signal<T>::clear(m_vector_size, m_output_left);
-            Signal<T>::clear(m_vector_size, m_output_right);
-
-            m_inputs  = new T[HOA_NBIN_H * m_vector_size];
-            Signal<T>::clear(HOA_NBIN_H * m_vector_size, m_inputs);
-
-            m_results = new T[HOA_NBIN_I * 2 * m_vector_size];
-            Signal<T>::clear(HOA_NBIN_I * 2 * m_vector_size, m_results);
-            m_result_matrix_left    = m_results;
-            m_result_matrix_right   = m_results + m_vector_size  * HOA_NBIN_I;
-
-            m_linear_vector_left    = new T[m_vector_size + HOA_NBIN_I - 1];
-            Signal<T>::clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_left);
-            m_linear_vector_right   = new T[m_vector_size + HOA_NBIN_I - 1];
-            Signal<T>::clear(m_vector_size + HOA_NBIN_I - 1, m_linear_vector_right);
+            clear();
+            m_vector_size  = vectorsize;
+            m_input  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size);
+            m_result = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() * m_vector_size);
+            m_left   = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
+            m_right  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
         }
-
-        //! This method performs the binaural decoding and the convolution.
-        inline void processBlock() noexcept
+        
+    private:
+        inline void processChannel(const T* harmonics, const T* response, T* vector, T* output) noexcept
         {
-            Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, 9, Hrtf<Hoa2d, T>::getImpulse(), m_inputs, m_results);
-
-            for(ulong i = 0; i < m_vector_size; i++)
+            const ulong l = Hrir<Hoa2d, T>::getNumberOfColumns();   // Harmonics size aka 11
+            const ulong m = Hrir<Hoa2d, T>::getNumberOfRows();      // Impulses size
+            const ulong n = m_vector_size;                          // Vector size
+            Signal<T>::mul(m, n, l, response, harmonics, m_result);
+            for(ulong i = 0; i < n; i ++)
             {
-                Signal<T>::add(HOA_NBIN_I, m_results + i, m_vector_size, m_linear_vector_left + i, 1);
-                m_output_left[i] = m_linear_vector_left[i];
+                Signal<T>::add(m, m_result + i, n, vector + i, 1);
             }
-
-            for(ulong i = 0; i < m_vector_size; i++)
-            {
-                Signal<T>::add(HOA_NBIN_I, m_results + i + m_vector_size * HOA_NBIN_I, m_vector_size, m_linear_vector_right + i, 1);
-                m_output_right[i] = m_linear_vector_right[i];
-            }
-
-            Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_left + m_vector_size, m_linear_vector_left);
-            Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_right + m_vector_size, m_linear_vector_right);
-
-            Signal<T>::clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
-            Signal<T>::clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
+            Signal<T>::copy(m_vector_size, vector, output);
+            Signal<T>::copy(m, vector + m_vector_size, vector);
+            Signal<T>::clear(m_vector_size, vector + m);
         }
-
+    public:
+        
         //! This method performs the binaural decoding and the convolution.
-        inline void processBlock(const T* inputs, T** outputs) const noexcept
+        inline void processBlock(const T** inputs, T** outputs) noexcept
         {
-            Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, 9, Hrtf<Hoa2d, T>::getImpulse(), inputs, m_results);
-            for(ulong i = 0; i < m_vector_size; i++)
+            T* input = m_input;
+            for(ulong i = 0; i < Hrir<Hoa2d, T>::getNumberOfColumns() && i < Decoder<Hoa2d, T>::getNumberOfHarmonics(); i++)
             {
-                Signal<T>::add(HOA_NBIN_I, m_results + i, m_vector_size, m_linear_vector_left + i, 1);
-                Signal<T>::add(HOA_NBIN_I, m_results + i + m_vector_size * HOA_NBIN_I, m_vector_size, m_linear_vector_right + i,1);
+                Signal<t_sample>::copy(m_vector_size, inputs[i], input);
+                input += m_vector_size;
             }
-            Signal<T>::copy(m_vector_size, m_linear_vector_left, outputs[0]);
-            Signal<T>::copy(m_vector_size, m_linear_vector_right, outputs[1]);
-            Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_left + m_vector_size, m_linear_vector_left);
-            Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_right + m_vector_size, m_linear_vector_right);
-            Signal<T>::clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
-            Signal<T>::clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
+            processChannel(m_input, Hrir<Hoa2d, T>::getLeftMatrix(),m_left, outputs[0]);
+            processChannel(m_input, Hrir<Hoa2d, T>::getRightMatrix(), m_right, outputs[1]);
         }
 
-        //! This method performs the binaural decoding.
-        /**	You should use this method for not-in-place processing and performs the binaural decoding sample by sample. The inputs array contains the spherical harmonics samples : inputs[number of harmonics] and the outputs array contains the headphones samples : outputs[2].
-
-         @param     inputs	The input samples.
-         @param     outputs  The output array that contains samples destinated to channels.
-         */
         inline void process(const T* inputs, T* outputs) noexcept override
         {
-            for(ulong i = 0; i < Decoder<Hoa2d, T>::getNumberOfHarmonics() && i < 9; i++)
-            {
-                m_inputs[i*m_vector_size+m_counter] = inputs[i];
-            }
-
-            outputs[0] = m_output_left[m_counter];
-            outputs[1] = m_output_right[m_counter];
-            if(++m_counter >= m_vector_size)
-            {
-                processBlock();
-                m_counter = 0;
-            }
+            
         }
-
     };
 
-#undef HOA_NBIN_I
-#undef HOA_NBIN_H
 
     template <typename T> class Decoder<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics, public Processor<Hoa3d, T>::Planewaves
     {
@@ -687,7 +623,7 @@ namespace hoa
         void computeRendering(const ulong vectorsize = 64)  override
         {
             typename Encoder<Hoa3d, T>::Basic encoder(Decoder<Hoa3d, T>::getDecompositionOrder());
-            const T factor = 12.5 / (T)(Decoder<Hoa3d, T>::getNumberOfHarmonics());
+            const T factor = 1. / (T)(Decoder<Hoa3d, T>::getNumberOfPlanewaves());
             for(ulong i = 0; i < Decoder<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
                 encoder.setAzimuth(Decoder<Hoa3d, T>::getPlanewaveAzimuth(i));
@@ -801,6 +737,7 @@ namespace hoa
         //! This method performs the binaural decoding and the convolution.
         inline void processBlock(const T* inputs, T** outputs) const noexcept
         {
+            /*
             Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, HOA_NBIN_H, Hrtf<Hoa3d, T>::getImpulse(), inputs, m_results);
             for(ulong i = 0; i < m_vector_size; i++)
             {
@@ -813,11 +750,13 @@ namespace hoa
             Signal<T>::copy(HOA_NBIN_I - 1, m_linear_vector_right + m_vector_size, m_linear_vector_right);
             Signal<T>::clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
             Signal<T>::clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
+             */
         }
         
         //! This method performs the binaural decoding and the convolution.
         void processBlock() noexcept
         {
+            /*
             Signal<T>::mul(HOA_NBIN_I * 2, m_vector_size, HOA_NBIN_H, Hrtf<Hoa3d, T>::getImpulse(), m_inputs, m_results);
 
             for(ulong i = 0; i < m_vector_size; i++)
@@ -837,6 +776,7 @@ namespace hoa
 
             Signal<T>::clear(m_vector_size, m_linear_vector_left + HOA_NBIN_I - 1);
             Signal<T>::clear(m_vector_size, m_linear_vector_right + HOA_NBIN_I - 1);
+             */
         }
 
         //! This method performs the binaural decoding.
