@@ -263,10 +263,10 @@ namespace hoa
         static T* generate(const ulong order)
         {
             T* vector = new T[order];
-            const T facn = Math<T>::factorial(order);
+            const T facn = Math<T>::factorial(long(order));
             for(ulong i = 1; i <= order; i++)
             {
-                vector[i-1] = facn / Math<T>::factorial(order - i) * facn / Math<T>::factorial(order + i);
+                vector[i-1] = facn / Math<T>::factorial(long(order - i)) * facn / Math<T>::factorial(long(order + i));
             }
             return vector;
         }
@@ -459,10 +459,10 @@ namespace hoa
         static T* generate(const ulong order)
         {
             T* vector = new T[order];
-            const T facn = Math<T>::factorial(order);
+            const T facn = T(Math<T>::factorial(long(order)));
             for(ulong i = 1; i <= order; i++)
             {
-                vector[i-1] = facn / Math<T>::factorial(order - i) * facn / Math<T>::factorial(order + i);
+                vector[i-1] = facn / T(Math<T>::factorial(long(order - i)) * facn / Math<T>::factorial(long(order + i)));
             }
             return vector;
         }
