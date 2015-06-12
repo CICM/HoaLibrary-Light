@@ -75,12 +75,12 @@ namespace hoa
             {
                 T result = 0;
                 const T* in1 = in;
-                for(size_t i = colsize>>3; i; --i, in1 += 8, in2 += 8)
+                for(size_t j = colsize>>3; j; --j, in1 += 8, in2 += 8)
                 {
                     result += in1[0] * in2[0]; result += in1[1] * in2[1]; result += in1[2] * in2[2]; result += in1[3] * in2[3];
                     result += in1[4] * in2[4]; result += in1[5] * in2[5]; result += in1[6] * in2[6]; result += in1[7] * in2[7];
                 }
-                for(size_t i = colsize&7; i; --i, in1++, in2++)
+                for(size_t j = colsize&7; j; --j, in1++, in2++)
                 {
                     result += in1[0] * in2[0];
                 }

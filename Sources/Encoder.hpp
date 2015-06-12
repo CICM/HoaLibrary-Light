@@ -1245,9 +1245,9 @@ namespace hoa
 
             for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                const T gain1   = (gain * (Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() - i) + dist);
+                const T gain2   = (gain * (Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() - i) + dist);
                 const T factor1 = (cos(Math<T>::clip(factor * i, 0., HOA_PI)) + 1.) * 0.5;
-                m_distance[i]   = factor1 * gain1;
+                m_distance[i]   = factor1 * gain2;
             }
         }
 
