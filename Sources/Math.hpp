@@ -23,9 +23,9 @@ namespace hoa
          If \f$x < min\f$, \f[f(x) = min\f]
          else if \f$x > max\f$, \f[f(x) = max\f]
          else \f[f(x) = x\f]
-         @param     value   The value to clip.
-         @param     min     The low boundary.
-         @param     max     The high boundary.
+         @param     n   The value to clip.
+         @param     lower     The low boundary.
+         @param     upper     The high boundary.
          @return    The function return the clipped value.
          */
         static inline T clip(const T& n, const T& lower, const T& upper)

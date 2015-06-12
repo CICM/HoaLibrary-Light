@@ -21,10 +21,6 @@ Julien Colafrancesco, Pierre Guillot, Eliott Paris, Thomas Le Meur
 
 [Documentation](http://cicm.github.io/HoaLibrary-Light "Documentation")
 
-#### Dependencies : 
-
-[Cblas](http://www.netlib.org/clapack/cblas/ "Cblas") you can use Gsl, Apple Accelerate or Intel Composer XE.
-
 ##### License : 
 
 The Hoa Library in under the [GNU](http://www.gnu.org/copyleft/gpl.html "GNU Public License"). If you'd like to avoid the restrictions of the GPL and use Hoa Library for a closed-source product, you contact the [CICM](http://cicm.mshparisnord.org/ "CICM").

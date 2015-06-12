@@ -175,7 +175,7 @@ namespace hoa
             void normalize() noexcept
             {
                 const double l = length();
-                if(l)
+                if(l != 0.)
                 {
                     const double f = (2. / length());
                     x *= f; y *= f; z *= f;
@@ -281,7 +281,7 @@ namespace hoa
                         const double dist = bounds[p].z / (bounds[p].z - bounds[i].z);
                         Point temp((bounds[i].x - bounds[p].x) * dist + bounds[p].x, (bounds[i].y - bounds[p].y) * dist + bounds[p].y, 0.);
                         temp.normalize();
-                        bounds.insert(bounds.begin()+(i), temp);
+                        bounds.insert(bounds.begin()+int(i), temp);
                         size++;
                     }
                     else if(bounds[i].z < 0. && bounds[n].z > 0.)
@@ -289,7 +289,7 @@ namespace hoa
                         const double dist = bounds[n].z / (bounds[n].z - bounds[i].z);
                         Point temp((bounds[i].x - bounds[n].x) * dist + bounds[n].x, (bounds[i].y - bounds[n].y) * dist + bounds[n].y, 0.);
                         temp.normalize();
-                        bounds.insert(bounds.begin()+(i+1), temp);
+                        bounds.insert(bounds.begin()+int(i+1), temp);
                         size++;
                     }
                 }
@@ -297,7 +297,7 @@ namespace hoa
                 {
                     if(bounds[i].z < 0.)
                     {
-                        bounds.erase(bounds.begin()+i);
+                        bounds.erase(bounds.begin()+int(i));
                         size--; i--;
                     }
                 }

@@ -65,16 +65,16 @@ namespace hoa
         /** Multiplies a matrix by a vector.
         @param colsize  The size of the input vector and the number of columns.
         @param rowsize  The size of the output vector and the number of rows.
-        @param vector      The input vector.
-        @param matrix      The input matrix.
+        @param in      The input vector.
+        @param in2      The input matrix.
         @param output      The output vector.
          */
-        static inline void mul(const ulong colsize, const ulong rowsize, const T* input, const T* in2, T* output) noexcept
+        static inline void mul(const ulong colsize, const ulong rowsize, const T* in, const T* in2, T* output) noexcept
         {
             for(ulong i = 0ul; i < rowsize; i++)
             {
                 T result = 0;
-                const T* in1 = input;
+                const T* in1 = in;
                 for(size_t i = colsize>>3; i; --i, in1 += 8, in2 += 8)
                 {
                     result += in1[0] * in2[0]; result += in1[1] * in2[1]; result += in1[2] * in2[2]; result += in1[3] * in2[3];
