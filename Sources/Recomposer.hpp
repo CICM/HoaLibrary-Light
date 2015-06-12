@@ -108,7 +108,7 @@ namespace hoa
 
         //! Set the fishEye value.
         /**	The fishEye value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is intact and at \f$1\f$ the sound field is centered in front of the audience.
-         @param     radius   The radius.
+         @param     fisheye   The fisheye value.
          */
         inline void setFisheye(const T fisheye) noexcept
         {
@@ -178,11 +178,11 @@ namespace hoa
 
         //! Set the azimuth.
         /**	The azimuth value is between \f$0\f$ and \f$2π\f$.
-        @param     radius   The radius.
+        @param     azim   The azimuth.
          */
-        inline void setAzimuth(const ulong index, const T azimuth) noexcept
+        inline void setAzimuth(const ulong index, const T azim) noexcept
         {
-            m_encoders[index]->setAzimuth(azimuth);
+            m_encoders[index]->setAzimuth(azim);
         }
 
         //! Set the widening value.

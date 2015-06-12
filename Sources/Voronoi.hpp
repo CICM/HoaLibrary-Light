@@ -57,7 +57,7 @@ namespace hoa
             @param z     The z value.
             @param index The index of the channel.
              */
-            Point(double _x, double _y, double _z, ulong index = 0) noexcept :
+            Point(double _x, double _y, double _z) noexcept :
             x(_x), y(_y), z(_z)
             {
                 ;

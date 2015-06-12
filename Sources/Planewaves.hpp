@@ -339,7 +339,6 @@ namespace hoa
         //! Set the azimuth of the planewave.
         /** The method sets the azimuth \f$\theta\f$ of the planewave.
          @param azimuth The azimuth \f$\theta\f$.
-         @return     The azimuth.
          */
         inline void setAzimuth(const T azimuth) noexcept
         {
@@ -371,7 +370,6 @@ namespace hoa
         //! Set the elevation of the planewave.
         /** The method sets the elevation \f$\varphi\f$ of the planewave.
          @param elevation The elevation \f$\varphi\f$.
-         @return     The elevation.
          */
         inline void setElevation(const T elevation) noexcept
         {

@@ -89,7 +89,7 @@ namespace hoa
 
         //! This method set the widening value.
         /**	The the widening value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is omni directional and at \f$1\f$ the sound field is intact.
-         @param     radius   The radius.
+         @param     widening   The widening value.
          @see       setAzimuth()
          */
         inline void setWidening(const T widening) noexcept

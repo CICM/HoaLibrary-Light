@@ -1482,7 +1482,7 @@ namespace hoa
 
         //! The source constructor by copy.
 		/**	The source constructor allocates and initialize the member values for a source.
-            @param     othe    It's a constructor by copy an 'other' source.
+            @param     other    The other source.
 		 */
         Source(const Source& other) :
         m_index(other.m_index),

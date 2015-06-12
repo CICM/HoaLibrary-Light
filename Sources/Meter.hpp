@@ -429,8 +429,8 @@ namespace hoa
         //! Get the Voronoi point of a channel.
         /** Get the Voronoi point of a channel.
         @param index      The index of the channel.
-        @param meterView  The meter view wanted (top or bottom).
-        @return
+        @param top  The meter view wanted (top or bottom).
+        @return The path.
          */
         inline Path const& getPlanewavePath(const ulong index, const bool top) const noexcept
         {

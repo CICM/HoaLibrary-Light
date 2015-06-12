@@ -304,7 +304,9 @@ namespace hoa
 
         //! Set the offset of the planewaves.
         /**	Set the azimuth offset of the planewaves in radian.
-         @param     offset		An azimuth value.
+         @param     x_axe		An azimuth value.
+         @param     y_axe		An azimuth value.
+         @param     z_axe		An azimuth value.
          */
         inline void setPlanewavesRotation(const T x_axe, const T y_axe, const T z_axe) noexcept
         {

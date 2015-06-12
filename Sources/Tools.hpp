@@ -58,7 +58,7 @@ namespace hoa
 
         //! Set the ramp value.
         /** Set the ramp value.
-        @param value    The new value of the ramp.
+        @param ramp    The new value of the ramp.
          */
         inline void setRamp(const ulong ramp) noexcept
         {
@@ -120,7 +120,7 @@ namespace hoa
     public:
         //! The line constructor.
         /**	The line constructor allocates and initialize the base classes.
-        @param nbOfSources  The number of sources.
+        @param numberOfSources  The number of sources.
          */
         PolarLines(ulong numberOfSources) noexcept :
         m_number_of_sources(numberOfSources)
@@ -180,7 +180,7 @@ namespace hoa
 
         //! Set the ramp value.
         /** Set the ramp value.
-        @param value    The new value of the ramp.
+        @param ramp    The new value of the ramp.
          */
         inline void setRamp(const ulong ramp) noexcept
         {
@@ -190,11 +190,11 @@ namespace hoa
         //! Set, linearly, the radius of a source.
         /** Set, linearly, the radius of a source.
         @param index    The index of the source.
-        @param value    The new value of the radius.
+        @param radi    The new value of the radius.
          */
-        inline void setRadius(const ulong index, const T radius) noexcept
+        inline void setRadius(const ulong index, const T radi) noexcept
         {
-            m_values_new[index]  = radius;
+            m_values_new[index]  = radi;
             m_values_step[index] = (m_values_new[index] - m_values_old[index]) / (T)m_ramp;
             m_counter = 0;
         }
@@ -202,11 +202,11 @@ namespace hoa
         //! Set, linearly, the azimuth of a source.
         /** Set, linearly, the azimuth of a source.
         @param index    The index of the source.
-        @param value    The new value of the azimuth.
+        @param azim     The new value of the azimuth.
          */
-        inline void setAzimuth(const ulong index, const T azimuth) noexcept
+        inline void setAzimuth(const ulong index, const T azim) noexcept
         {
-            m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azimuth);
+            m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azim);
             m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
 
             T distance;
@@ -236,11 +236,11 @@ namespace hoa
         //! Set, directly, the radius of a source.
         /** Set, directly, the radius of a source.
         @param index    The index of the source.
-        @param value    The new value of the radius.
+        @param radi     The new value of the radius.
          */
-        inline void setRadiusDirect(const ulong index, const T radius) noexcept
+        inline void setRadiusDirect(const ulong index, const T radi) noexcept
         {
-            m_values_old[index] = m_values_new[index] = radius;
+            m_values_old[index] = m_values_new[index] = radi;
             m_values_step[index] = 0.;
             m_counter = 0;
         }
@@ -248,11 +248,11 @@ namespace hoa
         //! Set, directly, the azimuth of a source.
         /** Set, directly, the azimuth of a source.
         @param index    The index of the source.
-        @param value    The new value of the azimuth.
+        @param azim     The new value of the azimuth.
          */
-        inline void setAzimuthDirect(ulong index, const T azimuth) noexcept
+        inline void setAzimuthDirect(ulong index, const T azim) noexcept
         {
-            m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azimuth;
+            m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azim;
             m_values_step[index + m_number_of_sources] = 0.;
             m_counter = 0;
         }
@@ -287,7 +287,7 @@ namespace hoa
     public:
         //! The line constructor.
         /**	The line constructor allocates and initialize the base classes.
-        @param nbOfSources  The number of sources.
+        @param numberOfSources  The number of sources.
          */
         PolarLines(ulong numberOfSources) noexcept :
         m_number_of_sources(numberOfSources)
@@ -357,7 +357,7 @@ namespace hoa
 
         //! Set the ramp value.
         /** Set the ramp value.
-        @param value    The new value of the ramp.
+        @param ramp    The new value of the ramp.
          */
         inline void setRamp(const ulong ramp) noexcept
         {
@@ -367,11 +367,11 @@ namespace hoa
         //! Set, linearly, the radius of a source.
         /** Set, linearly, the radius of a source.
         @param index    The index of the source.
-        @param value    The new value of the radius.
+        @param radi     The new value of the radius.
          */
-        inline void setRadius(const ulong index, const T radius) noexcept
+        inline void setRadius(const ulong index, const T radi) noexcept
         {
-            m_values_new[index]  = radius;
+            m_values_new[index]  = radi;
             m_values_step[index] = (m_values_new[index] - m_values_old[index]) / (T)m_ramp;
             m_counter = 0;
         }
@@ -379,11 +379,11 @@ namespace hoa
         //! Set, linearly, the azimuth of a source.
         /** Set, linearly, the azimuth of a source.
         @param index    The index of the source.
-        @param value    The new value of the azimuth.
+        @param azim     The new value of the azimuth.
          */
-        inline void setAzimuth(const ulong index, const T azimuth) noexcept
+        inline void setAzimuth(const ulong index, const T azim) noexcept
         {
-            m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azimuth);
+            m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azim);
             m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
 
             T distance;
@@ -413,11 +413,11 @@ namespace hoa
         //! Set, linearly, the elevation of a source.
         /** Set, linearly, the elevation of a source.
         @param index    The index of the source.
-        @param value    The new value of the elevation.
+        @param elev     The new value of the elevation.
          */
-        inline void setElevation(const ulong index, const T elevation) noexcept
+        inline void setElevation(const ulong index, const T elev) noexcept
         {
-            m_values_new[index + m_number_of_sources * 2] = Math<T>::wrap_pi(elevation);
+            m_values_new[index + m_number_of_sources * 2] = Math<T>::wrap_pi(elev);
             m_values_old[index + m_number_of_sources * 2] = Math<T>::wrap_pi(m_values_old[index + m_number_of_sources * 2]);
 
             T distance;
@@ -447,11 +447,11 @@ namespace hoa
         //! Set, directly, the radius of a source.
         /** Set, directly, the radius of a source.
         @param index    The index of the source.
-        @param value    The new value of the radius.
+        @param radi    The new value of the radius.
          */
-        inline void setRadiusDirect(const ulong index, const T radius) noexcept
+        inline void setRadiusDirect(const ulong index, const T radi) noexcept
         {
-            m_values_old[index] = m_values_new[index] = radius;
+            m_values_old[index] = m_values_new[index] = radi;
             m_values_step[index] = 0.;
             m_counter = 0;
         }
@@ -459,11 +459,11 @@ namespace hoa
         //! Set, directly, the azimuth of a source.
         /** Set, directly, the azimuth of a source.
         @param index    The index of the source.
-        @param value    The new value of the azimuth.
+        @param azim     The new value of the azimuth.
          */
-        inline void setAzimuthDirect(const ulong index, const T azimuth) noexcept
+        inline void setAzimuthDirect(const ulong index, const T azim) noexcept
         {
-            m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azimuth;
+            m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azim;
             m_values_step[index + m_number_of_sources] = 0.;
             m_counter = 0;
         }
@@ -471,11 +471,11 @@ namespace hoa
         //! Set, directly, the elevation of a source.
         /** Set, directly, the elevation of a source.
         @param index    The index of the source.
-        @param value    The new value of the elevation.
+        @param elev     The new value of the elevation.
          */
-        inline void setElevationDirect(const ulong index, const T elevation) noexcept
+        inline void setElevationDirect(const ulong index, const T elev) noexcept
         {
-            m_values_old[index + m_number_of_sources * 2] = m_values_new[index + m_number_of_sources * 2] = elevation;
+            m_values_old[index + m_number_of_sources * 2] = m_values_new[index + m_number_of_sources * 2] = elev;
             m_values_step[index + m_number_of_sources * 2] = 0.;
             m_counter = 0;
         }
