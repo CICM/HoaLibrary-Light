@@ -220,7 +220,7 @@ namespace hoa
          */
         static inline long getIndex(const ulong degree, const long order) noexcept
         {
-            return abs(order) *  2 - ulong(order < 0);
+            return abs(order) *  2 - long(order < 0);
         }
 
         //! Get the number of harmonics for an order of decomposition.
@@ -295,7 +295,7 @@ namespace hoa
          */
         inline ulong getDegree() const noexcept
         {
-            return sqrt(m_index);
+            return ulong(sqrt(m_index));
         }
 
         //! Get the order of the harmonic.
@@ -304,7 +304,7 @@ namespace hoa
          */
         inline long getOrder() const noexcept
         {
-            return m_index - (getDegree() * (getDegree() + 1));
+            return long(m_index) - long(getDegree() * (getDegree() + 1));
         }
 
         //! Get the name of the harmonic.
@@ -351,7 +351,7 @@ namespace hoa
          */
         static inline long getOrder(const ulong index) noexcept
         {
-            return index - (ulong(sqrt(index)) * (ulong(sqrt(index)) + 1));
+            return long(index) - (long(sqrt(index)) * (long(sqrt(index)) + 1));
         }
 
         //! Get the index of an harmonic with its degree and its order.
@@ -362,7 +362,7 @@ namespace hoa
          */
         static inline ulong getIndex(const ulong degree, const long order) noexcept
         {
-            return degree * (degree + 1) + order;
+            return ulong(long(degree * (degree + 1)) + order);
         }
 
         //! Get the number of harmonics for an order of decomposition.
@@ -396,12 +396,11 @@ namespace hoa
         {
             if(order == 0)
             {
-                return sqrt(Math<T>::factorial(T(degree) - T(abs(order))) / Math<T>::factorial(T(order) + T(abs(order)))) * sqrt(T(1.) / T(4. * HOA_PI));
+                return T(sqrt(Math<T>::factorial(long(degree) - long(abs(order))) / Math<T>::factorial(long(order) + long(abs(order))))) * T(sqrt(T(1.) / T(4. * HOA_PI)));
             }
             else
             {
-                return sqrt(Math<T>::factorial(long(degree) - abs(order)) / Math<T>::factorial(long(degree) + abs(order))) *
-                sqrt(T(2.) / T(4. * HOA_PI));
+                return T(sqrt(Math<T>::factorial(long(degree) - abs(order)) / Math<T>::factorial(long(degree) + abs(order))) * sqrt(T(2.) / T(4. * HOA_PI)));
             }
         }
     };

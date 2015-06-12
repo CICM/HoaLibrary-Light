@@ -19,6 +19,8 @@ namespace hoa
     {
     public:
 
+        inline virtual ~Processor() {}
+        
         //! This method performs the processing.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array and the outputs array depends of the template and the processing.
          @param     input  The input array.

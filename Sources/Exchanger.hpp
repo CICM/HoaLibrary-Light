@@ -264,7 +264,7 @@ namespace hoa
             {
                 if(index < 7)
                 {
-                    static const unsigned char FurseMalham_2D_Letterings[7] =
+                    static const char FurseMalham_2D_Letterings[7] =
                     {
                         'W', 'X', 'Y', 'U', 'V', 'P', 'Q'
                     };
@@ -544,7 +544,7 @@ namespace hoa
             else
             {
                 const long hdegree = long(sqrt(index));
-                const long tmp = index - (hdegree) * (hdegree);
+                const long tmp = long(index) - (hdegree) * (hdegree);
                 const long sign = (tmp % 2) ? -1l : 1l;
                 return sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
             }
@@ -569,7 +569,7 @@ namespace hoa
             else
             {
                 const long hdegree = long(sqrt(index));
-                const long tmp = index - (hdegree) * (hdegree);
+                const long tmp = long(index) - (hdegree) * (hdegree);
                 const long sign = (tmp % 2) ? -1l : 1l;
                 return sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
             }
@@ -599,7 +599,7 @@ namespace hoa
             {
                 if(index < 16)
                 {
-                    static const unsigned char FurseMalham_3D_Letterings[16] =
+                    static const char FurseMalham_3D_Letterings[16] =
                     {
                         'W', 'X', 'Y', 'Z',
                         'R', 'S', 'T', 'U', 'V',
@@ -616,7 +616,7 @@ namespace hoa
             {
                 // [0, 0], [1, 1], [1, -1], [1, 0], [2, 2], [2, -2], [2, 1], [2, -1], [2, 0] ...
                 const long hdegree = long(sqrt(index));
-                const long tmp = index - (hdegree) * (hdegree);
+                const long tmp = long(index) - (hdegree) * (hdegree);
                 const long sign = (tmp % 2) ? -1l : 1l;
                 const long horder = sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
                 return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
