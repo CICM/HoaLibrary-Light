@@ -151,6 +151,12 @@ namespace hoa
     template <typename T> class Decoder<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics, public Processor<Hoa2d, T>::Planewaves
     {
     public:
+        enum Mode
+        {
+            RegularMode = 0,
+            IrregularMode = 1,
+            BinauralMode = 2
+        };
 
         //! The decoder constructor.
         /**	The decoder constructor allocates and initialize the base classes.
@@ -184,6 +190,12 @@ namespace hoa
          @param vectorsize The vector size for binaural decoding.
          */
         virtual void computeRendering(const ulong vectorsize = 64) = 0;
+        
+        //! This method retrives the mode of the decoder.
+        /**	This method retrives the mode of the decoder.
+         @retun The mode of the decoder.
+         */
+        inline virtual Mode getMode() const noexcept = 0;
 
         //! The ambisonic regular decoder.
         /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
@@ -225,6 +237,12 @@ namespace hoa
         {
             delete [] m_matrix;
         }
+        
+        //! This method retrives the mode of the decoder.
+        /**	This method retrives the mode of the decoder.
+         @retun The mode of the decoder.
+         */
+        inline Mode getMode() const noexcept {return RegularMode;};
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -277,6 +295,12 @@ namespace hoa
         {
             delete [] m_matrix;
         }
+        
+        //! This method retrives the mode of the decoder.
+        /**	This method retrives the mode of the decoder.
+         @retun The mode of the decoder.
+         */
+        inline Mode getMode() const noexcept {return IrregularMode;};
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -475,6 +499,12 @@ namespace hoa
             Decoder<Hoa2d, T>::setPlanewaveAzimuth(1, HOA_PI2);
             setCropSize(0ul);
         }
+        
+        //! This method retrives the mode of the decoder.
+        /**	This method retrives the mode of the decoder.
+         @retun The mode of the decoder.
+         */
+        inline Mode getMode() const noexcept {return BinauralMode;};
 
         //! The binaural decoder destructor.
         /**	The binaural decoder destructor free the memory.
