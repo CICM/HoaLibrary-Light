@@ -56,49 +56,50 @@ namespace hoa
     }
 #endif
 #if (__cplusplus <= 199711L)
-inline string to_string(ulong val)
-{
-    char buffer[1024];
+    inline string to_string(const ulong& val)
+    {
+        char buffer[1024];
 #ifdef _WINDOWS
-    s_sprintf(buffer, "%lu", val);
+        s_sprintf(buffer, "%lu", val);
 #else
-    sprintf(buffer, "%lu", val);
+        sprintf(buffer, "%lu", val);
 #endif
-    return buffer;
-}
+        return buffer;
+    }
 
-inline string to_string(long val)
-{
-    char buffer[1024];
+    inline string to_string(const long& val)
+    {
+        char buffer[1024];
 #ifdef _WINDOWS
-    s_sprintf(buffer, "%ld", val);
+        s_sprintf(buffer, "%ld", val);
 #else
-    sprintf(buffer, "%ld", val);
+        sprintf(buffer, "%ld", val);
 #endif
-    return buffer;
-}
+        return buffer;
+    }
 
-inline string to_string(float val)
-{
-    char buffer[1024];
+    inline string to_string(const float& val)
+    {
+        char buffer[1024];
 #ifdef _WINDOWS
-    s_sprintf(buffer, "%f", val);
+        s_sprintf(buffer, "%f", val);
 #else
-    sprintf(buffer, "%f", val);
+        sprintf(buffer, "%f", val);
 #endif
-    return buffer;
-}
+        return buffer;
+    }
 
-inline string to_string(double val)
-{
-    char buffer[1024];
+    inline string to_string(const double& val)
+    {
+        char buffer[1024];
 #ifdef _WINDOWS
-    s_sprintf(buffer, "%lf", val);
+        s_sprintf(buffer, "%lf", val);
 #else
-    sprintf(buffer, "%lf", val);
+        sprintf(buffer, "%lf", val);
 #endif
-    return buffer;
-}
+        return buffer;
+    }
+    
 #endif
 
     //! The dimension of class.
