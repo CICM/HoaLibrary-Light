@@ -205,7 +205,7 @@ namespace hoa
         //! The ambisonic irregular decoder.
         /** The irregular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if less than the number of harmonics plus one or when the loudspeakers are not equally spaced.
          */
-       class Irregular;
+        class Irregular;
 
         //! The ambisonic binaural decoder.
         /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
@@ -593,6 +593,12 @@ namespace hoa
     template <typename T> class Decoder<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics, public Processor<Hoa3d, T>::Planewaves
     {
     public:
+        
+        enum Mode
+        {
+            RegularMode = 0,
+            BinauralMode = 2
+        };
 
         //! The decoder constructor.
         /**	The decoder constructor allocates and initialize the base classes.
@@ -613,6 +619,12 @@ namespace hoa
         {
             ;
         }
+        
+        //! This method retrives the mode of the decoder.
+        /**	This method retrives the mode of the decoder.
+         @retun The mode of the decoder.
+         */
+        inline virtual Mode getMode() const noexcept = 0;
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -654,6 +666,12 @@ namespace hoa
             m_matrix = new T[Decoder<Hoa3d, T>::getNumberOfPlanewaves() * Decoder<Hoa3d, T>::getNumberOfHarmonics()];
             computeRendering();
         }
+        
+        //! This method retrives the mode of the decoder.
+        /**	This method retrives the mode of the decoder.
+         @retun The mode of the decoder.
+         */
+        inline Mode getMode() const noexcept {return RegularMode;};
 
         //! The regular destructor.
         /**	The regular destructor free the memory.
@@ -736,6 +754,12 @@ namespace hoa
             Decoder<Hoa3d, T>::setPlanewaveAzimuth(1, HOA_PI2);
             setCropSize(0ul);
         }
+        
+        //! This method retrives the mode of the decoder.
+        /**	This method retrives the mode of the decoder.
+         @retun The mode of the decoder.
+         */
+        inline Mode getMode() const noexcept {return BinauralMode;};
 
         //! The binaural decoder destructor.
         /**	The binaural decoder destructor free the memory.
