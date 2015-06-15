@@ -21,7 +21,7 @@ namespace hoa
         /**	The vector constructor allocates and initialize the member values to computes vectors. The number of channels must be at least 1.
          @param     numberOfChannels	The number of channels.
          */
-        Vector(const ulong numberOfChannels) noexcept = 0;
+        Vector(const ulong numberOfChannels) noexcept;
 
         //! The vector destructor.
         /**	The vector destructor free the memory.

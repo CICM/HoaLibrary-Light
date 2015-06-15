@@ -23,12 +23,12 @@ namespace hoa
         /** The harmonic constructor allocates and initializes the general member values depending on an index.
          @param index    The index must be at least 1.
          */
-        Harmonic(const ulong index) noexcept = 0;
+        Harmonic(const ulong index) noexcept;
 
         //! The harmonic destructor.
         /** The harmonic destructor free the memory.
          */
-        ~Harmonic() noexcept;
+		~Harmonic() noexcept = 0;
 
         //! Get the index of the harmonic.
         /** The method returns the index \f$i\f$ of the harmonic.

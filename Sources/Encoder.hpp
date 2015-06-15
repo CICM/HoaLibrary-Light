@@ -22,12 +22,12 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const ulong order) noexcept = 0;
+        Encoder(const ulong order) noexcept;
 
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        virtual ~Encoder() noexcept;
+		virtual ~Encoder() noexcept = 0;
 
         //! This method performs the encoding.
         /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -46,12 +46,12 @@ namespace hoa
             /**	The basic constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
              @param     order	The order.
              */
-            Basic(const ulong order) noexcept = 0;
+            Basic(const ulong order) noexcept;
 
             //! The basic destructor.
             /**	The basic destructor free the memory.
              */
-            virtual ~Basic() noexcept;
+			virtual ~Basic() noexcept = 0;
 
             //! Mute or unmute the process.
             /**	This method mutes or unmutes the process.
@@ -135,12 +135,12 @@ namespace hoa
             /**	The dc constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
              @param     order	The order.
              */
-            DC(const ulong order) noexcept = 0;
+            DC(const ulong order) noexcept;
 
             //! The dc destructor.
             /**	The dc destructor free the memory.
              */
-            virtual ~DC() noexcept;
+			virtual ~DC() noexcept = 0;
 
             //! Mute or unmute the process.
             /**	This method mutes or unmutes the process.
@@ -224,12 +224,12 @@ namespace hoa
              @param     order            The order.
              @param     numberOfSources	The number of sources.
              */
-            Multi(const ulong order, ulong numberOfSources) noexcept = 0;
+            Multi(const ulong order, ulong numberOfSources) noexcept;
 
             //! The multi encoder destructor.
             /**	The multi encoder destructor free the memory and deallocate the member classes.
              */
-            virtual ~Multi() noexcept;
+			virtual ~Multi() noexcept = 0;
 
             //! This method retrieve the number of sources.
             /** Retrieve the number of sources.

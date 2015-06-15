@@ -22,25 +22,25 @@ namespace hoa
         /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const ulong order) noexcept = 0;
+        Wider(const ulong order) noexcept;
 
         //! The wider destructor.
         /**	The wider destructor free the memory.
          */
-        virtual ~Wider() noexcept;
+		virtual ~Wider() noexcept = 0;
 
         //! This method set the widening value.
         /**	The the widening value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is omni directional and at \f$1\f$ the sound field is intact.
          @param     radius   The radius.
          @see       setAzimuth()
          */
-        virtual void setWidening(const T radius) noexcept;
+		virtual void setWidening(const T radius) noexcept = 0;
 
         //! Get the the widening value.
         /** The method returns the the widening value.
          @return     The widening value.
          */
-        virtual T getWidening() const noexcept;
+		virtual T getWidening() const noexcept = 0;
 
         //! This method perform the widening.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics. \n
@@ -56,7 +56,7 @@ namespace hoa
          @param     inputs	The input array.
          @param     outputs The output array.
          */
-        virtual void process(const T* inputs, T* outputs) noexcept;
+		virtual void process(const T* inputs, T* outputs) noexcept = 0;
 
     };
 

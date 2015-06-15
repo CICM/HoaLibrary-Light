@@ -22,12 +22,12 @@ namespace hoa
         /**	The rotate constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Rotate(const ulong order) noexcept = 0;
+        Rotate(const ulong order) noexcept;
 
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
          */
-        virtual ~Rotate() noexcept;
+		virtual ~Rotate() noexcept = 0;
 
         //! This method sets the angle of the rotation around the z axis, the yaw value.
         /** The yaw is equivalent to a rotation around the z axis, the yaw value \f$\theta\f$ is in radian and should be between \f$0\f$ and \f$2\pi\f$.

@@ -23,12 +23,12 @@ namespace hoa
          @param     order                   The order
          @param     numberOfPlanewaves      The number of channels.
          */
-        Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept = 0;
+        Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept;
 
         //! The destructor.
         /** The destructor free the memory.
          */
-        virtual ~Decoder();
+		virtual ~Decoder() = 0;
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -55,12 +55,12 @@ namespace hoa
              @param     order				The order
              @param     numberOfPlanewaves     The number of channels.
              */
-            Regular(const ulong order, const ulong numberOfPlanewaves) noexcept = 0;
+            Regular(const ulong order, const ulong numberOfPlanewaves) noexcept;
 
             //! The destructor.
             /** The destructor free the memory.
              */
-            virtual ~Regular();
+			virtual ~Regular() = 0;
 
             //! This method performs the decoding.
             /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -87,12 +87,12 @@ namespace hoa
              @param     order				The order
              @param     numberOfPlanewaves     The number of channels.
              */
-            Irregular(const ulong order, const ulong numberOfPlanewaves) noexcept = 0;
+            Irregular(const ulong order, const ulong numberOfPlanewaves) noexcept;
 
             //! The destructor.
             /** The destructor free the memory.
              */
-            virtual ~Irregular();
+			virtual ~Irregular() = 0;
 
             //! This method performs the decoding.
             /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -119,13 +119,13 @@ namespace hoa
             /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a order of decomposition and a number of channels. The order and the number of channels must be at least 1.
              @param     order				The order
              */
-            Binaural(const ulong order)  = 0;
+            Binaural(const ulong order);
 
 
             //! The binaural decoder destructor.
             /**	The binaural decoder destructor free the memory.
              */
-            virtual ~Binaural();
+            virtual ~Binaural() = 0;
 
             //! This method computes the decoding matrix.
             /**	You should use this method after changing the position of the loudspeakers.

@@ -25,7 +25,7 @@ namespace hoa
          @param azimuth     The azimuth \f$\theta\f$.
          @param elevation   The elevation \f$\varphi\f$.
          */
-        Planewave(const ulong index, const T azimuth, const T elevation) noexcept = 0;
+        Planewave(const ulong index, const T azimuth, const T elevation) noexcept;
 
         //! The planewave constructor.
         /** The planewave constructor allocates and initializes the general member values depending on an index and a cartesian coordinate with an abscissa \f$x\f$, an ordinate \f$y\f$ and an height \f$z\f$ assuming that the point is normalized over the unit circle or unit the sphere.
@@ -34,12 +34,12 @@ namespace hoa
          @param ordinate    The ordinate \f$y\f$.
          @param height      The height \f$z\f$.
          */
-        Planewave(const ulong index, const T abscissa, const T ordinate, const T height) noexcept = 0;
+        Planewave(const ulong index, const T abscissa, const T ordinate, const T height) noexcept;
 
         //! The planewave destructor.
         /** The planewave destructor free the memory.
          */
-        virtual ~Planewave() noexcept;
+		virtual ~Planewave() noexcept = 0;
 
         //! Get the index of the planewave.
         /** The method returns the index \f$i\f$ of the planewave.

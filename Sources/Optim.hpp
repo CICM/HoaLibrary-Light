@@ -22,12 +22,12 @@ namespace hoa
         /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Optim(const ulong order) noexcept = 0;
+        Optim(const ulong order) noexcept;
 
         //! The optim destructor.
         /**	The optim destructor free the memory.
          */
-        virtual ~Optim() noexcept;
+		virtual ~Optim() noexcept = 0;
 
         //! This method performs the optimization.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -47,12 +47,12 @@ namespace hoa
             /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
-            Basic(const ulong order) noexcept = 0;
+            Basic(const ulong order) noexcept;
 
             //! The optim destructor.
             /**	The optim destructor free the memory.
              */
-            virtual ~Basic() noexcept;
+            virtual ~Basic() noexcept = 0;
 
             //! This method performs the basic optimization.
             /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -74,12 +74,12 @@ namespace hoa
             /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
-            MaxRe(const ulong order) noexcept = 0;
+            MaxRe(const ulong order) noexcept;
 
             //! The optim destructor.
             /**	The optim destructor free the memory.
              */
-            virtual ~MaxRe() noexcept;
+			virtual ~MaxRe() noexcept = 0;
 
             //! This method performs the max-re optimization.
             /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -101,12 +101,12 @@ namespace hoa
             /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
-            InPhase(const ulong order) noexcept = 0;
+            InPhase(const ulong order) noexcept;
 
             //! The optim destructor.
             /**	The optim destructor free the memory.
              */
-            virtual ~InPhase() noexcept;
+			virtual ~InPhase() noexcept = 0;
 
             //! This method performs the in-phase optimization.
             /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.

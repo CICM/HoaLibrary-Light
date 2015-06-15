@@ -24,12 +24,12 @@ namespace hoa
          @param     order            The order.
          @param     numberOfPoints   The number of points.
          */
-        Scope(ulong order, ulong numberOfPoints) = 0;
+        Scope(ulong order, ulong numberOfPoints);
 
         //! The Scope destructor.
         /**	The Scope destructor free the memory.
          */
-        ~Scope() noexcept = 0;
+        virtual ~Scope() noexcept = 0;
 
         //! Set the offset.
         /**	Set the rotation of the spherical harmonics in radian.

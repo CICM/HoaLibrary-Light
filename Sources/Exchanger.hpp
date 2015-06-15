@@ -49,12 +49,12 @@ namespace hoa
         /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
          @param     order	The order.
          */
-        Exchanger(const ulong order) noexcept = 0;
+        Exchanger(const ulong order) noexcept;
 
         //! The exchanger destructor.
         /**	The exchanger destructor free the memory.
          */
-        virtual ~Exchanger() noexcept;
+		virtual ~Exchanger() noexcept = 0;
 
         //! This method performs the numbering and the normalization.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
