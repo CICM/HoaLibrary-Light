@@ -49,7 +49,7 @@ using namespace std;
 namespace hoa
 {
     typedef unsigned long ulong;
-#ifdef _WINDOWS
+#ifdef _MSC_VER_
     static inline double round(double val)
     {
         return floor(val + 0.5);
@@ -59,7 +59,7 @@ namespace hoa
 #undef max
 #endif
 #ifdef min
-#undef min 
+#undef min
 #endif
 #endif
 
@@ -91,7 +91,7 @@ namespace hoa
         sprintf(buffer, "%lf", val);
         return buffer;
     }
-    
+
 #endif
 
     //! The dimension of class.
