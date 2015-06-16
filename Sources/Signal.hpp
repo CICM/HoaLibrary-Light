@@ -17,7 +17,7 @@ namespace hoa
     template<typename T> class Signal
     {
     public:
-        
+
         //! Allocates a vector.
         /** Allocates a vector.
          @param size  The size of the vector.
@@ -30,16 +30,16 @@ namespace hoa
             if(vec) {clear(size, vec);}
             return vec;
 #elif _WINDOWS
-            T* vec = (T *)_aligned_malloc(size * sizeof(T), 16);
+            T* vec = (T *)_aligned_malloc(size * sizeof(T), pow(2, sizeof(T)));
             if(vec) {clear(size, vec);}
             return vec;
 #else
-            T* vec = (T *)memalign(16, size * sizeof(T));
+            T* vec = (T *)memalign(pow(2, sizeof(T)), size * sizeof(T));
             if(vec) {clear(size, vec);}
             return vec;
 #endif
         }
-        
+
         //! Frees a vector.
         /** Frees a vector.
          @param vec A pointer to a vector.
@@ -58,9 +58,9 @@ namespace hoa
             return nullptr;
 #endif
         }
-        
-        
-        
+
+
+
         //! Multiplies a matrix by a vector.
         /** Multiplies a matrix by a vector.
         @param colsize  The size of the input vector and the number of columns.
