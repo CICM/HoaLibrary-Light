@@ -775,11 +775,15 @@ namespace hoa
          */
         inline void setCropSize(const ulong size) noexcept
         {
-            if(!size || size > Hrir<Hoa2d, T>::getNumberOfRows())
-                m_crop_size = Hrir<Hoa2d, T>::getNumberOfRows();
-                else
-                    m_crop_size = size;
-                    }
+            if(!size || size > Hrir<Hoa3d, T>::getNumberOfRows())
+            {
+                m_crop_size = Hrir<Hoa3d, T>::getNumberOfRows();
+            }
+            else
+            {
+                m_crop_size = size;
+            }
+        }
         
         //! This method gets the crop size of the responses.
         /**	This method gets the crop size of the responses.
@@ -787,7 +791,7 @@ namespace hoa
          */
         inline ulong getCropSize() const noexcept
         {
-            if(m_crop_size == Hrir<Hoa2d, T>::getNumberOfRows())
+            if(m_crop_size == Hrir<Hoa3d, T>::getNumberOfRows())
             {
                 return 0;
             }
@@ -801,7 +805,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeRendering(const ulong vectorsize = 64)  override
+        void computeRendering(const ulong vectorsize = 64) override
         {
             clear();
             m_vector_size  = vectorsize;
@@ -822,6 +826,7 @@ namespace hoa
             {
                 Signal<T>::add(m, m_result + i, n, vector + i, 1ul);
             }
+            
             Signal<T>::copy(m_vector_size, vector, output);
             Signal<T>::copy(m, vector + m_vector_size, vector);
             Signal<T>::clear(m_vector_size, vector + m);
