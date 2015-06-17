@@ -19,6 +19,11 @@
 #include <map>
 #include <algorithm>
 
+// avoid min and max to be defined when compiling on VS
+#ifdef _MSC_VER
+#define NOMINMAX
+#endif
+
 #ifdef PD_DEBUG
 #include "../../CicmWrapper/Sources/cicm_wrapper.h"
 #endif
@@ -49,19 +54,6 @@ using namespace std;
 namespace hoa
 {
     typedef unsigned long ulong;
-#ifdef _MSC_VER_
-    static inline double round(double val)
-    {
-        return floor(val + 0.5);
-    }
-
-#ifdef max
-#undef max
-#endif
-#ifdef min
-#undef min
-#endif
-#endif
 
 #if (__cplusplus <= 199711L)
     inline string to_string(const ulong& val)
