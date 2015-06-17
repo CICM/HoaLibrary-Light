@@ -750,8 +750,8 @@ namespace hoa
         m_left(nullptr),
         m_right(nullptr)
         {
-            Decoder<Hoa3d, T>::setPlanewaveAzimuth(0, HOA_PI2*3.);
-            Decoder<Hoa3d, T>::setPlanewaveAzimuth(1, HOA_PI2);
+            Decoder<Hoa3d, T>::setPlanewaveAzimuth(0, (T)(HOA_PI2*3.));
+            Decoder<Hoa3d, T>::setPlanewaveAzimuth(1, (T)HOA_PI2);
             setCropSize(0ul);
         }
         

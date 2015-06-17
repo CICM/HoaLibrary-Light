@@ -62,13 +62,13 @@ namespace hoa
         static inline T wrap_pi(const T& value)
         {
             T new_value = value;
-            while(new_value < -HOA_PI)
+			while(new_value < -HOA_PI)
             {
-                new_value += HOA_2PI;
+                new_value += (T)HOA_2PI;
             }
-            while(new_value >= HOA_PI)
+			while(new_value >= HOA_PI)
             {
-                new_value -= HOA_2PI;
+				new_value -= (T)HOA_2PI;
             }
             return new_value;
         }
