@@ -153,7 +153,7 @@ namespace hoa
          */
         inline ulong getDegree() const noexcept
         {
-            return (m_index + m_index % 2) * 0.5;
+			return (ulong)((m_index + m_index % 2) * 0.5);
         }
 
         //! Get the order of the harmonic.
