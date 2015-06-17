@@ -336,7 +336,7 @@ namespace hoa
             }
             else
             {
-                T smallest_distance = HOA_2PI;
+                T smallest_distance = (T)HOA_2PI;
                 vector<Planewave<Hoa2d, T> > channels;
                 for(ulong i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
@@ -372,7 +372,7 @@ namespace hoa
                 {
                     smallest_distance = HOA_2PI / T(Decoder<Hoa2d, T>::getNumberOfHarmonics() + 1.);
                 }
-                const ulong nvirtual = ceil(HOA_2PI / smallest_distance);
+                const ulong nvirtual = (ulong)ceil(HOA_2PI / smallest_distance);
                 const T factor = 1. / (T)(nvirtual);
 
                 //post("number of virtual %i", nvirtual);
@@ -495,8 +495,8 @@ namespace hoa
         m_left(nullptr),
         m_right(nullptr)
         {
-            Decoder<Hoa2d, T>::setPlanewaveAzimuth(0, HOA_PI2*3.);
-            Decoder<Hoa2d, T>::setPlanewaveAzimuth(1, HOA_PI2);
+            Decoder<Hoa2d, T>::setPlanewaveAzimuth(0, (T)(HOA_PI2*3.));
+            Decoder<Hoa2d, T>::setPlanewaveAzimuth(1, (T)(HOA_PI2));
             setCropSize(0ul);
         }
         

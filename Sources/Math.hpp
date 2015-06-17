@@ -44,11 +44,11 @@ namespace hoa
             T new_value = value;
             while(new_value < 0.)
             {
-                new_value += HOA_2PI;
+                new_value += (T)HOA_2PI;
             }
-            while(new_value >= HOA_2PI)
+            while(new_value >= (T)HOA_2PI)
             {
-                new_value -= HOA_2PI;
+                new_value -= (T)HOA_2PI;
             }
             return new_value;
         }
