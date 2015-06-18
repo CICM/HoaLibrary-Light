@@ -111,7 +111,8 @@ namespace hoa
 
         //! Retrieve the index of an harmonic.
         /** The method retrieves the index of an harmonic in the range \f$0\f$ to number of harmonics - 1.
-         @param     order	The order an harmonic.
+         @param degree  The degree of the harmonic.
+         @param order   The order of the harmonic.
          @return    The method returns the index of the harmonic.
          @see       getHarmonicOrder()
          @see       getHarmonicName()

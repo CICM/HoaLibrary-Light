@@ -10,6 +10,8 @@
 #include "Defs.hpp"
 #include "Math.hpp"
 
+//! @cond
+
 namespace hoa
 {
     //! The voronoi class.
@@ -450,6 +452,8 @@ namespace hoa
     };
 
 }
+            
+//! @endcond
 
 #endif
 

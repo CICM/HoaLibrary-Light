@@ -72,9 +72,21 @@ namespace hoa
          @return The numbering convertion.
          */
         virtual Numbering getNumbering() const noexcept;
+        
+        //! Sets the normalization conversion.
+        /**	This method sets the normalization conversion.
+         @param mode The normalization convertion.
+         */
+        virtual void setNormalization(const Normalization mode) noexcept;
+        
+        //! Gets the normalization conversion.
+        /**	This method gets the normalization conversion.
+         @return The normalization convertion.
+         */
+        virtual Normalization getNormalization() const noexcept;
 
-        //! Retrieve the harmonic order of an input depending on the current numbering configuration.
-        /** Retrieve the harmonic order of an input depending on the current numbering configuration.
+        //! Retrieves the harmonic order of an input depending on the current numbering configuration.
+        /**
          @param     index	The index of an harmonic.
          @return    The harmonic order.
          @see       getHarmonicDegree()
@@ -82,8 +94,8 @@ namespace hoa
          */
         virtual long getInputHarmonicOrder(const ulong index) const noexcept;
 
-        //! Retrieve the harmonic order of an output depending on the current numbering configuration.
-        /** Retrieve the harmonic order of an output depending on the current numbering configuration.
+        //! Retrieves the harmonic order of an output depending on the current numbering configuration.
+        /**
          @param     index	The index of an harmonic.
          @return    The harmonic order.
          @see       getHarmonicDegree()
@@ -91,9 +103,8 @@ namespace hoa
          */
         virtual long getOutputHarmonicOrder(const ulong index) const noexcept;
 
-        //! Retrieve the name of an harmonic depending on the current numbering configuration.
-        /** Retrieve the name of an harmonic depending on the current numbering configuration.
-         This returns the name of the harmonic that contains its degree and its order for ACN and SID and harmonic name with letter code for FUMA.
+        //! Retrieves the name of an harmonic depending on the current numbering configuration.
+        /** This methods returns the name that contains the degree and the order of the harmonic for ACN and SID or the letter code of the harmonic for Furse-Malham.
          @param     index	The index of an harmonic.
          @param     isInput	Pass true to retrieve the input harmonic name, false for an output.
          @return    The name of the harmonic.
@@ -103,7 +114,7 @@ namespace hoa
         virtual string getHarmonicName(const ulong index, const bool isInput) const noexcept;
     };
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
+//! @cond
 
     template <typename T> class Exchanger<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
     {
@@ -934,7 +945,7 @@ namespace hoa
         }
     };
 
-#endif
+//! @endcond
 }
 
 #endif

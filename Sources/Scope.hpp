@@ -43,8 +43,8 @@ namespace hoa
 
         //! This method performs the spherical/circular harmonics projection with single precision.
         /**	You should use this method to compute the projection of the spherical/circular harmonics over an ambisonic sphere. The inputs array contains the spherical/circular harmonics samples and the minimum size must be the number of harmonics.
-
          @param     inputs   The inputs array.
+         @param     outputs  The dummy outputs array (null).
          */
         virtual inline void process(const T* inputs, T* outputs) noexcept override = 0;
 

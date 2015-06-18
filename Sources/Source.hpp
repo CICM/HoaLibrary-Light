@@ -9,6 +9,8 @@
 
 #include "Math.hpp"
 
+//! @cond
+
 namespace hoa
 {
     //! The source class is used to simulate punctual sources.
@@ -1562,4 +1564,6 @@ namespace hoa
     };
 
 }
+
+//! @endcond
 #endif
