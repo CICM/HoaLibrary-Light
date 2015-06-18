@@ -504,10 +504,15 @@ namespace hoa
 		inline void setElevation(const double elevation)
 		{
 			m_elevation = Math<double>::wrap_pi(elevation);
-		    if(m_elevation > HOA_PI2 || m_elevation < -HOA_PI2)
+		    if(m_elevation > HOA_PI2)
 		    {
 		        m_azimuth = Math<double>::wrap_twopi(m_azimuth + HOA_PI);
-		        m_elevation = -elevation;
+                m_elevation = HOA_PI2 - (m_elevation - HOA_PI2);
+		    }
+		    else if(m_elevation < -HOA_PI2)
+		    {
+		        m_azimuth = Math<double>::wrap_twopi(m_azimuth + HOA_PI);
+                m_elevation = -HOA_PI2 + (-m_elevation - HOA_PI2);
 		    }
 		    notifyCoordinates();
 		}
