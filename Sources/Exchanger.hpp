@@ -37,10 +37,8 @@ namespace hoa
         {
             SN2D            = 0, /*!<  The normalization is considered as semi-normalization. */
             SN3D            = 0, /*!<  The normalization is considered as semi-normalization. */
-            fromN2D         = 0, /*!<  From N2D to SN2D. */
             fromN3D         = 0, /*!<  From N3D to SN3D. */
             fromMaxN        = 1, /*!<  From MaxN (B-format) to SN2D/SN3D. */
-            toN2D           = 2, /*!<  To N2D from SN2D. */
             toN3D           = 2, /*!<  To N3D from SN3D. */
             toMaxN          = 3  /*!<  To MaxN (B-format) from SN2D/SN3D. */
         };
@@ -128,9 +126,7 @@ namespace hoa
         enum Normalization
         {
             SN2D            = 0, /*!<  The normalization is considered as semi-normalization. */
-            fromN2D         = 0, /*!<  From N2D to SN2D. */
             fromMaxN        = 1, /*!<  From MaxN (B-format) to SN2D. */
-            toN2D           = 2, /*!<  To N2D from SN2D. */
             toMaxN          = 3  /*!<  To MaxN (B-format) from SN2D. */
         };
 
@@ -212,77 +208,6 @@ namespace hoa
             return m_normalization;
         }
 
-        //! Retrieve the harmonic order of an input depending on the current numbering configuration.
-        /** Retrieve the harmonic order of an input depending on the current numbering configuration.
-         @param     index	The index of an harmonic.
-         @return    The harmonic order.
-         @see       getHarmonicDegree()
-         @see       getHarmonicOrder()
-         */
-        long getInputHarmonicOrder(const ulong index) const noexcept
-        {
-            const Numbering numb = getNumbering();
-            const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID);
-            return Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * (acn ? 1l : -1l);
-        }
-
-        //! Retrieve the harmonic order of an output depending on the current numbering configuration.
-        /** Retrieve the harmonic order of an output depending on the current numbering configuration.
-         @param     index	The index of an harmonic.
-         @return    The harmonic order.
-         @see       getHarmonicDegree()
-         @see       getHarmonicOrder()
-         */
-        long getOutputHarmonicOrder(const ulong index) const noexcept
-        {
-            const Numbering numb = getNumbering();
-            const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID);
-            return Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * (acn ? 1l : -1l);
-        }
-
-        //! Retrieve the name of an harmonic depending on the current numbering configuration.
-        /** Retrieve the name of an harmonic depending on the current numbering configuration.
-         This returns the name of the harmonic that contains its degree and its order for ACN and SID and harmonic name with letter code for FUMA.
-         @param     index	The index of an harmonic.
-         @param     isInput	Pass true to retrieve the input harmonic name, false for an output.
-         @return    The name of the harmonic.
-         @see       getHarmonicDegree()
-         @see       getHarmonicOrder()
-         */
-        string getHarmonicName(const ulong index, const bool isInput) const noexcept
-        {
-            const Numbering numb = getNumbering();
-            const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
-            const bool malham = !acn && ((isInput && numb == fromFurseMalham) || (!isInput && numb == toFurseMalham));
-
-            if(acn)
-            {
-                // [0, 0], [1, -1], [1, 1], [2, -2], [2, 2], [3, -3], [3, 3]...
-                return Processor<Hoa2d, T>::Harmonics::getHarmonicName(index);
-            }
-            else if(malham)
-            {
-                if(index < 7)
-                {
-                    static const char FurseMalham_2D_Letterings[7] =
-                    {
-                        'W', 'X', 'Y', 'U', 'V', 'P', 'Q'
-                    };
-
-                    string name = "Harmonic ";
-                    return name += FurseMalham_2D_Letterings[index];
-                }
-
-                return "?";
-            }
-            else
-            {
-                // [0, 0], [1, 1], [1, -1], [2, 2], [2, -2], [3, 3], [3, -3]...
-                ulong hdegree = Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index);
-                ulong horder  = Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * -1l;
-                return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
-            }
-        }
 
         //! This method performs the numbering and the normalization.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -291,23 +216,39 @@ namespace hoa
          */
         void process(T const* inputs, T* outputs) noexcept
         {
-            switch(m_numbering)
+            T const* ins = inputs;
+            if(m_numbering == fromFurseMalham)
             {
-                case fromFurseMalham:
-                    numberFromFurseMalham(inputs, outputs);
+                numberFromFurseMalham(inputs, outputs);
+                ins = outputs;
+            }
+            else if(m_numbering == fromSID)
+            {
+                numberFromSID(inputs, outputs);
+                ins = outputs;
+            }
+            switch(m_normalization)
+            {
+                case fromMaxN:
+                    outputs[0] = ins[0] * T(sqrt(2.));
+                    Signal<T>::copy(Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics() - 1, ins+1, outputs+1);
+                    ins = outputs;
                     break;
-                case fromSID:
-                    numberFromSID(inputs, outputs);
-                    break;
-                case toFurseMalham:
-                    numberToFurseMalham(inputs, outputs);
-                    break;
-                case toSID:
-                    numberToSID(inputs, outputs);
+                case toMaxN:
+                    outputs[0] = ins[0] / T(sqrt(2.));
+                    Signal<T>::copy(Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics() - 1, ins+1, outputs+1);
+                    ins = outputs;
                     break;
                 default:
-                    Signal<T>::copy(Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(), inputs, outputs);
                     break;
+            }
+            if(m_numbering == toFurseMalham)
+            {
+                numberToFurseMalham(ins, outputs);
+            }
+            else if(m_numbering == toSID)
+            {
+                numberToSID(ins, outputs);
             }
         }
 
@@ -398,7 +339,82 @@ namespace hoa
                 *(outputs++) = temp;
             }
         }
+        
+        //! Retrieve the harmonic order of an input depending on the current numbering configuration.
+        /** Retrieve the harmonic order of an input depending on the current numbering configuration.
+         @param     index	The index of an harmonic.
+         @return    The harmonic order.
+         @see       getHarmonicDegree()
+         @see       getHarmonicOrder()
+         */
+        long getInputHarmonicOrder(const ulong index) const noexcept
+        {
+            const Numbering numb = getNumbering();
+            const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID);
+            return Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * (acn ? 1l : -1l);
+        }
+        
+        //! Retrieve the harmonic order of an output depending on the current numbering configuration.
+        /** Retrieve the harmonic order of an output depending on the current numbering configuration.
+         @param     index	The index of an harmonic.
+         @return    The harmonic order.
+         @see       getHarmonicDegree()
+         @see       getHarmonicOrder()
+         */
+        long getOutputHarmonicOrder(const ulong index) const noexcept
+        {
+            const Numbering numb = getNumbering();
+            const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID);
+            return Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * (acn ? 1l : -1l);
+        }
+        
+        //! Retrieve the name of an harmonic depending on the current numbering configuration.
+        /** Retrieve the name of an harmonic depending on the current numbering configuration.
+         This returns the name of the harmonic that contains its degree and its order for ACN and SID and harmonic name with letter code for FUMA.
+         @param     index	The index of an harmonic.
+         @param     isInput	Pass true to retrieve the input harmonic name, false for an output.
+         @return    The name of the harmonic.
+         @see       getHarmonicDegree()
+         @see       getHarmonicOrder()
+         */
+        string getHarmonicName(const ulong index, const bool isInput) const noexcept
+        {
+            const Numbering numb = getNumbering();
+            const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
+            const bool malham = !acn && ((isInput && numb == fromFurseMalham) || (!isInput && numb == toFurseMalham));
+            
+            if(acn)
+            {
+                // [0, 0], [1, -1], [1, 1], [2, -2], [2, 2], [3, -3], [3, 3]...
+                return Processor<Hoa2d, T>::Harmonics::getHarmonicName(index);
+            }
+            else if(malham)
+            {
+                if(index < 7)
+                {
+                    static const char FurseMalham_2D_Letterings[7] =
+                    {
+                        'W', 'X', 'Y', 'U', 'V', 'P', 'Q'
+                    };
+                    
+                    string name = "Harmonic ";
+                    return name += FurseMalham_2D_Letterings[index];
+                }
+                
+                return "?";
+            }
+            else
+            {
+                // [0, 0], [1, 1], [1, -1], [2, 2], [2, -2], [3, 3], [3, -3]...
+                ulong hdegree = Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index);
+                ulong horder  = Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * -1l;
+                return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
+            }
+        }
     };
+    
+    
+    
 
     template <typename T> class Exchanger<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics
     {
@@ -523,104 +539,6 @@ namespace hoa
         inline Normalization getNormalization() const noexcept
         {
             return m_normalization;
-        }
-
-        //! Retrieve the harmonic order of an input depending on the current numbering configuration.
-        /** Retrieve the harmonic order of an input depending on the current numbering configuration.
-         @param     index	The index of an harmonic.
-         @return    The harmonic order.
-         @see       getHarmonicDegree()
-         @see       getHarmonicOrder()
-         */
-        long getInputHarmonicOrder(const ulong index) const noexcept
-        {
-            const Numbering numb = getNumbering();
-            const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID);
-
-            if(acn)
-            {
-                return Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(index);
-            }
-            else
-            {
-                const long hdegree = long(sqrt(index));
-                const long tmp = long(index) - (hdegree) * (hdegree);
-                const long sign = (tmp % 2) ? -1l : 1l;
-                return sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
-            }
-        }
-
-        //! Retrieve the harmonic order of an output depending on the current numbering configuration.
-        /** Retrieve the harmonic order of an output depending on the current numbering configuration.
-         @param     index	The index of an harmonic.
-         @return    The harmonic order.
-         @see       getHarmonicDegree()
-         @see       getHarmonicOrder()
-         */
-        long getOutputHarmonicOrder(const ulong index) const noexcept
-        {
-            const Numbering numb = getNumbering();
-            const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID);
-
-            if(acn)
-            {
-                return Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(index);
-            }
-            else
-            {
-                const long hdegree = long(sqrt(index));
-                const long tmp = long(index) - (hdegree) * (hdegree);
-                const long sign = (tmp % 2) ? -1l : 1l;
-                return sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
-            }
-        }
-
-        //! Retrieve the name of an harmonic depending on the current numbering configuration.
-        /** Retrieve the name of an harmonic depending on the current numbering configuration.
-         This returns the name of the harmonic that contains its degree and its order for ACN and SID and harmonic name with letter code for FUMA.
-         @param     index	The index of an harmonic.
-         @param     isInput	Pass true to retrieve the input harmonic name, false for an output.
-         @return    The name of the harmonic.
-         @see       getHarmonicDegree()
-         @see       getHarmonicOrder()
-         */
-        string getHarmonicName(const ulong index, const bool isInput) const noexcept
-        {
-            const Numbering numb = getNumbering();
-            const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
-            const bool malham = !acn && ((isInput && numb == fromFurseMalham) || (!isInput && numb == toFurseMalham));
-
-            if(acn)
-            {
-                // [0, 0], [1, -1], [1, 0], [1, 1], [2, -2], [2, -1], [2, 0], [2, 1], [2, 2] ...
-                return Processor<Hoa3d, T>::Harmonics::getHarmonicName(index);
-            }
-            else if(malham)
-            {
-                if(index < 16)
-                {
-                    static const char FurseMalham_3D_Letterings[16] =
-                    {
-                        'W', 'X', 'Y', 'Z',
-                        'R', 'S', 'T', 'U', 'V',
-                        'K', 'L', 'M', 'N', 'O', 'P', 'Q'
-                    };
-
-                    string name = "Harmonic ";
-                    return name += FurseMalham_3D_Letterings[index];
-                }
-
-                return "?";
-            }
-            else
-            {
-                // [0, 0], [1, 1], [1, -1], [1, 0], [2, 2], [2, -2], [2, 1], [2, -1], [2, 0] ...
-                const long hdegree = long(sqrt(index));
-                const long tmp = long(index) - (hdegree) * (hdegree);
-                const long sign = (tmp % 2) ? -1l : 1l;
-                const long horder = sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
-                return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
-            }
         }
 
         //! This method performs the numbering and the normalization.
@@ -914,6 +832,104 @@ namespace hoa
                 {
                     *(outputs++) = *(inputs++) * norm;
                 }
+            }
+        }
+        
+        //! Retrieve the harmonic order of an input depending on the current numbering configuration.
+        /** Retrieve the harmonic order of an input depending on the current numbering configuration.
+         @param     index	The index of an harmonic.
+         @return    The harmonic order.
+         @see       getHarmonicDegree()
+         @see       getHarmonicOrder()
+         */
+        long getInputHarmonicOrder(const ulong index) const noexcept
+        {
+            const Numbering numb = getNumbering();
+            const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID);
+            
+            if(acn)
+            {
+                return Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(index);
+            }
+            else
+            {
+                const long hdegree = long(sqrt(index));
+                const long tmp = long(index) - (hdegree) * (hdegree);
+                const long sign = (tmp % 2) ? -1l : 1l;
+                return sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
+            }
+        }
+        
+        //! Retrieve the harmonic order of an output depending on the current numbering configuration.
+        /** Retrieve the harmonic order of an output depending on the current numbering configuration.
+         @param     index	The index of an harmonic.
+         @return    The harmonic order.
+         @see       getHarmonicDegree()
+         @see       getHarmonicOrder()
+         */
+        long getOutputHarmonicOrder(const ulong index) const noexcept
+        {
+            const Numbering numb = getNumbering();
+            const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID);
+            
+            if(acn)
+            {
+                return Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(index);
+            }
+            else
+            {
+                const long hdegree = long(sqrt(index));
+                const long tmp = long(index) - (hdegree) * (hdegree);
+                const long sign = (tmp % 2) ? -1l : 1l;
+                return sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
+            }
+        }
+        
+        //! Retrieve the name of an harmonic depending on the current numbering configuration.
+        /** Retrieve the name of an harmonic depending on the current numbering configuration.
+         This returns the name of the harmonic that contains its degree and its order for ACN and SID and harmonic name with letter code for FUMA.
+         @param     index	The index of an harmonic.
+         @param     isInput	Pass true to retrieve the input harmonic name, false for an output.
+         @return    The name of the harmonic.
+         @see       getHarmonicDegree()
+         @see       getHarmonicOrder()
+         */
+        string getHarmonicName(const ulong index, const bool isInput) const noexcept
+        {
+            const Numbering numb = getNumbering();
+            const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
+            const bool malham = !acn && ((isInput && numb == fromFurseMalham) || (!isInput && numb == toFurseMalham));
+            
+            if(acn)
+            {
+                // [0, 0], [1, -1], [1, 0], [1, 1], [2, -2], [2, -1], [2, 0], [2, 1], [2, 2] ...
+                return Processor<Hoa3d, T>::Harmonics::getHarmonicName(index);
+            }
+            else if(malham)
+            {
+                if(index < 16)
+                {
+                    static const char FurseMalham_3D_Letterings[16] =
+                    {
+                        'W', 'X', 'Y', 'Z',
+                        'R', 'S', 'T', 'U', 'V',
+                        'K', 'L', 'M', 'N', 'O', 'P', 'Q'
+                    };
+                    
+                    string name = "Harmonic ";
+                    return name += FurseMalham_3D_Letterings[index];
+                }
+                
+                return "?";
+            }
+            else
+            {
+                // [0, 0], [1, 1], [1, -1], [1, 0], [2, 2], [2, -2], [2, 1], [2, -1], [2, 0] ...
+                const long hdegree = long(sqrt(index));
+                const long tmp = long(index) - (hdegree) * (hdegree);
+                const long sign = (tmp % 2) ? -1l : 1l;
+                const long horder = sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
+                return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
             }
         }
     };
