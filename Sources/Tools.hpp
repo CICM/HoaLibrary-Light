@@ -125,9 +125,9 @@ namespace hoa
         PolarLines(ulong numberOfSources) noexcept :
         m_number_of_sources(numberOfSources)
         {
-            m_values_old    = new T[m_number_of_sources * 2];
-            m_values_new    = new T[m_number_of_sources * 2];
-            m_values_step   = new T[m_number_of_sources * 2];
+            m_values_old    = Signal<T>::alloc(m_number_of_sources * 2);
+            m_values_new    = Signal<T>::alloc(m_number_of_sources * 2);
+            m_values_step   = Signal<T>::alloc(m_number_of_sources * 2);
         }
 
         //! The destructor.
@@ -135,9 +135,9 @@ namespace hoa
          */
         ~PolarLines()
         {
-            delete [] m_values_old;
-            delete [] m_values_new;
-            delete [] m_values_step;
+            Signal<T>::free(m_values_old);
+            Signal<T>::free(m_values_new);
+            Signal<T>::free(m_values_step);
         }
 
         //! Get the number of sources.
@@ -292,9 +292,9 @@ namespace hoa
         PolarLines(ulong numberOfSources) noexcept :
         m_number_of_sources(numberOfSources)
         {
-            m_values_old    = new T[m_number_of_sources * 3];
-            m_values_new    = new T[m_number_of_sources * 3];
-            m_values_step   = new T[m_number_of_sources * 3];
+            m_values_old    = Signal<T>::alloc(m_number_of_sources * 3);
+            m_values_new    = Signal<T>::alloc(m_number_of_sources * 3);
+            m_values_step   = Signal<T>::alloc(m_number_of_sources * 3);
         }
 
         //! The destructor.
@@ -302,9 +302,9 @@ namespace hoa
          */
         ~PolarLines()
         {
-            delete [] m_values_old;
-            delete [] m_values_new;
-            delete [] m_values_step;
+            Signal<T>::free(m_values_old);
+            Signal<T>::free(m_values_new);
+            Signal<T>::free(m_values_step);
         }
 
         //! Get the number of sources.

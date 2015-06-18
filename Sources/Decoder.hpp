@@ -226,7 +226,7 @@ namespace hoa
          */
         Regular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
         {
-            m_matrix = new T[Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics()];
+            m_matrix = Signal<T>::alloc(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
             computeRendering();
         }
 
@@ -235,7 +235,7 @@ namespace hoa
          */
         ~Regular()
         {
-            delete [] m_matrix;
+            Signal<T>::free(m_matrix);
         }
         
         //! This method retrives the mode of the decoder.
@@ -284,7 +284,7 @@ namespace hoa
          */
         Irregular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
         {
-            m_matrix = new T[Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics()];
+            m_matrix = Signal<T>::alloc(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
             computeRendering();
         }
 
@@ -293,7 +293,7 @@ namespace hoa
          */
         ~Irregular()
         {
-            delete [] m_matrix;
+            Signal<T>::free(m_matrix);
         }
         
         //! This method retrives the mode of the decoder.
@@ -320,7 +320,7 @@ namespace hoa
         {
             typename Encoder<Hoa2d, T>::Basic encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
             Signal<T>::clear(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
-            T* vector_harmonics =  new T[Decoder<Hoa2d, T>::getNumberOfHarmonics()];
+            T* vector_harmonics = Signal<T>::alloc(Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
             if(Decoder<Hoa2d, T>::getNumberOfPlanewaves() == 1)
             {
@@ -461,7 +461,7 @@ namespace hoa
                 }
                 channels.clear();
             }
-            delete [] vector_harmonics;
+            Signal<T>::free(vector_harmonics);
         }
     };
 
@@ -663,7 +663,7 @@ namespace hoa
          */
         Regular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa3d, T>(order, numberOfPlanewaves)
         {
-            m_matrix = new T[Decoder<Hoa3d, T>::getNumberOfPlanewaves() * Decoder<Hoa3d, T>::getNumberOfHarmonics()];
+            m_matrix = Signal<T>::alloc(Decoder<Hoa3d, T>::getNumberOfPlanewaves() * Decoder<Hoa3d, T>::getNumberOfHarmonics());
             computeRendering();
         }
         
@@ -678,7 +678,7 @@ namespace hoa
          */
         ~Regular()
         {
-            delete [] m_matrix;
+            Signal<T>::free(m_matrix);
         }
 
         //! This method performs the decoding.

@@ -41,8 +41,8 @@ namespace hoa
         Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
         {
             const T factor = 1.;
-            T* vector   = new T[Encoder<Hoa2d, T>::getNumberOfHarmonics()];
-            m_matrix    = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
+            T* vector   = Signal<T>::alloc(Encoder<Hoa2d, T>::getNumberOfHarmonics());
+            m_matrix    = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics());
             for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
                 Encoder<Hoa2d, T>::Basic::setAzimuth(Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(i));
@@ -52,7 +52,7 @@ namespace hoa
                     m_matrix[j * Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() + i] = vector[j];
                 }
             }
-            delete [] vector;
+            Signal<T>::free(vector);
         }
 
         //! The destructor.
@@ -60,7 +60,7 @@ namespace hoa
          */
         ~Recomposer()
         {
-            delete [] m_matrix;
+            Signal<T>::free(m_matrix);
         }
 
         //! This method performs the recomposition.

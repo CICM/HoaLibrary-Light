@@ -76,8 +76,8 @@ namespace hoa
         Encoder<Hoa2d, T>::Basic(order),
         Processor<Hoa2d, T>::Planewaves(numberOfPoints)
         {
-            m_matrix = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
-            m_vector = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
+            m_matrix = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics());
+            m_vector = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
             computeRendering();
         }
 
@@ -86,8 +86,8 @@ namespace hoa
          */
         ~Scope() noexcept
         {
-            delete [] m_matrix;
-            delete [] m_vector;
+            Signal<T>::free(m_matrix);
+            Signal<T>::free(m_vector);
         }
 
         //! Set the offset.
@@ -252,8 +252,8 @@ namespace hoa
                 }
             }
 
-            m_matrix = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa3d, T>::getNumberOfHarmonics()];
-            m_vector = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
+            m_matrix = Signal<T>::alloc(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa3d, T>::getNumberOfHarmonics());
+            m_vector = Signal<T>::alloc(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves());
             computeRendering();
         }
 
@@ -262,8 +262,8 @@ namespace hoa
          */
         ~Scope() noexcept
         {
-            delete [] m_matrix;
-            delete [] m_vector;
+            Signal<T>::free(m_matrix);
+            Signal<T>::free(m_vector);
         }
 
         //! Retrieve the number of rows.

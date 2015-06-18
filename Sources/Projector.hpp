@@ -33,7 +33,7 @@ namespace hoa
         Encoder<Hoa2d, T>::Basic(order),
         Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
         {
-            m_matrix = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics()];
+            m_matrix = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics());
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
@@ -48,7 +48,7 @@ namespace hoa
          */
         ~Projector()
         {
-            delete [] m_matrix;
+            Signal<T>::free(m_matrix);
         }
 
         //! This method performs the decoding.

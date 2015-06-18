@@ -209,7 +209,7 @@ namespace hoa
     private:
         static T* generate(const ulong order)
         {
-            T* vector = new T[order];
+            T* vector = Signal<T>::alloc(order);
             for(ulong i = 1; i <= order; i++)
             {
                 vector[i-1] = cos(T(i) *  T(HOA_PI) / (T)(2. * order + 2.));
@@ -234,7 +234,7 @@ namespace hoa
          */
         ~MaxRe() noexcept
         {
-            delete [] m_weights;
+             Signal<T>::free(const_cast<T*>(m_weights));
         }
 
         //! This method performs the max-re optimization.
@@ -262,7 +262,7 @@ namespace hoa
     private:
         static T* generate(const ulong order)
         {
-            T* vector = new T[order];
+            T* vector = Signal<T>::alloc(order);
             const T facn = Math<T>::factorial(long(order));
             for(ulong i = 1; i <= order; i++)
             {
@@ -288,7 +288,7 @@ namespace hoa
          */
         ~InPhase() noexcept
         {
-            delete [] m_weights;
+             Signal<T>::free(const_cast<T*>(m_weights));
         }
 
         //! This method performs the in-phase optimization.
@@ -402,7 +402,7 @@ namespace hoa
     private:
         static T* generate(const ulong order)
         {
-            T* vector = new T[order];
+            T* vector = Signal<T>::alloc(order);
             for(ulong i = 1; i <= order; i++)
             {
                 vector[i-1] = cos(T(i) *  T(HOA_PI) / (T)(2. * order + 2.));
@@ -427,7 +427,7 @@ namespace hoa
          */
         ~MaxRe() noexcept
         {
-            delete [] m_weights;
+             Signal<T>::free(const_cast<T*>(m_weights));
         }
 
         //! This method performs the max-re optimization.
@@ -458,7 +458,7 @@ namespace hoa
     private:
         static T* generate(const ulong order)
         {
-            T* vector = new T[order];
+            T* vector = Signal<T>::alloc(order);
             const T facn = Math<T>::factorial(long(order));
             for(ulong i = 1; i <= order; i++)
             {
@@ -485,7 +485,7 @@ namespace hoa
          */
         ~InPhase() noexcept
         {
-            delete [] m_weights;
+            Signal<T>::free(const_cast<T*>(m_weights));
         }
 
         //! This method performs the in-phase optimization.
