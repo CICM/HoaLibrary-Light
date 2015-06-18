@@ -852,7 +852,7 @@ namespace hoa
          */
         Basic(const ulong order) noexcept : Encoder<Hoa3d, T>(order)
         {
-            m_normalization = new T[Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics()];
+            m_normalization = Signal<T>::alloc(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics());
             for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
             {
                 m_normalization[i] = Processor<Hoa3d, T>::Harmonics::getHarmonicSemiNormalization(i);
@@ -867,7 +867,7 @@ namespace hoa
          */
         ~Basic() noexcept
         {
-            delete [] m_normalization;
+            Signal<T>::free(m_normalization);
         }
 
         //! This method mute or unmute.
@@ -1154,12 +1154,12 @@ namespace hoa
          */
         DC(const ulong order) noexcept : Encoder<Hoa3d, T>(order)
         {
-            m_normalization = new T[Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics()];
+            m_normalization = Signal<T>::alloc(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics());
             for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
             {
                 m_normalization[i] = Processor<Hoa3d, T>::Harmonics::getHarmonicSemiNormalization(i);
             }
-            m_distance = new T[Processor<Hoa3d, T>::Harmonics::getDecompositionOrder()];
+            m_distance = Signal<T>::alloc(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder());
             setMute(false);
             setAzimuth(0.);
             setElevation(0.);
@@ -1171,8 +1171,8 @@ namespace hoa
          */
         ~DC() noexcept
         {
-            delete [] m_normalization;
-            delete [] m_distance;
+            Signal<T>::free(m_normalization);
+            Signal<T>::free(m_distance);
 
         }
 

@@ -38,9 +38,9 @@ namespace hoa
         {
             m_ramp                      = 0;
             m_vector_size               = 0;
-            m_channels_peaks            = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
-            m_channels_azimuth_width    = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
-            m_channels_azimuth_mapped   = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
+            m_channels_peaks            = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
+            m_channels_azimuth_width    = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
+            m_channels_azimuth_mapped   = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
             m_over_leds                 = new ulong[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
             for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
@@ -54,9 +54,9 @@ namespace hoa
          */
         ~Meter()
         {
-            delete [] m_channels_peaks;
-            delete [] m_channels_azimuth_width;
-            delete [] m_channels_azimuth_mapped;
+            Signal<T>::free(m_channels_peaks);
+            Signal<T>::free(m_channels_azimuth_width);
+            Signal<T>::free(m_channels_azimuth_mapped);
             delete [] m_over_leds;
         }
 
@@ -257,7 +257,7 @@ namespace hoa
         {
             m_ramp                      = 0;
             m_vector_size               = 0;
-            m_channels_peaks            = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
+            m_channels_peaks            = Signal<T>::alloc(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves());
             m_over_leds                 = new ulong[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
             m_top                       = new Path[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
             m_bottom                    = new Path[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
@@ -273,7 +273,7 @@ namespace hoa
          */
         ~Meter()
         {
-            delete [] m_channels_peaks;
+            Signal<T>::free(m_channels_peaks);
             delete [] m_over_leds;
             for(ulong i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {

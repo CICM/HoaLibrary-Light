@@ -458,7 +458,7 @@ namespace hoa
         m_numbering(ACN),
         m_normalization(SN3D)
         {
-            m_harmonics = new T[order*2+1];
+            m_harmonics = Signal<T>::alloc(order*2+1);
         }
 
         //! The exchanger destructor.
@@ -466,7 +466,7 @@ namespace hoa
          */
         inline ~Exchanger() noexcept
         {
-            delete [] m_harmonics;
+            Signal<T>::free(m_harmonics);
         }
 
         //! Sets the numbering and the normalization conversion from B-Format.

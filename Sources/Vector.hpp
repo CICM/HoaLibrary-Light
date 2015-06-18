@@ -72,9 +72,9 @@ namespace hoa
          */
         Vector(const ulong numberOfChannels) noexcept : Processor<Hoa2d, T>::Planewaves(numberOfChannels)
         {
-            m_channels_square   = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
-            m_channels_abscissa = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
-            m_channels_ordinate = new T[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
+            m_channels_square   = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
+            m_channels_abscissa = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
+            m_channels_ordinate = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
         }
 
         //! The vector destructor.
@@ -82,9 +82,9 @@ namespace hoa
          */
         ~Vector() noexcept
         {
-            delete [] m_channels_square;
-            delete [] m_channels_abscissa;
-            delete [] m_channels_ordinate;
+            Signal<T>::free(m_channels_square);
+            Signal<T>::free(m_channels_abscissa);
+            Signal<T>::free(m_channels_ordinate);
         }
 
         //! This method pre-computes the necessary values to process.
@@ -176,10 +176,10 @@ namespace hoa
          */
         Vector(const ulong numberOfChannels) noexcept : Processor<Hoa3d, T>::Planewaves(numberOfChannels)
         {
-            m_channels_square   = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
-            m_channels_abscissa = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
-            m_channels_ordinate = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
-            m_channels_height   = new T[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
+            m_channels_square   = Signal<T>::alloc(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves());
+            m_channels_abscissa = Signal<T>::alloc(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves());
+            m_channels_ordinate = Signal<T>::alloc(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves());
+            m_channels_height   = Signal<T>::alloc(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves());
         }
 
         //! The vector destructor.
@@ -187,10 +187,10 @@ namespace hoa
          */
         ~Vector() noexcept
         {
-            delete [] m_channels_square;
-            delete [] m_channels_abscissa;
-            delete [] m_channels_ordinate;
-            delete [] m_channels_height;
+            Signal<T>::free(m_channels_square);
+            Signal<T>::free(m_channels_abscissa);
+            Signal<T>::free(m_channels_ordinate);
+            Signal<T>::free(m_channels_height);
         }
 
         //! This method pre-computes the necessary values to process.
