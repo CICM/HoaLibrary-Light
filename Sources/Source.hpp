@@ -940,6 +940,10 @@ namespace hoa
                             if(circleValue - it->second->getAbscissa() < refValue)
                                 refValue = circleValue - it->second->getAbscissa();
                         }
+                        if(abscissa > refValue)
+                        {
+                            abscissa = refValue;
+                        }
                     }
                 }
                 for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
@@ -979,6 +983,10 @@ namespace hoa
                             if(circleValue - it->second->getOrdinate() < refValue)
                                 refValue = circleValue - it->second->getOrdinate();
                         }
+                        if(ordinate > refValue)
+                        {
+                            ordinate = refValue;
+                        }
                     }
                 }
                 for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
@@ -1017,6 +1025,10 @@ namespace hoa
                             double circleValue = sqrt(m_maximum_radius * m_maximum_radius - it->second->getAbscissa() * it->second->getAbscissa());
                             if(circleValue - it->second->getHeight() < refValue)
                                 refValue = circleValue - it->second->getHeight();
+                        }
+                        if(height > refValue)
+                        {
+                            height = refValue;
                         }
                     }
                 }
@@ -1080,6 +1092,11 @@ namespace hoa
              */
             inline void setCoordinatesPolar(const double radius, const double azimuth)
             {
+                if(m_maximum_radius >= 0)
+                {
+                    if(radius < -m_maximum_radius || radius > m_maximum_radius)
+                        return;
+                }
                 const double elevation = getElevation();
                 setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth, elevation), Math<double>::ordinate(radius, azimuth, elevation));
             }
@@ -1093,7 +1110,12 @@ namespace hoa
              */
             inline void setCoordinatesPolar(const double radius, const double azimuth, const double elevation)
             {
-                setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth, elevation), Math<double>::ordinate(radius, azimuth, elevation));
+                if(m_maximum_radius >= 0)
+                {
+                    if(radius < -m_maximum_radius || radius > m_maximum_radius)
+                        return;
+                }
+                setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth, elevation), Math<double>::ordinate(radius, azimuth, elevation), Math<double>::height(radius, azimuth, elevation));
             }
 
             //! Set the radius of the group.
@@ -1103,7 +1125,14 @@ namespace hoa
              */
             inline void setRadius(const double radius)
             {
-                setCoordinatesCartesian(Math<double>::abscissa(radius, getAzimuth(), getElevation()), Math<double>::ordinate(radius, getAzimuth(), getElevation()), Math<double>::height(radius, getAzimuth(), getElevation()));
+                if(m_maximum_radius >= 0)
+                {
+                    if(radius < -m_maximum_radius || radius > m_maximum_radius)
+                        return;
+                }
+                const double azimuth = getAzimuth();
+                const double elevation = getElevation();
+                setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth, elevation), Math<double>::ordinate(radius, azimuth, elevation), Math<double>::height(radius, azimuth, elevation));
             }
 
             //! Set the azimuth of the group.
@@ -1112,7 +1141,9 @@ namespace hoa
              */
             inline void setAzimuth(const double azimuth)
             {
-                setCoordinatesCartesian(Math<double>::abscissa(getRadius(), azimuth, getElevation()), Math<double>::ordinate(getRadius(), azimuth, getElevation()), Math<double>::height(getRadius(), azimuth, getElevation()));
+                const double radius = getRadius();
+                const double elevation = getElevation();
+                setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth, elevation), Math<double>::ordinate(radius, azimuth, elevation), Math<double>::height(radius, azimuth, elevation));
             }
 
             //! Set the elevation of the group.
@@ -1121,7 +1152,9 @@ namespace hoa
              */
             inline void setElevation(const double elevation)
             {
-                setCoordinatesCartesian(Math<double>::abscissa(getRadius(), getAzimuth(), elevation), Math<double>::ordinate(getRadius(), getAzimuth(), elevation), Math<double>::height(getRadius(), getAzimuth(), elevation));
+                const double radius = getRadius();
+                const double azimuth = getAzimuth();
+                setCoordinatesCartesian(Math<double>::abscissa(radius, azimuth, elevation), Math<double>::ordinate(radius, azimuth, elevation), Math<double>::height(radius, azimuth, elevation));
             }
 
             //! Set the position of the group with cartesian coordinates.
@@ -1244,7 +1277,7 @@ namespace hoa
              */
             inline void setRelativeRadius(const double radius)
             {
-                double aRadiusOffset = max(radius, (double)0.) - getRadius();
+                double aRadiusOffset = radius - getRadius();
                 shiftRadius(aRadiusOffset);
                 computeCentroid();
             }
@@ -1256,12 +1289,7 @@ namespace hoa
              */
             inline void setRelativeAzimuth(double azimuth)
             {
-                azimuth +=  HOA_PI2;
-                while (azimuth > HOA_2PI)
-                    azimuth -= HOA_2PI;
-                while (azimuth < 0.)
-                    azimuth += HOA_2PI;
-
+                azimuth = Math<double>::wrap_twopi(azimuth);
                 double aAngleOffset = azimuth  - getAzimuth();
                 shiftAzimuth(aAngleOffset);
                 computeCentroid();
@@ -1274,12 +1302,7 @@ namespace hoa
              */
             inline void setRelativeElevation(double elevation)
             {
-                elevation +=  HOA_PI2;
-                while (elevation > HOA_2PI)
-                    elevation -= HOA_2PI;
-                while (elevation < 0.)
-                    elevation += HOA_2PI;
-
+                elevation = Math<double>::wrap_twopi(elevation + HOA_PI2);
                 double aAngleOffset = elevation  - getElevation();
                 shiftElevation(aAngleOffset);
                 computeCentroid();
@@ -1329,7 +1352,7 @@ namespace hoa
              */
             inline const double	getAzimuth() const noexcept
             {
-                return Math<double>::azimuth(m_centroid_x, m_centroid_y, m_centroid_z) + HOA_PI2;
+                return Math<double>::azimuth(m_centroid_x, m_centroid_y, m_centroid_z);
             }
 
             //! Get the elevation of the group.
