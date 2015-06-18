@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['harmonic',['Harmonic',['../classhoa_1_1_harmonic.html',1,'hoa']]],
-  ['harmonics',['Harmonics',['../classhoa_1_1_processor_1_1_harmonics.html',1,'hoa::Processor']]],
-  ['hrtf',['Hrtf',['../classhoa_1_1_hrtf.html',1,'hoa']]]
+  ['inphase',['InPhase',['../classhoa_1_1_optim_1_1_in_phase.html',1,'hoa::Optim']]],
+  ['irregular',['Irregular',['../classhoa_1_1_decoder_1_1_irregular.html',1,'hoa::Decoder']]]
 ];

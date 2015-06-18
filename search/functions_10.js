@@ -1,11 +1,23 @@
 var searchData=
 [
-  ['vector',['Vector',['../classhoa_1_1_vector.html#ae024a4d02308dbdc0c866a5301ca107b',1,'hoa::Vector']]],
-  ['vector_5fadd',['vector_add',['../classhoa_1_1_signal.html#a09dcd90127f4360a1cfae15ddb63db00',1,'hoa::Signal::vector_add(const ulong vectorsize, const T *source, T *dest)=0'],['../classhoa_1_1_signal.html#a8cf109fa4cb98095093a5eb9cd17c099',1,'hoa::Signal::vector_add(const ulong vectorsize, const T *source, const ulong incs, T *dest, const ulong incd)=0']]],
-  ['vector_5fclear',['vector_clear',['../classhoa_1_1_signal.html#ad826e3b2d1b088ad0009692bafc2ea13',1,'hoa::Signal']]],
-  ['vector_5fcopy',['vector_copy',['../classhoa_1_1_signal.html#af96fa16c912eff6dd706b9faf90ce6a0',1,'hoa::Signal::vector_copy(const ulong vectorsize, const T *source, T *dest)=0'],['../classhoa_1_1_signal.html#abc6fd8fcfc0af910b933d3c15bca3174',1,'hoa::Signal::vector_copy(const ulong vectorsize, const double *source, const ulong incs, double *dest, const ulong incd)=0']]],
-  ['vector_5fmax',['vector_max',['../classhoa_1_1_signal.html#ab0f9cafe8b2f9a18d416eef62ff09793',1,'hoa::Signal']]],
-  ['vector_5fscale',['vector_scale',['../classhoa_1_1_signal.html#af79b2e7a248933e53d846521da9d1acd',1,'hoa::Signal']]],
-  ['vector_5fsum',['vector_sum',['../classhoa_1_1_signal.html#ae31eb6e3f1e215acf69f8acd9b357ba8',1,'hoa::Signal']]],
-  ['vectors_5fdot_5fproduct',['vectors_dot_product',['../classhoa_1_1_signal.html#ab10827896bb6f8cd1eb51cbf196f6bde',1,'hoa::Signal']]]
+  ['_7ebasic',['~Basic',['../classhoa_1_1_encoder_1_1_basic.html#ab129e9ba3edf0bca43abb6aaa5f4aaff',1,'hoa::Encoder::Basic::~Basic()'],['../classhoa_1_1_optim_1_1_basic.html#ab129e9ba3edf0bca43abb6aaa5f4aaff',1,'hoa::Optim::Basic::~Basic()']]],
+  ['_7ebinaural',['~Binaural',['../classhoa_1_1_decoder_1_1_binaural.html#afa2e4036fb488ba4be4f910205c93f76',1,'hoa::Decoder::Binaural']]],
+  ['_7edc',['~DC',['../classhoa_1_1_encoder_1_1_d_c.html#a9f47c06a661c0b22b2121e7fe6e842bf',1,'hoa::Encoder::DC']]],
+  ['_7edecoder',['~Decoder',['../classhoa_1_1_decoder.html#ad8bc1354ed1764a22e7b040d76726524',1,'hoa::Decoder']]],
+  ['_7eencoder',['~Encoder',['../classhoa_1_1_encoder.html#af56b3a09c4ef7723da1e3427adaccdec',1,'hoa::Encoder']]],
+  ['_7eexchanger',['~Exchanger',['../classhoa_1_1_exchanger.html#ab6867ca443d9faa47d69e5d0f43904ba',1,'hoa::Exchanger']]],
+  ['_7eharmonic',['~Harmonic',['../classhoa_1_1_harmonic.html#a73aa159d4ba4b7532cf5312db595b2bc',1,'hoa::Harmonic']]],
+  ['_7eharmonics',['~Harmonics',['../classhoa_1_1_processor_1_1_harmonics.html#a6abb832ce0c38d6ba566071526a7cb4f',1,'hoa::Processor::Harmonics']]],
+  ['_7einphase',['~InPhase',['../classhoa_1_1_optim_1_1_in_phase.html#a6904332d5334b9ef538d7f83bc345969',1,'hoa::Optim::InPhase']]],
+  ['_7eirregular',['~Irregular',['../classhoa_1_1_decoder_1_1_irregular.html#a6abe88d4f3a5892b5c413a7b9bc15f92',1,'hoa::Decoder::Irregular']]],
+  ['_7emaxre',['~MaxRe',['../classhoa_1_1_optim_1_1_max_re.html#ae574b545dbc1b9a29931332e7df494b3',1,'hoa::Optim::MaxRe']]],
+  ['_7emulti',['~Multi',['../classhoa_1_1_encoder_1_1_multi.html#a24c114c8bf15631981941880e334e727',1,'hoa::Encoder::Multi']]],
+  ['_7eoptim',['~Optim',['../classhoa_1_1_optim.html#a59ca210b5f29dbee54603185d4acfb87',1,'hoa::Optim']]],
+  ['_7eplanewave',['~Planewave',['../classhoa_1_1_planewave.html#a766abe5190aff92bf5519d54dfb84e68',1,'hoa::Planewave']]],
+  ['_7eplanewaves',['~Planewaves',['../classhoa_1_1_processor_1_1_planewaves.html#afe50b55066501cdc85da67f0bd82cf4e',1,'hoa::Processor::Planewaves']]],
+  ['_7eregular',['~Regular',['../classhoa_1_1_decoder_1_1_regular.html#ab038de63db34f7a5b923b74e5a596b91',1,'hoa::Decoder::Regular']]],
+  ['_7erotate',['~Rotate',['../classhoa_1_1_rotate.html#a08f8ab52f9fb69a452e0713bd4969ed8',1,'hoa::Rotate']]],
+  ['_7escope',['~Scope',['../classhoa_1_1_scope.html#a271189a2b8887dfc1b3ea40093f6d2f6',1,'hoa::Scope']]],
+  ['_7evector',['~Vector',['../classhoa_1_1_vector.html#a797e5f11982acf850b6053425ce4bac8',1,'hoa::Vector']]],
+  ['_7ewider',['~Wider',['../classhoa_1_1_wider.html#a31065c50ed711a04c2caebf72e4f9dde',1,'hoa::Wider']]]
 ];
