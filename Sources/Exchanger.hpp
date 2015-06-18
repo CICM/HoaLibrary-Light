@@ -361,7 +361,7 @@ namespace hoa
         long getInputHarmonicOrder(const ulong index) const noexcept
         {
             const Numbering numb = getNumbering();
-            const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID);
+            const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID) || (Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index) > 3);
             return Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * (acn ? 1l : -1l);
         }
         
@@ -375,7 +375,7 @@ namespace hoa
         long getOutputHarmonicOrder(const ulong index) const noexcept
         {
             const Numbering numb = getNumbering();
-            const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID);
+            const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID) || (Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index) > 3);
             return Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * (acn ? 1l : -1l);
         }
         
@@ -394,7 +394,7 @@ namespace hoa
             const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
             const bool malham = !acn && ((isInput && numb == fromFurseMalham) || (!isInput && numb == toFurseMalham));
             
-            if(acn)
+            if(acn || (malham && index > 6))
             {
                 // [0, 0], [1, -1], [1, 1], [2, -2], [2, 2], [3, -3], [3, 3]...
                 return Processor<Hoa2d, T>::Harmonics::getHarmonicName(index);
@@ -857,8 +857,9 @@ namespace hoa
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID);
+            const bool malham = !acn && numb == fromFurseMalham;
             
-            if(acn)
+            if(acn || (malham && index > 15))
             {
                 return Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(index);
             }
@@ -882,8 +883,9 @@ namespace hoa
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID);
+            const bool malham = !acn && numb == toFurseMalham;
             
-            if(acn)
+            if(acn || (malham && index > 15))
             {
                 return Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(index);
             }
@@ -911,7 +913,7 @@ namespace hoa
             const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
             const bool malham = !acn && ((isInput && numb == fromFurseMalham) || (!isInput && numb == toFurseMalham));
             
-            if(acn)
+            if(acn || (malham && index > 15))
             {
                 // [0, 0], [1, -1], [1, 0], [1, 1], [2, -2], [2, -1], [2, 0], [2, 1], [2, 2] ...
                 return Processor<Hoa3d, T>::Harmonics::getHarmonicName(index);
