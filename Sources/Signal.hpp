@@ -34,7 +34,7 @@ namespace hoa
             if(vec) {clear(size, vec);}
             return vec;
 #else
-            T* vec = (T *)memalign(pow(2, sizeof(T)), size * sizeof(T));
+            T* vec = (T *)memalign((size_t)pow(2, sizeof(T)), size * sizeof(T));
             if(vec) {clear(size, vec);}
             return vec;
 #endif
@@ -48,16 +48,17 @@ namespace hoa
         static inline T* free(T* vec) noexcept
         {
 #ifdef __APPLE__
-            if(vec) {free(vec);}
+            if(vec) {std::free(vec);}
             return nullptr;
 #elif _WINDOWS
             if(vec) {_aligned_free(vec);}
             return nullptr;
 #else
-            if(vec) {free(vec);}
+            if(vec) {std::free(vec);}
             return nullptr;
 #endif
         }
+
 
 
 
