@@ -295,7 +295,7 @@ namespace hoa
          */
         inline ulong getDegree() const noexcept
         {
-            return ulong(sqrt(m_index));
+            return ulong(sqrt(float(m_index)));
         }
 
         //! Get the order of the harmonic.
@@ -341,7 +341,7 @@ namespace hoa
          */
         static inline ulong getDegree(const ulong index) noexcept
         {
-            return ulong(sqrt(index));
+            return ulong(sqrt(float(index)));
         }
 
         //! Get the order of an harmonic with an index.
@@ -351,7 +351,7 @@ namespace hoa
          */
         static inline long getOrder(const ulong index) noexcept
         {
-            return long(index) - (long(sqrt(index)) * (long(sqrt(index)) + 1));
+            return long(index) - (long(sqrt(float(index))) * (long(sqrt(float(index))) + 1));
         }
 
         //! Get the index of an harmonic with its degree and its order.

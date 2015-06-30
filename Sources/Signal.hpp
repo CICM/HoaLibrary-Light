@@ -30,7 +30,7 @@ namespace hoa
             if(vec) {clear(size, vec);}
             return vec;
 #elif _WINDOWS
-            T* vec = (T *)_aligned_malloc(size * sizeof(T), (size_t)pow(2, sizeof(T)));
+            T* vec = (T *)_aligned_malloc(size * sizeof(T), (size_t)pow(float(2), int(sizeof(T))));
             if(vec) {clear(size, vec);}
             return vec;
 #else
