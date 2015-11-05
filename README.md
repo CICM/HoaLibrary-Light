@@ -8,7 +8,7 @@ Sound space is one of the principal dimensions of the contemporary musical thoug
 
 #### Authors :
 
-Julien Colafrancesco, Pierre Guillot, Eliott Paris, Thomas Le Meur
+Pierre Guillot, Eliott Paris, Thomas Le Meur
 
 #### Implementations :
 
