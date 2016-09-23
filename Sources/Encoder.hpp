@@ -11,7 +11,7 @@
 
 namespace hoa
 {
-#ifdef DOXYGEN_SHOULD_SKIP_THIS
+
     //! The encoder class generates the harmonics for one or several signal according to an azimuth, an elevation and a radius.
     /** The encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and potentially the radius of the signal.
      */
@@ -305,7 +305,6 @@ namespace hoa
         };
     };
 
-#endif
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
     template <typename T> class Encoder<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
@@ -1620,6 +1619,3 @@ namespace hoa
 }
 
 #endif
-
-
-
