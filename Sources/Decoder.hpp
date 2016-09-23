@@ -12,6 +12,7 @@
 
 namespace hoa
 {
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
     //! The decoder class decodes a sound field in the harmonics domain through the planewaves domain.
     /** The decoder should be used to decode a set the harmonics domain to a set of planewaves for loudspeakers. There are three types of decoder. Regular for a perfect circle or sphere of loudspeakers. Irregular when the loudspeakers are not equally spaced on the circle or the sphere. Binaural for headphone restitution.
      */
@@ -146,6 +147,7 @@ namespace hoa
         };
     };
 
+#endif
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
     template <typename T> class Decoder<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics, public Processor<Hoa2d, T>::Planewaves
