@@ -40,8 +40,8 @@ namespace hoa
     {
     private:
 
-        const ulong                 m_order_of_decomposition;
-        const ulong                 m_number_of_harmonics;
+        const size_t                 m_order_of_decomposition;
+        const size_t                 m_number_of_harmonics;
         std::vector< Harmonic<D, T> >    m_harmonics;
     public:
 
@@ -49,11 +49,11 @@ namespace hoa
         /** The harmonics constructor allocates and initializes the general member values depending on a order of decomposition \f$N\f$.
          @param order    The order of decomposition \f$N\f$, must be at least 1.
          */
-        Harmonics(const ulong order) noexcept :
+        Harmonics(const size_t order) noexcept :
         m_order_of_decomposition(order),
         m_number_of_harmonics(Harmonic<D, T>::getNumberOfHarmonics(order))
         {
-            for(ulong i = 0; i < m_number_of_harmonics; i++)
+            for(size_t i = 0; i < m_number_of_harmonics; i++)
             {
                 m_harmonics.push_back(Harmonic<D, T>(i));
             }
@@ -71,7 +71,7 @@ namespace hoa
         /** Retrieve the order of decomposition \f$N\f$.
          @return The order.
          */
-        inline ulong getDecompositionOrder() const noexcept
+        inline size_t getDecompositionOrder() const noexcept
         {
             return m_order_of_decomposition;
         }
@@ -80,7 +80,7 @@ namespace hoa
         /** Retrieve the number of harmonics.
          @return The number of harmonics.
          */
-        inline ulong getNumberOfHarmonics() const noexcept
+        inline size_t getNumberOfHarmonics() const noexcept
         {
             return m_number_of_harmonics;
         }
@@ -92,7 +92,7 @@ namespace hoa
          @see       getHarmonicOrder()
          @see       getHarmonicName()
          */
-        inline ulong getHarmonicDegree(const ulong index) const noexcept
+        inline size_t getHarmonicDegree(const size_t index) const noexcept
         {
             return m_harmonics[index].getDegree();
         }
@@ -104,7 +104,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicName()
          */
-        inline long getHarmonicOrder(const ulong index) const noexcept
+        inline long getHarmonicOrder(const size_t index) const noexcept
         {
             return m_harmonics[index].getOrder();
         }
@@ -117,7 +117,7 @@ namespace hoa
          @see       getHarmonicOrder()
          @see       getHarmonicName()
          */
-        inline ulong getHarmonicIndex(const ulong degree, long order) const noexcept
+        inline size_t getHarmonicIndex(const size_t degree, long order) const noexcept
         {
             return Harmonic<D, T>::getIndex(degree, order);
         }
@@ -129,7 +129,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        inline std::string getHarmonicName(const ulong index) const noexcept
+        inline std::string getHarmonicName(const size_t index) const noexcept
         {
             return m_harmonics[index].getName();
         }
@@ -139,7 +139,7 @@ namespace hoa
          @param     index	The index of an harmonic.
          @return     The normalization of an harmonics.
          */
-        inline T getHarmonicNormalization(const ulong index) const noexcept
+        inline T getHarmonicNormalization(const size_t index) const noexcept
         {
             return m_harmonics[index].getNormalization();
         }
@@ -149,7 +149,7 @@ namespace hoa
          @param     index	The index of an harmonic.
          @return    The semi-normalization of the harmonics.
          */
-        inline T getHarmonicSemiNormalization(const ulong index) const noexcept
+        inline T getHarmonicSemiNormalization(const size_t index) const noexcept
         {
             return m_harmonics[index].getSemiNormalization();
         }
@@ -172,7 +172,7 @@ namespace hoa
     template <Dimension D, typename T> class Processor<D, T>::Planewaves : virtual public Processor<D, T>
     {
     private:
-        const ulong                 m_number_of_planewaves;
+        const size_t                 m_number_of_planewaves;
         std::vector<Planewave<D, T> >    m_planewaves;
         T                           m_rotation_z;
         T                           m_rotation_y;
@@ -184,7 +184,7 @@ namespace hoa
         /** The planewaves constructor allocates and initializes the general member values depending on a number of planewaves. The number of planewaves must be a least 1.
          @param     numberOfPlanewaves	The number of planewaves.
          */
-        Planewaves(const ulong numberOfPlanewaves) noexcept :
+        Planewaves(const size_t numberOfPlanewaves) noexcept :
         m_number_of_planewaves(numberOfPlanewaves),
         m_rotation_z(0.),
         m_rotation_y(0.),
@@ -193,7 +193,7 @@ namespace hoa
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
             if(D == Hoa2d)
             {
-                for(ulong i = 0; i < m_number_of_planewaves; i++)
+                for(size_t i = 0; i < m_number_of_planewaves; i++)
                 {
                     m_planewaves.push_back(Planewave<D, T>(i+1, (T)i / (m_number_of_planewaves) * HOA_2PI, 0.));
                 }
@@ -234,7 +234,7 @@ namespace hoa
                 else if(m_number_of_planewaves == 12)
                 {
 					m_planewaves.push_back(Planewave<D, T>(1, 0., (T)HOA_PI2));
-                    for(ulong i = 1; i < 6; i++)
+                    for(size_t i = 1; i < 6; i++)
                     {
                         m_planewaves.push_back(Planewave<D, T>(i*2, T(i - 1.) / 5. * HOA_2PI, atan(0.5)));
                         m_planewaves.push_back(Planewave<D, T>(i*2+1, T(i - 1.) / 5. * HOA_2PI - HOA_PI / 5., -atan(0.5)));
@@ -248,7 +248,7 @@ namespace hoa
                     const T a = R;
                     const T b = R / phi;
                     const T c = R * phi;
-                    ulong index = 1;
+                    size_t index = 1;
                     for(long i = -1; i < 2; i += 2)
                     {
                         for(long j = -1; j < 2; j += 2)
@@ -270,9 +270,9 @@ namespace hoa
 						m_planewaves.push_back(Planewave<D, T>(1, 0., (T)HOA_PI2));
                     }
                     const T     phi     = (sqrt(5.) - 1.) / 4.;
-                    const ulong limit   = (m_number_of_planewaves - (m_number_of_planewaves % 2)) / 2;
+                    const size_t limit   = (m_number_of_planewaves - (m_number_of_planewaves % 2)) / 2;
                     const T     offset  = 1. / T(limit) * HOA_PI;
-                    for(ulong i = 0; i < m_number_of_planewaves - (m_number_of_planewaves % 2); i++)
+                    for(size_t i = 0; i < m_number_of_planewaves - (m_number_of_planewaves % 2); i++)
                     {
                         if(i < limit)
                         {
@@ -300,7 +300,7 @@ namespace hoa
         /** Retrieve the order of decomposition.
          @return The order.
          */
-        inline ulong getNumberOfPlanewaves() const noexcept
+        inline size_t getNumberOfPlanewaves() const noexcept
         {
             return m_number_of_planewaves;
         }
@@ -350,7 +350,7 @@ namespace hoa
          @param      index   The index of the planewave.
          @return     The index of the planewave.
          */
-        inline ulong getPlanewaveIndex(const ulong index) noexcept
+        inline size_t getPlanewaveIndex(const size_t index) noexcept
         {
             return m_planewaves[index].getIndex();
         }
@@ -361,7 +361,7 @@ namespace hoa
          @param     index   The index of the planewave.
          @param     azimuth The new azimuth of the planewave.
          */
-        inline void setPlanewaveAzimuth(const ulong index, const T azimuth) noexcept
+        inline void setPlanewaveAzimuth(const size_t index, const T azimuth) noexcept
         {
             m_planewaves[index].setAzimuth(Math<T>::wrap_twopi(azimuth));
         }
@@ -373,7 +373,7 @@ namespace hoa
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
          @return     The azimuth of the planewave.
          */
-        inline T getPlanewaveAzimuth(const ulong index, const bool rotation = true) const noexcept
+        inline T getPlanewaveAzimuth(const size_t index, const bool rotation = true) const noexcept
         {
             return m_planewaves[index].getAzimuth(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
@@ -384,7 +384,7 @@ namespace hoa
          @param      index    The index of the planewave.
          @param      azimuth  The azimuth of the planewave.
          */
-        inline void setPlanewaveElevation(const ulong index, const T azimuth) noexcept
+        inline void setPlanewaveElevation(const size_t index, const T azimuth) noexcept
         {
             m_planewaves[index].setElevation(Math<T>::wrap_pi(azimuth));
         }
@@ -396,7 +396,7 @@ namespace hoa
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
          @return     The elevation of the planewave.
          */
-        inline T getPlanewaveElevation(const ulong index, const bool rotation = true) const noexcept
+        inline T getPlanewaveElevation(const size_t index, const bool rotation = true) const noexcept
         {
             return m_planewaves[index].getElevation(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
@@ -407,7 +407,7 @@ namespace hoa
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
          @return    The abscissa of the planewave.
          */
-        inline T getPlanewaveAbscissa(const ulong index, const bool rotation = true) const noexcept
+        inline T getPlanewaveAbscissa(const size_t index, const bool rotation = true) const noexcept
         {
             return m_planewaves[index].getAbscissa(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
@@ -418,7 +418,7 @@ namespace hoa
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
          @return    The ordinate of the planewave.
          */
-        inline T getPlanewaveOrdinate(const ulong index, const bool rotation = true) const noexcept
+        inline T getPlanewaveOrdinate(const size_t index, const bool rotation = true) const noexcept
         {
             return m_planewaves[index].getOrdinate(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
@@ -429,7 +429,7 @@ namespace hoa
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
          @return    The height of the planewave.
          */
-        inline T getPlanewaveHeight(const ulong index, const bool rotation = true) const noexcept
+        inline T getPlanewaveHeight(const size_t index, const bool rotation = true) const noexcept
         {
             return m_planewaves[index].getHeight(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
@@ -439,7 +439,7 @@ namespace hoa
          @param     index	The index of a planewave.
          @return    The method returns a name for the planewave.
          */
-        inline std::string getPlanewaveName(const ulong index) const noexcept
+        inline std::string getPlanewaveName(const size_t index) const noexcept
         {
             return m_planewaves[index].getName();
         }

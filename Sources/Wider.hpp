@@ -22,7 +22,7 @@ namespace hoa
         /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const ulong order) noexcept;
+        Wider(const size_t order) noexcept;
 
         //! The wider destructor.
         /**	The wider destructor free the memory.
@@ -74,7 +74,7 @@ namespace hoa
         /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const ulong order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
+        Wider(const size_t order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
         {
             setWidening(1.);
         }
@@ -121,7 +121,7 @@ namespace hoa
             (*outputs++) = (*inputs++) * (gain + 1.);            // Hamonic [0,0]
             (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,-1]
             (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,1]
-            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 gain    = (m_gain * (Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - i) + 1.);
                 factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
@@ -144,7 +144,7 @@ namespace hoa
         /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const ulong order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
+        Wider(const size_t order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
         {
             setWidening(1.);
         }
@@ -192,12 +192,12 @@ namespace hoa
             (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,-1]
             (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,0]
             (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,1]
-            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 gain    = (m_gain * (Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() - i) + 1.);
                 factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
 
-                for(ulong j = 0; j < 2 * i + 1; j++)
+                for(size_t j = 0; j < 2 * i + 1; j++)
                 {
                     (*outputs++)    = (*inputs++) * factor * gain;    // Hamonic [i, ~j]
                 }

@@ -22,7 +22,7 @@ namespace hoa
         /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Optim(const ulong order) noexcept;
+        Optim(const size_t order) noexcept;
 
         //! The optim destructor.
         /**	The optim destructor free the memory.
@@ -47,7 +47,7 @@ namespace hoa
             /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
-            Basic(const ulong order) noexcept;
+            Basic(const size_t order) noexcept;
 
             //! The optim destructor.
             /**	The optim destructor free the memory.
@@ -74,7 +74,7 @@ namespace hoa
             /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
-            MaxRe(const ulong order) noexcept;
+            MaxRe(const size_t order) noexcept;
 
             //! The optim destructor.
             /**	The optim destructor free the memory.
@@ -101,7 +101,7 @@ namespace hoa
             /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
-            InPhase(const ulong order) noexcept;
+            InPhase(const size_t order) noexcept;
 
             //! The optim destructor.
             /**	The optim destructor free the memory.
@@ -129,7 +129,7 @@ namespace hoa
         /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Optim(const ulong order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
+        Optim(const size_t order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
         {
             ;
         }
@@ -173,7 +173,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Basic(const ulong order) noexcept :  Optim<Hoa2d, T>(order)
+        Basic(const size_t order) noexcept :  Optim<Hoa2d, T>(order)
         {
             ;
         }
@@ -196,7 +196,7 @@ namespace hoa
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
-            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 (*outputs++)  = (*inputs++);
                 (*outputs++)  = (*inputs++);
@@ -207,10 +207,10 @@ namespace hoa
     template <typename T> class Optim<Hoa2d, T>::MaxRe : public  Optim<Hoa2d, T>
     {
     private:
-        static T* generate(const ulong order)
+        static T* generate(const size_t order)
         {
             T* vector = Signal<T>::alloc(order);
-            for(ulong i = 1; i <= order; i++)
+            for(size_t i = 1; i <= order; i++)
             {
                 vector[i-1] = cos(T(i) *  T(HOA_PI) / (T)(2. * order + 2.));
             }
@@ -223,7 +223,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        MaxRe(const ulong order) noexcept :  Optim<Hoa2d, T>(order),
+        MaxRe(const size_t order) noexcept :  Optim<Hoa2d, T>(order),
         m_weights(generate(order))
         {
             ;
@@ -248,7 +248,7 @@ namespace hoa
             *outputs    = *inputs;
             *(++outputs)  = *(++inputs) * *weights;
             *(++outputs)  = *(++inputs) * *weights;
-            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 const T weight = *(++weights);
                 *(++outputs) = *(++inputs) * weight;
@@ -260,11 +260,11 @@ namespace hoa
     template <typename T> class Optim<Hoa2d, T>::InPhase : public  Optim<Hoa2d, T>
     {
     private:
-        static T* generate(const ulong order)
+        static T* generate(const size_t order)
         {
             T* vector = Signal<T>::alloc(order);
             const T facn = Math<T>::factorial(long(order));
-            for(ulong i = 1; i <= order; i++)
+            for(size_t i = 1; i <= order; i++)
             {
                 vector[i-1] = facn / Math<T>::factorial(long(order - i)) * facn / Math<T>::factorial(long(order + i));
             }
@@ -277,7 +277,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        InPhase(const ulong order) noexcept :  Optim<Hoa2d, T>(order),
+        InPhase(const size_t order) noexcept :  Optim<Hoa2d, T>(order),
         m_weights(generate(order))
         {
             ;
@@ -302,7 +302,7 @@ namespace hoa
             *outputs    = *inputs;
             *(++outputs)  = *(++inputs) * *weights;
             *(++outputs)  = *(++inputs) * *weights;
-            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 const T weight = *(++weights);
                 *(++outputs) = *(++inputs) * weight;
@@ -319,7 +319,7 @@ namespace hoa
         /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Optim(const ulong order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
+        Optim(const size_t order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
         {
             ;
         }
@@ -363,7 +363,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Basic(const ulong order) noexcept : Optim<Hoa3d, T>(order)
+        Basic(const size_t order) noexcept : Optim<Hoa3d, T>(order)
         {
             ;
         }
@@ -387,9 +387,9 @@ namespace hoa
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
-            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                for(ulong j = 0; j < 2 * i + 1; j++)
+                for(size_t j = 0; j < 2 * i + 1; j++)
                 {
                     (*outputs++)    = (*inputs++);    // Hamonic [i, ~j]
                 }
@@ -400,10 +400,10 @@ namespace hoa
     template <typename T> class Optim<Hoa3d, T>::MaxRe : public Optim<Hoa3d, T>
     {
     private:
-        static T* generate(const ulong order)
+        static T* generate(const size_t order)
         {
             T* vector = Signal<T>::alloc(order);
-            for(ulong i = 1; i <= order; i++)
+            for(size_t i = 1; i <= order; i++)
             {
                 vector[i-1] = cos(T(i) *  T(HOA_PI) / (T)(2. * order + 2.));
             }
@@ -416,7 +416,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        MaxRe(const ulong order) noexcept : Optim<Hoa3d, T>(order),
+        MaxRe(const size_t order) noexcept : Optim<Hoa3d, T>(order),
         m_weights(generate(order))
         {
             ;
@@ -442,10 +442,10 @@ namespace hoa
             *(++outputs)  = *(++inputs) * *weights;
             *(++outputs)  = *(++inputs) * *weights;
             *(++outputs)  = *(++inputs) * *weights;
-            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 const T weight = *(++weights);
-                for(ulong j = 0; j < 2 * i + 1; j++)
+                for(size_t j = 0; j < 2 * i + 1; j++)
                 {
                     *(++outputs) = *(++inputs) * weight;    // Hamonic [i, [-i...i]]
                 }
@@ -456,11 +456,11 @@ namespace hoa
     template <typename T> class Optim<Hoa3d, T>::InPhase : public Optim<Hoa3d, T>
     {
     private:
-        static T* generate(const ulong order)
+        static T* generate(const size_t order)
         {
             T* vector = Signal<T>::alloc(order);
             const T facn = Math<T>::factorial(long(order));
-            for(ulong i = 1; i <= order; i++)
+            for(size_t i = 1; i <= order; i++)
             {
                 vector[i-1] = facn / Math<T>::factorial(long(order - i)) * facn / Math<T>::factorial(long(order + i));
             }
@@ -474,7 +474,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        InPhase(const ulong order) noexcept : Optim<Hoa3d, T>(order),
+        InPhase(const size_t order) noexcept : Optim<Hoa3d, T>(order),
         m_weights(generate(order))
         {
             ;
@@ -500,10 +500,10 @@ namespace hoa
             *(++outputs)  = *(++inputs) * *weights;
             *(++outputs)  = *(++inputs) * *weights;
             *(++outputs)  = *(++inputs) * *weights;
-            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 const T weight = *(++weights);
-                for(ulong j = 0; j < 2 * i + 1; j++)
+                for(size_t j = 0; j < 2 * i + 1; j++)
                 {
                     *(++outputs) = *(++inputs) * weight;    // Hamonic [i, [-i...i]]
                 }

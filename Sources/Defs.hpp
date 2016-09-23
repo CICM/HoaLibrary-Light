@@ -51,10 +51,8 @@
  */
 namespace hoa
 {
-    typedef unsigned long ulong;
-
 #if (__cplusplus <= 199711L)
-    inline std::string to_string(const ulong& val)
+    inline std::string to_string(const size_t& val)
     {
         char buffer[1024];
 		sprintf(buffer, "%lu", val);

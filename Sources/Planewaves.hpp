@@ -25,7 +25,7 @@ namespace hoa
          @param azimuth     The azimuth \f$\theta\f$.
          @param elevation   The elevation \f$\varphi\f$.
          */
-        Planewave(const ulong index, const T azimuth, const T elevation) noexcept;
+        Planewave(const size_t index, const T azimuth, const T elevation) noexcept;
 
         //! The planewave constructor.
         /** The planewave constructor allocates and initializes the general member values depending on an index and a cartesian coordinate with an abscissa \f$x\f$, an ordinate \f$y\f$ and an height \f$z\f$ assuming that the point is normalized over the unit circle or unit the sphere.
@@ -34,7 +34,7 @@ namespace hoa
          @param ordinate    The ordinate \f$y\f$.
          @param height      The height \f$z\f$.
          */
-        Planewave(const ulong index, const T abscissa, const T ordinate, const T height) noexcept;
+        Planewave(const size_t index, const T abscissa, const T ordinate, const T height) noexcept;
 
         //! The planewave destructor.
         /** The planewave destructor free the memory.
@@ -45,7 +45,7 @@ namespace hoa
         /** The method returns the index \f$i\f$ of the planewave.
          @return     The index.
          */
-        virtual ulong getIndex() const noexcept;
+        virtual size_t getIndex() const noexcept;
 
         //! Get the azimuth of the planewave.
         /** The method returns the azimuth \f$\theta\f$ between \f$0\f$ and \f$2\pi\f$ of the planewave. The result will consider a full rotation around the axes x, y, and z. The order the rotation is x, z then y.
@@ -116,7 +116,7 @@ namespace hoa
     template<typename T> class Planewave<Hoa2d, T>
     {
     private:
-        ulong m_index;
+        size_t m_index;
         T     m_azimuth;
     public:
 
@@ -126,7 +126,7 @@ namespace hoa
          @param _azimuth     The azimuth \f$\theta\f$.
          @param _elevation   The elevation \f$\varphi\f$ (ignored).
          */
-        Planewave(const ulong _index, const T _azimuth, const T _elevation) noexcept :
+        Planewave(const size_t _index, const T _azimuth, const T _elevation) noexcept :
         m_index(_index),
         m_azimuth(_azimuth)
         {
@@ -140,7 +140,7 @@ namespace hoa
          @param _ordinate    The ordinate \f$y\f$.
          @param _height      The height \f$z\f$ (ignored).
          */
-        Planewave(const ulong _index, const T _abscissa, const T _ordinate, const T _height) noexcept :
+        Planewave(const size_t _index, const T _abscissa, const T _ordinate, const T _height) noexcept :
         m_index(_index),
         m_azimuth(Math<T>::azimuth(_abscissa, _ordinate, 0.))
         {
@@ -159,7 +159,7 @@ namespace hoa
         /** The method returns the index \f$i\f$ of the planewave.
          @return     The index.
          */
-        inline ulong getIndex() const noexcept
+        inline size_t getIndex() const noexcept
         {
             return m_index;
         }
@@ -264,7 +264,7 @@ namespace hoa
     template<typename T> class Planewave<Hoa3d, T>
     {
     private:
-        ulong m_index;
+        size_t m_index;
         T     m_azimuth;
         T     m_elevation;
     public:
@@ -275,7 +275,7 @@ namespace hoa
          @param azimuth     The azimuth \f$\theta\f$.
          @param elevation   The elevation \f$\varphi\f$.
          */
-        Planewave(const ulong _index, const T _azimuth, const T _elevation) noexcept :
+        Planewave(const size_t _index, const T _azimuth, const T _elevation) noexcept :
         m_index(_index),
         m_azimuth(_azimuth),
         m_elevation(_elevation)
@@ -290,7 +290,7 @@ namespace hoa
          @param ordinate    The ordinate \f$y\f$.
          @param height      The height \f$z\f$.
          */
-        Planewave(const ulong _index, const T _abscissa, const T _ordinate, const T _height) noexcept :
+        Planewave(const size_t _index, const T _abscissa, const T _ordinate, const T _height) noexcept :
         m_index(_index),
         m_azimuth(Math<T>::azimuth(_abscissa, _ordinate, _height)),
         m_elevation(Math<T>::elevation(_abscissa, _ordinate, _height))
@@ -310,7 +310,7 @@ namespace hoa
         /** The method returns the index \f$i\f$ of the planewave.
          @return     The index.
          */
-        inline ulong getIndex() const noexcept
+        inline size_t getIndex() const noexcept
         {
             return m_index;
         }

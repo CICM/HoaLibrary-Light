@@ -47,7 +47,7 @@ namespace hoa
         /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
          @param     order	The order.
          */
-        Exchanger(const ulong order) noexcept;
+        Exchanger(const size_t order) noexcept;
 
         //! The exchanger destructor.
         /**	The exchanger destructor free the memory.
@@ -92,7 +92,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        virtual long getInputHarmonicOrder(const ulong index) const noexcept;
+        virtual long getInputHarmonicOrder(const size_t index) const noexcept;
 
         //! Retrieves the harmonic order of an output depending on the current numbering configuration.
         /**
@@ -101,7 +101,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        virtual long getOutputHarmonicOrder(const ulong index) const noexcept;
+        virtual long getOutputHarmonicOrder(const size_t index) const noexcept;
 
         //! Retrieves the name of an harmonic depending on the current numbering configuration.
         /** This methods returns the name that contains the degree and the order of the harmonic for ACN and SID or the letter code of the harmonic for Furse-Malham.
@@ -111,7 +111,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        virtual std::string getHarmonicName(const ulong index, const bool isInput) const noexcept;
+        virtual std::string getHarmonicName(const size_t index, const bool isInput) const noexcept;
     };
 
 //! @cond
@@ -150,7 +150,7 @@ namespace hoa
         /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
          @param     order	The order.
          */
-        inline Exchanger(const ulong order) noexcept : Processor<Hoa2d, T>::Harmonics(order),
+        inline Exchanger(const size_t order) noexcept : Processor<Hoa2d, T>::Harmonics(order),
         m_numbering(ACN),
         m_normalization(SN2D)
         {
@@ -299,7 +299,7 @@ namespace hoa
             *(outputs++) = inputs[0]; // 0 -> 0
             *(outputs++) = inputs[2]; // 2 -> 1
             *(outputs++) = temp;      // 1 -> 2
-            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 temp         = inputs[(i-1)*2+1];
                 *(outputs++) = inputs[(i-1)*2+2];
@@ -343,7 +343,7 @@ namespace hoa
             *(outputs++) = inputs[0]; // 0 -> 0
             *(outputs++) = inputs[2]; // 2 -> 1
             *(outputs++) = temp;      // 1 -> 2
-            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 temp         = inputs[(i-1)*2+1];
                 *(outputs++) = inputs[(i-1)*2+2];
@@ -358,7 +358,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        long getInputHarmonicOrder(const ulong index) const noexcept
+        long getInputHarmonicOrder(const size_t index) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID) || (Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index) > 3);
@@ -372,7 +372,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        long getOutputHarmonicOrder(const ulong index) const noexcept
+        long getOutputHarmonicOrder(const size_t index) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID) || (Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index) > 3);
@@ -388,7 +388,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        std::string getHarmonicName(const ulong index, const bool isInput) const noexcept
+        std::string getHarmonicName(const size_t index, const bool isInput) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
@@ -417,8 +417,8 @@ namespace hoa
             else
             {
                 // [0, 0], [1, 1], [1, -1], [2, 2], [2, -2], [3, 3], [3, -3]...
-                ulong hdegree = Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index);
-                ulong horder  = Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * -1l;
+                size_t hdegree = Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index);
+                size_t horder  = Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * -1l;
                 return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
             }
         }
@@ -465,7 +465,7 @@ namespace hoa
         /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
          @param     order	The order.
          */
-        inline Exchanger(const ulong order) noexcept : Processor<Hoa3d, T>::Harmonics(order),
+        inline Exchanger(const size_t order) noexcept : Processor<Hoa3d, T>::Harmonics(order),
         m_numbering(ACN),
         m_normalization(SN3D)
         {
@@ -693,17 +693,17 @@ namespace hoa
         void numberFromSID(T const* inputs, T* outputs) noexcept
         {
             *(outputs++) = *(inputs++);
-            for(ulong i = 1ul; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 1ul; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                for(ulong j = 0; j < 2ul * i + 1ul; j++)
+                for(size_t j = 0; j < 2ul * i + 1ul; j++)
                 {
                     if(j%2)
                     {
-                        m_harmonics[j] = inputs[ulong(j/2)];
+                        m_harmonics[j] = inputs[size_t(j/2)];
                     }
                     else
                     {
-                        m_harmonics[j] = inputs[2ul * i - ulong(j/2)];
+                        m_harmonics[j] = inputs[2ul * i - size_t(j/2)];
                     }
                 }
                 Signal<T>::copy(i * 2ul + 1ul, m_harmonics, outputs);
@@ -720,17 +720,17 @@ namespace hoa
         void numberToSID(T const* inputs, T* outputs) noexcept
         {
             *(outputs++) = *(inputs++);
-            for(ulong i = 1ul; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 1ul; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
-                for(ulong j = 0; j < 2ul * i + 1ul; j++)
+                for(size_t j = 0; j < 2ul * i + 1ul; j++)
                 {
                     if(j%2)
                     {
-                        m_harmonics[ulong(j/2)] = *(inputs++);
+                        m_harmonics[size_t(j/2)] = *(inputs++);
                     }
                     else
                     {
-                        m_harmonics[2ul * i - ulong(j/2)] = *(inputs++);
+                        m_harmonics[2ul * i - size_t(j/2)] = *(inputs++);
                     }
                 }
                 Signal<T>::copy(i * 2ul + 1ul, m_harmonics, outputs);
@@ -814,10 +814,10 @@ namespace hoa
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
-            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 norm = T(sqrt(2. * T(i) + 1.));
-                for(ulong j = 0; j < i * 2ul + 1ul; j++)
+                for(size_t j = 0; j < i * 2ul + 1ul; j++)
                 {
                     *(outputs++) = *(inputs++) * norm;
                 }
@@ -836,10 +836,10 @@ namespace hoa
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
-            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 norm = T(1. / sqrt(2. * T(i) + 1.));
-                for(ulong j = 0; j < i * 2ul + 1ul; j++)
+                for(size_t j = 0; j < i * 2ul + 1ul; j++)
                 {
                     *(outputs++) = *(inputs++) * norm;
                 }
@@ -853,7 +853,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        long getInputHarmonicOrder(const ulong index) const noexcept
+        long getInputHarmonicOrder(const size_t index) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID);
@@ -879,7 +879,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        long getOutputHarmonicOrder(const ulong index) const noexcept
+        long getOutputHarmonicOrder(const size_t index) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID);
@@ -907,7 +907,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        std::string getHarmonicName(const ulong index, const bool isInput) const noexcept
+        std::string getHarmonicName(const size_t index, const bool isInput) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);

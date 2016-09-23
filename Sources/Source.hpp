@@ -21,10 +21,10 @@ namespace hoa
     public:
         class Group;
 
-        typedef  std::map<ulong, Source*>::iterator          source_iterator;
-        typedef  std::map<ulong, Source*>::const_iterator    const_source_iterator;
-        typedef  std::map<ulong, Group*>::iterator           group_iterator;
-        typedef  std::map<ulong, Group*>::const_iterator     const_group_iterator;
+        typedef  std::map<size_t, Source*>::iterator          source_iterator;
+        typedef  std::map<size_t, Source*>::const_iterator    const_source_iterator;
+        typedef  std::map<size_t, Group*>::iterator           group_iterator;
+        typedef  std::map<size_t, Group*>::const_iterator     const_group_iterator;
 
         //! The manager class is used to control punctual sources and group of sources.
         /** The manager class is used to control punctual sources and group of sources.
@@ -33,8 +33,8 @@ namespace hoa
         {
         private:
             const double        m_maximum_radius;
-            std::map<ulong, Source*> m_sources;
-            std::map<ulong, Group*>  m_groups;
+            std::map<size_t, Source*> m_sources;
+            std::map<size_t, Group*>  m_groups;
             double              m_zoom;
 
         public:
@@ -65,7 +65,7 @@ namespace hoa
                     Group* grp = new Group(*it->second);
                     m_groups[it->first] = grp;
 
-                    std::map<ulong, Source*>& tmp = it->second->getSources();
+                    std::map<size_t, Source*>& tmp = it->second->getSources();
                     for (source_iterator ti = tmp.begin() ; ti != tmp.end() ; ti ++)
                     {
                         grp->addSource(m_sources[ti->first]);
@@ -145,7 +145,7 @@ namespace hoa
              @param     elevation   The elevation of the new source.
              @return	            The created source.
              */
-            inline Source* newSource (const ulong index, const double radius = 0., const double azimuth = 0., const double elevation = 0.) noexcept
+            inline Source* newSource (const size_t index, const double radius = 0., const double azimuth = 0., const double elevation = 0.) noexcept
             {
                 source_iterator it = m_sources.find(index);
                 if(it == m_sources.end())
@@ -161,7 +161,7 @@ namespace hoa
             /** Remove a Source from the map container of the manager.
              @param     index   The index of the source.
              */
-            inline void removeSource (const ulong index) noexcept
+            inline void removeSource (const size_t index) noexcept
             {
                 source_iterator it = m_sources.find(index);
                 if(it != m_sources.end())
@@ -177,7 +177,7 @@ namespace hoa
             /** Get the Sources map size of the manager.
              @return     The sources map size.
              */
-            inline ulong getNumberOfSources() const noexcept
+            inline size_t getNumberOfSources() const noexcept
             {
                 return m_sources.size();
             }
@@ -195,7 +195,7 @@ namespace hoa
             /** Get the Groups map size of the manager.
              @return     The groups map size.
              */
-            inline ulong getNumberOfGroups() const noexcept
+            inline size_t getNumberOfGroups() const noexcept
             {
                 return m_groups.size();
             }
@@ -213,7 +213,7 @@ namespace hoa
             /**	The group constructor allocates and initialize the member values for a source group.
              @param     index       The index of the group
              */
-            Source::Group* createGroup (const ulong index)
+            Source::Group* createGroup (const size_t index)
             {
                 return new Source::Group(this, index);
             }
@@ -248,12 +248,12 @@ namespace hoa
             /** Remove a Group from the map container of the manager.
              @param     index   The index of the group.
              */
-            inline void removeGroup (const ulong index) noexcept
+            inline void removeGroup (const size_t index) noexcept
             {
                 group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
-                    std::map<ulong, Source*>& sources = it->second->getSources();
+                    std::map<size_t, Source*>& sources = it->second->getSources();
                     for (source_iterator ti = sources.begin() ; ti != sources.end() ; ++ti)
                     {
                         Source* src = ti->second;
@@ -272,12 +272,12 @@ namespace hoa
             /** Remove a Group from the map container of the manager with its sources.
              @param     index   The index of the group.
              */
-            void removeGroupWithSources (const ulong index) noexcept
+            void removeGroupWithSources (const size_t index) noexcept
             {
                 group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
-                    std::map<ulong, Source*>& sources = it->second->getSources();
+                    std::map<size_t, Source*>& sources = it->second->getSources();
                     source_iterator si = sources.begin();
                     while (si != sources.end())
                     {
@@ -300,7 +300,7 @@ namespace hoa
              @param     index   The index of the source.
              @return            A pointer on the source.
              */
-            inline Source* getSource(const ulong index)
+            inline Source* getSource(const size_t index)
             {
                 source_iterator it = m_sources.find(index);
                 if(it != m_sources.end())
@@ -400,7 +400,7 @@ namespace hoa
              @param     index   The index of the group.
              @return            A pointer on the group.
              */
-            inline Group* getGroup(const ulong index)
+            inline Group* getGroup(const size_t index)
             {
                 group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
@@ -620,7 +620,7 @@ namespace hoa
 		/** Get the index of the source.
 			@return		The index of the source.
          */
-        inline const ulong getIndex() const noexcept
+        inline const size_t getIndex() const noexcept
         {
             return m_index;
         }
@@ -719,7 +719,7 @@ namespace hoa
         /** Get the size of the Groups map of the source.
          @return    The group map size
          */
-        inline ulong getNumberOfGroups() const noexcept
+        inline size_t getNumberOfGroups() const noexcept
         {
             return m_groups.size();
         }
@@ -737,7 +737,7 @@ namespace hoa
         /** Get the Groups map of the source.
          @return    A reference of the groups map.
          */
-        inline std::map<ulong, Group*>& getGroups() noexcept
+        inline std::map<size_t, Group*>& getGroups() noexcept
         {
             return m_groups;
         }
@@ -752,8 +752,8 @@ namespace hoa
 
         private:
             const Manager*          m_manager;
-            ulong                   m_index;
-            std::map<ulong, Source*>     m_sources;
+            size_t                   m_index;
+            std::map<size_t, Source*>     m_sources;
             std::string                  m_description;
             double			        m_color[4];
             double			        m_centroid_x;
@@ -768,7 +768,7 @@ namespace hoa
              @param     manager		A pointer on a manager object
              @param     index       The index of the group
              */
-            Group(const Manager* manager, const ulong index) : m_manager(manager)
+            Group(const Manager* manager, const size_t index) : m_manager(manager)
             {
                 m_maximum_radius = m_manager->getMaximumRadius();
                 m_index = index;
@@ -809,7 +809,7 @@ namespace hoa
              */
             inline void notifyMute() noexcept
             {
-                ulong numberOfMutedSources = 0;
+                size_t numberOfMutedSources = 0;
                 for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
                 {
                     if (it->second->getMute())
@@ -1078,7 +1078,7 @@ namespace hoa
             /** Remove a Source from the map container of the group.
              @param     index   The index of the source.
              */
-            inline void removeSource(const ulong index) noexcept
+            inline void removeSource(const size_t index) noexcept
             {
                 m_sources.erase(index);
                 computeCentroid();
@@ -1330,7 +1330,7 @@ namespace hoa
             /** Get the index of the Group.
              @return    The index of the group.
              */
-            inline const ulong getIndex() const noexcept
+            inline const size_t getIndex() const noexcept
             {
                 return m_index;
             }
@@ -1438,7 +1438,7 @@ namespace hoa
             /** Get the size of the Sources map of the group.
              @return    The sources map size.
              */
-            inline ulong getNumberOfSources() const noexcept
+            inline size_t getNumberOfSources() const noexcept
             {
                 return m_sources.size();
             }
@@ -1456,7 +1456,7 @@ namespace hoa
             /** Get the Sources map of the group.
              @return    A reference of the sources map.
              */
-            inline std::map<ulong, Source*>& getSources() noexcept
+            inline std::map<size_t, Source*>& getSources() noexcept
             {
                 return m_sources;
             }
@@ -1465,7 +1465,7 @@ namespace hoa
             {
                 if (m_sources.size() == other.m_sources.size())
                 {
-                    ulong clones = 0;
+                    size_t clones = 0;
                     for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
                     {
                         source_iterator ti = other.m_sources.find(it->first);
@@ -1480,13 +1480,13 @@ namespace hoa
         };
 
     private:
-        ulong                m_index;
+        size_t                m_index;
         double		         m_radius;
 		double		         m_azimuth;
         double               m_elevation;
 		double		         m_color[4];
         std::string          m_description;
-        std::map<ulong, Group*>   m_groups;
+        std::map<size_t, Group*>   m_groups;
 		double               m_maximum_radius;
 		bool                 m_mute;
 
@@ -1498,7 +1498,7 @@ namespace hoa
 			@param     azimuth			The azimuth of the source.
             @param     elevation		The elevation of the source.
 		 */
-		Source(const double maximumRadius, const ulong index, const double radius = 0., const double azimuth = 0., const double elevation = 0.)
+		Source(const double maximumRadius, const size_t index, const double radius = 0., const double azimuth = 0., const double elevation = 0.)
 		{
             m_maximum_radius = maximumRadius;
             m_index = index;
@@ -1558,7 +1558,7 @@ namespace hoa
         /** Remove a group from the map container of the source.
          @param     index   The index of the group.
          */
-        inline void removeGroup(const ulong index) noexcept
+        inline void removeGroup(const size_t index) noexcept
         {
             m_groups.erase(index);
         }

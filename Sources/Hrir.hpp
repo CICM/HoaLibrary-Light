@@ -33,7 +33,7 @@ namespace hoa
         /** Gets the order of decomposition used to compute the matrices.
          @return The order of decomposition.
          */
-        static ulong getOrderOfDecomposition() noexcept
+        static size_t getOrderOfDecomposition() noexcept
         {
             return 5ul;
         }
@@ -42,7 +42,7 @@ namespace hoa
         /** Gets the number rows of the matrices (or the size of the responses used to compute the matrices).
          @return The number rows of the matrices.
          */
-        static ulong getNumberOfRows() noexcept
+        static size_t getNumberOfRows() noexcept
         {
             return 512ul;
         }
@@ -51,7 +51,7 @@ namespace hoa
         /** Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
          @return The number columns of the matrices.
          */
-        static ulong getNumberOfColumns() noexcept
+        static size_t getNumberOfColumns() noexcept
         {
             return 11ul;
         }
@@ -60,7 +60,7 @@ namespace hoa
         /** Gets the size of the matrices (rows * columns).
          @return The nsize of the matrices.
          */
-        static ulong getMatricesSize() noexcept
+        static size_t getMatricesSize() noexcept
         {
             return 5632ul;
         }
@@ -92,7 +92,7 @@ namespace hoa
         /** Gets the order of decomposition used to compute the matrices.
          @return The order of decomposition.
          */
-        static ulong getOrderOfDecomposition() noexcept
+        static size_t getOrderOfDecomposition() noexcept
         {
             return 5ul;
         }
@@ -101,7 +101,7 @@ namespace hoa
         /** Gets the number rows of the matrices (or the size of the responses used to compute the matrices).
          @return The number rows of the matrices.
          */
-        static ulong getNumberOfRows() noexcept
+        static size_t getNumberOfRows() noexcept
         {
             return 512ul;
         }
@@ -110,7 +110,7 @@ namespace hoa
         /** Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
          @return The number columns of the matrices.
          */
-        static ulong getNumberOfColumns() noexcept
+        static size_t getNumberOfColumns() noexcept
         {
             return 11ul;
         }
@@ -119,7 +119,7 @@ namespace hoa
         /** Gets the size of the matrices (rows * columns).
          @return The nsize of the matrices.
          */
-        static ulong getMatricesSize() noexcept
+        static size_t getMatricesSize() noexcept
         {
             return 5632ul;
         }
@@ -151,7 +151,7 @@ namespace hoa
         /** Gets the order of decomposition used to compute the matrices.
          @return The order of decomposition.
          */
-        static ulong getOrderOfDecomposition() noexcept
+        static size_t getOrderOfDecomposition() noexcept
         {
             return 3ul;
         }
@@ -160,7 +160,7 @@ namespace hoa
         /** Gets the number rows of the matrices (or the size of the responses used to compute the matrices).
          @return The number rows of the matrices.
          */
-        static ulong getNumberOfRows() noexcept
+        static size_t getNumberOfRows() noexcept
         {
             return 512ul;
         }
@@ -169,7 +169,7 @@ namespace hoa
         /** Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
          @return The number columns of the matrices.
          */
-        static ulong getNumberOfColumns() noexcept
+        static size_t getNumberOfColumns() noexcept
         {
             return 16ul;
         }
@@ -178,7 +178,7 @@ namespace hoa
         /** Gets the size of the matrices (rows * columns).
          @return The nsize of the matrices.
          */
-        static ulong getMatricesSize() noexcept
+        static size_t getMatricesSize() noexcept
         {
             return 8192ul;
         }
@@ -210,7 +210,7 @@ namespace hoa
         /** Gets the order of decomposition used to compute the matrices.
          @return The order of decomposition.
          */
-        static ulong getOrderOfDecomposition() noexcept
+        static size_t getOrderOfDecomposition() noexcept
         {
             return 3ul;
         }
@@ -219,7 +219,7 @@ namespace hoa
         /** Gets the number rows of the matrices (or the size of the responses used to compute the matrices).
          @return The number rows of the matrices.
          */
-        static ulong getNumberOfRows() noexcept
+        static size_t getNumberOfRows() noexcept
         {
             return 512ul;
         }
@@ -228,7 +228,7 @@ namespace hoa
         /** Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
          @return The number columns of the matrices.
          */
-        static ulong getNumberOfColumns() noexcept
+        static size_t getNumberOfColumns() noexcept
         {
             return 16ul;
         }
@@ -237,7 +237,7 @@ namespace hoa
         /** Gets the size of the matrices (rows * columns).
          @return The nsize of the matrices.
          */
-        static ulong getMatricesSize() noexcept
+        static size_t getMatricesSize() noexcept
         {
             return 8192ul;
         }

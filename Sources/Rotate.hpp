@@ -22,7 +22,7 @@ namespace hoa
         /**	The rotate constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Rotate(const ulong order) noexcept;
+        Rotate(const size_t order) noexcept;
 
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
@@ -70,7 +70,7 @@ namespace hoa
         /**	The rotate constructor allocates and initialize the member values to computes spherical harmonics rotation depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Rotate(const ulong order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
+        Rotate(const size_t order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
         {
             ;
         }
@@ -118,7 +118,7 @@ namespace hoa
             T sig = (*inputs++);
             (*outputs++) = sin_x * (*inputs) + cos_x * sig;
             (*outputs++) = cos_x * (*inputs++) - sin_x * sig;
-            for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 cos_x = tcos_x * m_cosx - sin_x * m_sinx;
                 sin_x = tcos_x * m_sinx + sin_x * m_cosx;

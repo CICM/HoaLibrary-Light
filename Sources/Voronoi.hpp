@@ -261,23 +261,23 @@ namespace hoa
             {
                 const double el = HOA_PI2 - elevation();
                 const double az = azimuth();
-                for(ulong i = 0; i < bounds.size(); i++)
+                for(size_t i = 0; i < bounds.size(); i++)
                 {
                     bounds[i].rotateZ(-az);
                     bounds[i].rotateX(el);
                 }
                 std::sort(bounds.begin(), bounds.end(), compareAzimuth);
-                for(ulong i = 0; i < bounds.size(); i++)
+                for(size_t i = 0; i < bounds.size(); i++)
                 {
                     bounds[i].rotateX(-el);
                     bounds[i].rotateZ(az);
                 }
 
-                ulong size = bounds.size();
-                for(ulong i = 0; i < size; i++)
+                size_t size = bounds.size();
+                for(size_t i = 0; i < size; i++)
                 {
-                    const ulong p = i ? i-1 : size-1;
-                    const ulong n = (i == size-1) ? 0 : i+1;
+                    const size_t p = i ? i-1 : size-1;
+                    const size_t n = (i == size-1) ? 0 : i+1;
                     if(bounds[i].z < 0. && bounds[p].z > 0.)
                     {
                         const double dist = bounds[p].z / (bounds[p].z - bounds[i].z);
@@ -295,7 +295,7 @@ namespace hoa
                         size++;
                     }
                 }
-                for(ulong i = 0; i < size; i++)
+                for(size_t i = 0; i < size; i++)
                 {
                     if(bounds[i].z < 0.)
                     {
@@ -382,22 +382,22 @@ namespace hoa
             return m_points;
         }
 
-        std::vector<Point> const& getBounds(const ulong i) const noexcept
+        std::vector<Point> const& getBounds(const size_t i) const noexcept
         {
             return m_points[i].bounds;
         }
 
-        std::vector<Point>& getBounds(const ulong i) noexcept
+        std::vector<Point>& getBounds(const size_t i) noexcept
         {
             return m_points[i].bounds;
         }
 
-        std::vector<Point> const& getNeightbours(const ulong i) const noexcept
+        std::vector<Point> const& getNeightbours(const size_t i) const noexcept
         {
             return m_points[i].neightbours;
         }
 
-        std::vector<Point>& getNeightbours(const ulong i) noexcept
+        std::vector<Point>& getNeightbours(const size_t i) noexcept
         {
             return m_points[i].neightbours;
         }
@@ -408,17 +408,17 @@ namespace hoa
             {
                 m_points.push_back(Point(0., 0., -1.));
             }
-            for(ulong i = 0; i < m_points.size() - 2; i++)
+            for(size_t i = 0; i < m_points.size() - 2; i++)
             {
-                for(ulong j = i+1; j < m_points.size() - 1; j++)
+                for(size_t j = i+1; j < m_points.size() - 1; j++)
                 {
-                    for(ulong k = j+1; k < m_points.size(); k++)
+                    for(size_t k = j+1; k < m_points.size(); k++)
                     {
                         Triangle t(m_points[i], m_points[j], m_points[k]);
                         if(t.r > 0.)
                         {
                             bool valid = true;
-                            for(ulong l = 0; l < m_points.size(); l++)
+                            for(size_t l = 0; l < m_points.size(); l++)
                             {
                                 if(l != i && l != j && l != k)
                                 {
@@ -444,7 +444,7 @@ namespace hoa
                     }
                 }
             }
-            for(ulong i = 0; i < m_points.size(); i++)
+            for(size_t i = 0; i < m_points.size(); i++)
             {
                 m_points[i].filterBounds();
             }

@@ -23,7 +23,7 @@ namespace hoa
         /** The harmonic constructor allocates and initializes the general member values depending on an index.
          @param index    The index must be at least 1.
          */
-        Harmonic(const ulong index) noexcept;
+        Harmonic(const size_t index) noexcept;
 
         //! The harmonic destructor.
         /** The harmonic destructor free the memory.
@@ -34,13 +34,13 @@ namespace hoa
         /** The method returns the index \f$i\f$ of the harmonic.
          @return     The index.
          */
-        ulong getIndex() const noexcept;
+        size_t getIndex() const noexcept;
 
         //! Get the degree of the harmonic.
         /** The method returns the degree \f$l\f$ of the harmonic.
          @return     The degree.
          */
-        ulong getDegree() const noexcept;
+        size_t getDegree() const noexcept;
 
         //! Get the order of the harmonic.
         /** The method returns the order \f$m\f$ of the harmonic.
@@ -72,28 +72,28 @@ namespace hoa
          @param order   The order of the harmonic.
          @return        The index.
          */
-        static ulong getHarmonicIndex(const ulong degree, const long order) noexcept;
+        static size_t getHarmonicIndex(const size_t degree, const long order) noexcept;
 
         //! Get the degree of an harmonic with an index.
         /** The method returns the degree of the harmonic.
          @param index  The index of the harmonic.
          @return        The degree.
          */
-        static ulong getHarmonicDegree(const ulong index) noexcept;
+        static size_t getHarmonicDegree(const size_t index) noexcept;
 
         //! Get the order of an harmonic with an index.
         /** The method returns the order of the harmonic.
          @param index  The index of the harmonic.
          @return        The degree.
          */
-        static ulong getHarmonicOrder(const ulong index) noexcept;
+        static size_t getHarmonicOrder(const size_t index) noexcept;
 
         //! Get the number of harmonics for an order of decomposition.
         /** The method returns the number of harmonics for a order of decomposition \f$N\f$.
          @param order   The order of decomposition.
          @return        The number of harmonics.
          */
-        static ulong getNumberOfHarmonics(const ulong order) noexcept;
+        static size_t getNumberOfHarmonics(const size_t order) noexcept;
 
         //! Get the normalization of an harmonic.
         /** The method returns the normalization of an harmonics.
@@ -101,7 +101,7 @@ namespace hoa
          @param order   The order of the harmonic.
          @return        The normalization of the harmonics.
          */
-        static T getNormalization(const ulong degree, const long order) noexcept;
+        static T getNormalization(const size_t degree, const long order) noexcept;
 
         //! Get the semi-normalization of an harmonic.
         /** The method returns the semi-normalization of an harmonics.
@@ -109,7 +109,7 @@ namespace hoa
          @param order   The order of the harmonic.
          @return        The semi-normalization of the harmonics.
          */
-        static T getSemiNormalization(const ulong degree, const long order) noexcept;
+        static T getSemiNormalization(const size_t degree, const long order) noexcept;
     };
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -117,14 +117,14 @@ namespace hoa
     template<typename T> class Harmonic<Hoa2d, T>
     {
     private:
-        ulong m_index;
+        size_t m_index;
     public:
 
         //! The harmonic constructor.
         /** The harmonic constructor allocates and initializes the general member values depending on an index.
          @param index    The index must be at least 1.
          */
-        inline Harmonic(const ulong index) noexcept : m_index(index)
+        inline Harmonic(const size_t index) noexcept : m_index(index)
         {
             
         }
@@ -141,7 +141,7 @@ namespace hoa
         /** The method returns the index of the harmonic.
          @return     The index.
          */
-        inline ulong getIndex() const noexcept
+        inline size_t getIndex() const noexcept
         {
             return m_index;
         }
@@ -150,9 +150,9 @@ namespace hoa
         /** The method returns the degree of the harmonic.
          @return     The degree.
          */
-        inline ulong getDegree() const noexcept
+        inline size_t getDegree() const noexcept
         {
-			return (ulong)((m_index + m_index % 2) * 0.5);
+			return (size_t)((m_index + m_index % 2) * 0.5);
         }
 
         //! Get the order of the harmonic.
@@ -196,7 +196,7 @@ namespace hoa
          @param index  The index of the harmonic.
          @return        The degree.
          */
-        static inline ulong getDegree(const ulong index) noexcept
+        static inline size_t getDegree(const size_t index) noexcept
         {
             return (index + index % 2) / 2ul;
         }
@@ -206,7 +206,7 @@ namespace hoa
          @param index  The index of the harmonic.
          @return        The order.
          */
-        static inline long getOrder(const ulong index) noexcept
+        static inline long getOrder(const size_t index) noexcept
         {
             return long(long(index + index % 2l) / 2l) * (1l - (long)(index % 2) * 2l);
         }
@@ -217,7 +217,7 @@ namespace hoa
          @param order   The order of the harmonic.
          @return        The index.
          */
-        static inline long getIndex(const ulong degree, const long order) noexcept
+        static inline long getIndex(const size_t degree, const long order) noexcept
         {
             return std::abs(order) *  2 - long(order < 0);
         }
@@ -227,7 +227,7 @@ namespace hoa
          @param order   The order of decomposition.
          @return        The number of harmonics.
          */
-        static inline ulong getNumberOfHarmonics(const ulong order) noexcept
+        static inline size_t getNumberOfHarmonics(const size_t order) noexcept
         {
             return order * 2 + 1;
         }
@@ -238,7 +238,7 @@ namespace hoa
          @param order   The order of the harmonic.
          @return        The normalization of the harmonics.
          */
-        static inline T getNormalization(const ulong degree, const long order) noexcept
+        static inline T getNormalization(const size_t degree, const long order) noexcept
         {
             return 1.;
         }
@@ -249,7 +249,7 @@ namespace hoa
          @param order   The order of the harmonic.
          @return        The semi-normalization of the harmonics.
          */
-        static inline T getSemiNormalization(const ulong degree, const long order) noexcept
+        static inline T getSemiNormalization(const size_t degree, const long order) noexcept
         {
             return 1.;
         }
@@ -258,14 +258,14 @@ namespace hoa
     template <typename T> class Harmonic<Hoa3d, T>
     {
     private:
-        ulong m_index;
+        size_t m_index;
     public:
 
         //! The harmonic constructor.
         /** The harmonic constructor allocates and initializes the general member values depending on an index.
          @param index    The index must be at least 1.
          */
-        Harmonic(const ulong index) noexcept :
+        Harmonic(const size_t index) noexcept :
         m_index(index)
         {
 
@@ -283,7 +283,7 @@ namespace hoa
         /** The method returns the index of the harmonic.
          @return     The index.
          */
-        inline ulong getIndex() const noexcept
+        inline size_t getIndex() const noexcept
         {
             return m_index;
         }
@@ -292,9 +292,9 @@ namespace hoa
         /** The method returns the degree of the harmonic.
          @return     The degree.
          */
-        inline ulong getDegree() const noexcept
+        inline size_t getDegree() const noexcept
         {
-            return ulong(sqrt(float(m_index)));
+            return size_t(sqrt(float(m_index)));
         }
 
         //! Get the order of the harmonic.
@@ -338,9 +338,9 @@ namespace hoa
          @param index  The index of the harmonic.
          @return        The degree.
          */
-        static inline ulong getDegree(const ulong index) noexcept
+        static inline size_t getDegree(const size_t index) noexcept
         {
-            return ulong(sqrt(float(index)));
+            return size_t(sqrt(float(index)));
         }
 
         //! Get the order of an harmonic with an index.
@@ -348,7 +348,7 @@ namespace hoa
          @param index  The index of the harmonic.
          @return        The order.
          */
-        static inline long getOrder(const ulong index) noexcept
+        static inline long getOrder(const size_t index) noexcept
         {
             return long(index) - (long(sqrt(float(index))) * (long(sqrt(float(index))) + 1));
         }
@@ -359,9 +359,9 @@ namespace hoa
          @param order   The order of the harmonic.
          @return        The index.
          */
-        static inline ulong getIndex(const ulong degree, const long order) noexcept
+        static inline size_t getIndex(const size_t degree, const long order) noexcept
         {
-            return ulong(long(degree * (degree + 1)) + order);
+            return size_t(long(degree * (degree + 1)) + order);
         }
 
         //! Get the number of harmonics for an order of decomposition.
@@ -369,7 +369,7 @@ namespace hoa
          @param order   The order of decomposition.
          @return        The number of harmonics.
          */
-        static inline ulong getNumberOfHarmonics(const ulong order) noexcept
+        static inline size_t getNumberOfHarmonics(const size_t order) noexcept
         {
             return (order + 1) * (order + 1);
         }
@@ -380,7 +380,7 @@ namespace hoa
          @param order   The order of the harmonic.
          @return        The normalization of the harmonics.
          */
-        static inline T getNormalization(const ulong degree, const long order) noexcept
+        static inline T getNormalization(const size_t degree, const long order) noexcept
         {
             return getSemiNormalization(degree, order) * sqrt(2. * double(degree) + 1.);
         }
@@ -391,7 +391,7 @@ namespace hoa
          @param order   The order of the harmonic.
          @return        The semi-normalization of the harmonics.
          */
-        static inline T getSemiNormalization(const ulong degree, const long order) noexcept
+        static inline T getSemiNormalization(const size_t degree, const long order) noexcept
         {
             if(order == 0)
             {

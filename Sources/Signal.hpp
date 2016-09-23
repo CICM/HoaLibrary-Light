@@ -23,7 +23,7 @@ namespace hoa
          @param size  The size of the vector.
          @return A pointer to a vector.
          */
-        static inline T* alloc(const ulong size) noexcept
+        static inline T* alloc(const size_t size) noexcept
         {
 #ifdef __APPLE__
             T* vec = (T *)malloc(size * sizeof(T));
@@ -70,9 +70,9 @@ namespace hoa
         @param in2      The input matrix.
         @param output      The output vector.
          */
-        static inline void mul(const ulong colsize, const ulong rowsize, const T* in, const T* in2, T* output) noexcept
+        static inline void mul(const size_t colsize, const size_t rowsize, const T* in, const T* in2, T* output) noexcept
         {
-            for(ulong i = 0ul; i < rowsize; i++)
+            for(size_t i = 0ul; i < rowsize; i++)
             {
                 T result = 0;
                 const T* in1 = in;
@@ -98,9 +98,9 @@ namespace hoa
         @param in2      The second matrix.
         @param output   The output matrix.
          */
-        static inline void mul(const ulong m, const ulong n, const ulong l, const T* in1, const T* in2, T* output) noexcept
+        static inline void mul(const size_t m, const size_t n, const size_t l, const T* in1, const T* in2, T* output) noexcept
         {
-            ulong i, j, k;
+            size_t i, j, k;
             memset(output, 0, m * n * sizeof(T));
             T* out = output;
             for(k = 0; k < l; k++)
@@ -130,10 +130,10 @@ namespace hoa
         @param   vector       The vector.
         @return  The maximum of the absolute values of the vector
          */
-        static inline T max(const ulong vectorsize, const T* vector) noexcept
+        static inline T max(const size_t vectorsize, const T* vector) noexcept
         {
             T max = fabs(vector[0]);
-            for(ulong i = 1ul; i < vectorsize; i++)
+            for(size_t i = 1ul; i < vectorsize; i++)
             {
                 const T temp = fabs(vector[i]);
                 if(temp > max)
@@ -150,10 +150,10 @@ namespace hoa
         @param   vector The vector.
         @return  The sum of each element of the vector
          */
-        static inline T sum(const ulong size, const T* vector) noexcept
+        static inline T sum(const size_t size, const T* vector) noexcept
         {
             T sum = 0;
-            for(ulong i = 0ul; i < size; i++)
+            for(size_t i = 0ul; i < size; i++)
             {
                 sum += fabs(vector[i]);
             }
@@ -166,9 +166,9 @@ namespace hoa
         @param   factor The factor of the scale.
         @param   vector The vector.
          */
-        static inline void scale(const ulong size, const T factor, T* vector) noexcept
+        static inline void scale(const size_t size, const T factor, T* vector) noexcept
         {
-            for(ulong i = 0ul; i < size; i++)
+            for(size_t i = 0ul; i < size; i++)
             {
                 vector[i] *= factor;
             }
@@ -179,7 +179,7 @@ namespace hoa
         @param   size   The size of the vector.
         @param   vector The vector.
          */
-        static inline void clear(const ulong size, T* vector) noexcept
+        static inline void clear(const size_t size, T* vector) noexcept
         {
             memset(vector, 0, size * sizeof(T));
         }
@@ -190,7 +190,7 @@ namespace hoa
         @param   source The source vector.
         @param   dest   The destination vector.
          */
-        static inline void copy(const ulong size, const T* source, T* dest) noexcept
+        static inline void copy(const size_t size, const T* source, T* dest) noexcept
         {
             memcpy(dest, source, size * sizeof(T));
         }
@@ -203,11 +203,11 @@ namespace hoa
          @param   dest   The destination vector.
          @param   incd   The increment of the destination vector.
          */
-        static inline void copy(const ulong size, const T* source, const ulong incs, T* dest, const ulong incd) noexcept
+        static inline void copy(const size_t size, const T* source, const size_t incs, T* dest, const size_t incd) noexcept
         {
-            ulong is = 0ul;
-            ulong id = 0ul;
-            for(ulong i = 0ul; i < size; i++)
+            size_t is = 0ul;
+            size_t id = 0ul;
+            for(size_t i = 0ul; i < size; i++)
             {
                 dest[id] = source[is];
                 is += incs;
@@ -221,7 +221,7 @@ namespace hoa
         @param   in The source vector.
         @param   out   The destination vector.
          */
-        static inline void add(const ulong size, const T* in, T* out) noexcept
+        static inline void add(const size_t size, const T* in, T* out) noexcept
         {
             for(size_t i = size>>3; i; --i, in += 8, out += 8)
             {
@@ -242,11 +242,11 @@ namespace hoa
          @param   dest   The destination vector.
          @param   incd   The increment of the destination vector.
          */
-        static inline void add(const ulong size, const T* source, const ulong incs, T* dest, const ulong incd) noexcept
+        static inline void add(const size_t size, const T* source, const size_t incs, T* dest, const size_t incd) noexcept
         {
-            ulong is = 0ul;
-            ulong id = 0ul;
-            for(ulong i = 0ul; i < size; i++)
+            size_t is = 0ul;
+            size_t id = 0ul;
+            for(size_t i = 0ul; i < size; i++)
             {
                 dest[id] += source[is];
                 is += incs;
@@ -261,7 +261,7 @@ namespace hoa
         @param   in2    The second vector.
         @return The dot product of the two vectors.
          */
-        static inline T dot(const ulong size, const T* in1, const T* in2) noexcept
+        static inline T dot(const size_t size, const T* in1, const T* in2) noexcept
         {
             T result = 0;
             for(size_t i = size>>3; i; --i, in1 += 8, in2 += 8)

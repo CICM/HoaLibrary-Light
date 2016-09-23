@@ -22,7 +22,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const ulong order) noexcept;
+        Encoder(const size_t order) noexcept;
 
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
@@ -46,7 +46,7 @@ namespace hoa
             /**	The basic constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
              @param     order	The order.
              */
-            Basic(const ulong order) noexcept;
+            Basic(const size_t order) noexcept;
 
             //! The basic destructor.
             /**	The basic destructor free the memory.
@@ -135,7 +135,7 @@ namespace hoa
             /**	The dc constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
              @param     order	The order.
              */
-            DC(const ulong order) noexcept;
+            DC(const size_t order) noexcept;
 
             //! The dc destructor.
             /**	The dc destructor free the memory.
@@ -224,7 +224,7 @@ namespace hoa
              @param     order            The order.
              @param     numberOfSources	The number of sources.
              */
-            Multi(const ulong order, ulong numberOfSources) noexcept;
+            Multi(const size_t order, size_t numberOfSources) noexcept;
 
             //! The multi encoder destructor.
             /**	The multi encoder destructor free the memory and deallocate the member classes.
@@ -235,63 +235,63 @@ namespace hoa
             /** Retrieve the number of sources.
              @return The number of sources.
              */
-            virtual ulong getNumberOfSources() const noexcept;
+            virtual size_t getNumberOfSources() const noexcept;
 
             //! Set the azimuth of a signal.
             /**	This method  sets the azimuth \f$\theta_{index}\f$ of a signal in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
              @param index   The index of the signal.
              @param azimuth	The azimuth.
              */
-            virtual void setAzimuth(const ulong index, const T azimuth) noexcept;
+            virtual void setAzimuth(const size_t index, const T azimuth) noexcept;
 
             //! Set the elevation  of a signal.
             /**	This method  sets the elevation \f$\varphi_{index}\f$  of a signal in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
              @param index       The index of the signal.
              @param elevation   The elevation.
              */
-            virtual void setElevation(const ulong index, const T elevation) noexcept;
+            virtual void setElevation(const size_t index, const T elevation) noexcept;
 
             //! Set the radius.
             /**	This method  sets the radius \f$\rho_{index}\f$ between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the center of the soundfield, \f$1\f$ is the radius of the ambisonic circle or sphere, beyond this limit the gain decreases and before the sound field is widened.
              @param index   The index of the signal.
              @param radius  The radius.
              */
-            virtual void setRadius(const ulong index, const T radius) noexcept;
+            virtual void setRadius(const size_t index, const T radius) noexcept;
 
             //! This method mute or unmute a signal.
             /**	Mute or unmute a signal with a boolean value.
              @param     index	The index of the signal.
              @param     muted	The mute state.
              */
-            virtual void setMute(const ulong index, const bool muted) noexcept;
+            virtual void setMute(const size_t index, const bool muted) noexcept;
 
             //! Get the azimuth of a signal.
             /** The method returns the azimuth \f$\theta_{index}\f$ between \f$0\f$ and \f$2\pi\f$.
              @param index The index of the signal.
              @return    The azimuth.
              */
-            virtual T getAzimuth(const ulong index) const noexcept;
+            virtual T getAzimuth(const size_t index) const noexcept;
 
             //!	Get the elevation of a signal.
             /** The method returns the elevation \f$\varphi_{index}\f$ between \f$-\pi\f$ and \f$\pi\f$.
              @param index The index of the signal.
              @return     The elevation.
              */
-            virtual T getElevation(const ulong index) const noexcept;
+            virtual T getElevation(const size_t index) const noexcept;
 
             //! Get the radius of a signal.
             /** The method returns the radius \f$\rho_{index}\f$ between \f$0\f$ and \f$+\infty\f$.
              @param index The index of the signal.
              @return     The radius.
              */
-            virtual T getRadius(const ulong index) const noexcept;
+            virtual T getRadius(const size_t index) const noexcept;
 
             //! Get the mute or unmute state of a signal.
             /**	This method gets mute state of a signal.
              @param index The index of the signal.
              @return    The mute state of the signal.
              */
-            virtual bool getMute(const ulong index) const noexcept;
+            virtual bool getMute(const size_t index) const noexcept;
 
 
             //! This method performs the encoding with distance compensation.
@@ -314,7 +314,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const ulong order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
+        Encoder(const size_t order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
         {
             ;
         }
@@ -363,7 +363,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
             @param     order	The order.
          */
-        Basic(const ulong order) noexcept: Encoder<Hoa2d, T>(order)
+        Basic(const size_t order) noexcept: Encoder<Hoa2d, T>(order)
         {
             setMute(false);
             setAzimuth(0.);
@@ -432,7 +432,7 @@ namespace hoa
                 (*outputs++)    = (*input);                         // Hamonic [0,0]
                 (*outputs++)    = (*input) * sin_x;                 // Hamonic [1,-1]
                 (*outputs++)    = (*input) * cos_x;                 // Hamonic [1,1]
-                for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+                for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
                 {
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
                     sin_x   = tcos_x * m_sinx + sin_x * m_cosx;
@@ -443,7 +443,7 @@ namespace hoa
             }
             else
             {
-                for(ulong i = 0; i < Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(); i++)
+                for(size_t i = 0; i < Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -467,7 +467,7 @@ namespace hoa
                 (*outputs++)    += (*input);                         // Hamonic [0,0]
                 (*outputs++)    += (*input) * sin_x;                 // Hamonic [1,-1]
                 (*outputs++)    += (*input) * cos_x;                 // Hamonic [1,1]
-                for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+                for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
                 {
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
                     sin_x   = tcos_x * m_sinx + sin_x * m_cosx;
@@ -497,7 +497,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        DC(const ulong order) noexcept: Encoder<Hoa2d, T>(order)
+        DC(const size_t order) noexcept: Encoder<Hoa2d, T>(order)
         {
             setAzimuth(0.);
             setRadius(1.);
@@ -601,7 +601,7 @@ namespace hoa
                 (*outputs++) = (*input) * (gain1 + m_distance);            // Hamonic [0,0]
                 (*outputs++) = (*input) * sin_x * factor1;                 // Hamonic [1,-1]
                 (*outputs++) = (*input) * cos_x * factor1;                 // Hamonic [1,1]
-                for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+                for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
                 {
                     const T gain    = (m_gain * (Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - i) + m_distance);
                     const T factor  = (cos(Math<T>::clip(m_factor * i, 0., T(HOA_PI))) + 1.) * T(0.5);
@@ -616,7 +616,7 @@ namespace hoa
             }
             else
             {
-                for(ulong i = 0; i < Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(); i++)
+                for(size_t i = 0; i < Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -643,7 +643,7 @@ namespace hoa
                 (*outputs++) += (*input) * (gain1 + m_distance);            // Hamonic [0,0]
                 (*outputs++) += (*input) * sin_x * factor1;                 // Hamonic [1,-1]
                 (*outputs++) += (*input) * cos_x * factor1;                 // Hamonic [1,1]
-                for(ulong i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+                for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
                 {
                     const T gain    = (m_gain * (Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - i) + m_distance);
                     const T factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
@@ -663,7 +663,7 @@ namespace hoa
     template <typename T> class Encoder<Hoa2d, T>::Multi : public Encoder<Hoa2d, T>
     {
     private:
-        const ulong                     m_number_of_sources;
+        const size_t                     m_number_of_sources;
         std::vector<Encoder<Hoa2d, T>::DC*>  m_encoders;
     public:
 
@@ -673,10 +673,10 @@ namespace hoa
          @param     order            The order.
          @param     numberOfSources	The number of sources.
          */
-        Multi(const ulong order, ulong numberOfSources) noexcept : Encoder<Hoa2d, T>(order),
+        Multi(const size_t order, size_t numberOfSources) noexcept : Encoder<Hoa2d, T>(order),
         m_number_of_sources(numberOfSources)
         {
-            for(ulong i = 0; i < m_number_of_sources; i++)
+            for(size_t i = 0; i < m_number_of_sources; i++)
             {
                 m_encoders.push_back(new Encoder<Hoa2d, T>::DC(order));
             }
@@ -687,7 +687,7 @@ namespace hoa
          */
         ~Multi() noexcept
         {
-            for(ulong i = 0; i < m_number_of_sources; i++)
+            for(size_t i = 0; i < m_number_of_sources; i++)
             {
                 delete m_encoders[i];
             }
@@ -699,7 +699,7 @@ namespace hoa
 
          @return The number of sources.
          */
-        inline ulong getNumberOfSources() const noexcept
+        inline size_t getNumberOfSources() const noexcept
         {
             return m_number_of_sources;
         }
@@ -711,7 +711,7 @@ namespace hoa
          @param     azimuth	The azimuth.
          @see       setRadius()
          */
-        inline void setAzimuth(const ulong index, const T azimuth) noexcept
+        inline void setAzimuth(const size_t index, const T azimuth) noexcept
         {
             m_encoders[index]->setAzimuth(azimuth);
         }
@@ -723,7 +723,7 @@ namespace hoa
          @param     radius   The radius.
          @see       setAzimuth()
          */
-        inline void setRadius(const ulong index, const T radius) noexcept
+        inline void setRadius(const size_t index, const T radius) noexcept
         {
             m_encoders[index]->setRadius(radius);
         }
@@ -734,7 +734,7 @@ namespace hoa
          @param     index	The index of the source.
          @param     muted	The mute state.
          */
-        inline void setMute(const ulong index, const bool muted) noexcept
+        inline void setMute(const size_t index, const bool muted) noexcept
         {
             m_encoders[index]->setMute(muted);
         }
@@ -745,7 +745,7 @@ namespace hoa
          @param     index	The index of the source.
          @return The azimuth of the source if the source exists, otherwise the function generates an error.
          */
-        inline T getAzimuth(const ulong index) const noexcept
+        inline T getAzimuth(const size_t index) const noexcept
         {
             return m_encoders[index]->getAzimuth();
         }
@@ -756,7 +756,7 @@ namespace hoa
          @param     index	The index of the source.
          @return The radius of the source if the source exists, otherwise the function generates an error.
          */
-        inline T getRadius(const ulong index) const noexcept
+        inline T getRadius(const size_t index) const noexcept
         {
             return m_encoders[index]->getRadius();
         }
@@ -768,7 +768,7 @@ namespace hoa
          @return    The mute state of the source if the source exists, otherwise the function generates an error.
          @see       setMute()
          */
-        inline bool getMute(const ulong index) const noexcept
+        inline bool getMute(const size_t index) const noexcept
         {
             return m_encoders[index]->getMute();
         }
@@ -782,7 +782,7 @@ namespace hoa
         inline void process(const T* input, T* outputs) noexcept override
         {
             m_encoders[0]->process(input, outputs);
-            for(ulong i = 1; i < m_number_of_sources; i++)
+            for(size_t i = 1; i < m_number_of_sources; i++)
             {
                 m_encoders[i]->processAdd(++input, outputs);
             }
@@ -797,7 +797,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const ulong order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
+        Encoder(const size_t order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
         {
             ;
         }
@@ -850,10 +850,10 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Basic(const ulong order) noexcept : Encoder<Hoa3d, T>(order)
+        Basic(const size_t order) noexcept : Encoder<Hoa3d, T>(order)
         {
             m_normalization = Signal<T>::alloc(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics());
-            for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
+            for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
             {
                 m_normalization[i] = Processor<Hoa3d, T>::Harmonics::getHarmonicSemiNormalization(i);
             }
@@ -948,7 +948,7 @@ namespace hoa
         {
             if(!m_muted)
             {
-                const ulong order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
+                const size_t order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -969,8 +969,8 @@ namespace hoa
                 // For m[0] and l{0...N}
                 *(outputs)      = (*input);                 // Hamonic [0, 0]
                 *(outputs+2)    = (*input) * leg_l1;      // Hamonic [1, 0]
-                ulong index = 6;
-                for(ulong i = 2; i <= order; i++, index += 2 * i)
+                size_t index = 6;
+                for(size_t i = 2; i <= order; i++, index += 2 * i)
                 {
                     tleg_l  = (cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
                     leg_l2  = leg_l1;
@@ -980,9 +980,9 @@ namespace hoa
 
                 // For m{1...N-1} and l{m...N}
                 index = 1;
-                for(ulong i = 1; i < order; i++, index = i * i)
+                for(size_t i = 1; i < order; i++, index = i * i)
                 {
-                    ulong inc = 2;
+                    size_t inc = 2;
                     leg_l2 = sqr_theta * pleg_l * (T)(2 * (i - 1) + 1);
                     leg_l1 = cos_theta  * leg_l2 * (T)(2 * i + 1);
                     pleg_l = leg_l2;
@@ -998,7 +998,7 @@ namespace hoa
                     inc += 2;
                     index += inc;
 
-                    for(ulong j = i + 2; j <= order; j++)
+                    for(size_t j = i + 2; j <= order; j++)
                     {
                         tleg_l  = (cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
                         leg_l2  = leg_l1;
@@ -1024,7 +1024,7 @@ namespace hoa
             }
             else
             {
-                for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
+                for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -1049,7 +1049,7 @@ namespace hoa
         {
             if(!m_muted)
             {
-                const ulong order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
+                const size_t order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -1070,8 +1070,8 @@ namespace hoa
                 // For m[0] and l{0...N}
                 *(outputs)      += (*input);                 // Hamonic [0, 0]
                 *(outputs+2)    += (*input) * leg_l1;      // Hamonic [1, 0]
-                ulong index = 6;
-                for(ulong i = 2; i <= order; i++, index += 2 * i)
+                size_t index = 6;
+                for(size_t i = 2; i <= order; i++, index += 2 * i)
                 {
                     tleg_l      = (cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
                     leg_l2      = leg_l1;
@@ -1081,9 +1081,9 @@ namespace hoa
 
                 // For m{1...N-1} and l{m...N}
                 index = 1;
-                for(ulong i = 1; i < order; i++, index = i * i)
+                for(size_t i = 1; i < order; i++, index = i * i)
                 {
-                    ulong inc = 2;
+                    size_t inc = 2;
                     leg_l2 = sqr_theta * pleg_l * (T)(2 * (i - 1) + 1);
                     leg_l1 = cos_theta  * leg_l2 * (T)(2 * i + 1);
                     pleg_l = leg_l2;
@@ -1099,7 +1099,7 @@ namespace hoa
                     inc += 2;
                     index += inc;
 
-                    for(ulong j = i + 2; j <= order; j++)
+                    for(size_t j = i + 2; j <= order; j++)
                     {
                         tleg_l  = (cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
                         leg_l2  = leg_l1;
@@ -1125,7 +1125,7 @@ namespace hoa
             }
             else
             {
-                for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
+                for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -1152,10 +1152,10 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        DC(const ulong order) noexcept : Encoder<Hoa3d, T>(order)
+        DC(const size_t order) noexcept : Encoder<Hoa3d, T>(order)
         {
             m_normalization = Signal<T>::alloc(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics());
-            for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
+            for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
             {
                 m_normalization[i] = Processor<Hoa3d, T>::Harmonics::getHarmonicSemiNormalization(i);
             }
@@ -1243,7 +1243,7 @@ namespace hoa
             m_distance[0] = (gain1 + dist);
             m_distance[1] = (cos(Math<T>::clip(factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - gain) + dist);
 
-            for(ulong i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
             {
                 const T gain2   = (gain * (Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() - i) + dist);
                 const T factor1 = (cos(Math<T>::clip(factor * i, 0., HOA_PI)) + 1.) * 0.5;
@@ -1289,7 +1289,7 @@ namespace hoa
         {
             if(!m_muted)
             {
-                const ulong order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
+                const size_t order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -1311,8 +1311,8 @@ namespace hoa
                 // For m[0] and l{0...N}
                 *(outputs)      = (*input) * *(dist);                 // Hamonic [0, 0]
                 *(outputs+2)    = (*input) * leg_l1 * *(dist+1);      // Hamonic [1, 0]
-                ulong index = 6;
-                for(ulong i = 2; i <= order; i++, index += 2 * i)
+                size_t index = 6;
+                for(size_t i = 2; i <= order; i++, index += 2 * i)
                 {
                     tleg_l  = (cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
                     leg_l2  = leg_l1;
@@ -1322,9 +1322,9 @@ namespace hoa
 
                 // For m{1...N-1} and l{m...N}
                 index = 1;
-                for(ulong i = 1; i < order; i++, index = i * i)
+                for(size_t i = 1; i < order; i++, index = i * i)
                 {
-                    ulong inc = 2;
+                    size_t inc = 2;
                     leg_l2 = sqr_theta * pleg_l * (T)(2 * (i - 1) + 1);
                     leg_l1 = cos_theta  * leg_l2 * (T)(2 * i + 1);
                     pleg_l = leg_l2;
@@ -1340,7 +1340,7 @@ namespace hoa
                     inc += 2;
                     index += inc;
 
-                    for(ulong j = i + 2; j <= order; j++)
+                    for(size_t j = i + 2; j <= order; j++)
                     {
                         tleg_l  = (cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
                         leg_l2  = leg_l1;
@@ -1366,7 +1366,7 @@ namespace hoa
             }
             else
             {
-                for(ulong i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
+                for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -1384,7 +1384,7 @@ namespace hoa
         {
             if(!m_muted)
             {
-                const ulong order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
+                const size_t order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -1406,8 +1406,8 @@ namespace hoa
                 // For m[0] and l{0...N}
                 *(outputs)      += (*input) * *(dist);                 // Hamonic [0, 0]
                 *(outputs+2)    += (*input) * leg_l1 * *(dist+1);      // Hamonic [1, 0]
-                ulong index = 6;
-                for(ulong i = 2; i <= order; i++, index += 2 * i)
+                size_t index = 6;
+                for(size_t i = 2; i <= order; i++, index += 2 * i)
                 {
                     tleg_l  = (cos_theta * leg_l1 * (T)(2 * (i - 1) + 1) - (T)(i - 1) * leg_l2) / (T)(i);
                     leg_l2  = leg_l1;
@@ -1417,9 +1417,9 @@ namespace hoa
 
                 // For m{1...N-1} and l{m...N}
                 index = 1;
-                for(ulong i = 1; i < order; i++, index = i * i)
+                for(size_t i = 1; i < order; i++, index = i * i)
                 {
-                    ulong inc = 2;
+                    size_t inc = 2;
                     leg_l2 = sqr_theta * pleg_l * (T)(2 * (i - 1) + 1);
                     leg_l1 = cos_theta  * leg_l2 * (T)(2 * i + 1);
                     pleg_l = leg_l2;
@@ -1435,7 +1435,7 @@ namespace hoa
                     inc += 2;
                     index += inc;
 
-                    for(ulong j = i + 2; j <= order; j++)
+                    for(size_t j = i + 2; j <= order; j++)
                     {
                         tleg_l  = (cos_theta * leg_l1 * (T)(2 * (j - 1) + 1) - (T)(j - 1 + i) * leg_l2) / (T)(j - i);
                         leg_l2  = leg_l1;
@@ -1465,7 +1465,7 @@ namespace hoa
     template <typename T> class Encoder<Hoa3d, T>::Multi : public Encoder<Hoa3d, T>
     {
     private:
-        const ulong                     m_number_of_sources;
+        const size_t                     m_number_of_sources;
         std::vector<Encoder<Hoa3d, T>::DC *> m_encoders;
     public:
 
@@ -1475,10 +1475,10 @@ namespace hoa
          @param     order            The order.
          @param     numberOfSources	The number of sources.
          */
-        Multi(const ulong order, ulong numberOfSources) noexcept : Encoder<Hoa3d, T>(order),
+        Multi(const size_t order, size_t numberOfSources) noexcept : Encoder<Hoa3d, T>(order),
         m_number_of_sources(numberOfSources)
         {
-            for(ulong i = 0; i < m_number_of_sources; i++)
+            for(size_t i = 0; i < m_number_of_sources; i++)
             {
                 m_encoders.push_back(new Encoder<Hoa3d, T>::DC(order));
             }
@@ -1489,7 +1489,7 @@ namespace hoa
          */
         ~Multi() noexcept
         {
-            for(ulong i = 0; i < m_number_of_sources; i++)
+            for(size_t i = 0; i < m_number_of_sources; i++)
             {
                 delete m_encoders[i];
             }
@@ -1501,7 +1501,7 @@ namespace hoa
 
          @return The number of sources.
          */
-        inline ulong getNumberOfSources() const noexcept
+        inline size_t getNumberOfSources() const noexcept
         {
             return m_number_of_sources;
         }
@@ -1513,7 +1513,7 @@ namespace hoa
          @param     azimuth	The azimuth.
          @see       setRadius()
          */
-        inline void setAzimuth(const ulong index, const T azimuth) noexcept
+        inline void setAzimuth(const size_t index, const T azimuth) noexcept
         {
             m_encoders[index]->setAzimuth(azimuth);
         }
@@ -1525,7 +1525,7 @@ namespace hoa
          @param     azimuth	The azimuth.
          @see       setRadius()
          */
-        inline void setElevation(const ulong index, const T elevation) noexcept
+        inline void setElevation(const size_t index, const T elevation) noexcept
         {
             m_encoders[index]->setElevation(elevation);
         }
@@ -1537,7 +1537,7 @@ namespace hoa
          @param     radius   The radius.
          @see       setAzimuth()
          */
-        inline void setRadius(const ulong index, const T radius) noexcept
+        inline void setRadius(const size_t index, const T radius) noexcept
         {
             m_encoders[index]->setRadius(radius);
         }
@@ -1548,7 +1548,7 @@ namespace hoa
          @param     index	The index of the source.
          @param     muted	The mute state.
          */
-        inline void setMute(const ulong index, const bool muted) noexcept
+        inline void setMute(const size_t index, const bool muted) noexcept
         {
             m_encoders[index]->setMute(muted);
         }
@@ -1559,7 +1559,7 @@ namespace hoa
          @param     index	The index of the source.
          @return The azimuth of the source if the source exists, otherwise the function generates an error.
          */
-        inline T getAzimuth(const ulong index) const noexcept
+        inline T getAzimuth(const size_t index) const noexcept
         {
             return m_encoders[index]->getAzimuth();
         }
@@ -1570,7 +1570,7 @@ namespace hoa
          @param     index	The index of the source.
          @return The elevation of the source if the source exists, otherwise the function generates an error.
          */
-        inline T getElevation(const ulong index) const noexcept
+        inline T getElevation(const size_t index) const noexcept
         {
             return m_encoders[index]->getElevation();
         }
@@ -1581,7 +1581,7 @@ namespace hoa
          @param     index	The index of the source.
          @return The radius of the source if the source exists, otherwise the function generates an error.
          */
-        inline T getRadius(const ulong index) const noexcept
+        inline T getRadius(const size_t index) const noexcept
         {
             return m_encoders[index]->getRadius();
         }
@@ -1593,7 +1593,7 @@ namespace hoa
          @return    The mute state of the source if the source exists, otherwise the function generates an error.
          @see       setMute()
          */
-        inline bool getMute(const ulong index) const noexcept
+        inline bool getMute(const size_t index) const noexcept
         {
             return m_encoders[index]->getMute();
         }
@@ -1607,7 +1607,7 @@ namespace hoa
         inline void process(const T* input, T* outputs) noexcept override
         {
             m_encoders[0]->process(input, outputs);
-            for(ulong i = 1; i < m_number_of_sources; i++)
+            for(size_t i = 1; i < m_number_of_sources; i++)
             {
                 m_encoders[i]->processAdd(++input, outputs);
             }

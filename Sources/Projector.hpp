@@ -29,13 +29,13 @@ namespace hoa
          @param     order				The order
          @param     numberOfPlanewaves     The number of planewaves.
          */
-        Projector(const ulong order, const ulong numberOfPlanewaves) noexcept :
+        Projector(const size_t order, const size_t numberOfPlanewaves) noexcept :
         Encoder<Hoa2d, T>::Basic(order),
         Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
         {
             m_matrix = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics());
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
-            for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
                 Encoder<Hoa2d, T>::Basic::setAzimuth(Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(i));
                 Encoder<Hoa2d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());

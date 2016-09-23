@@ -24,7 +24,7 @@ namespace hoa
          @param     order            The order.
          @param     numberOfPoints   The number of points.
          */
-        Scope(ulong order, ulong numberOfPoints);
+        Scope(size_t order, size_t numberOfPoints);
 
         //! The Scope destructor.
         /**	The Scope destructor free the memory.
@@ -72,7 +72,7 @@ namespace hoa
          @param     order            The order.
          @param     numberOfPoints   The number of points.
          */
-        Scope(ulong order, ulong numberOfPoints) noexcept :
+        Scope(size_t order, size_t numberOfPoints) noexcept :
         Encoder<Hoa2d, T>::Basic(order),
         Processor<Hoa2d, T>::Planewaves(numberOfPoints)
         {
@@ -112,13 +112,13 @@ namespace hoa
         void computeRendering() noexcept
         {
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
-            for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
                 Encoder<Hoa2d, T>::Basic::setAzimuth(Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(i));
                 Encoder<Hoa2d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
                 m_matrix[i * Encoder<Hoa2d, T>::getNumberOfHarmonics()] = factor * 0.5;
             }
-            for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
                 m_vector[i] = 0.;
             }
@@ -129,7 +129,7 @@ namespace hoa
         /**	Retrieve the number of points used to discretize the ambisonic circle.
          @return     This method returns the number of points used to discretize the circle.
          */
-        inline ulong getNumberOfPoints() const noexcept
+        inline size_t getNumberOfPoints() const noexcept
         {
             return Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves();
         }
@@ -139,7 +139,7 @@ namespace hoa
          @param     index   The point index of the point.
          @return    This method returns the value of a point of the ambisonic circle.
          */
-        inline T getPointValue(const ulong index) const noexcept
+        inline T getPointValue(const size_t index) const noexcept
         {
             return m_vector[index];
         }
@@ -149,7 +149,7 @@ namespace hoa
          @param     pointIndex   The point index of the point.
          @return    This method returns the radius of a point of the ambisonic circle.
          */
-        inline T getPointRadius(const ulong index) const noexcept
+        inline T getPointRadius(const size_t index) const noexcept
         {
             return fabs(m_vector[index]);
         }
@@ -159,7 +159,7 @@ namespace hoa
          @param     pointIndex   The point index of the point.
          @return    This method returns the azimuth of a point of the ambisonic circle.
          */
-        inline T getPointAzimuth(const ulong index) const noexcept
+        inline T getPointAzimuth(const size_t index) const noexcept
         {
             return Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(index);
         }
@@ -172,7 +172,7 @@ namespace hoa
 
          @see       getOrdinate
          */
-        inline double getPointAbscissa(const ulong index) const noexcept
+        inline double getPointAbscissa(const size_t index) const noexcept
         {
             return fabs(m_vector[index]) * Processor<Hoa2d, T>::Planewaves::getPlanewaveAbscissa(index);
         }
@@ -185,7 +185,7 @@ namespace hoa
 
          @see       getAbscissa
          */
-        inline double getPointOrdinate(const ulong index) const noexcept
+        inline double getPointOrdinate(const size_t index) const noexcept
         {
             return fabs(m_vector[index]) * Processor<Hoa2d, T>::Planewaves::getPlanewaveOrdinate(index);
         }
@@ -222,8 +222,8 @@ namespace hoa
     template <typename T> class Scope<Hoa3d, T> : public Encoder<Hoa3d, T>::Basic, protected Processor<Hoa3d, T>::Planewaves
     {
     private:
-        const ulong m_number_of_rows;
-        const ulong m_number_of_columns;
+        const size_t m_number_of_rows;
+        const size_t m_number_of_columns;
         T*  m_matrix;
         T*  m_vector;
         T   m_maximum;
@@ -236,16 +236,16 @@ namespace hoa
          @param     numberOfRow      The number of rows.
          @param     numberOfColumn	The number of columns.
          */
-        Scope(ulong order, ulong numberOfRow, ulong numberOfColumn) noexcept :
+        Scope(size_t order, size_t numberOfRow, size_t numberOfColumn) noexcept :
         Encoder<Hoa3d, T>::Basic(order),
         Processor<Hoa3d, T>::Planewaves(numberOfRow * numberOfColumn),
         m_number_of_rows(numberOfRow),
         m_number_of_columns(numberOfColumn)
         {
-            for(ulong i = 0; i < m_number_of_rows; i++)
+            for(size_t i = 0; i < m_number_of_rows; i++)
             {
                 const T elevation = (T)i  * HOA_PI / (T)(m_number_of_rows - 1) - HOA_PI2;
-                for(ulong j = 0; j < m_number_of_columns; j++)
+                for(size_t j = 0; j < m_number_of_columns; j++)
                 {
                     Processor<Hoa3d, T>::Planewaves::setPlanewaveAzimuth(i * m_number_of_columns + j, (T)j * HOA_2PI / (T)m_number_of_columns);
                     Processor<Hoa3d, T>::Planewaves::setPlanewaveElevation(i * m_number_of_columns + j, elevation);
@@ -271,7 +271,7 @@ namespace hoa
 
          @return     This method returns the number of rows used to discretize the sphere.
          */
-        inline ulong getNumberOfRows() const noexcept
+        inline size_t getNumberOfRows() const noexcept
         {
             return m_number_of_rows;
         }
@@ -281,7 +281,7 @@ namespace hoa
 
          @return     This method returns the number of column used to discretize the sphere.
          */
-        inline ulong getNumberOfColumns() const noexcept
+        inline size_t getNumberOfColumns() const noexcept
         {
             return m_number_of_columns;
         }
@@ -296,7 +296,7 @@ namespace hoa
          @see       getAzimuth
          @see       getElevation
          */
-        inline T getPointValue(const ulong rowIndex, const ulong columnIndex) const noexcept
+        inline T getPointValue(const size_t rowIndex, const size_t columnIndex) const noexcept
         {
             return m_vector[rowIndex * m_number_of_columns + columnIndex];
         }
@@ -311,7 +311,7 @@ namespace hoa
          @see       getElevation
          @see       getValue
          */
-        inline T getPointRadius(const ulong rowIndex, const ulong columnIndex) const noexcept
+        inline T getPointRadius(const size_t rowIndex, const size_t columnIndex) const noexcept
         {
             return fabs(m_vector[rowIndex * m_number_of_columns + columnIndex]);
         }
@@ -326,7 +326,7 @@ namespace hoa
          @see       getRadius
          @see       getElevation
          */
-        inline T getPointAzimuth(const ulong columnIndex) const noexcept
+        inline T getPointAzimuth(const size_t columnIndex) const noexcept
         {
             return (T)columnIndex * HOA_2PI / (T)m_number_of_columns;
         }
@@ -341,7 +341,7 @@ namespace hoa
          @see       getRadius
          @see       getAzimuth
          */
-        inline T getPointElevation(const ulong rowIndex) const noexcept
+        inline T getPointElevation(const size_t rowIndex) const noexcept
         {
             return (T)rowIndex * HOA_PI / (T)(m_number_of_rows - 1) - HOA_PI2;
         }
@@ -384,14 +384,14 @@ namespace hoa
         void computeRendering() noexcept
         {
             const T factor = 12.5 / (T)(Encoder<Hoa3d, T>::getNumberOfHarmonics());
-            for(ulong i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
                 Encoder<Hoa3d, T>::Basic::setAzimuth(Processor<Hoa3d, T>::Planewaves::getPlanewaveAzimuth(i));
                 Encoder<Hoa3d, T>::Basic::setElevation(Processor<Hoa3d, T>::Planewaves::getPlanewaveElevation(i));
                 Encoder<Hoa3d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa3d, T>::getNumberOfHarmonics());
-                for(ulong j = 0; j < Encoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
+                for(size_t j = 0; j < Encoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
                 {
-                    const ulong l = Encoder<Hoa3d, T>::getHarmonicDegree(j);
+                    const size_t l = Encoder<Hoa3d, T>::getHarmonicDegree(j);
                     if(Encoder<Hoa3d, T>::getHarmonicOrder(j) == 0)
                     {
                         m_matrix[i * Encoder<Hoa3d, T>::getNumberOfHarmonics() + j] *= (2. * l + 1.);
@@ -402,7 +402,7 @@ namespace hoa
                     }
                 }
             }
-            for(ulong i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
             {
                 m_vector[i] = 0.;
             }

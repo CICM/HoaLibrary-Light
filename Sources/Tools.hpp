@@ -18,8 +18,8 @@ namespace hoa
         T       m_value_old;
         T       m_value_new;
         T       m_value_step;
-        ulong   m_counter;
-        ulong   m_ramp;
+        size_t   m_counter;
+        size_t   m_ramp;
 
     public:
         //! The line constructor.
@@ -42,7 +42,7 @@ namespace hoa
         /** Get the ramp value.
         @return The ramp value.
          */
-        inline ulong getRamp() const noexcept
+        inline size_t getRamp() const noexcept
         {
             return m_ramp;
         }
@@ -60,9 +60,9 @@ namespace hoa
         /** Set the ramp value.
         @param ramp    The new value of the ramp.
          */
-        inline void setRamp(const ulong ramp) noexcept
+        inline void setRamp(const size_t ramp) noexcept
         {
-            m_ramp = std::max(ramp, (ulong)1);
+            m_ramp = std::max(ramp, (size_t)1);
         }
 
         //! Set, linearly, the current value.
@@ -110,19 +110,19 @@ namespace hoa
     {
 
     private:
-        const ulong m_number_of_sources;
+        const size_t m_number_of_sources;
         T*      m_values_old;
         T*      m_values_new;
         T*      m_values_step;
-        ulong   m_counter;
-        ulong   m_ramp;
+        size_t   m_counter;
+        size_t   m_ramp;
 
     public:
         //! The line constructor.
         /**	The line constructor allocates and initialize the base classes.
         @param numberOfSources  The number of sources.
          */
-        PolarLines(ulong numberOfSources) noexcept :
+        PolarLines(size_t numberOfSources) noexcept :
         m_number_of_sources(numberOfSources)
         {
             m_values_old    = Signal<T>::alloc(m_number_of_sources * 2);
@@ -144,7 +144,7 @@ namespace hoa
         /** Get the number of sources.
         @return The number of sources.
          */
-        inline ulong getNumberOfSources() const noexcept
+        inline size_t getNumberOfSources() const noexcept
         {
             return m_number_of_sources;
         }
@@ -153,7 +153,7 @@ namespace hoa
         /** Get the ramp value.
         @return The ramp value.
          */
-        inline ulong getRamp() const noexcept
+        inline size_t getRamp() const noexcept
         {
             return m_ramp;
         }
@@ -163,7 +163,7 @@ namespace hoa
         @param index    The index of the source.
         @return The radius of a source.
          */
-        inline T getRadius(const ulong index) const noexcept
+        inline T getRadius(const size_t index) const noexcept
         {
             return m_values_new[index];
         }
@@ -173,7 +173,7 @@ namespace hoa
         @param index    The index of the source.
         @return The azimuth of a source.
          */
-        inline T getAzimuth(const ulong index) const noexcept
+        inline T getAzimuth(const size_t index) const noexcept
         {
             return m_values_new[m_number_of_sources +index];
         }
@@ -182,9 +182,9 @@ namespace hoa
         /** Set the ramp value.
         @param ramp    The new value of the ramp.
          */
-        inline void setRamp(const ulong ramp) noexcept
+        inline void setRamp(const size_t ramp) noexcept
         {
-            m_ramp = std::max(ramp, (ulong)1);
+            m_ramp = std::max(ramp, (size_t)1);
         }
 
         //! Set, linearly, the radius of a source.
@@ -192,7 +192,7 @@ namespace hoa
         @param index    The index of the source.
         @param radi    The new value of the radius.
          */
-        inline void setRadius(const ulong index, const T radi) noexcept
+        inline void setRadius(const size_t index, const T radi) noexcept
         {
             m_values_new[index]  = radi;
             m_values_step[index] = (m_values_new[index] - m_values_old[index]) / (T)m_ramp;
@@ -204,7 +204,7 @@ namespace hoa
         @param index    The index of the source.
         @param azim     The new value of the azimuth.
          */
-        inline void setAzimuth(const ulong index, const T azim) noexcept
+        inline void setAzimuth(const size_t index, const T azim) noexcept
         {
             m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azim);
             m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
@@ -238,7 +238,7 @@ namespace hoa
         @param index    The index of the source.
         @param radi     The new value of the radius.
          */
-        inline void setRadiusDirect(const ulong index, const T radi) noexcept
+        inline void setRadiusDirect(const size_t index, const T radi) noexcept
         {
             m_values_old[index] = m_values_new[index] = radi;
             m_values_step[index] = 0.;
@@ -250,7 +250,7 @@ namespace hoa
         @param index    The index of the source.
         @param azim     The new value of the azimuth.
          */
-        inline void setAzimuthDirect(ulong index, const T azim) noexcept
+        inline void setAzimuthDirect(size_t index, const T azim) noexcept
         {
             m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azim;
             m_values_step[index + m_number_of_sources] = 0.;
@@ -277,19 +277,19 @@ namespace hoa
     {
 
     private:
-        const ulong m_number_of_sources;
+        const size_t m_number_of_sources;
         T*      m_values_old;
         T*      m_values_new;
         T*      m_values_step;
-        ulong   m_counter;
-        ulong   m_ramp;
+        size_t   m_counter;
+        size_t   m_ramp;
 
     public:
         //! The line constructor.
         /**	The line constructor allocates and initialize the base classes.
         @param numberOfSources  The number of sources.
          */
-        PolarLines(ulong numberOfSources) noexcept :
+        PolarLines(size_t numberOfSources) noexcept :
         m_number_of_sources(numberOfSources)
         {
             m_values_old    = Signal<T>::alloc(m_number_of_sources * 3);
@@ -311,7 +311,7 @@ namespace hoa
         /** Get the number of sources.
         @return The number of sources.
          */
-        inline ulong getNumberOfSources() const noexcept
+        inline size_t getNumberOfSources() const noexcept
         {
             return m_number_of_sources;
         }
@@ -320,7 +320,7 @@ namespace hoa
         /** Get the ramp value.
         @return The ramp value.
          */
-        inline ulong getRamp() const noexcept
+        inline size_t getRamp() const noexcept
         {
             return m_ramp;
         }
@@ -330,7 +330,7 @@ namespace hoa
         @param index    The index of the source.
         @return The radius of a source.
          */
-        inline T getRadius(const ulong index) const noexcept
+        inline T getRadius(const size_t index) const noexcept
         {
             return m_values_new[index];
         }
@@ -340,7 +340,7 @@ namespace hoa
         @param index    The index of the source.
         @return The azimuth of a source.
          */
-        inline T getAzimuth(const ulong index) const noexcept
+        inline T getAzimuth(const size_t index) const noexcept
         {
             return m_values_new[m_number_of_sources + index];
         }
@@ -350,7 +350,7 @@ namespace hoa
         @param index    The index of the source.
         @return The elevation of a source.
          */
-        inline T getElevation(const ulong index) const noexcept
+        inline T getElevation(const size_t index) const noexcept
         {
             return m_values_new[m_number_of_sources * 2 + index];
         }
@@ -359,9 +359,9 @@ namespace hoa
         /** Set the ramp value.
         @param ramp    The new value of the ramp.
          */
-        inline void setRamp(const ulong ramp) noexcept
+        inline void setRamp(const size_t ramp) noexcept
         {
-            m_ramp = std::max(ramp, (ulong)1);
+            m_ramp = std::max(ramp, (size_t)1);
         }
 
         //! Set, linearly, the radius of a source.
@@ -369,7 +369,7 @@ namespace hoa
         @param index    The index of the source.
         @param radi     The new value of the radius.
          */
-        inline void setRadius(const ulong index, const T radi) noexcept
+        inline void setRadius(const size_t index, const T radi) noexcept
         {
             m_values_new[index]  = radi;
             m_values_step[index] = (m_values_new[index] - m_values_old[index]) / (T)m_ramp;
@@ -381,7 +381,7 @@ namespace hoa
         @param index    The index of the source.
         @param azim     The new value of the azimuth.
          */
-        inline void setAzimuth(const ulong index, const T azim) noexcept
+        inline void setAzimuth(const size_t index, const T azim) noexcept
         {
             m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azim);
             m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
@@ -415,7 +415,7 @@ namespace hoa
         @param index    The index of the source.
         @param elev     The new value of the elevation.
          */
-        inline void setElevation(const ulong index, const T elev) noexcept
+        inline void setElevation(const size_t index, const T elev) noexcept
         {
             m_values_new[index + m_number_of_sources * 2] = Math<T>::wrap_pi(elev);
             m_values_old[index + m_number_of_sources * 2] = Math<T>::wrap_pi(m_values_old[index + m_number_of_sources * 2]);
@@ -449,7 +449,7 @@ namespace hoa
         @param index    The index of the source.
         @param radi    The new value of the radius.
          */
-        inline void setRadiusDirect(const ulong index, const T radi) noexcept
+        inline void setRadiusDirect(const size_t index, const T radi) noexcept
         {
             m_values_old[index] = m_values_new[index] = radi;
             m_values_step[index] = 0.;
@@ -461,7 +461,7 @@ namespace hoa
         @param index    The index of the source.
         @param azim     The new value of the azimuth.
          */
-        inline void setAzimuthDirect(const ulong index, const T azim) noexcept
+        inline void setAzimuthDirect(const size_t index, const T azim) noexcept
         {
             m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azim;
             m_values_step[index + m_number_of_sources] = 0.;
@@ -473,7 +473,7 @@ namespace hoa
         @param index    The index of the source.
         @param elev     The new value of the elevation.
          */
-        inline void setElevationDirect(const ulong index, const T elev) noexcept
+        inline void setElevationDirect(const size_t index, const T elev) noexcept
         {
             m_values_old[index + m_number_of_sources * 2] = m_values_new[index + m_number_of_sources * 2] = elev;
             m_values_step[index + m_number_of_sources * 2] = 0.;

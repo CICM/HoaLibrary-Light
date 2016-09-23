@@ -23,7 +23,7 @@ namespace hoa
          @param     order                   The order
          @param     numberOfPlanewaves      The number of channels.
          */
-        Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept;
+        Decoder(const size_t order, const size_t numberOfPlanewaves) noexcept;
 
         //! The destructor.
         /** The destructor free the memory.
@@ -41,7 +41,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers and/or calling the process method.
          @param vectorsize The vector size for binaural decoding.
          */
-        virtual void computeRendering(const ulong vectorsize = 64);
+        virtual void computeRendering(const size_t vectorsize = 64);
 
         //! The regular decoder class decodes a sound field in the harmonics domain through the planewaves domain for a perfect circle or sphere of loudspeakers.
         /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced on the circle or the sphere.
@@ -55,7 +55,7 @@ namespace hoa
              @param     order				The order
              @param     numberOfPlanewaves     The number of channels.
              */
-            Regular(const ulong order, const ulong numberOfPlanewaves) noexcept;
+            Regular(const size_t order, const size_t numberOfPlanewaves) noexcept;
 
             //! The destructor.
             /** The destructor free the memory.
@@ -73,7 +73,7 @@ namespace hoa
             /**	You should use this method after changing the position of the loudspeakers.
              @param vectorsize The vector size for binaural decoding.
              */
-            virtual void computeRendering(const ulong vectorsize = 64) override;
+            virtual void computeRendering(const size_t vectorsize = 64) override;
         };
 
         //! The irregular decoder class decodes a sound field in the harmonics domain through the planewaves domain for a irregular circle or sphere (2d only).
@@ -87,7 +87,7 @@ namespace hoa
              @param     order				The order
              @param     numberOfPlanewaves     The number of channels.
              */
-            Irregular(const ulong order, const ulong numberOfPlanewaves) noexcept;
+            Irregular(const size_t order, const size_t numberOfPlanewaves) noexcept;
 
             //! The destructor.
             /** The destructor free the memory.
@@ -105,7 +105,7 @@ namespace hoa
             /**	You should use this method after changing the position of the loudspeakers.
              @param vectorsize The vector size for binaural decoding.
              */
-            virtual void computeRendering(const ulong vectorsize = 64) override;
+            virtual void computeRendering(const size_t vectorsize = 64) override;
 
         };
 
@@ -119,7 +119,7 @@ namespace hoa
             /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a order of decomposition and a number of channels. The order and the number of channels must be at least 1.
              @param     order				The order
              */
-            Binaural(const ulong order);
+            Binaural(const size_t order);
 
 
             //! The binaural decoder destructor.
@@ -131,7 +131,7 @@ namespace hoa
             /**	You should use this method after changing the position of the loudspeakers.
              @param vectorsize The vector size for binaural decoding.
              */
-            virtual void computeRendering(const ulong vectorsize = 64)  override;
+            virtual void computeRendering(const size_t vectorsize = 64)  override;
 
             //! This method performs the binaural decoding and the convolution.
             virtual  void processBlock() noexcept;
@@ -163,7 +163,7 @@ namespace hoa
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
-        Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept :
+        Decoder(const size_t order, const size_t numberOfPlanewaves) noexcept :
         Processor<Hoa2d, T>::Harmonics(order),
         Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
         {
@@ -189,7 +189,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        virtual void computeRendering(const ulong vectorsize = 64) = 0;
+        virtual void computeRendering(const size_t vectorsize = 64) = 0;
 
         //! This method retrives the mode of the decoder.
         /**	This method retrives the mode of the decoder.
@@ -224,7 +224,7 @@ namespace hoa
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
-        Regular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
+        Regular(const size_t order, const size_t numberOfPlanewaves) noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
         {
             m_matrix = Signal<T>::alloc(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
             computeRendering();
@@ -258,11 +258,11 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeRendering(const ulong vectorsize = 64) override
+        void computeRendering(const size_t vectorsize = 64) override
         {
             typename Encoder<Hoa2d, T>::Basic encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
             const T factor = 1. / (T)(Decoder<Hoa2d, T>::getDecompositionOrder() + 1.);
-            for(ulong i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
                 encoder.setAzimuth(Decoder<Hoa2d, T>::getPlanewaveAzimuth(i));
                 encoder.process(&factor, m_matrix + i * Decoder<Hoa2d, T>::getNumberOfHarmonics());
@@ -282,7 +282,7 @@ namespace hoa
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
-        Irregular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
+        Irregular(const size_t order, const size_t numberOfPlanewaves) noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
         {
             m_matrix = Signal<T>::alloc(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
             computeRendering();
@@ -316,7 +316,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeRendering(const ulong vectorsize = 64)  override
+        void computeRendering(const size_t vectorsize = 64)  override
         {
             typename Encoder<Hoa2d, T>::Basic encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
             Signal<T>::clear(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
@@ -324,9 +324,9 @@ namespace hoa
 
             if(Decoder<Hoa2d, T>::getNumberOfPlanewaves() == 1)
             {
-                const ulong nls = ulong(Decoder<Hoa2d, T>::getDecompositionOrder() + 1.);
+                const size_t nls = size_t(Decoder<Hoa2d, T>::getDecompositionOrder() + 1.);
                 const T factor = 1. / (T)(nls);
-                for(ulong i = 0; i <nls; i++)
+                for(size_t i = 0; i <nls; i++)
                 {
                     encoder.setAzimuth(T(i) * HOA_2PI / T(nls));
                     encoder.process(&factor, vector_harmonics);
@@ -338,7 +338,7 @@ namespace hoa
             {
                 T smallest_distance = (T)HOA_2PI;
                 std::vector<Planewave<Hoa2d, T> > channels;
-                for(ulong i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
+                for(size_t i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
                     channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Decoder<Hoa2d, T>::getPlanewaveAzimuth(i)), 0.));
                 }
@@ -355,7 +355,7 @@ namespace hoa
                     }
                     //post("channel %i : %f", (int)channels[0].getIndex(), (float)(channels[0].getAzimuth() / HOA_2PI * 360.f));
                 }
-                for(ulong i = 1; i < channels.size(); i++)
+                for(size_t i = 1; i < channels.size(); i++)
                 {
                     const T current_angle   = channels[i].getAzimuth(0., 0., 0.);
                     const T previous_angle  = channels[i-1].getAzimuth(0., 0., 0.);
@@ -372,11 +372,11 @@ namespace hoa
                 {
                     smallest_distance = HOA_2PI / T(Decoder<Hoa2d, T>::getNumberOfHarmonics() + 1.);
                 }
-                const ulong nvirtual = (ulong)ceil(HOA_2PI / smallest_distance);
+                const size_t nvirtual = (size_t)ceil(HOA_2PI / smallest_distance);
                 const T factor = 1. / (T)(nvirtual);
 
                 //post("number of virtual %i", nvirtual);
-                for(ulong i = 0; i < nvirtual; i++)
+                for(size_t i = 0; i < nvirtual; i++)
                 {
                     const T angle = T(i) / T(nvirtual) * HOA_2PI;
                     //post("virtual %i :  %f", (int)i , (float)(angle / HOA_2PI * 360.f));
@@ -428,7 +428,7 @@ namespace hoa
                     }
                     else
                     {
-                        for(ulong j = 1; j < channels.size(); j++)
+                        for(size_t j = 1; j < channels.size(); j++)
                         {
                             if(angle < channels[j].getAzimuth(0., 0., 0.) && angle >= channels[j-1].getAzimuth(0., 0., 0.))
                             {
@@ -468,8 +468,8 @@ namespace hoa
     template <typename T> class Decoder<Hoa2d, T>::Binaural : public Decoder<Hoa2d, T>
     {
     private:
-        ulong       m_vector_size;
-        ulong       m_crop_size;
+        size_t       m_vector_size;
+        size_t       m_crop_size;
         T*          m_input;
         T*          m_result;
         T*          m_left;
@@ -488,7 +488,7 @@ namespace hoa
         /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a order of decomposition and a number of channels. The order and the number of channels must be at least 1.
          @param     order				The order
          */
-        Binaural(const ulong order) noexcept : Decoder<Hoa2d, T>(order, 2),
+        Binaural(const size_t order) noexcept : Decoder<Hoa2d, T>(order, 2),
         m_vector_size(0ul),
         m_input(nullptr),
         m_result(nullptr),
@@ -518,7 +518,7 @@ namespace hoa
         /**	This method sets the crop size of the responses.
          @param size The crop size.
          */
-        inline void setCropSize(const ulong size) noexcept
+        inline void setCropSize(const size_t size) noexcept
         {
             if(!size || size > Hrir<Hoa2d, T>::getNumberOfRows())
                 m_crop_size = Hrir<Hoa2d, T>::getNumberOfRows();
@@ -530,7 +530,7 @@ namespace hoa
         /**	This method gets the crop size of the responses.
          @return The crop size.
          */
-        inline ulong getCropSize() const noexcept
+        inline size_t getCropSize() const noexcept
         {
             if(m_crop_size == Hrir<Hoa2d, T>::getNumberOfRows())
             {
@@ -546,7 +546,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeRendering(const ulong vectorsize = 64)  override
+        void computeRendering(const size_t vectorsize = 64)  override
         {
             clear();
             m_vector_size  = vectorsize;
@@ -559,11 +559,11 @@ namespace hoa
     private:
         inline void processChannel(const T* harmonics, const T* response, T* vector, T* output) noexcept
         {
-            const ulong l = Hrir<Hoa2d, T>::getNumberOfColumns();   // Harmonics size aka 11
-            const ulong m = m_crop_size;      // Impulses size
-            const ulong n = m_vector_size;    // Vector size
+            const size_t l = Hrir<Hoa2d, T>::getNumberOfColumns();   // Harmonics size aka 11
+            const size_t m = m_crop_size;      // Impulses size
+            const size_t n = m_vector_size;    // Vector size
             Signal<T>::mul(m, n, l, response, harmonics, m_result);
-            for(ulong i = 0; i < n; i ++)
+            for(size_t i = 0; i < n; i ++)
             {
                 Signal<T>::add(m, m_result + i, n, vector + i, 1ul);
             }
@@ -577,7 +577,7 @@ namespace hoa
         inline void processBlock(const T** inputs, T** outputs) noexcept
         {
             T* input = m_input;
-            for(ulong i = 0; i < Hrir<Hoa2d, T>::getNumberOfColumns() && i < Decoder<Hoa2d, T>::getNumberOfHarmonics(); i++)
+            for(size_t i = 0; i < Hrir<Hoa2d, T>::getNumberOfColumns() && i < Decoder<Hoa2d, T>::getNumberOfHarmonics(); i++)
             {
                 Signal<T>::copy(m_vector_size, inputs[i], input);
                 input += m_vector_size;
@@ -605,7 +605,7 @@ namespace hoa
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
-        Decoder(const ulong order, const ulong numberOfPlanewaves) noexcept :
+        Decoder(const size_t order, const size_t numberOfPlanewaves) noexcept :
         Processor<Hoa3d, T>::Harmonics(order),
         Processor<Hoa3d, T>::Planewaves(numberOfPlanewaves)
         {
@@ -637,7 +637,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        virtual void computeRendering(const ulong vectorsize = 64) = 0;
+        virtual void computeRendering(const size_t vectorsize = 64) = 0;
 
         //! The ambisonic regular decoder.
         /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
@@ -661,7 +661,7 @@ namespace hoa
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
-        Regular(const ulong order, const ulong numberOfPlanewaves) noexcept : Decoder<Hoa3d, T>(order, numberOfPlanewaves)
+        Regular(const size_t order, const size_t numberOfPlanewaves) noexcept : Decoder<Hoa3d, T>(order, numberOfPlanewaves)
         {
             m_matrix = Signal<T>::alloc(Decoder<Hoa3d, T>::getNumberOfPlanewaves() * Decoder<Hoa3d, T>::getNumberOfHarmonics());
             computeRendering();
@@ -695,18 +695,18 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeRendering(const ulong vectorsize = 64)  override
+        void computeRendering(const size_t vectorsize = 64)  override
         {
             typename Encoder<Hoa3d, T>::Basic encoder(Decoder<Hoa3d, T>::getDecompositionOrder());
             const T factor = 1. / (T)(Decoder<Hoa3d, T>::getNumberOfPlanewaves());
-            for(ulong i = 0; i < Decoder<Hoa3d, T>::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < Decoder<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
                 encoder.setAzimuth(Decoder<Hoa3d, T>::getPlanewaveAzimuth(i));
                 encoder.setElevation(Decoder<Hoa3d, T>::getPlanewaveElevation(i));
                 encoder.process(&factor, m_matrix + i * Decoder<Hoa3d, T>::getNumberOfHarmonics());
-                for(ulong j = 0; j < Decoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
+                for(size_t j = 0; j < Decoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
                 {
-                    const ulong l = Decoder<Hoa3d, T>::getHarmonicDegree(j);
+                    const size_t l = Decoder<Hoa3d, T>::getHarmonicDegree(j);
                     if(encoder.getHarmonicOrder(j) == 0)
                     {
                         m_matrix[i * encoder.getNumberOfHarmonics() + j] *= (2. * l + 1.);
@@ -722,8 +722,8 @@ namespace hoa
 
     template <typename T> class Decoder<Hoa3d, T>::Binaural : public Decoder<Hoa3d, T>
     {
-        ulong       m_vector_size;
-        ulong       m_crop_size;
+        size_t       m_vector_size;
+        size_t       m_crop_size;
         T*          m_input;
         T*          m_result;
         T*          m_left;
@@ -743,7 +743,7 @@ namespace hoa
         /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a order of decomposition and a number of channels. The order and the number of channels must be at least 1.
          @param     order				The order
          */
-        Binaural(const ulong order) : Decoder<Hoa3d, T>(order, 2),
+        Binaural(const size_t order) : Decoder<Hoa3d, T>(order, 2),
         m_vector_size(0ul),
         m_input(nullptr),
         m_result(nullptr),
@@ -773,7 +773,7 @@ namespace hoa
         /**	This method sets the crop size of the responses.
          @param size The crop size.
          */
-        inline void setCropSize(const ulong size) noexcept
+        inline void setCropSize(const size_t size) noexcept
         {
             if(!size || size > Hrir<Hoa3d, T>::getNumberOfRows())
             {
@@ -789,7 +789,7 @@ namespace hoa
         /**	This method gets the crop size of the responses.
          @return The crop size.
          */
-        inline ulong getCropSize() const noexcept
+        inline size_t getCropSize() const noexcept
         {
             if(m_crop_size == Hrir<Hoa3d, T>::getNumberOfRows())
             {
@@ -805,7 +805,7 @@ namespace hoa
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
          */
-        void computeRendering(const ulong vectorsize = 64) override
+        void computeRendering(const size_t vectorsize = 64) override
         {
             clear();
             m_vector_size  = vectorsize;
@@ -818,11 +818,11 @@ namespace hoa
     private:
         inline void processChannel(const T* harmonics, const T* response, T* vector, T* output) noexcept
         {
-            const ulong l = Hrir<Hoa3d, T>::getNumberOfColumns();   // Harmonics size aka 11
-            const ulong m = m_crop_size;      // Impulses size
-            const ulong n = m_vector_size;    // Vector size
+            const size_t l = Hrir<Hoa3d, T>::getNumberOfColumns();   // Harmonics size aka 11
+            const size_t m = m_crop_size;      // Impulses size
+            const size_t n = m_vector_size;    // Vector size
             Signal<T>::mul(m, n, l, response, harmonics, m_result);
-            for(ulong i = 0; i < n; i ++)
+            for(size_t i = 0; i < n; i ++)
             {
                 Signal<T>::add(m, m_result + i, n, vector + i, 1ul);
             }
@@ -837,7 +837,7 @@ namespace hoa
         inline void processBlock(const T** inputs, T** outputs) noexcept
         {
             T* input = m_input;
-            for(ulong i = 0; i < Hrir<Hoa3d, T>::getNumberOfColumns() && i < Decoder<Hoa3d, T>::getNumberOfHarmonics(); i++)
+            for(size_t i = 0; i < Hrir<Hoa3d, T>::getNumberOfColumns() && i < Decoder<Hoa3d, T>::getNumberOfHarmonics(); i++)
             {
                 Signal<T>::copy(m_vector_size, inputs[i], input);
                 input += m_vector_size;
