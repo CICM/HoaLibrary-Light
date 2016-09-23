@@ -22,25 +22,25 @@ namespace hoa
         /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const size_t order) noexcept;
+        Wider(const size_t order) hoa_noexcept;
 
         //! The wider destructor.
         /**	The wider destructor free the memory.
          */
-		virtual ~Wider() noexcept = 0;
+		virtual ~Wider() hoa_noexcept = 0;
 
         //! This method set the widening value.
         /**	The the widening value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is omni directional and at \f$1\f$ the sound field is intact.
          @param     radius   The radius.
          @see       setAzimuth()
          */
-		virtual void setWidening(const T radius) noexcept = 0;
+		virtual void setWidening(const T radius) hoa_noexcept = 0;
 
         //! Get the the widening value.
         /** The method returns the the widening value.
          @return     The widening value.
          */
-		virtual T getWidening() const noexcept = 0;
+		virtual T getWidening() const hoa_noexcept = 0;
 
         //! This method perform the widening.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics. \n
@@ -56,7 +56,7 @@ namespace hoa
          @param     inputs	The input array.
          @param     outputs The output array.
          */
-		virtual void process(const T* inputs, T* outputs) noexcept = 0;
+		virtual void process(const T* inputs, T* outputs) hoa_noexcept = 0;
 
     };
 
@@ -74,7 +74,7 @@ namespace hoa
         /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const size_t order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
+        Wider(const size_t order) hoa_noexcept : Processor<Hoa2d, T>::Harmonics(order)
         {
             setWidening(1.);
         }
@@ -82,7 +82,7 @@ namespace hoa
         //! The wider destructor.
         /**	The wider destructor free the memory.
          */
-        ~Wider() noexcept
+        ~Wider() hoa_noexcept
         {
             ;
         }
@@ -92,7 +92,7 @@ namespace hoa
          @param     widening   The widening value.
          @see       setAzimuth()
          */
-        inline void setWidening(const T widening) noexcept
+        inline void setWidening(const T widening) hoa_noexcept
         {
             m_widening  = Math<T>::clip(widening, (T)0., (T)1.);
             m_factor    = (1. - m_widening) * HOA_PI;
@@ -103,7 +103,7 @@ namespace hoa
         /** The method returns the the widening value.
          @return     The widening value.
          */
-        inline T getWidening() const noexcept
+        inline T getWidening() const hoa_noexcept
         {
             return m_widening;
         }
@@ -113,7 +113,7 @@ namespace hoa
          @param     inputs	The input array.
          @param     outputs The output array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept override
+        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
             T gain   = (m_gain * Processor<Hoa2d, T>::Harmonics::getDecompositionOrder());
             T factor = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain - m_gain) + 1.);
@@ -144,7 +144,7 @@ namespace hoa
         /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Wider(const size_t order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
+        Wider(const size_t order) hoa_noexcept : Processor<Hoa3d, T>::Harmonics(order)
         {
             setWidening(1.);
         }
@@ -152,7 +152,7 @@ namespace hoa
         //! The wider destructor.
         /**	The wider destructor free the memory.
          */
-        ~Wider() noexcept
+        ~Wider() hoa_noexcept
         {
             ;
         }
@@ -162,7 +162,7 @@ namespace hoa
          @param     radius   The radius.
          @see       setAzimuth()
          */
-        inline void setWidening(const T radius) noexcept
+        inline void setWidening(const T radius) hoa_noexcept
         {
             m_widening  = Math<T>::clip(radius, (T)0., (T)1.);
             m_factor    = (1. - m_widening) * HOA_PI;
@@ -173,7 +173,7 @@ namespace hoa
         /** The method returns the the widening value.
          @return     The widening value.
          */
-        inline T getWidening() const noexcept
+        inline T getWidening() const hoa_noexcept
         {
             return m_widening;
         }
@@ -183,7 +183,7 @@ namespace hoa
          @param     inputs	The input array.
          @param     outputs The output array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept override
+        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
             T gain   = (m_gain * Processor<Hoa3d, T>::Harmonics::getDecompositionOrder());
             T factor = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain - m_gain) + 1.);

@@ -25,7 +25,7 @@ namespace hoa
         //! The line constructor.
         /**	The line constructor allocates and initialize the base classes.
          */
-        Line() noexcept
+        Line() hoa_noexcept
         {
             ;
         }
@@ -42,7 +42,7 @@ namespace hoa
         /** Get the ramp value.
         @return The ramp value.
          */
-        inline size_t getRamp() const noexcept
+        inline size_t getRamp() const hoa_noexcept
         {
             return m_ramp;
         }
@@ -51,7 +51,7 @@ namespace hoa
         /** Get the current value.
         @return The current value.
          */
-        inline T getValue() const noexcept
+        inline T getValue() const hoa_noexcept
         {
             return m_value_new;
         }
@@ -60,7 +60,7 @@ namespace hoa
         /** Set the ramp value.
         @param ramp    The new value of the ramp.
          */
-        inline void setRamp(const size_t ramp) noexcept
+        inline void setRamp(const size_t ramp) hoa_noexcept
         {
             m_ramp = std::max(ramp, (size_t)1);
         }
@@ -69,7 +69,7 @@ namespace hoa
         /** Set, linearly, the current value.
         @param value    The new value of the current value.
          */
-        inline void setValue(const T value) noexcept
+        inline void setValue(const T value) hoa_noexcept
         {
             m_value_new = value;
             m_value_step = (m_value_new - m_value_old) / (T)m_ramp;
@@ -80,7 +80,7 @@ namespace hoa
         /** Set, directly, the current value.
         @param value    The new value of the current value.
          */
-        inline void setValueDirect(const T value) noexcept
+        inline void setValueDirect(const T value) hoa_noexcept
         {
             m_value_old = m_value_new = value;
             m_value_step = 0.;
@@ -91,7 +91,7 @@ namespace hoa
         /** This method performs the count of the virtual points of the line.
         @return The old value of the counter.
          */
-        inline T process() noexcept
+        inline T process() hoa_noexcept
         {
             m_value_old += m_value_step;
             if(m_counter++ >= m_ramp)
@@ -122,7 +122,7 @@ namespace hoa
         /**	The line constructor allocates and initialize the base classes.
         @param numberOfSources  The number of sources.
          */
-        PolarLines(size_t numberOfSources) noexcept :
+        PolarLines(size_t numberOfSources) hoa_noexcept :
         m_number_of_sources(numberOfSources)
         {
             m_values_old    = Signal<T>::alloc(m_number_of_sources * 2);
@@ -144,7 +144,7 @@ namespace hoa
         /** Get the number of sources.
         @return The number of sources.
          */
-        inline size_t getNumberOfSources() const noexcept
+        inline size_t getNumberOfSources() const hoa_noexcept
         {
             return m_number_of_sources;
         }
@@ -153,7 +153,7 @@ namespace hoa
         /** Get the ramp value.
         @return The ramp value.
          */
-        inline size_t getRamp() const noexcept
+        inline size_t getRamp() const hoa_noexcept
         {
             return m_ramp;
         }
@@ -163,7 +163,7 @@ namespace hoa
         @param index    The index of the source.
         @return The radius of a source.
          */
-        inline T getRadius(const size_t index) const noexcept
+        inline T getRadius(const size_t index) const hoa_noexcept
         {
             return m_values_new[index];
         }
@@ -173,7 +173,7 @@ namespace hoa
         @param index    The index of the source.
         @return The azimuth of a source.
          */
-        inline T getAzimuth(const size_t index) const noexcept
+        inline T getAzimuth(const size_t index) const hoa_noexcept
         {
             return m_values_new[m_number_of_sources +index];
         }
@@ -182,7 +182,7 @@ namespace hoa
         /** Set the ramp value.
         @param ramp    The new value of the ramp.
          */
-        inline void setRamp(const size_t ramp) noexcept
+        inline void setRamp(const size_t ramp) hoa_noexcept
         {
             m_ramp = std::max(ramp, (size_t)1);
         }
@@ -192,7 +192,7 @@ namespace hoa
         @param index    The index of the source.
         @param radi    The new value of the radius.
          */
-        inline void setRadius(const size_t index, const T radi) noexcept
+        inline void setRadius(const size_t index, const T radi) hoa_noexcept
         {
             m_values_new[index]  = radi;
             m_values_step[index] = (m_values_new[index] - m_values_old[index]) / (T)m_ramp;
@@ -204,7 +204,7 @@ namespace hoa
         @param index    The index of the source.
         @param azim     The new value of the azimuth.
          */
-        inline void setAzimuth(const size_t index, const T azim) noexcept
+        inline void setAzimuth(const size_t index, const T azim) hoa_noexcept
         {
             m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azim);
             m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
@@ -238,7 +238,7 @@ namespace hoa
         @param index    The index of the source.
         @param radi     The new value of the radius.
          */
-        inline void setRadiusDirect(const size_t index, const T radi) noexcept
+        inline void setRadiusDirect(const size_t index, const T radi) hoa_noexcept
         {
             m_values_old[index] = m_values_new[index] = radi;
             m_values_step[index] = 0.;
@@ -250,7 +250,7 @@ namespace hoa
         @param index    The index of the source.
         @param azim     The new value of the azimuth.
          */
-        inline void setAzimuthDirect(size_t index, const T azim) noexcept
+        inline void setAzimuthDirect(size_t index, const T azim) hoa_noexcept
         {
             m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azim;
             m_values_step[index + m_number_of_sources] = 0.;
@@ -260,7 +260,7 @@ namespace hoa
         //! This method performs the count of the virtual points of the line.
         /** This method performs the count of the virtual points of the line.
          */
-        void process(T* vector) noexcept
+        void process(T* vector) hoa_noexcept
         {
             Signal<T>::add(m_number_of_sources * 2, m_values_step, m_values_old);
             if(m_counter++ >= m_ramp)
@@ -289,7 +289,7 @@ namespace hoa
         /**	The line constructor allocates and initialize the base classes.
         @param numberOfSources  The number of sources.
          */
-        PolarLines(size_t numberOfSources) noexcept :
+        PolarLines(size_t numberOfSources) hoa_noexcept :
         m_number_of_sources(numberOfSources)
         {
             m_values_old    = Signal<T>::alloc(m_number_of_sources * 3);
@@ -311,7 +311,7 @@ namespace hoa
         /** Get the number of sources.
         @return The number of sources.
          */
-        inline size_t getNumberOfSources() const noexcept
+        inline size_t getNumberOfSources() const hoa_noexcept
         {
             return m_number_of_sources;
         }
@@ -320,7 +320,7 @@ namespace hoa
         /** Get the ramp value.
         @return The ramp value.
          */
-        inline size_t getRamp() const noexcept
+        inline size_t getRamp() const hoa_noexcept
         {
             return m_ramp;
         }
@@ -330,7 +330,7 @@ namespace hoa
         @param index    The index of the source.
         @return The radius of a source.
          */
-        inline T getRadius(const size_t index) const noexcept
+        inline T getRadius(const size_t index) const hoa_noexcept
         {
             return m_values_new[index];
         }
@@ -340,7 +340,7 @@ namespace hoa
         @param index    The index of the source.
         @return The azimuth of a source.
          */
-        inline T getAzimuth(const size_t index) const noexcept
+        inline T getAzimuth(const size_t index) const hoa_noexcept
         {
             return m_values_new[m_number_of_sources + index];
         }
@@ -350,7 +350,7 @@ namespace hoa
         @param index    The index of the source.
         @return The elevation of a source.
          */
-        inline T getElevation(const size_t index) const noexcept
+        inline T getElevation(const size_t index) const hoa_noexcept
         {
             return m_values_new[m_number_of_sources * 2 + index];
         }
@@ -359,7 +359,7 @@ namespace hoa
         /** Set the ramp value.
         @param ramp    The new value of the ramp.
          */
-        inline void setRamp(const size_t ramp) noexcept
+        inline void setRamp(const size_t ramp) hoa_noexcept
         {
             m_ramp = std::max(ramp, (size_t)1);
         }
@@ -369,7 +369,7 @@ namespace hoa
         @param index    The index of the source.
         @param radi     The new value of the radius.
          */
-        inline void setRadius(const size_t index, const T radi) noexcept
+        inline void setRadius(const size_t index, const T radi) hoa_noexcept
         {
             m_values_new[index]  = radi;
             m_values_step[index] = (m_values_new[index] - m_values_old[index]) / (T)m_ramp;
@@ -381,7 +381,7 @@ namespace hoa
         @param index    The index of the source.
         @param azim     The new value of the azimuth.
          */
-        inline void setAzimuth(const size_t index, const T azim) noexcept
+        inline void setAzimuth(const size_t index, const T azim) hoa_noexcept
         {
             m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azim);
             m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
@@ -415,7 +415,7 @@ namespace hoa
         @param index    The index of the source.
         @param elev     The new value of the elevation.
          */
-        inline void setElevation(const size_t index, const T elev) noexcept
+        inline void setElevation(const size_t index, const T elev) hoa_noexcept
         {
             m_values_new[index + m_number_of_sources * 2] = Math<T>::wrap_pi(elev);
             m_values_old[index + m_number_of_sources * 2] = Math<T>::wrap_pi(m_values_old[index + m_number_of_sources * 2]);
@@ -449,7 +449,7 @@ namespace hoa
         @param index    The index of the source.
         @param radi    The new value of the radius.
          */
-        inline void setRadiusDirect(const size_t index, const T radi) noexcept
+        inline void setRadiusDirect(const size_t index, const T radi) hoa_noexcept
         {
             m_values_old[index] = m_values_new[index] = radi;
             m_values_step[index] = 0.;
@@ -461,7 +461,7 @@ namespace hoa
         @param index    The index of the source.
         @param azim     The new value of the azimuth.
          */
-        inline void setAzimuthDirect(const size_t index, const T azim) noexcept
+        inline void setAzimuthDirect(const size_t index, const T azim) hoa_noexcept
         {
             m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azim;
             m_values_step[index + m_number_of_sources] = 0.;
@@ -473,7 +473,7 @@ namespace hoa
         @param index    The index of the source.
         @param elev     The new value of the elevation.
          */
-        inline void setElevationDirect(const size_t index, const T elev) noexcept
+        inline void setElevationDirect(const size_t index, const T elev) hoa_noexcept
         {
             m_values_old[index + m_number_of_sources * 2] = m_values_new[index + m_number_of_sources * 2] = elev;
             m_values_step[index + m_number_of_sources * 2] = 0.;
@@ -483,7 +483,7 @@ namespace hoa
         //! This method performs the count of the virtual points of the line.
         /** This method performs the count of the virtual points of the line.
          */
-        void process(T* vector) noexcept
+        void process(T* vector) hoa_noexcept
         {
             Signal<T>::add(m_number_of_sources * 3, m_values_step, m_values_old);
             if(m_counter++ >= m_ramp)

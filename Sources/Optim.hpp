@@ -22,19 +22,19 @@ namespace hoa
         /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Optim(const size_t order) noexcept;
+        Optim(const size_t order) hoa_noexcept;
 
         //! The optim destructor.
         /**	The optim destructor free the memory.
          */
-		virtual ~Optim() noexcept = 0;
+		virtual ~Optim() hoa_noexcept = 0;
 
         //! This method performs the optimization.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        virtual void process(T const* inputs, T* outputs) noexcept;
+        virtual void process(T const* inputs, T* outputs) hoa_noexcept;
 
         //! The basic optim.
         /** The basic optim has no effect, it should be used (or not) with a perfect ambisonic channels arrangement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle of the sphere.
@@ -47,12 +47,12 @@ namespace hoa
             /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
-            Basic(const size_t order) noexcept;
+            Basic(const size_t order) hoa_noexcept;
 
             //! The optim destructor.
             /**	The optim destructor free the memory.
              */
-            virtual ~Basic() noexcept = 0;
+            virtual ~Basic() hoa_noexcept = 0;
 
             //! This method performs the basic optimization.
             /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -61,7 +61,7 @@ namespace hoa
              @param     inputs   The inputs array.
              @param     outputs  The outputs array.
              */
-            virtual void process(T const* inputs, T* outputs) noexcept;
+            virtual void process(T const* inputs, T* outputs) hoa_noexcept;
         };
 
         //! The maxre optim.
@@ -74,12 +74,12 @@ namespace hoa
             /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
-            MaxRe(const size_t order) noexcept;
+            MaxRe(const size_t order) hoa_noexcept;
 
             //! The optim destructor.
             /**	The optim destructor free the memory.
              */
-			virtual ~MaxRe() noexcept = 0;
+			virtual ~MaxRe() hoa_noexcept = 0;
 
             //! This method performs the max-re optimization.
             /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -88,7 +88,7 @@ namespace hoa
              @param     inputs   The inputs array.
              @param     outputs  The outputs array.
              */
-            virtual void process(T const* inputs, T* outputs) noexcept;
+            virtual void process(T const* inputs, T* outputs) hoa_noexcept;
         };
 
         //! The inphase optim.
@@ -101,12 +101,12 @@ namespace hoa
             /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
              @param     order	The order.
              */
-            InPhase(const size_t order) noexcept;
+            InPhase(const size_t order) hoa_noexcept;
 
             //! The optim destructor.
             /**	The optim destructor free the memory.
              */
-			virtual ~InPhase() noexcept = 0;
+			virtual ~InPhase() hoa_noexcept = 0;
 
             //! This method performs the in-phase optimization.
             /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -115,7 +115,7 @@ namespace hoa
              @param     inputs   The inputs array.
              @param     outputs  The outputs array.
              */
-            virtual void process(T const* inputs, T* outputs) noexcept;
+            virtual void process(T const* inputs, T* outputs) hoa_noexcept;
         };
     };
 
@@ -129,7 +129,7 @@ namespace hoa
         /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Optim(const size_t order) noexcept : Processor<Hoa2d, T>::Harmonics(order)
+        Optim(const size_t order) hoa_noexcept : Processor<Hoa2d, T>::Harmonics(order)
         {
             ;
         }
@@ -137,7 +137,7 @@ namespace hoa
         //! The optim destructor.
         /**	The optim destructor free the memory.
          */
-        virtual ~Optim() noexcept
+        virtual ~Optim() hoa_noexcept
         {
             ;
         }
@@ -147,7 +147,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        virtual void process(T const* inputs, T* outputs) noexcept = 0;
+        virtual void process(T const* inputs, T* outputs) hoa_noexcept = 0;
 
         //! The basic optim.
         /** The basic optim has no effect, it should be used (or not) with a perfect ambisonic channels arrangement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle of the sphere.
@@ -173,7 +173,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Basic(const size_t order) noexcept :  Optim<Hoa2d, T>(order)
+        Basic(const size_t order) hoa_noexcept :  Optim<Hoa2d, T>(order)
         {
             ;
         }
@@ -181,7 +181,7 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~Basic() noexcept
+        ~Basic() hoa_noexcept
         {
             ;
         }
@@ -191,7 +191,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept override
+        inline void process(T const* inputs, T* outputs) hoa_noexcept hoa_override
         {
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
@@ -223,7 +223,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        MaxRe(const size_t order) noexcept :  Optim<Hoa2d, T>(order),
+        MaxRe(const size_t order) hoa_noexcept :  Optim<Hoa2d, T>(order),
         m_weights(generate(order))
         {
             ;
@@ -232,7 +232,7 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~MaxRe() noexcept
+        ~MaxRe() hoa_noexcept
         {
              Signal<T>::free(const_cast<T*>(m_weights));
         }
@@ -242,7 +242,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept override
+        inline void process(T const* inputs, T* outputs) hoa_noexcept hoa_override
         {
             const T* weights = m_weights;
             *outputs    = *inputs;
@@ -277,7 +277,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        InPhase(const size_t order) noexcept :  Optim<Hoa2d, T>(order),
+        InPhase(const size_t order) hoa_noexcept :  Optim<Hoa2d, T>(order),
         m_weights(generate(order))
         {
             ;
@@ -286,7 +286,7 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~InPhase() noexcept
+        ~InPhase() hoa_noexcept
         {
              Signal<T>::free(const_cast<T*>(m_weights));
         }
@@ -296,7 +296,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept override
+        inline void process(T const* inputs, T* outputs) hoa_noexcept hoa_override
         {
             const T* weights = m_weights;
             *outputs    = *inputs;
@@ -319,7 +319,7 @@ namespace hoa
         /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Optim(const size_t order) noexcept : Processor<Hoa3d, T>::Harmonics(order)
+        Optim(const size_t order) hoa_noexcept : Processor<Hoa3d, T>::Harmonics(order)
         {
             ;
         }
@@ -327,7 +327,7 @@ namespace hoa
         //! The optim destructor.
         /**	The optim destructor free the memory.
          */
-        virtual ~Optim() noexcept
+        virtual ~Optim() hoa_noexcept
         {
             ;
         }
@@ -337,7 +337,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        virtual void process(T const* inputs, T* outputs) noexcept = 0;
+        virtual void process(T const* inputs, T* outputs) hoa_noexcept = 0;
 
         //! The basic optim.
         /** The basic optim has no effect, it should be used (or not) with a perfect ambisonic channels arrangement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle of the sphere.
@@ -363,7 +363,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Basic(const size_t order) noexcept : Optim<Hoa3d, T>(order)
+        Basic(const size_t order) hoa_noexcept : Optim<Hoa3d, T>(order)
         {
             ;
         }
@@ -371,7 +371,7 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~Basic() noexcept
+        ~Basic() hoa_noexcept
         {
             ;
         }
@@ -381,7 +381,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept override
+        inline void process(T const* inputs, T* outputs) hoa_noexcept hoa_override
         {
             (*outputs++)  = (*inputs++);
             (*outputs++)  = (*inputs++);
@@ -416,7 +416,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        MaxRe(const size_t order) noexcept : Optim<Hoa3d, T>(order),
+        MaxRe(const size_t order) hoa_noexcept : Optim<Hoa3d, T>(order),
         m_weights(generate(order))
         {
             ;
@@ -425,7 +425,7 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~MaxRe() noexcept
+        ~MaxRe() hoa_noexcept
         {
              Signal<T>::free(const_cast<T*>(m_weights));
         }
@@ -435,7 +435,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept override
+        inline void process(T const* inputs, T* outputs) hoa_noexcept hoa_override
         {
             const T* weights = m_weights;
             *outputs    = *inputs;
@@ -474,7 +474,7 @@ namespace hoa
         /**	The optimization constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        InPhase(const size_t order) noexcept : Optim<Hoa3d, T>(order),
+        InPhase(const size_t order) hoa_noexcept : Optim<Hoa3d, T>(order),
         m_weights(generate(order))
         {
             ;
@@ -483,7 +483,7 @@ namespace hoa
         //! The optimization destructor.
         /**	The optimization destructor free the memory.
          */
-        ~InPhase() noexcept
+        ~InPhase() hoa_noexcept
         {
             Signal<T>::free(const_cast<T*>(m_weights));
         }
@@ -493,7 +493,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(T const* inputs, T* outputs) noexcept override
+        inline void process(T const* inputs, T* outputs) hoa_noexcept hoa_override
         {
             const T* weights = m_weights;
             *outputs    = *inputs;

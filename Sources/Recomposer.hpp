@@ -36,7 +36,7 @@ namespace hoa
          @param     order                   The order
          @param     numberOfPlanewaves      The number of channels.
          */
-        Recomposer(size_t order, size_t numberOfPlanewaves) noexcept :
+        Recomposer(size_t order, size_t numberOfPlanewaves) hoa_noexcept :
         Encoder<Hoa2d, T>::Basic(order),
         Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
         {
@@ -68,7 +68,7 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
-        void process(const T* inputs, T* outputs) noexcept override
+        void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
             Signal<T>::mul(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), Encoder<Hoa2d, T>::getNumberOfHarmonics(), inputs, m_matrix, outputs);
         }
@@ -84,7 +84,7 @@ namespace hoa
          @param     order                   The order
          @param     numberOfPlanewaves      The number of channels.
          */
-        Recomposer(size_t order, size_t numberOfPlanewaves) noexcept :
+        Recomposer(size_t order, size_t numberOfPlanewaves) hoa_noexcept :
         Processor<Hoa2d, T>::Harmonics(order),
         Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
         {
@@ -110,7 +110,7 @@ namespace hoa
         /**	The fishEye value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is intact and at \f$1\f$ the sound field is centered in front of the audience.
          @param     fisheye   The fisheye value.
          */
-        inline void setFisheye(const T fisheye) noexcept
+        inline void setFisheye(const T fisheye) hoa_noexcept
         {
             T factor = 1. - Math<T>::clip(fisheye, (T)0., (T)1.);
             for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
@@ -133,7 +133,7 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
-        inline void process(const T* inputs, T* outputs) noexcept override
+        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
             m_encoders[0]->process(inputs, outputs);
             for(size_t i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
@@ -153,7 +153,7 @@ namespace hoa
          @param     order                   The order
          @param     numberOfPlanewaves      The number of channels.
          */
-        Recomposer(size_t order, size_t numberOfPlanewaves) noexcept :
+        Recomposer(size_t order, size_t numberOfPlanewaves) hoa_noexcept :
         Processor<Hoa2d, T>::Harmonics(order),
         Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
         {
@@ -180,7 +180,7 @@ namespace hoa
         /**	The azimuth value is between \f$0\f$ and \f$2π\f$.
         @param     azim   The azimuth.
          */
-        inline void setAzimuth(const size_t index, const T azim) noexcept
+        inline void setAzimuth(const size_t index, const T azim) hoa_noexcept
         {
             m_encoders[index]->setAzimuth(azim);
         }
@@ -189,7 +189,7 @@ namespace hoa
         /**	The the widening value is between \f$0\f$ and \f$1\f$.
          @param     radius   The radius.
          */
-        inline void setWidening(const size_t index, const T radius) noexcept
+        inline void setWidening(const size_t index, const T radius) hoa_noexcept
         {
             m_encoders[index]->setRadius(Math<T>::clip(radius, (T)0, (T)1));
         }
@@ -199,7 +199,7 @@ namespace hoa
          @param     index   The index of the planewave.
          @return The azimuth value.
          */
-        inline T getAzimuth(const size_t index) const noexcept
+        inline T getAzimuth(const size_t index) const hoa_noexcept
         {
             return m_encoders[index]->getAzimuth();
         }
@@ -209,7 +209,7 @@ namespace hoa
          @param   index   The index of planewave.
          @return the widening value.
          */
-        inline T getWidening(const size_t index) const noexcept
+        inline T getWidening(const size_t index) const hoa_noexcept
         {
             return m_encoders[index]->getRadius();
         }
@@ -219,7 +219,7 @@ namespace hoa
          @param     inputs  The input array that contains the samples of the harmonics.
          @param     outputs The output array that contains samples destinated to the channels.
          */
-        inline void process(const T* inputs, T* outputs) noexcept override
+        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
             m_encoders[0]->process(inputs, outputs);
             for(size_t i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)

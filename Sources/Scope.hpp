@@ -29,31 +29,31 @@ namespace hoa
         //! The Scope destructor.
         /**	The Scope destructor free the memory.
          */
-        virtual ~Scope() noexcept = 0;
+        virtual ~Scope() hoa_noexcept = 0;
 
         //! Set the offset.
         /**	Set the rotation of the spherical harmonics in radian.
          */
-        virtual inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) noexcept = 0;
+        virtual inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) hoa_noexcept = 0;
 
         //! Compute the values of the summation of every harmonic to the representation of the sound field
         /** Compute the values of the summation of every harmonic to the representation of the sound field
          */
-        virtual void computeRendering() noexcept = 0;
+        virtual void computeRendering() hoa_noexcept = 0;
 
         //! This method performs the spherical/circular harmonics projection with single precision.
         /**	You should use this method to compute the projection of the spherical/circular harmonics over an ambisonic sphere. The inputs array contains the spherical/circular harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          @param     outputs  The dummy outputs array (null).
          */
-        virtual inline void process(const T* inputs, T* outputs) noexcept override = 0;
+        virtual inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override = 0;
 
         //! This method performs the spherical harmonics projection with single precision.
         /**	You should use this method to compute the projection of the spherical harmonics over an ambisonic sphere. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
 
          @param     inputs   The inputs array.
          */
-        virtual inline void process(const T* inputs) noexcept = 0;
+        virtual inline void process(const T* inputs) hoa_noexcept = 0;
 
     };
 
@@ -72,7 +72,7 @@ namespace hoa
          @param     order            The order.
          @param     numberOfPoints   The number of points.
          */
-        Scope(size_t order, size_t numberOfPoints) noexcept :
+        Scope(size_t order, size_t numberOfPoints) hoa_noexcept :
         Encoder<Hoa2d, T>::Basic(order),
         Processor<Hoa2d, T>::Planewaves(numberOfPoints)
         {
@@ -84,7 +84,7 @@ namespace hoa
         //! The scope destructor.
         /**	The scope destructor free the memory.
          */
-        ~Scope() noexcept
+        ~Scope() hoa_noexcept
         {
             Signal<T>::free(m_matrix);
             Signal<T>::free(m_vector);
@@ -93,7 +93,7 @@ namespace hoa
         //! Set the offset.
         /**	Set the rotation of the spherical harmonics in radian.
          */
-        inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) noexcept
+        inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) hoa_noexcept
         {
             Processor<Hoa2d, T>::Planewaves::setPlanewavesRotation(x_axe, y_axe, z_axe);
         }
@@ -101,7 +101,7 @@ namespace hoa
         //! Get the value of the z rotation.
         /** Get the value of the z rotation. The value is in radian, between 0 and 2π.
          */
-        inline T getViewRotationZ() const noexcept
+        inline T getViewRotationZ() const hoa_noexcept
         {
             return Processor<Hoa2d, T>::Planewaves::getPlanewavesRotationZ();
         }
@@ -109,7 +109,7 @@ namespace hoa
         //! Compute the values of the summation of every harmonic to the representation of the sound field
         /** Compute the values of the summation of every harmonic to the representation of the sound field
          */
-        void computeRendering() noexcept
+        void computeRendering() hoa_noexcept
         {
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
@@ -129,7 +129,7 @@ namespace hoa
         /**	Retrieve the number of points used to discretize the ambisonic circle.
          @return     This method returns the number of points used to discretize the circle.
          */
-        inline size_t getNumberOfPoints() const noexcept
+        inline size_t getNumberOfPoints() const hoa_noexcept
         {
             return Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves();
         }
@@ -139,7 +139,7 @@ namespace hoa
          @param     index   The point index of the point.
          @return    This method returns the value of a point of the ambisonic circle.
          */
-        inline T getPointValue(const size_t index) const noexcept
+        inline T getPointValue(const size_t index) const hoa_noexcept
         {
             return m_vector[index];
         }
@@ -149,7 +149,7 @@ namespace hoa
          @param     pointIndex   The point index of the point.
          @return    This method returns the radius of a point of the ambisonic circle.
          */
-        inline T getPointRadius(const size_t index) const noexcept
+        inline T getPointRadius(const size_t index) const hoa_noexcept
         {
             return fabs(m_vector[index]);
         }
@@ -159,7 +159,7 @@ namespace hoa
          @param     pointIndex   The point index of the point.
          @return    This method returns the azimuth of a point of the ambisonic circle.
          */
-        inline T getPointAzimuth(const size_t index) const noexcept
+        inline T getPointAzimuth(const size_t index) const hoa_noexcept
         {
             return Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(index);
         }
@@ -172,7 +172,7 @@ namespace hoa
 
          @see       getOrdinate
          */
-        inline double getPointAbscissa(const size_t index) const noexcept
+        inline double getPointAbscissa(const size_t index) const hoa_noexcept
         {
             return fabs(m_vector[index]) * Processor<Hoa2d, T>::Planewaves::getPlanewaveAbscissa(index);
         }
@@ -185,7 +185,7 @@ namespace hoa
 
          @see       getAbscissa
          */
-        inline double getPointOrdinate(const size_t index) const noexcept
+        inline double getPointOrdinate(const size_t index) const hoa_noexcept
         {
             return fabs(m_vector[index]) * Processor<Hoa2d, T>::Planewaves::getPlanewaveOrdinate(index);
         }
@@ -194,7 +194,7 @@ namespace hoa
         /**	You should use this method to compute the projection of the circular harmonics over an ambisonics circle. The inputs array contains the circular harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept override
+        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
             Signal<T>::mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
             m_maximum = fabs(Signal<T>::max(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
@@ -208,7 +208,7 @@ namespace hoa
         /**	You should use this method to compute the projection of the circular harmonics over an ambisonics circle. The inputs array contains the circular harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          */
-        inline void process(const T* inputs) noexcept
+        inline void process(const T* inputs) hoa_noexcept
         {
             Signal<T>::mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
             m_maximum = fabs(Signal<T>::max(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
@@ -236,7 +236,7 @@ namespace hoa
          @param     numberOfRow      The number of rows.
          @param     numberOfColumn	The number of columns.
          */
-        Scope(size_t order, size_t numberOfRow, size_t numberOfColumn) noexcept :
+        Scope(size_t order, size_t numberOfRow, size_t numberOfColumn) hoa_noexcept :
         Encoder<Hoa3d, T>::Basic(order),
         Processor<Hoa3d, T>::Planewaves(numberOfRow * numberOfColumn),
         m_number_of_rows(numberOfRow),
@@ -260,7 +260,7 @@ namespace hoa
         //! The scope destructor.
         /**	The scope destructor free the memory.
          */
-        ~Scope() noexcept
+        ~Scope() hoa_noexcept
         {
             Signal<T>::free(m_matrix);
             Signal<T>::free(m_vector);
@@ -271,7 +271,7 @@ namespace hoa
 
          @return     This method returns the number of rows used to discretize the sphere.
          */
-        inline size_t getNumberOfRows() const noexcept
+        inline size_t getNumberOfRows() const hoa_noexcept
         {
             return m_number_of_rows;
         }
@@ -281,7 +281,7 @@ namespace hoa
 
          @return     This method returns the number of column used to discretize the sphere.
          */
-        inline size_t getNumberOfColumns() const noexcept
+        inline size_t getNumberOfColumns() const hoa_noexcept
         {
             return m_number_of_columns;
         }
@@ -296,7 +296,7 @@ namespace hoa
          @see       getAzimuth
          @see       getElevation
          */
-        inline T getPointValue(const size_t rowIndex, const size_t columnIndex) const noexcept
+        inline T getPointValue(const size_t rowIndex, const size_t columnIndex) const hoa_noexcept
         {
             return m_vector[rowIndex * m_number_of_columns + columnIndex];
         }
@@ -311,7 +311,7 @@ namespace hoa
          @see       getElevation
          @see       getValue
          */
-        inline T getPointRadius(const size_t rowIndex, const size_t columnIndex) const noexcept
+        inline T getPointRadius(const size_t rowIndex, const size_t columnIndex) const hoa_noexcept
         {
             return fabs(m_vector[rowIndex * m_number_of_columns + columnIndex]);
         }
@@ -326,7 +326,7 @@ namespace hoa
          @see       getRadius
          @see       getElevation
          */
-        inline T getPointAzimuth(const size_t columnIndex) const noexcept
+        inline T getPointAzimuth(const size_t columnIndex) const hoa_noexcept
         {
             return (T)columnIndex * HOA_2PI / (T)m_number_of_columns;
         }
@@ -341,7 +341,7 @@ namespace hoa
          @see       getRadius
          @see       getAzimuth
          */
-        inline T getPointElevation(const size_t rowIndex) const noexcept
+        inline T getPointElevation(const size_t rowIndex) const hoa_noexcept
         {
             return (T)rowIndex * HOA_PI / (T)(m_number_of_rows - 1) - HOA_PI2;
         }
@@ -349,7 +349,7 @@ namespace hoa
         //! Set the offset.
         /**	Set the rotation of the spherical harmonics in radian.
          */
-        inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) noexcept
+        inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) hoa_noexcept
         {
             Processor<Hoa3d, T>::Planewaves::setPlanewavesRotation(x_axe, y_axe, z_axe);
         }
@@ -357,7 +357,7 @@ namespace hoa
         //! Get the value of the x rotation.
         /** Get the value of the x rotation. The value is in radian, between 0 and 2π.
          */
-        inline T getViewRotationX() const noexcept
+        inline T getViewRotationX() const hoa_noexcept
         {
             return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationX();
         }
@@ -365,7 +365,7 @@ namespace hoa
         //! Get the value of the y rotation.
         /** Get the value of the y rotation. The value is in radian, between 0 and 2π.
          */
-        inline T getViewRotationY() const noexcept
+        inline T getViewRotationY() const hoa_noexcept
         {
             return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationY();
         }
@@ -373,7 +373,7 @@ namespace hoa
         //! Get the value of the z rotation.
         /** Get the value of the z rotation. The value is in radian, between 0 and 2π.
          */
-        inline T getViewRotationZ() const noexcept
+        inline T getViewRotationZ() const hoa_noexcept
         {
             return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationZ();
         }
@@ -381,7 +381,7 @@ namespace hoa
         //! Compute the values of the summation of every harmonic to the representation of the sound field
         /** Compute the values of the summation of every harmonic to the representation of the sound field
          */
-        void computeRendering() noexcept
+        void computeRendering() hoa_noexcept
         {
             const T factor = 12.5 / (T)(Encoder<Hoa3d, T>::getNumberOfHarmonics());
             for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
@@ -414,7 +414,7 @@ namespace hoa
 
          @param     inputs   The inputs array.
          */
-        inline void process(const T* inputs, T* outputs) noexcept override
+        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
             Signal<T>::mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
             m_maximum = fabs(Signal<T>::max(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
@@ -429,7 +429,7 @@ namespace hoa
 
          @param     inputs   The inputs array.
          */
-        inline void process(const T* inputs) noexcept
+        inline void process(const T* inputs) hoa_noexcept
         {
             Signal<T>::mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
             m_maximum = fabs(Signal<T>::max(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));

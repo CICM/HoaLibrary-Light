@@ -26,7 +26,7 @@ namespace hoa
          @param     input  The input array.
          @param     outputs The outputs array.
          */
-        virtual void process(const T* input, T* outputs) noexcept = 0;
+        virtual void process(const T* input, T* outputs) hoa_noexcept = 0;
 
         class Harmonics;
 
@@ -49,7 +49,7 @@ namespace hoa
         /** The harmonics constructor allocates and initializes the general member values depending on a order of decomposition \f$N\f$.
          @param order    The order of decomposition \f$N\f$, must be at least 1.
          */
-        Harmonics(const size_t order) noexcept :
+        Harmonics(const size_t order) hoa_noexcept :
         m_order_of_decomposition(order),
         m_number_of_harmonics(Harmonic<D, T>::getNumberOfHarmonics(order))
         {
@@ -62,7 +62,7 @@ namespace hoa
         //! The harmonics destructor.
         /** The harmonics destructor.
          */
-        virtual ~Harmonics() noexcept
+        virtual ~Harmonics() hoa_noexcept
         {
             m_harmonics.clear();
         }
@@ -71,7 +71,7 @@ namespace hoa
         /** Retrieve the order of decomposition \f$N\f$.
          @return The order.
          */
-        inline size_t getDecompositionOrder() const noexcept
+        inline size_t getDecompositionOrder() const hoa_noexcept
         {
             return m_order_of_decomposition;
         }
@@ -80,7 +80,7 @@ namespace hoa
         /** Retrieve the number of harmonics.
          @return The number of harmonics.
          */
-        inline size_t getNumberOfHarmonics() const noexcept
+        inline size_t getNumberOfHarmonics() const hoa_noexcept
         {
             return m_number_of_harmonics;
         }
@@ -92,7 +92,7 @@ namespace hoa
          @see       getHarmonicOrder()
          @see       getHarmonicName()
          */
-        inline size_t getHarmonicDegree(const size_t index) const noexcept
+        inline size_t getHarmonicDegree(const size_t index) const hoa_noexcept
         {
             return m_harmonics[index].getDegree();
         }
@@ -104,7 +104,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicName()
          */
-        inline long getHarmonicOrder(const size_t index) const noexcept
+        inline long getHarmonicOrder(const size_t index) const hoa_noexcept
         {
             return m_harmonics[index].getOrder();
         }
@@ -117,7 +117,7 @@ namespace hoa
          @see       getHarmonicOrder()
          @see       getHarmonicName()
          */
-        inline size_t getHarmonicIndex(const size_t degree, long order) const noexcept
+        inline size_t getHarmonicIndex(const size_t degree, long order) const hoa_noexcept
         {
             return Harmonic<D, T>::getIndex(degree, order);
         }
@@ -129,7 +129,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        inline std::string getHarmonicName(const size_t index) const noexcept
+        inline std::string getHarmonicName(const size_t index) const hoa_noexcept
         {
             return m_harmonics[index].getName();
         }
@@ -139,7 +139,7 @@ namespace hoa
          @param     index	The index of an harmonic.
          @return     The normalization of an harmonics.
          */
-        inline T getHarmonicNormalization(const size_t index) const noexcept
+        inline T getHarmonicNormalization(const size_t index) const hoa_noexcept
         {
             return m_harmonics[index].getNormalization();
         }
@@ -149,7 +149,7 @@ namespace hoa
          @param     index	The index of an harmonic.
          @return    The semi-normalization of the harmonics.
          */
-        inline T getHarmonicSemiNormalization(const size_t index) const noexcept
+        inline T getHarmonicSemiNormalization(const size_t index) const hoa_noexcept
         {
             return m_harmonics[index].getSemiNormalization();
         }
@@ -159,7 +159,7 @@ namespace hoa
          @param     input  The input array.
          @param     outputs The outputs array.
          */
-        virtual void process(const T* input, T* outputs) noexcept
+        virtual void process(const T* input, T* outputs) hoa_noexcept
         {
             ;
         }
@@ -184,7 +184,7 @@ namespace hoa
         /** The planewaves constructor allocates and initializes the general member values depending on a number of planewaves. The number of planewaves must be a least 1.
          @param     numberOfPlanewaves	The number of planewaves.
          */
-        Planewaves(const size_t numberOfPlanewaves) noexcept :
+        Planewaves(const size_t numberOfPlanewaves) hoa_noexcept :
         m_number_of_planewaves(numberOfPlanewaves),
         m_rotation_z(0.),
         m_rotation_y(0.),
@@ -291,7 +291,7 @@ namespace hoa
         //! The planewaves destructor.
         /** The planewaves destructor.
          */
-        virtual ~Planewaves() noexcept
+        virtual ~Planewaves() hoa_noexcept
         {
             m_planewaves.clear();
         }
@@ -300,7 +300,7 @@ namespace hoa
         /** Retrieve the order of decomposition.
          @return The order.
          */
-        inline size_t getNumberOfPlanewaves() const noexcept
+        inline size_t getNumberOfPlanewaves() const hoa_noexcept
         {
             return m_number_of_planewaves;
         }
@@ -311,7 +311,7 @@ namespace hoa
          @param     y_axe		An azimuth value.
          @param     z_axe		An azimuth value.
          */
-        inline void setPlanewavesRotation(const T x_axe, const T y_axe, const T z_axe) noexcept
+        inline void setPlanewavesRotation(const T x_axe, const T y_axe, const T z_axe) hoa_noexcept
         {
             m_rotation_x = Math<T>::wrap_twopi(x_axe);
             m_rotation_y = Math<T>::wrap_twopi(y_axe);
@@ -322,7 +322,7 @@ namespace hoa
         /**	Retrieve the azimuth offset of the planewaves in radian.
          @return    The offset of the planewaves.
          */
-        inline T getPlanewavesRotationX() const noexcept
+        inline T getPlanewavesRotationX() const hoa_noexcept
         {
             return m_rotation_x;
         }
@@ -331,7 +331,7 @@ namespace hoa
         /**	Retrieve the azimuth offset of the planewaves in radian.
          @return    The offset of the planewaves.
          */
-        inline T getPlanewavesRotationY() const noexcept
+        inline T getPlanewavesRotationY() const hoa_noexcept
         {
             return m_rotation_y;
         }
@@ -340,7 +340,7 @@ namespace hoa
         /**	Retrieve the azimuth offset of the planewaves in radian.
          @return    The offset of the planewaves.
          */
-        inline T getPlanewavesRotationZ() const noexcept
+        inline T getPlanewavesRotationZ() const hoa_noexcept
         {
             return m_rotation_z;
         }
@@ -350,7 +350,7 @@ namespace hoa
          @param      index   The index of the planewave.
          @return     The index of the planewave.
          */
-        inline size_t getPlanewaveIndex(const size_t index) noexcept
+        inline size_t getPlanewaveIndex(const size_t index) hoa_noexcept
         {
             return m_planewaves[index].getIndex();
         }
@@ -361,7 +361,7 @@ namespace hoa
          @param     index   The index of the planewave.
          @param     azimuth The new azimuth of the planewave.
          */
-        inline void setPlanewaveAzimuth(const size_t index, const T azimuth) noexcept
+        inline void setPlanewaveAzimuth(const size_t index, const T azimuth) hoa_noexcept
         {
             m_planewaves[index].setAzimuth(Math<T>::wrap_twopi(azimuth));
         }
@@ -373,7 +373,7 @@ namespace hoa
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
          @return     The azimuth of the planewave.
          */
-        inline T getPlanewaveAzimuth(const size_t index, const bool rotation = true) const noexcept
+        inline T getPlanewaveAzimuth(const size_t index, const bool rotation = true) const hoa_noexcept
         {
             return m_planewaves[index].getAzimuth(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
@@ -384,7 +384,7 @@ namespace hoa
          @param      index    The index of the planewave.
          @param      azimuth  The azimuth of the planewave.
          */
-        inline void setPlanewaveElevation(const size_t index, const T azimuth) noexcept
+        inline void setPlanewaveElevation(const size_t index, const T azimuth) hoa_noexcept
         {
             m_planewaves[index].setElevation(Math<T>::wrap_pi(azimuth));
         }
@@ -396,7 +396,7 @@ namespace hoa
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
          @return     The elevation of the planewave.
          */
-        inline T getPlanewaveElevation(const size_t index, const bool rotation = true) const noexcept
+        inline T getPlanewaveElevation(const size_t index, const bool rotation = true) const hoa_noexcept
         {
             return m_planewaves[index].getElevation(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
@@ -407,7 +407,7 @@ namespace hoa
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
          @return    The abscissa of the planewave.
          */
-        inline T getPlanewaveAbscissa(const size_t index, const bool rotation = true) const noexcept
+        inline T getPlanewaveAbscissa(const size_t index, const bool rotation = true) const hoa_noexcept
         {
             return m_planewaves[index].getAbscissa(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
@@ -418,7 +418,7 @@ namespace hoa
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
          @return    The ordinate of the planewave.
          */
-        inline T getPlanewaveOrdinate(const size_t index, const bool rotation = true) const noexcept
+        inline T getPlanewaveOrdinate(const size_t index, const bool rotation = true) const hoa_noexcept
         {
             return m_planewaves[index].getOrdinate(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
@@ -429,7 +429,7 @@ namespace hoa
          @param      rotation   False if you don't want to consider the rotation, otherwise true (default).
          @return    The height of the planewave.
          */
-        inline T getPlanewaveHeight(const size_t index, const bool rotation = true) const noexcept
+        inline T getPlanewaveHeight(const size_t index, const bool rotation = true) const hoa_noexcept
         {
             return m_planewaves[index].getHeight(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
         }
@@ -439,7 +439,7 @@ namespace hoa
          @param     index	The index of a planewave.
          @return    The method returns a name for the planewave.
          */
-        inline std::string getPlanewaveName(const size_t index) const noexcept
+        inline std::string getPlanewaveName(const size_t index) const hoa_noexcept
         {
             return m_planewaves[index].getName();
         }
@@ -449,7 +449,7 @@ namespace hoa
          @param     input  The input array.
          @param     outputs The outputs array.
          */
-        virtual void process(const T* input, T* outputs) noexcept
+        virtual void process(const T* input, T* outputs) hoa_noexcept
         {
             ;
         }
