@@ -11,6 +11,7 @@
 
 namespace hoa
 {
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
     //! The rotate class rotates a sound field in the harmonics domain (2d available only).
     /** The rotate should be used to rotate a sound field by weighting the harmonics depending on the rotation.
      */
@@ -56,6 +57,7 @@ namespace hoa
         virtual void process(const T* inputs, T* outputs) hoa_noexcept;
     };
 
+#endif
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
     template <typename T> class Rotate<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics

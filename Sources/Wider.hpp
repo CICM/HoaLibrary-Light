@@ -11,6 +11,7 @@
 
 namespace hoa
 {
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
     //! The wider class wides the diffusion of the sound field in the harmonics domain.
     /** The wider simulates fractional orders to diffuse a sound field from omni directional when the widening factor is \f$0\f$ to the most directional when the widening factor is \f$1\f$.
      */
@@ -60,6 +61,7 @@ namespace hoa
 
     };
 
+#endif
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
     template <typename T> class Wider<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics

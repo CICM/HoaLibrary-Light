@@ -11,6 +11,7 @@
 
 namespace hoa
 {
+#ifdef DOXYGEN_SHOULD_SKIP_THIS
     //! The vector class computes the energy and the velocity vectors for a set of loudspeakers.
     /** The vector class compute the energy and the velocity vectors of a sound field for a set of channels. It is an useful tool to characterize the quality of the sound field restitution. For further information : Michael A. Gerzon, General metatheorie of auditory localization. Audio Engineering Society Preprint, 3306, 1992. This class retrieve the cartesian coordinates of the vectors.
      */
@@ -56,6 +57,7 @@ namespace hoa
         virtual void processEnergy(const T* inputs, T* outputs) hoa_noexcept = 0;
     };
 
+#endif
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
     template <typename T> class Vector<Hoa2d, T> : public Processor<Hoa2d, T>::Planewaves
@@ -277,6 +279,3 @@ namespace hoa
 }
 
 #endif
-
-
-
