@@ -219,7 +219,7 @@ namespace hoa
          */
         static inline long getIndex(const ulong degree, const long order) noexcept
         {
-            return abs(order) *  2 - long(order < 0);
+            return std::abs(order) *  2 - long(order < 0);
         }
 
         //! Get the number of harmonics for an order of decomposition.
@@ -395,11 +395,11 @@ namespace hoa
         {
             if(order == 0)
             {
-                return T(sqrt(Math<T>::factorial(long(degree) - long(abs(order))) / Math<T>::factorial(long(order) + long(abs(order))))) * T(sqrt(T(1.) / T(4. * HOA_PI)));
+                return T(sqrt(Math<T>::factorial(long(degree) - long(std::abs(order))) / Math<T>::factorial(long(order) + long(std::abs(order))))) * T(sqrt(T(1.) / T(4. * HOA_PI)));
             }
             else
             {
-                return T(sqrt(Math<T>::factorial(long(degree) - abs(order)) / Math<T>::factorial(long(degree) + abs(order))) * sqrt(T(2.) / T(4. * HOA_PI)));
+                return T(sqrt(Math<T>::factorial(long(degree) - std::abs(order)) / Math<T>::factorial(long(degree) + std::abs(order))) * sqrt(T(2.) / T(4. * HOA_PI)));
             }
         }
     };
