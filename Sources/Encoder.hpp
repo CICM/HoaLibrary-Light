@@ -664,7 +664,7 @@ namespace hoa
     {
     private:
         const ulong                     m_number_of_sources;
-        vector<Encoder<Hoa2d, T>::DC*>  m_encoders;
+        std::vector<Encoder<Hoa2d, T>::DC*>  m_encoders;
     public:
 
         //! The map constructor.
@@ -1466,7 +1466,7 @@ namespace hoa
     {
     private:
         const ulong                     m_number_of_sources;
-        vector<Encoder<Hoa3d, T>::DC *> m_encoders;
+        std::vector<Encoder<Hoa3d, T>::DC *> m_encoders;
     public:
 
         //! The map constructor.

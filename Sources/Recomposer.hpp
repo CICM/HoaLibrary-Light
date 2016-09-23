@@ -77,7 +77,7 @@ namespace hoa
     template <typename T> class Recomposer<Hoa2d, T, Fisheye> : public Processor<Hoa2d, T>::Harmonics, public Processor<Hoa2d, T>::Planewaves
     {
     private:
-        vector< typename Encoder<Hoa2d, T>::Basic*>m_encoders;
+        std::vector< typename Encoder<Hoa2d, T>::Basic*>m_encoders;
     public:
         //! The decoder constructor.
         /**	The decoder constructor allocates and initialize the base classes.
@@ -146,7 +146,7 @@ namespace hoa
     template <typename T> class Recomposer<Hoa2d, T, Free> : public Processor<Hoa2d, T>::Harmonics, public Processor<Hoa2d, T>::Planewaves
     {
     private:
-        vector< typename Encoder<Hoa2d, T>::DC* >  m_encoders;
+        std::vector< typename Encoder<Hoa2d, T>::DC* >  m_encoders;
     public:
         //! The decoder constructor.
         /**	The decoder constructor allocates and initialize the base classes.

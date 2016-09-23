@@ -31,8 +31,8 @@ namespace hoa
             double x;
             double y;
             double z;
-            vector<Point> neightbours;
-            vector<Point> bounds;
+            std::vector<Point> neightbours;
+            std::vector<Point> bounds;
 
             //! The point constructor.
             /**	The point constructor allocates and initialize the base classes.
@@ -349,7 +349,7 @@ namespace hoa
             return p1.z < 0.;
         }
 
-        vector<Point>       m_points;
+        std::vector<Point>       m_points;
     public:
 
         Voronoi() noexcept
@@ -372,32 +372,32 @@ namespace hoa
             m_points.clear();
         }
 
-        vector<Point> const& getPoints() const noexcept
+        std::vector<Point> const& getPoints() const noexcept
         {
             return m_points;
         }
 
-        vector<Point>& getPoints() noexcept
+        std::vector<Point>& getPoints() noexcept
         {
             return m_points;
         }
 
-        vector<Point> const& getBounds(const ulong i) const noexcept
+        std::vector<Point> const& getBounds(const ulong i) const noexcept
         {
             return m_points[i].bounds;
         }
 
-        vector<Point>& getBounds(const ulong i) noexcept
+        std::vector<Point>& getBounds(const ulong i) noexcept
         {
             return m_points[i].bounds;
         }
 
-        vector<Point> const& getNeightbours(const ulong i) const noexcept
+        std::vector<Point> const& getNeightbours(const ulong i) const noexcept
         {
             return m_points[i].neightbours;
         }
 
-        vector<Point>& getNeightbours(const ulong i) noexcept
+        std::vector<Point>& getNeightbours(const ulong i) noexcept
         {
             return m_points[i].neightbours;
         }

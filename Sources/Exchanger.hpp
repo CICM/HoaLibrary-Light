@@ -111,7 +111,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        virtual string getHarmonicName(const ulong index, const bool isInput) const noexcept;
+        virtual std::string getHarmonicName(const ulong index, const bool isInput) const noexcept;
     };
 
 //! @cond
@@ -388,7 +388,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        string getHarmonicName(const ulong index, const bool isInput) const noexcept
+        std::string getHarmonicName(const ulong index, const bool isInput) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
@@ -408,7 +408,7 @@ namespace hoa
                         'W', 'X', 'Y', 'U', 'V', 'P', 'Q'
                     };
                     
-                    string name = "Harmonic ";
+                    std::string name = "Harmonic ";
                     return name += FurseMalham_2D_Letterings[index];
                 }
                 
@@ -907,7 +907,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        string getHarmonicName(const ulong index, const bool isInput) const noexcept
+        std::string getHarmonicName(const ulong index, const bool isInput) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
@@ -929,7 +929,7 @@ namespace hoa
                         'K', 'L', 'M', 'N', 'O', 'P', 'Q'
                     };
                     
-                    string name = "Harmonic ";
+                    std::string name = "Harmonic ";
                     return name += FurseMalham_3D_Letterings[index];
                 }
                 

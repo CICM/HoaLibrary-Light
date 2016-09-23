@@ -52,7 +52,7 @@ namespace hoa
         /** The method returns the name \f$harmonic_{l,m}\f$ of the harmonic.
          @return     The name.
          */
-        string getName() const noexcept;
+        std::string getName() const noexcept;
 
         //! Get the normalization of the harmonic.
         /** The method returns the normalization of the harmonics.
@@ -168,7 +168,7 @@ namespace hoa
         /** The method returns the name of the harmonic.
          @return     The name.
          */
-        inline string getName() const noexcept
+        inline std::string getName() const noexcept
         {
             return "Harmonic " + to_string(getDegree()) + " " + to_string(getOrder());
         }
@@ -310,7 +310,7 @@ namespace hoa
         /** The method returns the name of the harmonic.
          @return     The name.
          */
-        inline string getName() const noexcept
+        inline std::string getName() const noexcept
         {
             return "Harmonic " + to_string(getDegree()) + " " + to_string(getOrder());
         }

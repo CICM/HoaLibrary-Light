@@ -46,8 +46,6 @@
 #define HOA_PI4 0.785398163397448309615660845819875721
 #define HOA_EPSILON 1e-6
 
-using namespace std;
-
 //! The namespace of the hoa library.
 /** All the classes of the hoa library are inside this namespace.
  */
@@ -56,28 +54,28 @@ namespace hoa
     typedef unsigned long ulong;
 
 #if (__cplusplus <= 199711L)
-    inline string to_string(const ulong& val)
+    inline std::string to_string(const ulong& val)
     {
         char buffer[1024];
 		sprintf(buffer, "%lu", val);
         return buffer;
     }
 
-    inline string to_string(const long& val)
+    inline std::string to_string(const long& val)
     {
         char buffer[1024];
         sprintf(buffer, "%ld", val);
         return buffer;
     }
 
-    inline string to_string(const float& val)
+    inline std::string to_string(const float& val)
     {
         char buffer[1024];
         sprintf(buffer, "%f", val);
         return buffer;
     }
 
-    inline string to_string(const double& val)
+    inline std::string to_string(const double& val)
     {
         char buffer[1024];
         sprintf(buffer, "%lf", val);

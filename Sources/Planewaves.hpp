@@ -108,7 +108,7 @@ namespace hoa
         /** The method returns the name \f$planewave_{index}\f$ of the planewave.
          @return     The name.
          */
-        virtual string getName() const noexcept;
+        virtual std::string getName() const noexcept;
     };
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -246,7 +246,7 @@ namespace hoa
         /** The method returns the name \f$planewave_{index}\f$ of the planewave.
          @return     The name.
          */
-        inline string getName() const noexcept
+        inline std::string getName() const noexcept
         {
             return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth(0., 0., 0.) / HOA_2PI * 360.) + "°";
         }
@@ -443,7 +443,7 @@ namespace hoa
         /** The method returns the name \f$planewave_{index}\f$ of the planewave.
          @return     The name.
          */
-        inline string getName() const noexcept
+        inline std::string getName() const noexcept
         {
             return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth(0., 0., 0.) / HOA_2PI * 360.) + "° " + to_string(getElevation(0., 0., 0.) / HOA_2PI * 360.) + "°";
         }

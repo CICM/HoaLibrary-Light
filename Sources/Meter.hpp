@@ -91,7 +91,7 @@ namespace hoa
             }
             else
             {
-                vector<Planewave<Hoa2d, T> > channels;
+                std::vector<Planewave<Hoa2d, T> > channels;
                 for(ulong i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
                 {
                     channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(i)), 0.));
@@ -238,7 +238,7 @@ namespace hoa
     {
     public:
         typedef typename Voronoi<Hoa3d>::Point Point;
-        typedef vector<Point> Path;
+        typedef std::vector<Point> Path;
     private:
         ulong   m_ramp;
         ulong   m_vector_size;

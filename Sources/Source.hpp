@@ -21,10 +21,10 @@ namespace hoa
     public:
         class Group;
 
-        typedef  map<ulong, Source*>::iterator          source_iterator;
-        typedef  map<ulong, Source*>::const_iterator    const_source_iterator;
-        typedef  map<ulong, Group*>::iterator           group_iterator;
-        typedef  map<ulong, Group*>::const_iterator     const_group_iterator;
+        typedef  std::map<ulong, Source*>::iterator          source_iterator;
+        typedef  std::map<ulong, Source*>::const_iterator    const_source_iterator;
+        typedef  std::map<ulong, Group*>::iterator           group_iterator;
+        typedef  std::map<ulong, Group*>::const_iterator     const_group_iterator;
 
         //! The manager class is used to control punctual sources and group of sources.
         /** The manager class is used to control punctual sources and group of sources.
@@ -33,8 +33,8 @@ namespace hoa
         {
         private:
             const double        m_maximum_radius;
-            map<ulong, Source*> m_sources;
-            map<ulong, Group*>  m_groups;
+            std::map<ulong, Source*> m_sources;
+            std::map<ulong, Group*>  m_groups;
             double              m_zoom;
 
         public:
@@ -65,7 +65,7 @@ namespace hoa
                     Group* grp = new Group(*it->second);
                     m_groups[it->first] = grp;
 
-                    map<ulong, Source*>& tmp = it->second->getSources();
+                    std::map<ulong, Source*>& tmp = it->second->getSources();
                     for (source_iterator ti = tmp.begin() ; ti != tmp.end() ; ti ++)
                     {
                         grp->addSource(m_sources[ti->first]);
@@ -253,7 +253,7 @@ namespace hoa
                 group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
-                    map<ulong, Source*>& sources = it->second->getSources();
+                    std::map<ulong, Source*>& sources = it->second->getSources();
                     for (source_iterator ti = sources.begin() ; ti != sources.end() ; ++ti)
                     {
                         Source* src = ti->second;
@@ -277,7 +277,7 @@ namespace hoa
                 group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
                 {
-                    map<ulong, Source*>& sources = it->second->getSources();
+                    std::map<ulong, Source*>& sources = it->second->getSources();
                     source_iterator si = sources.begin();
                     while (si != sources.end())
                     {
@@ -485,7 +485,7 @@ namespace hoa
 		        if(radius < -m_maximum_radius || radius > m_maximum_radius)
 		            return;
 		    }
-		    m_radius = max(radius, (double)0.);
+            m_radius = std::max(radius, (double)0.);
 		    notifyCoordinates();
 		}
 
@@ -591,7 +591,7 @@ namespace hoa
 		/** Set the description of the source.
 		 * @param     description		The text description of the source.
          */
-		inline void setDescription(const string description)
+		inline void setDescription(const std::string description)
 		{
 			m_description = description;
 		}
@@ -700,7 +700,7 @@ namespace hoa
 			@return		The description of the source.
 			@see setDescription
          */
-		inline const string	getDescription() const noexcept
+		inline const std::string	getDescription() const noexcept
 		{
 			return m_description;
 		}
@@ -737,7 +737,7 @@ namespace hoa
         /** Get the Groups map of the source.
          @return    A reference of the groups map.
          */
-        inline map<ulong, Group*>& getGroups() noexcept
+        inline std::map<ulong, Group*>& getGroups() noexcept
         {
             return m_groups;
         }
@@ -753,8 +753,8 @@ namespace hoa
         private:
             const Manager*          m_manager;
             ulong                   m_index;
-            map<ulong, Source*>     m_sources;
-            string                  m_description;
+            std::map<ulong, Source*>     m_sources;
+            std::string                  m_description;
             double			        m_color[4];
             double			        m_centroid_x;
             double			        m_centroid_y;
@@ -1237,7 +1237,7 @@ namespace hoa
             /** Set the description of the group.
              @param     description		The text description of the group.
              */
-            inline void setDescription(const string description)
+            inline void setDescription(const std::string description)
             {
                 m_description = description;
             }
@@ -1410,7 +1410,7 @@ namespace hoa
              @return		The description of the group.
              @see setDescription
              */
-            inline const string	getDescription() const noexcept
+            inline const std::string	getDescription() const noexcept
             {
                 return m_description;
             }
@@ -1456,7 +1456,7 @@ namespace hoa
             /** Get the Sources map of the group.
              @return    A reference of the sources map.
              */
-            inline map<ulong, Source*>& getSources() noexcept
+            inline std::map<ulong, Source*>& getSources() noexcept
             {
                 return m_sources;
             }
@@ -1485,8 +1485,8 @@ namespace hoa
 		double		         m_azimuth;
         double               m_elevation;
 		double		         m_color[4];
-		string               m_description;
-		map<ulong, Group*>   m_groups;
+        std::string          m_description;
+        std::map<ulong, Group*>   m_groups;
 		double               m_maximum_radius;
 		bool                 m_mute;
 

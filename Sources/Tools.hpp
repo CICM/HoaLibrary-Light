@@ -62,7 +62,7 @@ namespace hoa
          */
         inline void setRamp(const ulong ramp) noexcept
         {
-            m_ramp = max(ramp, (ulong)1);
+            m_ramp = std::max(ramp, (ulong)1);
         }
 
         //! Set, linearly, the current value.
@@ -184,7 +184,7 @@ namespace hoa
          */
         inline void setRamp(const ulong ramp) noexcept
         {
-            m_ramp = max(ramp, (ulong)1);
+            m_ramp = std::max(ramp, (ulong)1);
         }
 
         //! Set, linearly, the radius of a source.
@@ -361,7 +361,7 @@ namespace hoa
          */
         inline void setRamp(const ulong ramp) noexcept
         {
-            m_ramp = max(ramp, (ulong)1);
+            m_ramp = std::max(ramp, (ulong)1);
         }
 
         //! Set, linearly, the radius of a source.

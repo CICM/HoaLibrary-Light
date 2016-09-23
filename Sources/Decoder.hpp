@@ -190,7 +190,7 @@ namespace hoa
          @param vectorsize The vector size for binaural decoding.
          */
         virtual void computeRendering(const ulong vectorsize = 64) = 0;
-        
+
         //! This method retrives the mode of the decoder.
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
@@ -237,7 +237,7 @@ namespace hoa
         {
             Signal<T>::free(m_matrix);
         }
-        
+
         //! This method retrives the mode of the decoder.
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
@@ -295,7 +295,7 @@ namespace hoa
         {
             Signal<T>::free(m_matrix);
         }
-        
+
         //! This method retrives the mode of the decoder.
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
@@ -337,7 +337,7 @@ namespace hoa
             else
             {
                 T smallest_distance = (T)HOA_2PI;
-                vector<Planewave<Hoa2d, T> > channels;
+                std::vector<Planewave<Hoa2d, T> > channels;
                 for(ulong i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
                     channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Decoder<Hoa2d, T>::getPlanewaveAzimuth(i)), 0.));
@@ -474,7 +474,7 @@ namespace hoa
         T*          m_result;
         T*          m_left;
         T*          m_right;
-        
+
         void clear()
         {
             m_input  = Signal<T>::free(m_input);
@@ -499,7 +499,7 @@ namespace hoa
             Decoder<Hoa2d, T>::setPlanewaveAzimuth(1, (T)(HOA_PI2));
             setCropSize(0ul);
         }
-        
+
         //! This method retrives the mode of the decoder.
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
@@ -513,7 +513,7 @@ namespace hoa
         {
             clear();
         }
-        
+
         //! This method sets the crop size of the responses.
         /**	This method sets the crop size of the responses.
          @param size The crop size.
@@ -525,7 +525,7 @@ namespace hoa
             else
                 m_crop_size = size;
         }
-        
+
         //! This method gets the crop size of the responses.
         /**	This method gets the crop size of the responses.
          @return The crop size.
@@ -541,7 +541,7 @@ namespace hoa
                 return m_crop_size;
             }
         }
-        
+
         //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
@@ -555,7 +555,7 @@ namespace hoa
             m_left   = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
             m_right  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
         }
-        
+
     private:
         inline void processChannel(const T* harmonics, const T* response, T* vector, T* output) noexcept
         {
@@ -572,7 +572,7 @@ namespace hoa
             Signal<T>::clear(m_vector_size, vector + m);
         }
     public:
-        
+
         //! This method performs the binaural decoding and the convolution.
         inline void processBlock(const T** inputs, T** outputs) noexcept
         {
@@ -593,7 +593,7 @@ namespace hoa
     template <typename T> class Decoder<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics, public Processor<Hoa3d, T>::Planewaves
     {
     public:
-        
+
         enum Mode
         {
             RegularMode = 0,
@@ -619,7 +619,7 @@ namespace hoa
         {
             ;
         }
-        
+
         //! This method retrives the mode of the decoder.
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
@@ -666,7 +666,7 @@ namespace hoa
             m_matrix = Signal<T>::alloc(Decoder<Hoa3d, T>::getNumberOfPlanewaves() * Decoder<Hoa3d, T>::getNumberOfHarmonics());
             computeRendering();
         }
-        
+
         //! This method retrives the mode of the decoder.
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
@@ -719,7 +719,7 @@ namespace hoa
             }
         }
     };
-    
+
     template <typename T> class Decoder<Hoa3d, T>::Binaural : public Decoder<Hoa3d, T>
     {
         ulong       m_vector_size;
@@ -728,7 +728,7 @@ namespace hoa
         T*          m_result;
         T*          m_left;
         T*          m_right;
-        
+
         void clear()
         {
             m_input  = Signal<T>::free(m_input);
@@ -736,7 +736,7 @@ namespace hoa
             m_left   = Signal<T>::free(m_left);
             m_right  = Signal<T>::free(m_right);
         }
-        
+
     public:
 
         //! The binaural decoder constructor.
@@ -754,7 +754,7 @@ namespace hoa
             Decoder<Hoa3d, T>::setPlanewaveAzimuth(1, (T)HOA_PI2);
             setCropSize(0ul);
         }
-        
+
         //! This method retrives the mode of the decoder.
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
@@ -784,7 +784,7 @@ namespace hoa
                 m_crop_size = size;
             }
         }
-        
+
         //! This method gets the crop size of the responses.
         /**	This method gets the crop size of the responses.
          @return The crop size.
@@ -800,7 +800,7 @@ namespace hoa
                 return m_crop_size;
             }
         }
-        
+
         //! This method computes the decoding matrix.
         /**	You should use this method after changing the position of the loudspeakers.
          @param vectorsize The vector size for binaural decoding.
@@ -814,7 +814,7 @@ namespace hoa
             m_left   = Signal<T>::alloc(Hrir<Hoa3d, T>::getNumberOfRows() + m_vector_size);
             m_right  = Signal<T>::alloc(Hrir<Hoa3d, T>::getNumberOfRows() + m_vector_size);
         }
-        
+
     private:
         inline void processChannel(const T* harmonics, const T* response, T* vector, T* output) noexcept
         {
@@ -826,13 +826,13 @@ namespace hoa
             {
                 Signal<T>::add(m, m_result + i, n, vector + i, 1ul);
             }
-            
+
             Signal<T>::copy(m_vector_size, vector, output);
             Signal<T>::copy(m, vector + m_vector_size, vector);
             Signal<T>::clear(m_vector_size, vector + m);
         }
     public:
-        
+
         //! This method performs the binaural decoding and the convolution.
         inline void processBlock(const T** inputs, T** outputs) noexcept
         {
@@ -845,7 +845,7 @@ namespace hoa
             processChannel(m_input, Hrir<Hoa3d, T>::getLeftMatrix(), m_left, outputs[0]);
             processChannel(m_input, Hrir<Hoa3d, T>::getRightMatrix(), m_right, outputs[1]);
         }
-        
+
         inline void process(const T* inputs, T* outputs) noexcept override {}
 
     };
@@ -855,6 +855,3 @@ namespace hoa
 }
 
 #endif
-
-
-

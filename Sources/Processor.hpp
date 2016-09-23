@@ -42,7 +42,7 @@ namespace hoa
 
         const ulong                 m_order_of_decomposition;
         const ulong                 m_number_of_harmonics;
-        vector< Harmonic<D, T> >    m_harmonics;
+        std::vector< Harmonic<D, T> >    m_harmonics;
     public:
 
         //! The harmonics constructor.
@@ -129,7 +129,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        inline string getHarmonicName(const ulong index) const noexcept
+        inline std::string getHarmonicName(const ulong index) const noexcept
         {
             return m_harmonics[index].getName();
         }
@@ -173,7 +173,7 @@ namespace hoa
     {
     private:
         const ulong                 m_number_of_planewaves;
-        vector<Planewave<D, T> >    m_planewaves;
+        std::vector<Planewave<D, T> >    m_planewaves;
         T                           m_rotation_z;
         T                           m_rotation_y;
         T                           m_rotation_x;
@@ -435,11 +435,11 @@ namespace hoa
         }
 
         //! Get a name for a planewave.
-        /** Get a name for a planewave in a string format that will be "Planewave index azimuth (in degrees)".
+        /** Get a name for a planewave in a std::string format that will be "Planewave index azimuth (in degrees)".
          @param     index	The index of a planewave.
          @return    The method returns a name for the planewave.
          */
-        inline string getPlanewaveName(const ulong index) const noexcept
+        inline std::string getPlanewaveName(const ulong index) const noexcept
         {
             return m_planewaves[index].getName();
         }
