@@ -15,6 +15,7 @@
 
 #include <string>
 #include <cmath>
+#include <cstring>
 #include <vector>
 #include <map>
 #include <algorithm>
@@ -24,9 +25,6 @@
 #define NOMINMAX
 #endif
 
-#ifdef PD_DEBUG
-#include "../../CicmWrapper/Sources/cicm_wrapper.h"
-#endif
 #ifdef MAX_DEBUG
 #include <ext.h>
 #include <ext_obex.h>
