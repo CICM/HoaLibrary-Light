@@ -33,13 +33,25 @@
 #endif
 
 #if (__cplusplus <= 199711L)
+#define HOA_CPP11_NOSUPPORT 1
+#endif
+
+#ifdef HOA_CPP11_NOSUPPORT
 #define hoa_noexcept
 #define hoa_nullptr NULL
+#define hoa_constexpr
 #define hoa_override
+#define hoa_final
+#define hoa_delete_f
+#define hoa_default_f {}
 #else
 #define hoa_noexcept noexcept
 #define hoa_nullptr nullptr
+#define hoa_constexpr constexpr
 #define hoa_override override
+#define hoa_final final
+#define hoa_delete_f = delete
+#define hoa_default_f = default;
 #endif
 
 #define HOA_PI  3.14159265358979323846264338327950288
