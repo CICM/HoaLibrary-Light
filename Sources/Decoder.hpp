@@ -646,7 +646,7 @@ namespace hoa
         /**	This method retrieves the mode of the decoder.
          @retun The mode of the decoder.
          */
-        inline virtual Mode getMode() const hoa_noexcept = 0;
+        inline virtual Mode getMode() const hoa_noexcept { return RegularMode; }
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
