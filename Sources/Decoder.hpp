@@ -712,7 +712,7 @@ namespace hoa
          */
         void computeRendering(const size_t vectorsize = 64)  hoa_override
         {
-            typename Encoder<Hoa3d, T>::Basic encoder(Decoder<Hoa3d, T>::getDecompositionOrder());
+            EncoderBasic<Hoa3d, T> encoder(Decoder<Hoa3d, T>::getDecompositionOrder());
             const T factor = 1. / (T)(Decoder<Hoa3d, T>::getNumberOfPlanewaves());
             for(size_t i = 0; i < Decoder<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
