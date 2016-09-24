@@ -204,11 +204,11 @@ namespace hoa
          */
         virtual void computeRendering(const size_t vectorsize = 64) = 0;
 
-        //! This method retrives the mode of the decoder.
-        /**	This method retrives the mode of the decoder.
+        //! This method retrieves the mode of the decoder.
+        /**	This method retrieves the mode of the decoder.
          @retun The mode of the decoder.
          */
-        inline virtual Mode getMode() const hoa_noexcept = 0;
+        inline virtual Mode getMode() const hoa_noexcept {return RegularMode;}
     };
 
     //! The ambisonic regular decoder.
@@ -239,8 +239,8 @@ namespace hoa
             Signal<T>::free(m_matrix);
         }
 
-        //! This method retrives the mode of the decoder.
-        /**	This method retrives the mode of the decoder.
+        //! This method retrieves the mode of the decoder.
+        /**	This method retrieves the mode of the decoder.
          @retun The mode of the decoder.
          */
         inline typename Decoder<Hoa2d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa2d, T>::RegularMode;};
@@ -301,8 +301,8 @@ namespace hoa
             Signal<T>::free(m_matrix);
         }
 
-        //! This method retrives the mode of the decoder.
-        /**	This method retrives the mode of the decoder.
+        //! This method retrieves the mode of the decoder.
+        /**	This method retrieves the mode of the decoder.
          @retun The mode of the decoder.
          */
         inline typename Decoder<Hoa2d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa2d, T>::IrregularMode;};
@@ -508,8 +508,8 @@ namespace hoa
             setCropSize(0ul);
         }
 
-        //! This method retrives the mode of the decoder.
-        /**	This method retrives the mode of the decoder.
+        //! This method retrieves the mode of the decoder.
+        /**	This method retrieves the mode of the decoder.
          @retun The mode of the decoder.
          */
         inline typename Decoder<Hoa2d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa2d, T>::BinauralMode;};
@@ -642,8 +642,8 @@ namespace hoa
          */
         virtual ~Decoder() {}
 
-        //! This method retrives the mode of the decoder.
-        /**	This method retrives the mode of the decoder.
+        //! This method retrieves the mode of the decoder.
+        /**	This method retrieves the mode of the decoder.
          @retun The mode of the decoder.
          */
         inline virtual Mode getMode() const hoa_noexcept = 0;
@@ -690,8 +690,8 @@ namespace hoa
             Signal<T>::free(m_matrix);
         }
         
-        //! This method retrives the mode of the decoder.
-        /**	This method retrives the mode of the decoder.
+        //! This method retrieves the mode of the decoder.
+        /**	This method retrieves the mode of the decoder.
          @retun The mode of the decoder.
          */
         inline typename Decoder<Hoa3d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa3d, T>::RegularMode;}
@@ -773,8 +773,8 @@ namespace hoa
             setCropSize(0ul);
         }
 
-        //! This method retrives the mode of the decoder.
-        /**	This method retrives the mode of the decoder.
+        //! This method retrieves the mode of the decoder.
+        /**	This method retrieves the mode of the decoder.
          @retun The mode of the decoder.
          */
         inline typename Decoder<Hoa3d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa3d, T>::BinauralMode;};
