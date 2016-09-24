@@ -66,10 +66,17 @@
 namespace hoa
 {
 #if (__cplusplus <= 199711L)
-    inline std::string to_string(const size_t& val)
+    inline std::string to_string(const unsigned long& val)
     {
         char buffer[1024];
-		sprintf(buffer, "%lu", val);
+        sprintf(buffer, "%lu", val);
+        return buffer;
+    }
+    
+    inline std::string to_string(const unsigned int& val)
+    {
+        char buffer[1024];
+		sprintf(buffer, "%iu", val);
         return buffer;
     }
 
