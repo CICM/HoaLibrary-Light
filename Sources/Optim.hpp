@@ -119,6 +119,19 @@ namespace hoa
         virtual void process(T const* inputs, T* outputs) hoa_noexcept;
     };
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //! The optim class optimizes the ambisonic sound field for several restitution systems.
     /** The optim should be used to optimize the ambisonic sound field. There are 3 optimizations, Basic (no optimization), MaxRe (energy vector optimization) and InPhase (energy and velocity vector optimization). Basic has no effect, it should be used (or not) with a perfect ambisonic channels arrangement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle of the sphere. MaxRe should be used should be used for an auditory confined to the center of the circle of the sphere. InPhase should be used when the auditory covers the entire channels area and when the channels arrangement is not a perfect circle or a perfect sphere or when the channels are not to equal distance. Note that the optimizations decrease the precision of the sound field restitution thus it can be compared to particular cases of the fractional orders.
      */
@@ -144,16 +157,6 @@ namespace hoa
          */
         virtual void process(T const* inputs, T* outputs) hoa_noexcept = 0;
     };
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     //! The basic optim.
     /** The basic optim has no effect, it should be used (or not) with a perfect ambisonic channels arrangement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle of the sphere.

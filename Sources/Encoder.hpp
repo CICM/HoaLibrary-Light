@@ -36,277 +36,289 @@ namespace hoa
          @param     outputs  The outputs array.
          */
         virtual void process(const T* input, T* outputs) hoa_noexcept;
-
-        //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
-        /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
+    };
+    
+    //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
+    /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
+     */
+    template <Dimension D, typename T> class EncoderBasic : public Encoder<D, T>
+    {
+    public:
+        //! The basic constructor.
+        /**	The basic constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
+         @param     order	The order.
          */
-        class Basic : public Encoder
-        {
-        public:
-            //! The basic constructor.
-            /**	The basic constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
-             @param     order	The order.
-             */
-            Basic(const size_t order) hoa_noexcept;
-
-            //! The basic destructor.
-            /**	The basic destructor free the memory.
-             */
-			virtual ~Basic() hoa_noexcept = 0;
-
-            //! Mute or unmute the process.
-            /**	This method mutes or unmutes the process.
-             @param     muted	The mute state.
-             */
-            virtual void setMute(const bool muted) hoa_noexcept;
-
-            //! Get the mute or unmute state of the process.
-            /**	This method gets mute state of the process.
-             @return    The mute state of the process.
-             */
-            virtual bool getMute() const hoa_noexcept;
-
-            //! Set the azimuth.
-            /**	This method  sets the azimuth \f$\theta\f$ in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
-             @param     azimuth	The azimuth.
-             */
-            virtual void setAzimuth(const T azimuth) hoa_noexcept;
-
-            //! Get the azimuth
-            /** The method returns the azimuth \f$\theta\f$ between \f$0\f$ and \f$2\pi\f$.
-             @return     The azimuth.
-             */
-            virtual T getAzimuth() const hoa_noexcept;
-
-            //! Set the elevation.
-            /**	This method  sets the elevation \f$\varphi\f$ in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
-             @param     elevation The elevation.
-             */
-            virtual void setElevation(const T elevation) hoa_noexcept;
-
-            //!	Get the elevation.
-            /** The method returns the elevation \f$\varphi\f$ between \f$-\pi\f$ and \f$\pi\f$.
-             @return     The elevation.
-             */
-            virtual T getElevation()  const hoa_noexcept;
-
-            //! This method performs the encoding.
-            /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-             \f[Y_{l,m}(\theta, \varphi) = k_{l, m} P_{l, \left|m\right|}(\cos{(\varphi)}) e^{+im\theta} \f]
-             with \f$e^{+im\theta}\f$ the azimuth part of the equation with \f$i\f$ the imaginary, \f$P_{l, \left|m\right|}(\cos{(\varphi)})\f$ the elevation part of the equation with \f$P_{l, \left|m\right|}(x)\f$ the associated Legendre polynomials, \f$k_{l, m}\f$ the normalization, \f$l\f$ the degree, \f$m\f$ the order, \f$\theta\f$ the azimuth in radian and \f$\varphi\f$ the elevation in radian.\n
-
-             The azimuth part in the imaginary form \f$e^{+im\theta}\f$ can be expressed with the real form :\n
-             if \f$m \geq 0\f$ then
-             \f[e^{+im\theta} = \cos{(\left|m\right|\theta)}\f]
-             else
-             \f[e^{+im\theta} = sin{(\left|m\right|\theta)}\f]
-             The elevation part \f$P_{l, \left|m\right|}(x)\f$ can be expressed with recursives formulas :
-             \f[P_{l+1,l+1}(x) = -(2l+1)\sqrt{(1-x^2)}P_{(l,l)}(x) \f]
-             \f[P_{l+1,l}(x) = x(2l+1)P_{(l,l)}(x) \f]
-             \f[P_{l+1,m}(x) = \frac{x(2l+1)P_{(l,m)}(x) - (l+m)P_{(l-1,m)}(x)}{l-m+1} \f]
-             and with \f[P_{0, 0}(x) = 1\f]
-             The normalization part \f$k_{l, m}\f$ is equivalent to :\n
-             if \f$m = 0\f$ then
-             \f[k_{l, m} = 1\f]
-             else
-             \f[k_{l, m} = \sqrt{\frac{(l - \left|m\right|)!}{(l + \left|m\right|)!}}\sqrt{2} \f]
-
-             @param     input    The pointer to the input sample.
-             @param     outputs  The outputs array.
-             */
-            virtual void process(const T* input, T* outputs) hoa_noexcept hoa_override;
-
-            //! This method performs the encoding but add the result to the outputs.
-            /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-             @see process
-             @param     input    The pointer to the input sample.
-             @param     outputs  The outputs array.
-             */
-            virtual void processAdd(const T* input, T* outputs) hoa_noexcept;
-        };
-
-        //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
-        /** The dc encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of the signal. The distance compensation is performed with the simulation of fractional orders when the signal is inside the ambisonic circle or sphere and with gain attenuation when the signal is outside the ambisonics circle or sphere.
+        EncoderBasic(const size_t order) hoa_noexcept;
+        
+        //! The basic destructor.
+        /**	The basic destructor free the memory.
          */
-        class DC : public Encoder
-        {
-        public:
-
-            //! The dc constructor.
-            /**	The dc constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
-             @param     order	The order.
-             */
-            DC(const size_t order) hoa_noexcept;
-
-            //! The dc destructor.
-            /**	The dc destructor free the memory.
-             */
-			virtual ~DC() hoa_noexcept = 0;
-
-            //! Mute or unmute the process.
-            /**	This method mutes or unmutes the process.
-             @param     muted	The mute state.
-             */
-            virtual void setMute(const bool muted) hoa_noexcept;
-
-            //! Get the mute or unmute state of the process.
-            /**	This method gets mute state of the process.
-             @return    The mute state of the process.
-             */
-            virtual bool getMute() const hoa_noexcept;
-
-            //! Set the azimuth.
-            /**	This method  sets the azimuth \f$\theta\f$ in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
-             @param     azimuth	The azimuth.
-             */
-            virtual void setAzimuth(const T azimuth) hoa_noexcept;
-
-            //! Get the azimuth.
-            /** The method returns the azimuth \f$\theta\f$ between \f$0\f$ and \f$2\pi\f$.
-             @return     The azimuth.
-             */
-            virtual T getAzimuth() const hoa_noexcept;
-
-            //! Set the elevation.
-            /**	This method  sets the elevation \f$\varphi\f$ in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
-             @param     elevation The elevation.
-             */
-            virtual void setElevation(const T elevation) hoa_noexcept;
-
-            //!	Get the elevation.
-            /** The method returns the elevation \f$\varphi\f$ between \f$-\pi\f$ and \f$\pi\f$.
-             @return     The elevation.
-             */
-            virtual T getElevation()  const hoa_noexcept;
-
-            //! Set the radius.
-            /**	This method  sets the radius \f$\rho\f$ between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the center of the soundfield, \f$1\f$ is the radius of the ambisonics circle or sphere, beyond this limit the gain decreases and before the sound field is widened.
-             @param     radius The radius.
-             */
-            virtual void setRadius(const T radius) hoa_noexcept;
-
-            //! Get the radius.
-            /** The method returns the radius \f$\rho\f$ between \f$0\f$ and \f$+\infty\f$.
-             @return     The radius.
-             */
-            virtual T getRadius() const hoa_noexcept;
-
-            //! This method performs the encoding.
-            /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-             \f[Y^{dc}_{l,m}(\theta, \varphi, \rho) = (\frac{1}{\max{(\rho, 1)}})Y^{widened}_{l,m}(\rho) \leftarrow Y_{l,m}(\theta, \varphi) \f]
-             with \f$Y_{l,m}\f$ the basic encoding, \f$Y^{widened}_{l,m}\f$ the widening operation, \f$l\f$ the degree, \f$m\f$ the order, \f$\theta\f$ the azimuth in radian, \f$\varphi\f$ the elevation in radian and \f$\rho\f$ the radius.\n
-             @see Basic
-             @see Wider
-             @param     input    The pointer to the input sample.
-             @param     outputs  The outputs array.
-             */
-            virtual void process(const T* input, T* outputs) hoa_noexcept;
-
-            //! This method performs the encoding but add the result to the outputs.
-            /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-             @see process
-             @param     input    The pointer to the input sample.
-             @param     outputs  The outputs array.
-             */
-            inline void processAdd(const T* input, T* outputs) hoa_noexcept;
-
-        };
-
-        //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
-        /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
+        virtual ~EncoderBasic() hoa_noexcept = 0;
+        
+        //! Mute or unmute the process.
+        /**	This method mutes or unmutes the process.
+         @param     muted	The mute state.
          */
-        class Multi : public Encoder
-        {
-        public:
-
-            //! The multi encoder constructor.
-            /**	The multi encoder constructor allocates and initialize the member values and classes depending on a order of decomposition and the number of sources. The order and the number of sources must be at least 1.
-
-             @param     order            The order.
-             @param     numberOfSources	The number of sources.
-             */
-            Multi(const size_t order, size_t numberOfSources) hoa_noexcept;
-
-            //! The multi encoder destructor.
-            /**	The multi encoder destructor free the memory and deallocate the member classes.
-             */
-			virtual ~Multi() hoa_noexcept = 0;
-
-            //! This method retrieve the number of sources.
-            /** Retrieve the number of sources.
-             @return The number of sources.
-             */
-            virtual size_t getNumberOfSources() const hoa_noexcept;
-
-            //! Set the azimuth of a signal.
-            /**	This method  sets the azimuth \f$\theta_{index}\f$ of a signal in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
-             @param index   The index of the signal.
-             @param azimuth	The azimuth.
-             */
-            virtual void setAzimuth(const size_t index, const T azimuth) hoa_noexcept;
-
-            //! Set the elevation  of a signal.
-            /**	This method  sets the elevation \f$\varphi_{index}\f$  of a signal in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
-             @param index       The index of the signal.
-             @param elevation   The elevation.
-             */
-            virtual void setElevation(const size_t index, const T elevation) hoa_noexcept;
-
-            //! Set the radius.
-            /**	This method  sets the radius \f$\rho_{index}\f$ between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the center of the soundfield, \f$1\f$ is the radius of the ambisonic circle or sphere, beyond this limit the gain decreases and before the sound field is widened.
-             @param index   The index of the signal.
-             @param radius  The radius.
-             */
-            virtual void setRadius(const size_t index, const T radius) hoa_noexcept;
-
-            //! This method mute or unmute a signal.
-            /**	Mute or unmute a signal with a boolean value.
-             @param     index	The index of the signal.
-             @param     muted	The mute state.
-             */
-            virtual void setMute(const size_t index, const bool muted) hoa_noexcept;
-
-            //! Get the azimuth of a signal.
-            /** The method returns the azimuth \f$\theta_{index}\f$ between \f$0\f$ and \f$2\pi\f$.
-             @param index The index of the signal.
-             @return    The azimuth.
-             */
-            virtual T getAzimuth(const size_t index) const hoa_noexcept;
-
-            //!	Get the elevation of a signal.
-            /** The method returns the elevation \f$\varphi_{index}\f$ between \f$-\pi\f$ and \f$\pi\f$.
-             @param index The index of the signal.
-             @return     The elevation.
-             */
-            virtual T getElevation(const size_t index) const hoa_noexcept;
-
-            //! Get the radius of a signal.
-            /** The method returns the radius \f$\rho_{index}\f$ between \f$0\f$ and \f$+\infty\f$.
-             @param index The index of the signal.
-             @return     The radius.
-             */
-            virtual T getRadius(const size_t index) const hoa_noexcept;
-
-            //! Get the mute or unmute state of a signal.
-            /**	This method gets mute state of a signal.
-             @param index The index of the signal.
-             @return    The mute state of the signal.
-             */
-            virtual bool getMute(const size_t index) const hoa_noexcept;
-
-
-            //! This method performs the encoding with distance compensation.
-            /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array contains the samples of the sources and the minimum size should be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-             \f[Y^{multi}_{l,m}(\theta_0^n, \varphi_0^n, \rho_0^n) = \sum_{i=0}^n Y^{dc}_{l,m}(\theta_i, \varphi_i, \rho_i) \f]
-             @param     input  The input array.
-             @param     outputs The outputs array.
-             */
-            virtual void process(const T* input, T* outputs) hoa_noexcept;
-        };
+        virtual void setMute(const bool muted) hoa_noexcept;
+        
+        //! Get the mute or unmute state of the process.
+        /**	This method gets mute state of the process.
+         @return    The mute state of the process.
+         */
+        virtual bool getMute() const hoa_noexcept;
+        
+        //! Set the azimuth.
+        /**	This method  sets the azimuth \f$\theta\f$ in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
+         @param     azimuth	The azimuth.
+         */
+        virtual void setAzimuth(const T azimuth) hoa_noexcept;
+        
+        //! Get the azimuth
+        /** The method returns the azimuth \f$\theta\f$ between \f$0\f$ and \f$2\pi\f$.
+         @return     The azimuth.
+         */
+        virtual T getAzimuth() const hoa_noexcept;
+        
+        //! Set the elevation.
+        /**	This method  sets the elevation \f$\varphi\f$ in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
+         @param     elevation The elevation.
+         */
+        virtual void setElevation(const T elevation) hoa_noexcept;
+        
+        //!	Get the elevation.
+        /** The method returns the elevation \f$\varphi\f$ between \f$-\pi\f$ and \f$\pi\f$.
+         @return     The elevation.
+         */
+        virtual T getElevation()  const hoa_noexcept;
+        
+        //! This method performs the encoding.
+        /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         \f[Y_{l,m}(\theta, \varphi) = k_{l, m} P_{l, \left|m\right|}(\cos{(\varphi)}) e^{+im\theta} \f]
+         with \f$e^{+im\theta}\f$ the azimuth part of the equation with \f$i\f$ the imaginary, \f$P_{l, \left|m\right|}(\cos{(\varphi)})\f$ the elevation part of the equation with \f$P_{l, \left|m\right|}(x)\f$ the associated Legendre polynomials, \f$k_{l, m}\f$ the normalization, \f$l\f$ the degree, \f$m\f$ the order, \f$\theta\f$ the azimuth in radian and \f$\varphi\f$ the elevation in radian.\n
+         
+         The azimuth part in the imaginary form \f$e^{+im\theta}\f$ can be expressed with the real form :\n
+         if \f$m \geq 0\f$ then
+         \f[e^{+im\theta} = \cos{(\left|m\right|\theta)}\f]
+         else
+         \f[e^{+im\theta} = sin{(\left|m\right|\theta)}\f]
+         The elevation part \f$P_{l, \left|m\right|}(x)\f$ can be expressed with recursives formulas :
+         \f[P_{l+1,l+1}(x) = -(2l+1)\sqrt{(1-x^2)}P_{(l,l)}(x) \f]
+         \f[P_{l+1,l}(x) = x(2l+1)P_{(l,l)}(x) \f]
+         \f[P_{l+1,m}(x) = \frac{x(2l+1)P_{(l,m)}(x) - (l+m)P_{(l-1,m)}(x)}{l-m+1} \f]
+         and with \f[P_{0, 0}(x) = 1\f]
+         The normalization part \f$k_{l, m}\f$ is equivalent to :\n
+         if \f$m = 0\f$ then
+         \f[k_{l, m} = 1\f]
+         else
+         \f[k_{l, m} = \sqrt{\frac{(l - \left|m\right|)!}{(l + \left|m\right|)!}}\sqrt{2} \f]
+         
+         @param     input    The pointer to the input sample.
+         @param     outputs  The outputs array.
+         */
+        virtual void process(const T* input, T* outputs) hoa_noexcept hoa_override;
+        
+        //! This method performs the encoding but add the result to the outputs.
+        /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @see process
+         @param     input    The pointer to the input sample.
+         @param     outputs  The outputs array.
+         */
+        virtual void processAdd(const T* input, T* outputs) hoa_noexcept;
+    };
+    
+    //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
+    /** The dc encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of the signal. The distance compensation is performed with the simulation of fractional orders when the signal is inside the ambisonic circle or sphere and with gain attenuation when the signal is outside the ambisonics circle or sphere.
+     */
+    template <Dimension D, typename T> class EncoderDC : public Encoder<D, T>
+    {
+    public:
+        
+        //! The dc constructor.
+        /**	The dc constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
+         @param     order	The order.
+         */
+        EncoderDC(const size_t order) hoa_noexcept;
+        
+        //! The dc destructor.
+        /**	The dc destructor free the memory.
+         */
+        virtual ~EncoderDC() hoa_noexcept = 0;
+        
+        //! Mute or unmute the process.
+        /**	This method mutes or unmutes the process.
+         @param     muted	The mute state.
+         */
+        virtual void setMute(const bool muted) hoa_noexcept;
+        
+        //! Get the mute or unmute state of the process.
+        /**	This method gets mute state of the process.
+         @return    The mute state of the process.
+         */
+        virtual bool getMute() const hoa_noexcept;
+        
+        //! Set the azimuth.
+        /**	This method  sets the azimuth \f$\theta\f$ in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
+         @param     azimuth	The azimuth.
+         */
+        virtual void setAzimuth(const T azimuth) hoa_noexcept;
+        
+        //! Get the azimuth.
+        /** The method returns the azimuth \f$\theta\f$ between \f$0\f$ and \f$2\pi\f$.
+         @return     The azimuth.
+         */
+        virtual T getAzimuth() const hoa_noexcept;
+        
+        //! Set the elevation.
+        /**	This method  sets the elevation \f$\varphi\f$ in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
+         @param     elevation The elevation.
+         */
+        virtual void setElevation(const T elevation) hoa_noexcept;
+        
+        //!	Get the elevation.
+        /** The method returns the elevation \f$\varphi\f$ between \f$-\pi\f$ and \f$\pi\f$.
+         @return     The elevation.
+         */
+        virtual T getElevation()  const hoa_noexcept;
+        
+        //! Set the radius.
+        /**	This method  sets the radius \f$\rho\f$ between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the center of the soundfield, \f$1\f$ is the radius of the ambisonics circle or sphere, beyond this limit the gain decreases and before the sound field is widened.
+         @param     radius The radius.
+         */
+        virtual void setRadius(const T radius) hoa_noexcept;
+        
+        //! Get the radius.
+        /** The method returns the radius \f$\rho\f$ between \f$0\f$ and \f$+\infty\f$.
+         @return     The radius.
+         */
+        virtual T getRadius() const hoa_noexcept;
+        
+        //! This method performs the encoding.
+        /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         \f[Y^{dc}_{l,m}(\theta, \varphi, \rho) = (\frac{1}{\max{(\rho, 1)}})Y^{widened}_{l,m}(\rho) \leftarrow Y_{l,m}(\theta, \varphi) \f]
+         with \f$Y_{l,m}\f$ the basic encoding, \f$Y^{widened}_{l,m}\f$ the widening operation, \f$l\f$ the degree, \f$m\f$ the order, \f$\theta\f$ the azimuth in radian, \f$\varphi\f$ the elevation in radian and \f$\rho\f$ the radius.\n
+         @see Basic
+         @see Wider
+         @param     input    The pointer to the input sample.
+         @param     outputs  The outputs array.
+         */
+        virtual void process(const T* input, T* outputs) hoa_noexcept;
+        
+        //! This method performs the encoding but add the result to the outputs.
+        /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         @see process
+         @param     input    The pointer to the input sample.
+         @param     outputs  The outputs array.
+         */
+        inline void processAdd(const T* input, T* outputs) hoa_noexcept;
+        
+    };
+    
+    //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
+    /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
+     */
+    template <Dimension D, typename T> class EncoderMulti : public Encoder<D, T>
+    {
+    public:
+        
+        //! The multi encoder constructor.
+        /**	The multi encoder constructor allocates and initialize the member values and classes depending on a order of decomposition and the number of sources. The order and the number of sources must be at least 1.
+         
+         @param     order            The order.
+         @param     numberOfSources	The number of sources.
+         */
+        EncoderMulti(const size_t order, size_t numberOfSources) hoa_noexcept;
+        
+        //! The multi encoder destructor.
+        /**	The multi encoder destructor free the memory and deallocate the member classes.
+         */
+        virtual ~EncoderMulti() hoa_noexcept = 0;
+        
+        //! This method retrieve the number of sources.
+        /** Retrieve the number of sources.
+         @return The number of sources.
+         */
+        virtual size_t getNumberOfSources() const hoa_noexcept;
+        
+        //! Set the azimuth of a signal.
+        /**	This method  sets the azimuth \f$\theta_{index}\f$ of a signal in radian and you should prefer to use it between \f$0\f$ and \f$2\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$ phase shifted relative to a mathematical representation of a circle, then the \f$0\f$ radian is at the "front" of the soundfield.
+         @param index   The index of the signal.
+         @param azimuth	The azimuth.
+         */
+        virtual void setAzimuth(const size_t index, const T azimuth) hoa_noexcept;
+        
+        //! Set the elevation  of a signal.
+        /**	This method  sets the elevation \f$\varphi_{index}\f$  of a signal in radian and you should prefer to use it between \f$-\pi\f$ and \f$\pi\f$ to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The \f$0\f$ radian is centered at the "front" of the soundfield, then \f$\frac{\pi}{2}\f$ is at the top, \f$-\frac{\pi}{2}\f$ is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed.
+         @param index       The index of the signal.
+         @param elevation   The elevation.
+         */
+        virtual void setElevation(const size_t index, const T elevation) hoa_noexcept;
+        
+        //! Set the radius.
+        /**	This method  sets the radius \f$\rho_{index}\f$ between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the center of the soundfield, \f$1\f$ is the radius of the ambisonic circle or sphere, beyond this limit the gain decreases and before the sound field is widened.
+         @param index   The index of the signal.
+         @param radius  The radius.
+         */
+        virtual void setRadius(const size_t index, const T radius) hoa_noexcept;
+        
+        //! This method mute or unmute a signal.
+        /**	Mute or unmute a signal with a boolean value.
+         @param     index	The index of the signal.
+         @param     muted	The mute state.
+         */
+        virtual void setMute(const size_t index, const bool muted) hoa_noexcept;
+        
+        //! Get the azimuth of a signal.
+        /** The method returns the azimuth \f$\theta_{index}\f$ between \f$0\f$ and \f$2\pi\f$.
+         @param index The index of the signal.
+         @return    The azimuth.
+         */
+        virtual T getAzimuth(const size_t index) const hoa_noexcept;
+        
+        //!	Get the elevation of a signal.
+        /** The method returns the elevation \f$\varphi_{index}\f$ between \f$-\pi\f$ and \f$\pi\f$.
+         @param index The index of the signal.
+         @return     The elevation.
+         */
+        virtual T getElevation(const size_t index) const hoa_noexcept;
+        
+        //! Get the radius of a signal.
+        /** The method returns the radius \f$\rho_{index}\f$ between \f$0\f$ and \f$+\infty\f$.
+         @param index The index of the signal.
+         @return     The radius.
+         */
+        virtual T getRadius(const size_t index) const hoa_noexcept;
+        
+        //! Get the mute or unmute state of a signal.
+        /**	This method gets mute state of a signal.
+         @param index The index of the signal.
+         @return    The mute state of the signal.
+         */
+        virtual bool getMute(const size_t index) const hoa_noexcept;
+        
+        
+        //! This method performs the encoding with distance compensation.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array contains the samples of the sources and the minimum size should be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
+         \f[Y^{multi}_{l,m}(\theta_0^n, \varphi_0^n, \rho_0^n) = \sum_{i=0}^n Y^{dc}_{l,m}(\theta_i, \varphi_i, \rho_i) \f]
+         @param     input  The input array.
+         @param     outputs The outputs array.
+         */
+        virtual void process(const T* input, T* outputs) hoa_noexcept;
     };
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //! The encoder class generates the harmonics for one or several signal according to an azimuth, an elevation and a radius.
+    /** The encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and potentially the radius of the signal.
+     */
     template <typename T> class Encoder<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
     {
     public:
@@ -315,43 +327,25 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const size_t order) hoa_noexcept : Processor<Hoa2d, T>::Harmonics(order)
-        {
-            ;
-        }
+        Encoder(const size_t order) hoa_noexcept : Processor<Hoa2d, T>::Harmonics(order) {}
 
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        virtual ~Encoder() hoa_noexcept
-        {
-
-        }
-
+        virtual ~Encoder() hoa_noexcept hoa_default_f
+        
         //! This method performs the encoding.
         /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The pointer to the input sample of the inputs samples.
          @param     outputs  The outputs array.
          */
         virtual void process(const T* input, T* outputs) hoa_noexcept = 0;
-
-        //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
-        /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
-         */
-        class Basic;
-
-        //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
-        /** The dc encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of the signal. The distance compensation is performed with the simulation of fractional orders when the signal is inside the ambisonic circle or sphere and with gain attenuation when the signal is outside the ambisonics circle or sphere.
-         */
-        class DC;
-
-        //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
-        /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
-         */
-        class Multi;
     };
 
-    template <typename T> class Encoder<Hoa2d, T>::Basic : public Encoder<Hoa2d, T>
+    //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
+    /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
+     */
+    template <typename T> class EncoderBasic<Hoa2d, T> : public Encoder<Hoa2d, T>
     {
     private:
         T    m_azimuth;
@@ -364,7 +358,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
             @param     order	The order.
          */
-        Basic(const size_t order) hoa_noexcept: Encoder<Hoa2d, T>(order)
+        EncoderBasic(const size_t order) hoa_noexcept: Encoder<Hoa2d, T>(order)
         {
             setMute(false);
             setAzimuth(0.);
@@ -373,10 +367,7 @@ namespace hoa
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        ~Basic() hoa_noexcept
-        {
-            ;
-        }
+        ~EncoderBasic() hoa_noexcept hoa_default_f
 
         //! This method set the azimuth.
         /**	The azimuth in radian and you should prefer to use it between 0 and 2π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
@@ -393,28 +384,19 @@ namespace hoa
         /** The method returns the azimuth between 0 and 2π.
             @return     The azimuth.
          */
-        inline T getAzimuth() const hoa_noexcept
-        {
-            return Math<T>::wrap_twopi(m_azimuth);
-        }
+        inline T getAzimuth() const hoa_noexcept { return Math<T>::wrap_twopi(m_azimuth);}
 
         //! This method mute or unmute.
         /**	Mute or unmute.
          @param     muted	The mute state.
          */
-        inline void setMute(const bool muted) hoa_noexcept
-        {
-            m_muted = muted;
-        }
+        inline void setMute(const bool muted) hoa_noexcept { m_muted = muted; }
 
         //! This method retrieve the mute or unmute state of a source.
         /**	Get the Mute state of a source.
          @return    The mute state of the source.
          */
-        inline bool getMute() const hoa_noexcept
-        {
-            return m_muted;
-        }
+        inline bool getMute() const hoa_noexcept { return m_muted; }
 
         //! This method performs the encoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -481,7 +463,10 @@ namespace hoa
         }
     };
 
-    template <typename T> class Encoder<Hoa2d, T>::DC : public Encoder<Hoa2d, T>
+    //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
+    /** The dc encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of the signal. The distance compensation is performed with the simulation of fractional orders when the signal is inside the ambisonic circle or sphere and with gain attenuation when the signal is outside the ambisonics circle or sphere.
+     */
+    template <typename T> class EncoderDC<Hoa2d, T> : public Encoder<Hoa2d, T>
     {
     private:
         T   m_azimuth;
@@ -498,7 +483,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        DC(const size_t order) hoa_noexcept: Encoder<Hoa2d, T>(order)
+        EncoderDC(const size_t order) hoa_noexcept: Encoder<Hoa2d, T>(order)
         {
             setAzimuth(0.);
             setRadius(1.);
@@ -508,10 +493,7 @@ namespace hoa
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        ~DC() hoa_noexcept
-        {
-            ;
-        }
+        ~EncoderDC() hoa_noexcept hoa_default_f
 
         //! This method set the azimuth.
         /**	The azimuth in radian and you should prefer to use it between 0 and 2π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
@@ -528,10 +510,7 @@ namespace hoa
         /** The method returns the azimuth between 0 and 2π.
          @return     The azimuth.
          */
-        inline T getAzimuth() const hoa_noexcept
-        {
-            return Math<T>::wrap_twopi(m_azimuth);
-        }
+        inline T getAzimuth() const hoa_noexcept { return Math<T>::wrap_twopi(m_azimuth); }
 
         //! This method set the radius.
         /**	The radius is between 0 and infinity. At 0, the source is in the center of the ambisonic circle and at 1, the source is at the limit of the ambisonic circle. Over 1, the source get away the ambisonic circle.
@@ -559,28 +538,19 @@ namespace hoa
         /** The method returns the azimuth between 0 and 2π.
          @return     The azimuth.
          */
-        inline T getRadius() const hoa_noexcept
-        {
-            return m_radius;
-        }
+        inline T getRadius() const hoa_noexcept { return m_radius; }
 
         //! This method mute or unmute.
         /**	Mute or unmute.
          @param     muted	The mute state.
          */
-        inline void setMute(const bool muted) hoa_noexcept
-        {
-            m_muted = muted;
-        }
+        inline void setMute(const bool muted) hoa_noexcept { m_muted = muted; }
 
         //! This method retrieve the mute or unmute state of a source.
         /**	Get the Mute state of a source.
          @return    The mute state of the source.
          */
-        inline bool getMute() const hoa_noexcept
-        {
-            return m_muted;
-        }
+        inline bool getMute() const hoa_noexcept { return m_muted; }
 
         //! This method performs the encoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -661,11 +631,14 @@ namespace hoa
     };
 
 
-    template <typename T> class Encoder<Hoa2d, T>::Multi : public Encoder<Hoa2d, T>
+    //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
+    /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
+     */
+    template <typename T> class EncoderMulti<Hoa2d, T> : public Encoder<Hoa2d, T>
     {
     private:
         const size_t                     m_number_of_sources;
-        std::vector<Encoder<Hoa2d, T>::DC*>  m_encoders;
+        std::vector< EncoderDC<Hoa2d, T>* >  m_encoders;
     public:
 
         //! The map constructor.
@@ -674,19 +647,19 @@ namespace hoa
          @param     order            The order.
          @param     numberOfSources	The number of sources.
          */
-        Multi(const size_t order, size_t numberOfSources) hoa_noexcept : Encoder<Hoa2d, T>(order),
+        EncoderMulti(const size_t order, size_t numberOfSources) hoa_noexcept : Encoder<Hoa2d, T>(order),
         m_number_of_sources(numberOfSources)
         {
             for(size_t i = 0; i < m_number_of_sources; i++)
             {
-                m_encoders.push_back(new Encoder<Hoa2d, T>::DC(order));
+                m_encoders.push_back(new EncoderDC<Hoa2d, T>(order));
             }
         }
 
         //! The map destructor.
         /**	The map destructor free the memory and deallocate the member classes.
          */
-        ~Multi() hoa_noexcept
+        ~EncoderMulti() hoa_noexcept
         {
             for(size_t i = 0; i < m_number_of_sources; i++)
             {
@@ -697,13 +670,9 @@ namespace hoa
 
         //! This method retrieve the number of sources.
         /** Retrieve the number of sources.
-
          @return The number of sources.
          */
-        inline size_t getNumberOfSources() const hoa_noexcept
-        {
-            return m_number_of_sources;
-        }
+        inline size_t getNumberOfSources() const hoa_noexcept { return m_number_of_sources; }
 
         //! This method set the angle of azimuth of a source.
         /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield. The index must be between 0 and the number of sources - 1.
@@ -712,44 +681,29 @@ namespace hoa
          @param     azimuth	The azimuth.
          @see       setRadius()
          */
-        inline void setAzimuth(const size_t index, const T azimuth) hoa_noexcept
-        {
-            m_encoders[index]->setAzimuth(azimuth);
-        }
+        inline void setAzimuth(const size_t index, const T azimuth) hoa_noexcept { m_encoders[index]->setAzimuth(azimuth); }
 
         //! This method set the radius of a source.
         /**	The radius is between 0 and infinity. At 0, the source is in the center of the ambisonic circle and at 1, the source is at the limit of the ambisonic circle. Over 1, the source get away the ambisonic circle. The index must be between 0 and the number of sources - 1.
-
          @param     index	The index of the source.
          @param     radius   The radius.
          @see       setAzimuth()
          */
-        inline void setRadius(const size_t index, const T radius) hoa_noexcept
-        {
-            m_encoders[index]->setRadius(radius);
-        }
+        inline void setRadius(const size_t index, const T radius) hoa_noexcept { m_encoders[index]->setRadius(radius); }
 
         //! This method mute or unmute a source.
         /**	Mute or unmute a source with a boolean value. The index must be between 0 and the number of sources - 1.
-
          @param     index	The index of the source.
          @param     muted	The mute state.
          */
-        inline void setMute(const size_t index, const bool muted) hoa_noexcept
-        {
-            m_encoders[index]->setMute(muted);
-        }
+        inline void setMute(const size_t index, const bool muted) hoa_noexcept { m_encoders[index]->setMute(muted); }
 
         //! This method retrieve the azimuth of a source.
         /** Retrieve the azimuth of a source.
-
          @param     index	The index of the source.
          @return The azimuth of the source if the source exists, otherwise the function generates an error.
          */
-        inline T getAzimuth(const size_t index) const hoa_noexcept
-        {
-            return m_encoders[index]->getAzimuth();
-        }
+        inline T getAzimuth(const size_t index) const hoa_noexcept { return m_encoders[index]->getAzimuth(); }
 
         //! This method retrieve the radius of a source.
         /** Retrieve the radius of a source.
@@ -757,10 +711,7 @@ namespace hoa
          @param     index	The index of the source.
          @return The radius of the source if the source exists, otherwise the function generates an error.
          */
-        inline T getRadius(const size_t index) const hoa_noexcept
-        {
-            return m_encoders[index]->getRadius();
-        }
+        inline T getRadius(const size_t index) const hoa_noexcept { return m_encoders[index]->getRadius(); }
 
         //! This method retrieve the mute or unmute state of a source.
         /**	Get the Mute state of a source.
@@ -769,10 +720,7 @@ namespace hoa
          @return    The mute state of the source if the source exists, otherwise the function generates an error.
          @see       setMute()
          */
-        inline bool getMute(const size_t index) const hoa_noexcept
-        {
-            return m_encoders[index]->getMute();
-        }
+        inline bool getMute(const size_t index) const hoa_noexcept { return m_encoders[index]->getMute(); }
 
 
         //! This method performs the encoding with distance compensation.
@@ -790,6 +738,14 @@ namespace hoa
         }
     };
 
+    
+    
+    
+    
+    
+    
+    
+    
     template <typename T> class Encoder<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics
     {
     public:
@@ -798,18 +754,12 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const size_t order) hoa_noexcept : Processor<Hoa3d, T>::Harmonics(order)
-        {
-            ;
-        }
+        Encoder(const size_t order) hoa_noexcept : Processor<Hoa3d, T>::Harmonics(order) {}
 
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        virtual ~Encoder() hoa_noexcept
-        {
-
-        }
+        virtual ~Encoder() hoa_noexcept hoa_default_f
 
         //! This method performs the encoding.
         /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -817,24 +767,12 @@ namespace hoa
          @param     outputs  The outputs array.
          */
         virtual void process(const T* input, T* outputs) hoa_noexcept = 0;
-
-        //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
-        /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
-         */
-        class Basic;
-
-        //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
-        /** The dc encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of the signal. The distance compensation is performed with the simulation of fractional orders when the signal is inside the ambisonic circle or sphere and with gain attenuation when the signal is outside the ambisonics circle or sphere.
-         */
-        class DC;
-
-        //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
-        /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
-         */
-        class Multi;
     };
 
-    template <typename T> class Encoder<Hoa3d, T>::Basic : public Encoder<Hoa3d, T>
+    //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
+    /** The basic encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth and the elevation of the signal.
+     */
+    template <typename T> class EncoderBasic<Hoa3d, T> : public Encoder<Hoa3d, T>
     {
     private:
         T  m_azimuth;
@@ -851,7 +789,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Basic(const size_t order) hoa_noexcept : Encoder<Hoa3d, T>(order)
+        EncoderBasic(const size_t order) hoa_noexcept : Encoder<Hoa3d, T>(order)
         {
             m_normalization = Signal<T>::alloc(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics());
             for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
@@ -866,7 +804,7 @@ namespace hoa
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        ~Basic() hoa_noexcept
+        ~EncoderBasic() hoa_noexcept
         {
             Signal<T>::free(m_normalization);
         }
@@ -875,19 +813,13 @@ namespace hoa
         /**	Mute or unmute.
          @param     muted	The mute state.
          */
-        inline void setMute(const bool muted) hoa_noexcept
-        {
-            m_muted = muted;
-        }
+        inline void setMute(const bool muted) hoa_noexcept { m_muted = muted; }
 
         //! This method retrieve the mute or unmute state of a source.
         /**	Get the Mute state of a source.
          @return    The mute state of the source.
          */
-        inline bool getMute() const hoa_noexcept
-        {
-            return m_muted;
-        }
+        inline bool getMute() const hoa_noexcept { return m_muted; }
 
         //! This method set the angle of azimuth.
         /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield.
@@ -905,10 +837,7 @@ namespace hoa
         /** The method returns the azimuth between 0 and 2π.
          @return     The azimuth.
          */
-        inline T getAzimuth() const hoa_noexcept
-        {
-            return Math<T>::wrap_twopi(m_azimuth);
-        }
+        inline T getAzimuth() const hoa_noexcept { return Math<T>::wrap_twopi(m_azimuth); }
 
         //! This method set the angle of elevation.
         /**	The angle of elevation in radian and you should prefer to use it between -π and π to avoid recursive wrapping of the value. The direction of rotation is from bottom to the top. The 0 radian is centered at the "front" of the soundfield, then π/2 is at the top, -π/2 is at the bottom and π is behind. Note that if the angle of elevation is between π/2 and 3*π/2, the azimuth is reversed.
@@ -926,10 +855,7 @@ namespace hoa
         /** The method returns the elevation between -π and π.
          @return     The elevation.
          */
-        inline T getElevation()  const hoa_noexcept
-        {
-            return m_elevation;
-        }
+        inline T getElevation()  const hoa_noexcept { return m_elevation; }
 
         //! This method performs the encoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics. For the elevation, the function uses three recurrence formulas :
@@ -1134,7 +1060,10 @@ namespace hoa
         }
     };
 
-    template <typename T> class Encoder<Hoa3d, T>::DC : public Encoder<Hoa3d, T>
+    //! The dc encoder class generates the harmonics for one signal according to an azimuth, an elevation and a radius.
+    /** The dc encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of the signal. The distance compensation is performed with the simulation of fractional orders when the signal is inside the ambisonic circle or sphere and with gain attenuation when the signal is outside the ambisonics circle or sphere.
+     */
+    template <typename T> class EncoderDC<Hoa3d, T> : public Encoder<Hoa3d, T>
     {
     private:
         T  m_azimuth;
@@ -1153,7 +1082,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes circular harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        DC(const size_t order) hoa_noexcept : Encoder<Hoa3d, T>(order)
+        EncoderDC(const size_t order) hoa_noexcept : Encoder<Hoa3d, T>(order)
         {
             m_normalization = Signal<T>::alloc(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics());
             for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
@@ -1170,7 +1099,7 @@ namespace hoa
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
          */
-        ~DC() hoa_noexcept
+        ~EncoderDC() hoa_noexcept
         {
             Signal<T>::free(m_normalization);
             Signal<T>::free(m_distance);
@@ -1463,11 +1392,14 @@ namespace hoa
         }
     };
 
-    template <typename T> class Encoder<Hoa3d, T>::Multi : public Encoder<Hoa3d, T>
+    //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
+    /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
+     */
+    template <typename T> class EncoderMulti<Hoa3d, T> : public Encoder<Hoa3d, T>
     {
     private:
         const size_t                     m_number_of_sources;
-        std::vector<Encoder<Hoa3d, T>::DC *> m_encoders;
+        std::vector<EncoderDC<Hoa3d, T> *> m_encoders;
     public:
 
         //! The map constructor.
@@ -1476,19 +1408,19 @@ namespace hoa
          @param     order            The order.
          @param     numberOfSources	The number of sources.
          */
-        Multi(const size_t order, size_t numberOfSources) hoa_noexcept : Encoder<Hoa3d, T>(order),
+        EncoderMulti(const size_t order, size_t numberOfSources) hoa_noexcept : Encoder<Hoa3d, T>(order),
         m_number_of_sources(numberOfSources)
         {
             for(size_t i = 0; i < m_number_of_sources; i++)
             {
-                m_encoders.push_back(new Encoder<Hoa3d, T>::DC(order));
+                m_encoders.push_back(new EncoderDC<Hoa3d, T>(order));
             }
         }
 
         //! The map destructor.
         /**	The map destructor free the memory and deallocate the member classes.
          */
-        ~Multi() hoa_noexcept
+        ~EncoderMulti() hoa_noexcept
         {
             for(size_t i = 0; i < m_number_of_sources; i++)
             {
@@ -1614,8 +1546,6 @@ namespace hoa
             }
         }
     };
-
-#endif
 }
 
 #endif
