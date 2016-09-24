@@ -15,13 +15,17 @@ Sound space is one of the principal dimensions of the contemporary musical thoug
 
 #### Implementations :
 
-[PureData](https://github.com/CICM/HoaLibrary-PD "PureData")<br/>
+
 [Max](https://github.com/CICM/HoaLibrary-Max "Max")<br/>
 [Ofx](https://github.com/CICM/ofxHoa "Open Framework")<br/>
 [Faust](https://github.com/CICM/HoaLibrary-Faust "Faust")
 
+[![PureData](https://img.shields.io/badge/HOA-PureData-blue.svg)](https://github.com/CICM/HoaLibrary-PD)  
+[![Max](https://img.shields.io/badge/HOA-PureData-blue.svg)](https://github.com/CICM/HoaLibrary-PD)  
+[![PureData](https://img.shields.io/badge/HOA-PureData-blue.svg)](https://github.com/CICM/HoaLibrary-PD)  
+[![PureData](https://img.shields.io/badge/HOA-PureData-blue.svg)](https://github.com/CICM/HoaLibrary-PD)  
 [![Documentation](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://cicm.github.io/HoaLibrary-Light/)
 
-##### License :
+#### License :
 
 The HOA Library in under the [GNU](http://www.gnu.org/copyleft/gpl.html "GNU Public License"). If you'd like to avoid the restrictions of the GPL and use HOA Library for a closed-source product, you contact the [CICM](http://cicm.mshparisnord.org/ "CICM").
