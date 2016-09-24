@@ -42,112 +42,128 @@ namespace hoa
          @param vectorsize The vector size for binaural decoding.
          */
         virtual void computeRendering(const size_t vectorsize = 64);
-
-        //! The regular decoder class decodes a sound field in the harmonics domain through the planewaves domain for a perfect circle or sphere of loudspeakers.
-        /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced on the circle or the sphere.
+    };
+    
+    
+    //! The regular decoder class decodes a sound field in the harmonics domain through the planewaves domain for a perfect circle or sphere of loudspeakers.
+    /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced on the circle or the sphere.
+     */
+    template <Dimension D, typename T> class DecoderRegular : public Decoder<D, T>
+    {
+    public:
+        
+        //! The regular constructor.
+        /**	The regular constructor allocates and initialize the decoding matrix depending on a order of decomposition and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
+         @param     order				The order
+         @param     numberOfPlanewaves     The number of channels.
          */
-        class Regular : public Decoder
-        {
-        public:
-
-            //! The regular constructor.
-            /**	The regular constructor allocates and initialize the decoding matrix depending on a order of decomposition and a number of channels. The order must be at least 1 and the number of channels must be at least the number of harmonics.
-             @param     order				The order
-             @param     numberOfPlanewaves     The number of channels.
-             */
-            Regular(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept;
-
-            //! The destructor.
-            /** The destructor free the memory.
-             */
-			virtual ~Regular() = 0;
-
-            //! This method performs the decoding.
-            /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
-             @param     inputs  The input array that contains the samples of the harmonics.
-             @param     outputs The output array that contains samples destinated to channels.
-             */
-            virtual void process(const T* inputs, T* outputs) hoa_noexcept hoa_override;
-
-            //! This method computes the decoding matrix.
-            /**	You should use this method after changing the position of the loudspeakers.
-             @param vectorsize The vector size for binaural decoding.
-             */
-            virtual void computeRendering(const size_t vectorsize = 64) hoa_override;
-        };
-
-        //! The irregular decoder class decodes a sound field in the harmonics domain through the planewaves domain for a irregular circle or sphere (2d only).
-        /** The irregular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if less than the number of harmonics plus one or when the loudspeakers are not equally spaced on the circle or the sphere.
+        DecoderRegular(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept;
+        
+        //! The destructor.
+        /** The destructor free the memory.
          */
-        class Irregular : public Decoder
-        {
-        public:
-            //! The irregular constructor.
-            /**	The irregular constructor allocates and initialize the decoding matrix depending on a order of decomposition and a number of channels. The order must be at least 1.
-             @param     order				The order
-             @param     numberOfPlanewaves     The number of channels.
-             */
-            Irregular(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept;
-
-            //! The destructor.
-            /** The destructor free the memory.
-             */
-			virtual ~Irregular() = 0;
-
-            //! This method performs the decoding.
-            /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
-             @param     inputs  The input array that contains the samples of the harmonics.
-             @param     outputs The output array that contains samples destinated to the channels.
-             */
-            virtual void process(const T* inputs, T* outputs) hoa_noexcept hoa_override;
-
-            //! This method computes the decoding matrix.
-            /**	You should use this method after changing the position of the loudspeakers.
-             @param vectorsize The vector size for binaural decoding.
-             */
-            virtual void computeRendering(const size_t vectorsize = 64) hoa_override;
-
-        };
-
-        //! The binaural decoder class decodes a sound field in the harmonics domain for headphones.
-        /** The binaural decoder should be used to decode an ambisonic sound field for headphones. It decodes the sound field through the planewaves domain an convolves the results with HRTF from the IRCAM database.
+        virtual ~DecoderRegular() = 0;
+        
+        //! This method performs the decoding.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
+         @param     inputs  The input array that contains the samples of the harmonics.
+         @param     outputs The output array that contains samples destinated to channels.
          */
-        class Binaural : public Decoder
-        {
-        public:
-            //! The binaural decoder constructor.
-            /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a order of decomposition and a number of channels. The order and the number of channels must be at least 1.
-             @param     order				The order
-             */
-            Binaural(const size_t order);
-
-
-            //! The binaural decoder destructor.
-            /**	The binaural decoder destructor free the memory.
-             */
-            virtual ~Binaural() = 0;
-
-            //! This method computes the decoding matrix.
-            /**	You should use this method after changing the position of the loudspeakers.
-             @param vectorsize The vector size for binaural decoding.
-             */
-            virtual void computeRendering(const size_t vectorsize = 64)  hoa_override;
-
-            //! This method performs the binaural decoding and the convolution.
-            virtual  void processBlock() hoa_noexcept;
-
-            //! This method performs the binaural decoding.
-            /**	You should use this method for not-in-place processing and performs the binaural decoding sample by sample. The inputs array contains the spherical harmonics samples : inputs[number of harmonics] and the outputs array contains the headphones samples : outputs[2].
-
-             @param     inputs	The input samples.
-             @param     outputs  The output array that contains samples destinated to channels.
-             */
-            virtual void process(const T* inputs, T* outputs) hoa_noexcept hoa_override;
-        };
+        virtual void process(const T* inputs, T* outputs) hoa_noexcept hoa_override;
+        
+        //! This method computes the decoding matrix.
+        /**	You should use this method after changing the position of the loudspeakers.
+         @param vectorsize The vector size for binaural decoding.
+         */
+        virtual void computeRendering(const size_t vectorsize = 64) hoa_override;
+    };
+    
+    //! The irregular decoder class decodes a sound field in the harmonics domain through the planewaves domain for a irregular circle or sphere (2d only).
+    /** The irregular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if less than the number of harmonics plus one or when the loudspeakers are not equally spaced on the circle or the sphere.
+     */
+    template <Dimension D, typename T> class DecoderIrregular : public Decoder<D, T>
+    {
+    public:
+        //! The irregular constructor.
+        /**	The irregular constructor allocates and initialize the decoding matrix depending on a order of decomposition and a number of channels. The order must be at least 1.
+         @param     order				The order
+         @param     numberOfPlanewaves     The number of channels.
+         */
+        DecoderIrregular(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept;
+        
+        //! The destructor.
+        /** The destructor free the memory.
+         */
+        virtual ~DecoderIrregular() = 0;
+        
+        //! This method performs the decoding.
+        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
+         @param     inputs  The input array that contains the samples of the harmonics.
+         @param     outputs The output array that contains samples destinated to the channels.
+         */
+        virtual void process(const T* inputs, T* outputs) hoa_noexcept hoa_override;
+        
+        //! This method computes the decoding matrix.
+        /**	You should use this method after changing the position of the loudspeakers.
+         @param vectorsize The vector size for binaural decoding.
+         */
+        virtual void computeRendering(const size_t vectorsize = 64) hoa_override;
+        
+    };
+    
+    //! The binaural decoder class decodes a sound field in the harmonics domain for headphones.
+    /** The binaural decoder should be used to decode an ambisonic sound field for headphones. It decodes the sound field through the planewaves domain an convolves the results with HRTF from the IRCAM database.
+     */
+    template <Dimension D, typename T> class DecoderBinaural : public Decoder<Hoa2d, T>
+    {
+    public:
+        //! The binaural decoder constructor.
+        /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a order of decomposition and a number of channels. The order and the number of channels must be at least 1.
+         @param     order				The order
+         */
+        DecoderBinaural(const size_t order);
+        
+        
+        //! The binaural decoder destructor.
+        /**	The binaural decoder destructor free the memory.
+         */
+        virtual ~DecoderBinaural() = 0;
+        
+        //! This method computes the decoding matrix.
+        /**	You should use this method after changing the position of the loudspeakers.
+         @param vectorsize The vector size for binaural decoding.
+         */
+        virtual void computeRendering(const size_t vectorsize = 64)  hoa_override;
+        
+        //! This method performs the binaural decoding and the convolution.
+        virtual  void processBlock() hoa_noexcept;
+        
+        //! This method performs the binaural decoding.
+        /**	You should use this method for not-in-place processing and performs the binaural decoding sample by sample. The inputs array contains the spherical harmonics samples : inputs[number of harmonics] and the outputs array contains the headphones samples : outputs[2].
+         
+         @param     inputs	The input samples.
+         @param     outputs  The output array that contains samples destinated to channels.
+         */
+        virtual void process(const T* inputs, T* outputs) hoa_noexcept hoa_override;
     };
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //! The decoder class decodes a sound field in the harmonics domain through the planewaves domain.
+    /** The decoder should be used to decode a set the harmonics domain to a set of planewaves for loudspeakers. There are three types of decoder. Regular for a perfect circle or sphere of loudspeakers. Irregular when the loudspeakers are not equally spaced on the circle or the sphere. Binaural for headphone restitution.
+     */
     template <typename T> class Decoder<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics, public Processor<Hoa2d, T>::Planewaves
     {
     public:
@@ -173,10 +189,7 @@ namespace hoa
         //! The destructor.
         /** The destructor free the memory.
          */
-        virtual ~Decoder()
-        {
-            ;
-        }
+        virtual ~Decoder() hoa_default_f
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -196,24 +209,12 @@ namespace hoa
          @retun The mode of the decoder.
          */
         inline virtual Mode getMode() const hoa_noexcept = 0;
-
-        //! The ambisonic regular decoder.
-        /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
-         */
-        class Regular;
-
-        //! The ambisonic irregular decoder.
-        /** The irregular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if less than the number of harmonics plus one or when the loudspeakers are not equally spaced.
-         */
-        class Irregular;
-
-        //! The ambisonic binaural decoder.
-        /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
-         */
-        class Binaural;
     };
 
-    template <typename T> class Decoder<Hoa2d, T>::Regular : public Decoder<Hoa2d, T>
+    //! The ambisonic regular decoder.
+    /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
+     */
+    template <typename T> class DecoderRegular<Hoa2d, T> : public Decoder<Hoa2d, T>
     {
     private:
         T*  m_matrix;
@@ -224,7 +225,7 @@ namespace hoa
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
-        Regular(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
+        DecoderRegular(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
         {
             m_matrix = Signal<T>::alloc(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
             computeRendering();
@@ -233,7 +234,7 @@ namespace hoa
         //! The destructor.
         /** The destructor free the memory.
          */
-        ~Regular()
+        ~DecoderRegular()
         {
             Signal<T>::free(m_matrix);
         }
@@ -242,7 +243,7 @@ namespace hoa
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
          */
-        inline Mode getMode() const hoa_noexcept hoa_override {return RegularMode;};
+        inline typename Decoder<Hoa2d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa2d, T>::RegularMode;};
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -260,7 +261,7 @@ namespace hoa
          */
         void computeRendering(const size_t vectorsize = 64) hoa_override
         {
-            typename Encoder<Hoa2d, T>::Basic encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
+            EncoderBasic<Hoa2d, T> encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
             const T factor = 1. / (T)(Decoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(size_t i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
@@ -271,7 +272,11 @@ namespace hoa
         }
     };
 
-    template <typename T> class Decoder<Hoa2d, T>::Irregular : public Decoder<Hoa2d, T>
+    
+    //! The ambisonic irregular decoder.
+    /** The irregular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if less than the number of harmonics plus one or when the loudspeakers are not equally spaced.
+     */
+    template <typename T> class DecoderIrregular<Hoa2d, T> : public Decoder<Hoa2d, T>
     {
     private:
         T*  m_matrix;
@@ -282,7 +287,7 @@ namespace hoa
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
-        Irregular(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
+        DecoderIrregular(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept : Decoder<Hoa2d, T>(order, numberOfPlanewaves)
         {
             m_matrix = Signal<T>::alloc(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
             computeRendering();
@@ -291,7 +296,7 @@ namespace hoa
         //! The destructor.
         /** The destructor free the memory.
          */
-        ~Irregular()
+        ~DecoderIrregular()
         {
             Signal<T>::free(m_matrix);
         }
@@ -300,7 +305,7 @@ namespace hoa
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
          */
-        inline Mode getMode() const hoa_noexcept hoa_override {return IrregularMode;};
+        inline typename Decoder<Hoa2d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa2d, T>::IrregularMode;};
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -318,7 +323,7 @@ namespace hoa
          */
         void computeRendering(const size_t vectorsize = 64)  hoa_override
         {
-            typename Encoder<Hoa2d, T>::Basic encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
+            EncoderBasic<Hoa2d, T> encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
             Signal<T>::clear(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
             T* vector_harmonics = Signal<T>::alloc(Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
@@ -465,7 +470,10 @@ namespace hoa
         }
     };
 
-    template <typename T> class Decoder<Hoa2d, T>::Binaural : public Decoder<Hoa2d, T>
+    //! The ambisonic binaural decoder.
+    /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
+     */
+    template <typename T> class DecoderBinaural<Hoa2d, T> : public Decoder<Hoa2d, T>
     {
     private:
         size_t       m_vector_size;
@@ -488,7 +496,7 @@ namespace hoa
         /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a order of decomposition and a number of channels. The order and the number of channels must be at least 1.
          @param     order				The order
          */
-        Binaural(const size_t order) hoa_noexcept : Decoder<Hoa2d, T>(order, 2),
+        DecoderBinaural(const size_t order) hoa_noexcept : Decoder<Hoa2d, T>(order, 2),
         m_vector_size(0ul),
         m_input(hoa_nullptr),
         m_result(hoa_nullptr),
@@ -504,12 +512,12 @@ namespace hoa
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
          */
-        inline Mode getMode() const hoa_noexcept hoa_override {return BinauralMode;};
+        inline typename Decoder<Hoa2d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa2d, T>::BinauralMode;};
 
         //! The binaural decoder destructor.
         /**	The binaural decoder destructor free the memory.
          */
-        ~Binaural() hoa_noexcept
+        ~DecoderBinaural() hoa_noexcept
         {
             clear();
         }
@@ -590,6 +598,23 @@ namespace hoa
     };
 
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //! The decoder class decodes a sound field in the harmonics domain through the planewaves domain.
+    /** The decoder should be used to decode a set the harmonics domain to a set of planewaves for loudspeakers. There are three types of decoder. Regular for a perfect circle or sphere of loudspeakers. Irregular when the loudspeakers are not equally spaced on the circle or the sphere. Binaural for headphone restitution.
+     */
     template <typename T> class Decoder<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics, public Processor<Hoa3d, T>::Planewaves
     {
     public:
@@ -615,10 +640,7 @@ namespace hoa
         //! The destructor.
         /** The destructor free the memory.
          */
-        virtual ~Decoder()
-        {
-            ;
-        }
+        virtual ~Decoder() {}
 
         //! This method retrives the mode of the decoder.
         /**	This method retrives the mode of the decoder.
@@ -638,19 +660,12 @@ namespace hoa
          @param vectorsize The vector size for binaural decoding.
          */
         virtual void computeRendering(const size_t vectorsize = 64) = 0;
-
-        //! The ambisonic regular decoder.
-        /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
-         */
-        class Regular;
-
-        //! The ambisonic binaural decoder.
-        /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
-         */
-        class Binaural;
     };
 
-    template <typename T> class Decoder<Hoa3d, T>::Regular : public Decoder<Hoa3d, T>
+    //! The ambisonic regular decoder.
+    /** The regular decoder should be used to decode an ambisonic sound field when the number of loudspeakers if more or equal to the number of harmonics plus one and when the loudspeakers are equally spaced.
+     */
+    template <typename T> class DecoderRegular<Hoa3d, T> : public Decoder<Hoa3d, T>
     {
     private:
         T*  m_matrix;
@@ -661,25 +676,25 @@ namespace hoa
          @param     order				The order
          @param     numberOfPlanewaves     The number of channels.
          */
-        Regular(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept : Decoder<Hoa3d, T>(order, numberOfPlanewaves)
+        DecoderRegular(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept : Decoder<Hoa3d, T>(order, numberOfPlanewaves)
         {
             m_matrix = Signal<T>::alloc(Decoder<Hoa3d, T>::getNumberOfPlanewaves() * Decoder<Hoa3d, T>::getNumberOfHarmonics());
             computeRendering();
         }
 
+        //! The regular destructor.
+        /**	The regular destructor free the memory.
+         */
+        ~DecoderRegular()
+        {
+            Signal<T>::free(m_matrix);
+        }
+        
         //! This method retrives the mode of the decoder.
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
          */
-        inline Mode getMode() const hoa_noexcept hoa_override {return RegularMode;};
-
-        //! The regular destructor.
-        /**	The regular destructor free the memory.
-         */
-        ~Regular()
-        {
-            Signal<T>::free(m_matrix);
-        }
+        inline typename Decoder<Hoa3d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa3d, T>::RegularMode;}
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -720,7 +735,10 @@ namespace hoa
         }
     };
 
-    template <typename T> class Decoder<Hoa3d, T>::Binaural : public Decoder<Hoa3d, T>
+    //! The ambisonic binaural decoder.
+    /** The binaural decoder should be used to decode an ambisonic sound field for headphones.
+     */
+    template <typename T> class DecoderBinaural<Hoa3d, T> : public Decoder<Hoa3d, T>
     {
         size_t       m_vector_size;
         size_t       m_crop_size;
@@ -743,7 +761,7 @@ namespace hoa
         /**	The binaural decoder constructor allocates and initialize the member values to the decoding matrix depending on a order of decomposition and a number of channels. The order and the number of channels must be at least 1.
          @param     order				The order
          */
-        Binaural(const size_t order) : Decoder<Hoa3d, T>(order, 2),
+        DecoderBinaural(const size_t order) : Decoder<Hoa3d, T>(order, 2),
         m_vector_size(0ul),
         m_input(hoa_nullptr),
         m_result(hoa_nullptr),
@@ -759,12 +777,12 @@ namespace hoa
         /**	This method retrives the mode of the decoder.
          @retun The mode of the decoder.
          */
-        inline Mode getMode() const hoa_noexcept hoa_override {return BinauralMode;};
+        inline typename Decoder<Hoa3d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa3d, T>::BinauralMode;};
 
         //! The binaural decoder destructor.
         /**	The binaural decoder destructor free the memory.
          */
-        ~Binaural()
+        ~DecoderBinaural()
         {
             clear();
         }
@@ -849,8 +867,6 @@ namespace hoa
         inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override {}
 
     };
-
-#endif
 
 }
 
