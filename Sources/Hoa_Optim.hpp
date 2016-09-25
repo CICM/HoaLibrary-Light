@@ -210,7 +210,7 @@ namespace hoa
             T* vector = Signal<T>::alloc(order);
             for(size_t i = 1; i <= order; i++)
             {
-                vector[i-1] = cos(T(i) *  T(HOA_PI) / (T)(2. * order + 2.));
+                vector[i-1] = cos(T(i) *  T(HOA_PI) / T(2. * order + 2.));
             }
             return vector;
         }
