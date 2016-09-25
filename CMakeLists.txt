@@ -5,7 +5,7 @@ option(GCOV_SUPPORT "Build for gcov" Off)
 
 file(GLOB HOASOURCES ${PROJECT_SOURCE_DIR}/Sources/*.cpp ${PROJECT_SOURCE_DIR}/Sources/*.hpp)
 source_group(Hoa FILES ${HOASOURCES})
-include_directories(${PROJECT_SOURCE_DIR}/Test)
+include_directories(${PROJECT_SOURCE_DIR}/Tests)
 include_directories(${PROJECT_SOURCE_DIR}/Sources)
 
 set(CMAKE_MACOSX_RPATH On)
