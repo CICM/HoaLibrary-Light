@@ -3,32 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 project(Hoa)
 option(COVERALLS "Build with coveralls" OFF)
 
-set(HOASOURCES
-  ${PROJECT_SOURCE_DIR}/Sources/Decoder.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/HrirIrc1002C3D.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Rotate.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Defs.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Math.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Scope.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Encoder.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Meter.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Signal.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Exchanger.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Optim.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Source.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Harmonics.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Planewaves.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Tools.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Hoa.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Processor.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Vector.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Hrir.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Projector.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Voronoi.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/HrirIrc1002C2D.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Recomposer.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Wider.hpp)
-
+file(GLOB HOASOURCES ${PROJECT_SOURCE_DIR}/Sources/*.cpp ${PROJECT_SOURCE_DIR}/Sources/*.hpp)
 source_group(Hoa FILES ${HOASOURCES})
 include_directories(${PROJECT_SOURCE_DIR}/Test)
 include_directories(${PROJECT_SOURCE_DIR}/Sources)
