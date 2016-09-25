@@ -13,7 +13,7 @@ build_script:
 
 test_script:
     - cd %APPVEYOR_BUILD_FOLDER%\build\Debug
-    - hoatest.exe
+    - test.exe
 
 notifications:
   - provider: Email
