@@ -13,8 +13,8 @@
 #ifndef DEF_HOA_HRIR_LIGHT
 #define DEF_HOA_HRIR_LIGHT
 
-#include "HrirIrc1002C2D.hpp"
-#include "HrirIrc1002C3D.hpp"
+#include "Hoa_HrirIrc1002C2D.hpp"
+#include "Hoa_HrirIrc1002C3D.hpp"
 
 namespace hoa
 {

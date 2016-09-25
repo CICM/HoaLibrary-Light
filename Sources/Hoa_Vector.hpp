@@ -12,7 +12,7 @@
 #ifndef DEF_HOA_VECTOR_LIGHT
 #define DEF_HOA_VECTOR_LIGHT
 
-#include "Planewaves.hpp"
+#include "Hoa_Planewaves.hpp"
 
 namespace hoa
 {

@@ -12,8 +12,8 @@
 #ifndef DEF_HOA_VORONOI_LIGHT
 #define DEF_HOA_VORONOI_LIGHT
 
-#include "Defs.hpp"
-#include "Math.hpp"
+#include "Hoa_Defs.hpp"
+#include "Hoa_Math.hpp"
 
 //! @cond
 

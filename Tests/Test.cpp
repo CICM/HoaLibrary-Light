@@ -4,11 +4,16 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#include "../Sources/Hoa.hpp"
+#include <Hoa.hpp>
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <cassert>
+
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
+
+
 
 static void test_binaural()
 {
@@ -90,12 +95,3 @@ static void test_binaural()
      */
 }
 
-
-
-int main(int argc, char** argv)
-{
-    std::cout << "binaural...";
-    test_binaural();
-    std::cout << "ok\n";
-    return 0;
-}

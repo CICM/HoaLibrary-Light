@@ -12,7 +12,7 @@
 #ifndef DEF_HOA_MATH_LIGHT
 #define DEF_HOA_MATH_LIGHT
 
-#include "Defs.hpp"
+#include "Hoa_Defs.hpp"
 
 namespace hoa
 {

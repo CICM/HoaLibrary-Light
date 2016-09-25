@@ -12,7 +12,7 @@
 #ifndef DEF_HOA_SOURCE_LIGHT
 #define DEF_HOA_SOURCE_LIGHT
 
-#include "Math.hpp"
+#include "Hoa_Math.hpp"
 
 //! @cond
 

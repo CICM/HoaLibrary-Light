@@ -12,8 +12,8 @@
 #ifndef DEF_HOA_SCOPE_LIGHT
 #define DEF_HOA_SCOPE_LIGHT
 
-#include "Encoder.hpp"
-#include "Planewaves.hpp"
+#include "Hoa_Encoder.hpp"
+#include "Hoa_Planewaves.hpp"
 
 namespace hoa
 {

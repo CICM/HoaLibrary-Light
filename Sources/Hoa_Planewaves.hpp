@@ -12,8 +12,8 @@
 #ifndef DEF_HOA_PLANEWAVES_LIGHT
 #define DEF_HOA_PLANEWAVES_LIGHT
 
-#include "Math.hpp"
-#include "Signal.hpp"
+#include "Hoa_Math.hpp"
+#include "Hoa_Signal.hpp"
 
 namespace hoa
 {

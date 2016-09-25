@@ -12,7 +12,7 @@
 #ifndef DEF_HOA_WIDER_LIGHT
 #define DEF_HOA_WIDER_LIGHT
 
-#include "Processor.hpp"
+#include "Hoa_Processor.hpp"
 
 namespace hoa
 {

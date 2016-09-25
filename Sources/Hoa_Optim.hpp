@@ -12,7 +12,7 @@
 #ifndef DEF_HOA_OPTIM_LIGHT
 #define DEF_HOA_OPTIM_LIGHT
 
-#include "Processor.hpp"
+#include "Hoa_Processor.hpp"
 
 namespace hoa
 {

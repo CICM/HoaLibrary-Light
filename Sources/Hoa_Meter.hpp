@@ -12,8 +12,8 @@
 #ifndef DEF_HOA_METER_LIGHT
 #define DEF_HOA_METER_LIGHT
 
-#include "Planewaves.hpp"
-#include "Voronoi.hpp"
+#include "Hoa_Planewaves.hpp"
+#include "Hoa_Voronoi.hpp"
 
 namespace hoa
 {

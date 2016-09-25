@@ -12,8 +12,8 @@
 #ifndef DEF_HOA_PROCESSOR_LIGHT
 #define DEF_HOA_PROCESSOR_LIGHT
 
-#include "Harmonics.hpp"
-#include "Planewaves.hpp"
+#include "Hoa_Harmonics.hpp"
+#include "Hoa_Planewaves.hpp"
 
 namespace hoa
 {

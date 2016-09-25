@@ -12,7 +12,7 @@
 #ifndef DEF_HOA_EXCHANGER_LIGHT
 #define DEF_HOA_EXCHANGER_LIGHT
 
-#include "Processor.hpp"
+#include "Hoa_Processor.hpp"
 
 namespace hoa
 {

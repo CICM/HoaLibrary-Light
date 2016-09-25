@@ -12,8 +12,8 @@
 #ifndef DEF_HOA_DECODER_LIGHT
 #define DEF_HOA_DECODER_LIGHT
 
-#include "Encoder.hpp"
-#include "Hrir.hpp"
+#include "Hoa_Encoder.hpp"
+#include "Hoa_Hrir.hpp"
 
 namespace hoa
 {
