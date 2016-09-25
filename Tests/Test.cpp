@@ -13,7 +13,82 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
+using namespace hoa;
+typedef float hoa_float_t;
 
+TEST_CASE("Harmonics 2D", "[Harmonics] [2D]")
+{
+    typedef Harmonic<Hoa2d, hoa_float_t> Harmonic;
+    SECTION("Static Degree")
+    {
+        CHECK(Harmonic::getDegree(0) == 0);
+        CHECK(Harmonic::getDegree(1) == 1);
+        CHECK(Harmonic::getDegree(2) == 1);
+        CHECK(Harmonic::getDegree(3) == 2);
+        CHECK(Harmonic::getDegree(4) == 2);
+        CHECK(Harmonic::getDegree(5) == 3);
+        CHECK(Harmonic::getDegree(6) == 3);
+        CHECK(Harmonic::getDegree(13) == 7);
+        CHECK(Harmonic::getDegree(14) == 7);
+        CHECK(Harmonic::getDegree(21) == 11);
+        CHECK(Harmonic::getDegree(22) == 11);
+    }
+    
+    SECTION("Static Order")
+    {
+        CHECK(Harmonic::getOrder(0) == 0);
+        CHECK(Harmonic::getOrder(1) == -1);
+        CHECK(Harmonic::getOrder(2) == 1);
+        CHECK(Harmonic::getOrder(3) == -2);
+        CHECK(Harmonic::getOrder(4) == 2);
+        CHECK(Harmonic::getOrder(5) == -3);
+        CHECK(Harmonic::getOrder(6) == 3);
+        CHECK(Harmonic::getOrder(13) == -7);
+        CHECK(Harmonic::getOrder(14) == 7);
+        CHECK(Harmonic::getOrder(21) == -11);
+        CHECK(Harmonic::getOrder(22) == 11);
+    }
+
+    SECTION("Static Index")
+    {
+        CHECK(Harmonic::getIndex(0, 0) == 0);
+        CHECK(Harmonic::getIndex(1, -1) == 1);
+        CHECK(Harmonic::getIndex(1, 1) == 2);
+        CHECK(Harmonic::getIndex(2, -2) == 3);
+        CHECK(Harmonic::getIndex(2, 2) == 4);
+        CHECK(Harmonic::getIndex(3, -3) == 5);
+        CHECK(Harmonic::getIndex(3, 3) == 6);
+        CHECK(Harmonic::getIndex(7, -7) == 13);
+        CHECK(Harmonic::getIndex(7, 7) == 14);
+        CHECK(Harmonic::getIndex(11, -11) == 21);
+        CHECK(Harmonic::getIndex(11, 11) == 22);
+    }
+    /*
+     CHECK(Harmonic::getOrder(0) == 0);
+     CHECK(Harmonic::getIndex(0, 0) == 0);
+     
+     CHECK(Harmonic::getDegree(0) == 0);
+     CHECK(Harmonic::getOrder(0) == 0);
+     CHECK(Harmonic::getIndex(0, 0) == 0);
+     
+     for(size_t i = 1; i < HOA_MAX_ORDER; ++i)
+     {
+     const size_t index1 = Harmonic::getNumberOfHarmonics(i) - 1;
+     const size_t index2 = Harmonic::getNumberOfHarmonics(i);
+     CHECK(index1 == i * 2);
+     CHECK(index2 == i * 2 + 1);
+     
+     CHECK(Harmonic::getDegree(index1) == i);
+     CHECK(Harmonic::getDegree(index2) == i);
+     
+     CHECK(Harmonic::getOrder(index1) == -long(i));
+     CHECK(Harmonic::getOrder(index2) == i);
+     
+     CHECK(Harmonic::getIndex(Harmonic::getDegree(index1), Harmonic::getOrder(index1)) == index1);
+     CHECK(Harmonic::getIndex(Harmonic::getDegree(index2), Harmonic::getOrder(index2)) == index2);
+     }
+     */
+}
 
 static void test_binaural()
 {
