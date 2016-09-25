@@ -12,6 +12,7 @@
 
 static void test_binaural()
 {
+    /*
     const unsigned i_blck_size  = 128;
     const unsigned i_order      = 1;
     const unsigned i_input_nb   = 4;
@@ -19,7 +20,7 @@ static void test_binaural()
     const unsigned i_nb_samples = 64000;
 
     srand(time(NULL));
-    hoa::Decoder<hoa::Hoa3d, float>::Binaural *decoder = new hoa::Decoder<hoa::Hoa3d, float>::Binaural(i_order);
+    hoa::DecoderBinaural<hoa::Hoa3d, float> *decoder = new hoa::DecoderBinaural<hoa::Hoa3d, float>(i_order);
     float *p_src    = (float *)malloc(i_input_nb * i_nb_samples * sizeof(float));
     float *p_dest   = (float *)malloc(i_output_nb * i_nb_samples * sizeof(float));
     memset(p_src, 0, i_input_nb * i_nb_samples * sizeof(float));
@@ -86,6 +87,7 @@ static void test_binaural()
     free(p_dest);
 
     delete decoder;
+     */
 }
 
 
