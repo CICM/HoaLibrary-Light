@@ -11,7 +11,7 @@ include_directories(${PROJECT_SOURCE_DIR}/Sources)
 set(CMAKE_MACOSX_RPATH On)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
 
-add_executable(hoatest ${HOASOURCES} ${PROJECT_SOURCE_DIR}/Test/Test.cpp)
+add_executable(hoatest ${HOASOURCES} ${PROJECT_SOURCE_DIR}/Tests/Test.cpp)
 set_target_properties(hoatest PROPERTIES OUTPUT_NAME test)
 set_target_properties(hoatest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 
