@@ -1,17 +1,20 @@
 cmake_minimum_required(VERSION 2.8)
 
+set(CMAKE_MACOSX_RPATH On)
+set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
+
 project(Hoa)
 option(GCOV_SUPPORT "Build for gcov" Off)
 
 file(GLOB HOASOURCES ${PROJECT_SOURCE_DIR}/Sources/*.cpp ${PROJECT_SOURCE_DIR}/Sources/*.hpp)
 source_group(Hoa FILES ${HOASOURCES})
-include_directories(${PROJECT_SOURCE_DIR}/Tests)
 include_directories(${PROJECT_SOURCE_DIR}/Sources)
 
-set(CMAKE_MACOSX_RPATH On)
-set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
+file(GLOB TESTSOURCES ${PROJECT_SOURCE_DIR}/Tests/*.cpp)
+source_group(Tests FILES ${TESTSOURCES})
+include_directories(${PROJECT_SOURCE_DIR}/Tests)
 
-add_executable(hoatest ${HOASOURCES} ${PROJECT_SOURCE_DIR}/Tests/Test.cpp)
+add_executable(hoatest ${HOASOURCES} ${TESTSOURCES})
 set_target_properties(hoatest PROPERTIES OUTPUT_NAME test)
 set_target_properties(hoatest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 

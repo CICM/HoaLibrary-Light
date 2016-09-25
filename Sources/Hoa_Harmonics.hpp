@@ -123,9 +123,9 @@ namespace hoa
     template<typename T> class Harmonic<Hoa2d, T>
     {
     private:
-        const size_t m_index;
-        const size_t m_degree;
-        const long   m_order;
+        size_t m_index;
+        size_t m_degree;
+        long   m_order;
     public:
 
         //! The harmonic constructor.
@@ -230,9 +230,9 @@ namespace hoa
     template <typename T> class Harmonic<Hoa3d, T>
     {
     private:
-        const size_t m_index;
-        const size_t m_degree;
-        const long   m_order;
+        size_t m_index;
+        size_t m_degree;
+        long   m_order;
     public:
 
         //! The harmonic constructor.
