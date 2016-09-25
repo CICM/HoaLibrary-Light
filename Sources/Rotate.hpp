@@ -1,13 +1,13 @@
 /*
-// Copyright (c) 2012-2016 CICM - Universite Paris 8 - Labex Arts H2H.
-// Authors :
-// 2012: Pierre Guillot, Eliott Paris & Julien Colafrancesco.
-// 2012-2015: Pierre Guillot & Eliott Paris.
-// 2015: Pierre Guillot & Eliott Paris & Thomas Le Meur (Light version)
-// 2016: Pierre Guillot & Eliott Paris.
-// For information on usage and redistribution, and for a DISCLAIMER OF ALL
-// WARRANTIES, see the file, "LICENSE.txt," in this distribution.
-*/
+ // Copyright (c) 2012-2016 CICM - Universite Paris 8 - Labex Arts H2H.
+ // Authors :
+ // 2012: Pierre Guillot, Eliott Paris & Julien Colafrancesco.
+ // 2012-2015: Pierre Guillot & Eliott Paris.
+ // 2015: Pierre Guillot & Eliott Paris & Thomas Le Meur (Light version)
+ // 2016: Pierre Guillot & Eliott Paris.
+ // For information on usage and redistribution, and for a DISCLAIMER OF ALL
+ // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
+ */
 
 #ifndef DEF_HOA_ROTATE_LIGHT
 #define DEF_HOA_ROTATE_LIGHT
@@ -22,30 +22,30 @@ namespace hoa
     template <Dimension D, typename T> class Rotate : public  Processor<D, T>::Harmonics
     {
     public:
-
+        
         //! The rotate constructor.
         /**	The rotate constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
         Rotate(const size_t order) hoa_noexcept;
-
+        
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
          */
-		virtual ~Rotate() hoa_noexcept = 0;
-
+        virtual ~Rotate() hoa_noexcept = 0;
+        
         //! This method sets the angle of the rotation around the z axis, the yaw value.
         /** The yaw is equivalent to a rotation around the z axis, the yaw value \f$\theta\f$ is in radian and should be between \f$0\f$ and \f$2\pi\f$.
          @param     yaw The yaw value.
          */
         virtual void setYaw(const T yaw) hoa_noexcept;
-
+        
         //! Get the angle of the rotation around the z axis, the yaw value.
         /** The method returns the angle of the rotation around the z axis, the yaw value \f$\theta\f$, in radian between \f$0\f$ and \f$2\pi\f$.
          @return     The yaw value.
          */
         virtual T getYaw() const hoa_noexcept;
-
+        
         //! This method performs the rotation.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          If \f$l = 0\f$
@@ -60,9 +60,9 @@ namespace hoa
          */
         virtual void process(const T* inputs, T* outputs) hoa_noexcept;
     };
-
+    
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
-
+    
     template <typename T> class Rotate<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
     {
     private:
@@ -70,7 +70,7 @@ namespace hoa
         T   m_cosx;
         T   m_sinx;
     public:
-
+        
         //! The rotate constructor.
         /**	The rotate constructor allocates and initialize the member values to computes spherical harmonics rotation depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
@@ -79,7 +79,7 @@ namespace hoa
         {
             ;
         }
-
+        
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
          */
@@ -87,7 +87,7 @@ namespace hoa
         {
             ;
         }
-
+        
         //! This method sets the angle of the rotation around the z axis, the yaw value,
         /** The yaw is equivalent to a rotation around the z axis, the value is in radian and should be between 0 and 2π.
          @param     yaw The yaw value.
@@ -98,7 +98,7 @@ namespace hoa
             m_cosx    = std::cos(m_yaw);
             m_sinx    = std::sin(m_yaw);
         }
-
+        
         //! Get the angle of the rotation around the z axis, the yaw value.
         /** The method returns the angle of the rotation around the z axis, the yaw value, in radian between 0 and 2π.
          @return     The yaw value.
@@ -106,19 +106,19 @@ namespace hoa
         inline T getYaw() const hoa_noexcept
         {
             return Math<T>::wrap_twopi(m_yaw);
-        };
-
+        }
+        
         //! This method performs the rotation.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The input array.
          @param     outputs  The output array.
          */
-        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
+        inline void process(const T* inputs, T* outputs) hoa_noexcept override
         {
             T cos_x = m_cosx;
             T sin_x = m_sinx;
             T tcos_x = cos_x;
-
+            
             (*outputs++) = (*inputs++);
             T sig = (*inputs++);
             (*outputs++) = sin_x * (*inputs) + cos_x * sig;
@@ -134,8 +134,11 @@ namespace hoa
             }
         }
     };
-
+    
 #endif
 }
 
 #endif
+
+
+
