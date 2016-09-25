@@ -16,11 +16,11 @@ matrix:
       addons:
         apt:
           packages: ['python-pip', 'python-yaml']
-      before_script:
-        - pip install --user git+git://github.com/eddyxu/cpp-coveralls.git
+      install:
+        - pip install --user cpp-coveralls
       script:
           - mkdir build && cd build
-          - cmake -DCOVERALLS=1 -DCMAKE_BUILD_TYPE=Debug ..
+          - cmake -GCOV_SUPPORT=1 -DCMAKE_BUILD_TYPE=Debug ..
           - cmake --build .
           - cd ../
           - ./build/test
