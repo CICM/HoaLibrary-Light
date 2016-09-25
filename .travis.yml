@@ -20,7 +20,7 @@ matrix:
         - pip install --user cpp-coveralls
       script:
           - mkdir build && cd build
-          - cmake -GCOV_SUPPORT=1 -DCMAKE_BUILD_TYPE=Debug ..
+          - cmake -DGCOV_SUPPORT=On ..
           - cmake --build .
           - cd ../
           - ./build/test
