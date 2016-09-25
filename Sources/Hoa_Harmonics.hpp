@@ -169,13 +169,13 @@ namespace hoa
         /** The method returns the normalization of the harmonics.
          @return        The normalization of the harmonics.
          */
-        inline T getNormalization() const hoa_noexcept { return 1.; }
+        inline T getNormalization() const hoa_noexcept { return getNormalization(m_degree, m_order); }
 
         //! Get the semi-normalization of the harmonic.
         /** The method returns the semi-normalization of the harmonics.
          @return        The semi-normalization of the harmonics.
          */
-        inline T getSemiNormalization() const hoa_noexcept { return 1.; }
+        inline T getSemiNormalization() const hoa_noexcept { return getSemiNormalization(m_degree, m_order); }
 
         
         //! Get the degree of an harmonic with an index.

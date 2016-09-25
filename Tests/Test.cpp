@@ -19,6 +19,18 @@ typedef float hoa_float_t;
 TEST_CASE("Harmonics 2D", "[Harmonics] [2D]")
 {
     typedef Harmonic<Hoa2d, hoa_float_t> Harmonic;
+    Harmonic Harmonic0(0);
+    Harmonic Harmonic1(1);
+    Harmonic Harmonic2(2);
+    Harmonic Harmonic3(3);
+    Harmonic Harmonic4(4);
+    Harmonic Harmonic5(5);
+    Harmonic Harmonic6(6);
+    Harmonic Harmonic13(13);
+    Harmonic Harmonic14(14);
+    Harmonic Harmonic21(21);
+    Harmonic Harmonic22(22);
+    
     SECTION("Static Degree")
     {
         CHECK(Harmonic::getDegree(0) == 0);
@@ -63,110 +75,127 @@ TEST_CASE("Harmonics 2D", "[Harmonics] [2D]")
         CHECK(Harmonic::getIndex(11, -11) == 21);
         CHECK(Harmonic::getIndex(11, 11) == 22);
     }
-    /*
-     CHECK(Harmonic::getOrder(0) == 0);
-     CHECK(Harmonic::getIndex(0, 0) == 0);
-     
-     CHECK(Harmonic::getDegree(0) == 0);
-     CHECK(Harmonic::getOrder(0) == 0);
-     CHECK(Harmonic::getIndex(0, 0) == 0);
-     
-     for(size_t i = 1; i < HOA_MAX_ORDER; ++i)
-     {
-     const size_t index1 = Harmonic::getNumberOfHarmonics(i) - 1;
-     const size_t index2 = Harmonic::getNumberOfHarmonics(i);
-     CHECK(index1 == i * 2);
-     CHECK(index2 == i * 2 + 1);
-     
-     CHECK(Harmonic::getDegree(index1) == i);
-     CHECK(Harmonic::getDegree(index2) == i);
-     
-     CHECK(Harmonic::getOrder(index1) == -long(i));
-     CHECK(Harmonic::getOrder(index2) == i);
-     
-     CHECK(Harmonic::getIndex(Harmonic::getDegree(index1), Harmonic::getOrder(index1)) == index1);
-     CHECK(Harmonic::getIndex(Harmonic::getDegree(index2), Harmonic::getOrder(index2)) == index2);
-     }
-     */
+    
+    SECTION("Static Number of Harmonics")
+    {
+        CHECK(Harmonic::getNumberOfHarmonics(0) == 1);
+        CHECK(Harmonic::getNumberOfHarmonics(1) == 3);
+        CHECK(Harmonic::getNumberOfHarmonics(2) == 5);
+        CHECK(Harmonic::getNumberOfHarmonics(3) == 7);
+        CHECK(Harmonic::getNumberOfHarmonics(7) == 15);
+        CHECK(Harmonic::getNumberOfHarmonics(11) == 23);
+    }
+    
+    SECTION("Static Normalization")
+    {
+        CHECK(Harmonic::getSemiNormalization(0, 0) == 1.);
+        CHECK(Harmonic::getSemiNormalization(1, -1) == 1.);
+        CHECK(Harmonic::getSemiNormalization(1, 1) == 1.);
+        CHECK(Harmonic::getSemiNormalization(2, -2) == 1.);
+        CHECK(Harmonic::getSemiNormalization(2, 2) == 1.);
+        CHECK(Harmonic::getSemiNormalization(3, -3) == 1.);
+        CHECK(Harmonic::getSemiNormalization(3, 3) == 1.);
+        CHECK(Harmonic::getSemiNormalization(7, -7) == 1.);
+        CHECK(Harmonic::getSemiNormalization(7, 7) == 1.);
+        CHECK(Harmonic::getSemiNormalization(11, -11) == 1.);
+        CHECK(Harmonic::getSemiNormalization(11, 11) == 1.);
+    }
+    
+    SECTION("Static Semi Normalization")
+    {
+        CHECK(Harmonic::getSemiNormalization(0, 0) == 1.);
+        CHECK(Harmonic::getSemiNormalization(1, -1) == 1.);
+        CHECK(Harmonic::getSemiNormalization(1, 1) == 1.);
+        CHECK(Harmonic::getSemiNormalization(2, -2) == 1.);
+        CHECK(Harmonic::getSemiNormalization(2, 2) == 1.);
+        CHECK(Harmonic::getSemiNormalization(3, -3) == 1.);
+        CHECK(Harmonic::getSemiNormalization(3, 3) == 1.);
+        CHECK(Harmonic::getSemiNormalization(7, -7) == 1.);
+        CHECK(Harmonic::getSemiNormalization(7, 7) == 1.);
+        CHECK(Harmonic::getSemiNormalization(11, -11) == 1.);
+        CHECK(Harmonic::getSemiNormalization(11, 11) == 1.);
+    }
+    
+    
+    
+    
+    
+    
+    
+    SECTION("Local Degree")
+    {
+        CHECK(Harmonic0.getDegree() == 0);
+        CHECK(Harmonic1.getDegree() == 1);
+        CHECK(Harmonic2.getDegree() == 1);
+        CHECK(Harmonic3.getDegree() == 2);
+        CHECK(Harmonic4.getDegree() == 2);
+        CHECK(Harmonic5.getDegree() == 3);
+        CHECK(Harmonic6.getDegree() == 3);
+        CHECK(Harmonic13.getDegree() == 7);
+        CHECK(Harmonic14.getDegree() == 7);
+        CHECK(Harmonic21.getDegree() == 11);
+        CHECK(Harmonic22.getDegree() == 11);
+    }
+    
+    SECTION("Static Order")
+    {
+        CHECK(Harmonic0.getOrder() == 0);
+        CHECK(Harmonic1.getOrder() == -1);
+        CHECK(Harmonic2.getOrder() == 1);
+        CHECK(Harmonic3.getOrder() == -2);
+        CHECK(Harmonic4.getOrder() == 2);
+        CHECK(Harmonic5.getOrder() == -3);
+        CHECK(Harmonic6.getOrder() == 3);
+        CHECK(Harmonic13.getOrder() == -7);
+        CHECK(Harmonic14.getOrder() == 7);
+        CHECK(Harmonic21.getOrder() == -11);
+        CHECK(Harmonic22.getOrder() == 11);
+    }
+    
+    SECTION("Static Index")
+    {
+        CHECK(Harmonic0.getIndex() == 0);
+        CHECK(Harmonic1.getIndex() == 1);
+        CHECK(Harmonic2.getIndex() == 2);
+        CHECK(Harmonic3.getIndex() == 3);
+        CHECK(Harmonic4.getIndex() == 4);
+        CHECK(Harmonic5.getIndex() == 5);
+        CHECK(Harmonic6.getIndex() == 6);
+        CHECK(Harmonic13.getIndex() == 13);
+        CHECK(Harmonic14.getIndex() == 14);
+        CHECK(Harmonic21.getIndex() == 21);
+        CHECK(Harmonic22.getIndex() == 22);
+    }
+    
+    SECTION("Static Normalization")
+    {
+        CHECK(Harmonic0.getNormalization() == 1.);
+        CHECK(Harmonic1.getNormalization() == 1.);
+        CHECK(Harmonic2.getNormalization() == 1.);
+        CHECK(Harmonic3.getNormalization() == 1.);
+        CHECK(Harmonic4.getNormalization() == 1.);
+        CHECK(Harmonic5.getNormalization() == 1.);
+        CHECK(Harmonic6.getNormalization() == 1.);
+        CHECK(Harmonic13.getNormalization() == 1.);
+        CHECK(Harmonic14.getNormalization() == 1.);
+        CHECK(Harmonic21.getNormalization() == 1.);
+        CHECK(Harmonic22.getNormalization() == 1.);
+    }
+    
+    SECTION("Static Semi Normalization")
+    {
+        CHECK(Harmonic0.getNormalization() == 1.);
+        CHECK(Harmonic1.getNormalization() == 1.);
+        CHECK(Harmonic2.getNormalization() == 1.);
+        CHECK(Harmonic3.getNormalization() == 1.);
+        CHECK(Harmonic4.getNormalization() == 1.);
+        CHECK(Harmonic5.getNormalization() == 1.);
+        CHECK(Harmonic6.getNormalization() == 1.);
+        CHECK(Harmonic13.getNormalization() == 1.);
+        CHECK(Harmonic14.getNormalization() == 1.);
+        CHECK(Harmonic21.getNormalization() == 1.);
+        CHECK(Harmonic22.getNormalization() == 1.);
+    }
 }
 
-static void test_binaural()
-{
-    /*
-    const unsigned i_blck_size  = 128;
-    const unsigned i_order      = 1;
-    const unsigned i_input_nb   = 4;
-    const unsigned i_output_nb  = 2;
-    const unsigned i_nb_samples = 64000;
-
-    srand(time(NULL));
-    hoa::DecoderBinaural<hoa::Hoa3d, float> *decoder = new hoa::DecoderBinaural<hoa::Hoa3d, float>(i_order);
-    float *p_src    = (float *)malloc(i_input_nb * i_nb_samples * sizeof(float));
-    float *p_dest   = (float *)malloc(i_output_nb * i_nb_samples * sizeof(float));
-    memset(p_src, 0, i_input_nb * i_nb_samples * sizeof(float));
-    memset(p_dest, 0, i_output_nb * i_nb_samples * sizeof(float));
-    for(unsigned i = 0; i < i_input_nb * i_nb_samples; i += 4)
-    {
-        p_src[i] = rand() / RAND_MAX + 1.f;
-    }
-
-    float **in_buf  = (float **)malloc(i_input_nb * sizeof(float *));
-    for (unsigned i = 0; i < i_input_nb; ++i)
-    {
-        in_buf[i] = (float *)malloc(i_blck_size * sizeof(float));
-    }
-
-    float **out_buf = (float **)malloc(i_output_nb * sizeof(float *));
-    for (unsigned i = 0; i < i_output_nb; ++i)
-    {
-        out_buf[i] = (float *)malloc(i_blck_size * sizeof(float));
-    }
-
-    decoder->computeRendering(i_blck_size);
-
-    for(unsigned i = 0; i < i_nb_samples; i += i_blck_size)
-    {
-        for(unsigned j = 0; j < i_input_nb; ++j)
-        {
-            for(unsigned k = 0; k < i_blck_size; ++k)
-            {
-                in_buf[j][i] = p_src[(i + k) * i_input_nb + j];
-            }
-        }
-
-        decoder->processBlock((const float**)in_buf, (float**)out_buf);
-
-        for(unsigned j = 0; j < i_output_nb; ++j)
-        {
-            for(unsigned k = 0; k < i_blck_size; ++k)
-            {
-                p_dest[(i + k) * i_output_nb + j] = out_buf[j][k];
-            }
-        }
-    }
-
-
-    for(unsigned i = 0; i < i_output_nb * i_nb_samples; ++i)
-    {
-        assert(p_dest[i] != 0.f && "problem ici");
-    }
-
-    for(unsigned i = 0; i < i_output_nb; ++i)
-    {
-        free(out_buf[i]);
-    }
-    free(out_buf);
-
-    for(unsigned i = 0; i < i_input_nb; ++i)
-    {
-        free(in_buf[i]);
-    }
-    free(in_buf);
-
-    free(p_src);
-    free(p_dest);
-
-    delete decoder;
-     */
-}
 
