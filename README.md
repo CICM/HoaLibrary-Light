@@ -15,15 +15,15 @@ Sound space is one of the principal dimensions of the contemporary musical thoug
 
 #### Implementations :
 
-
+[Pure Data](https://github.com/CICM/HoaLibrary-PD "PD")<br/>
 [Max](https://github.com/CICM/HoaLibrary-Max "Max")<br/>
 [Ofx](https://github.com/CICM/ofxHoa "Open Framework")<br/>
 [Faust](https://github.com/CICM/HoaLibrary-Faust "Faust")
 
-[![PureData](https://img.shields.io/badge/HOA-PureData-blue.svg)](https://github.com/CICM/HoaLibrary-PD)  
-[![Max](https://img.shields.io/badge/HOA-PureData-blue.svg)](https://github.com/CICM/HoaLibrary-PD)  
-[![PureData](https://img.shields.io/badge/HOA-PureData-blue.svg)](https://github.com/CICM/HoaLibrary-PD)  
-[![PureData](https://img.shields.io/badge/HOA-PureData-blue.svg)](https://github.com/CICM/HoaLibrary-PD)  
+
+[![Travis](https://img.shields.io/travis/CICM/HoaLibrary-Light.svg?label=travis)](https://travis-ci.org/CICM/HoaLibrary-Light)  
+[![Appveyor](https://img.shields.io/appveyor/ci/pierreguillot/HoaLibrary-Light.svg?label=appveyor)](https://ci.appveyor.com/project/pierreguillot/HoaLibrary-Light/history)
+
 [![Documentation](https://img.shields.io/badge/docs-doxygen-blue.svg)](http://cicm.github.io/HoaLibrary-Light/)
 
 #### License :
