@@ -23,7 +23,7 @@ namespace hoa
      */
     template <Dimension D, typename T> class Meter;
 
-    template <typename T> class Meter<Hoa2d, T> : public Processor<Hoa2d, T>::Planewaves
+    template <typename T> class Meter<Hoa2d, T> : public ProcessorPlanewaves<Hoa2d, T>
     {
     private:
         size_t   m_ramp;
@@ -39,15 +39,15 @@ namespace hoa
          @param     numberOfPlanewaves      The number of channels.
          */
         Meter(size_t numberOfPlanewaves) hoa_noexcept :
-        Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
+        ProcessorPlanewaves<Hoa2d, T>(numberOfPlanewaves)
         {
             m_ramp                      = 0;
             m_vector_size               = 0;
-            m_channels_peaks            = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
-            m_channels_azimuth_width    = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
-            m_channels_azimuth_mapped   = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
-            m_over_leds                 = new size_t[Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves()];
-            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            m_channels_peaks            = Signal<T>::alloc(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves());
+            m_channels_azimuth_width    = Signal<T>::alloc(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves());
+            m_channels_azimuth_mapped   = Signal<T>::alloc(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves());
+            m_over_leds                 = new size_t[ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves()];
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
                 m_channels_peaks[i] = 0;
                 m_over_leds[i]      = 0;
@@ -89,7 +89,7 @@ namespace hoa
          */
         void computeRendering()
         {
-            if(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() == 1)
+            if(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves() == 1)
             {
                 m_channels_azimuth_width[0] = HOA_2PI;
                 m_channels_azimuth_mapped[0]= 0.;
@@ -97,9 +97,9 @@ namespace hoa
             else
             {
                 std::vector<Planewave<Hoa2d, T> > channels;
-                for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+                for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
-                    channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(i)), 0.));
+                    channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(i)), 0.));
                 }
                 std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);
                 {
@@ -188,7 +188,7 @@ namespace hoa
          */
         inline void tick(const size_t time) hoa_noexcept
         {
-            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
                 if(m_channels_peaks[i] >= 1.)
                 {
@@ -210,14 +210,14 @@ namespace hoa
             if(m_ramp++ == m_vector_size)
             {
                 m_ramp = 0;
-                for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+                for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
                     m_channels_peaks[i] = fabs(*inputs++);
                 }
             }
             else
             {
-                for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+                for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
                     const T peak = fabs(*inputs++);
                     if(peak > m_channels_peaks[i])
@@ -239,7 +239,7 @@ namespace hoa
         }
     };
 
-    template <typename T> class Meter<Hoa3d, T> : public Processor<Hoa3d, T>::Planewaves
+    template <typename T> class Meter<Hoa3d, T> : public ProcessorPlanewaves<Hoa3d, T>
     {
     public:
         typedef typename Voronoi<Hoa3d>::Point Point;
@@ -258,15 +258,15 @@ namespace hoa
         /**	The meter constructor allocates and initialize the base classes.
          @param     numberOfPlanewaves      The number of channels.
          */
-        Meter(const size_t numberOfPlanewaves) hoa_noexcept : Processor<Hoa3d, T>::Planewaves(numberOfPlanewaves)
+        Meter(const size_t numberOfPlanewaves) hoa_noexcept : ProcessorPlanewaves<Hoa3d, T>(numberOfPlanewaves)
         {
             m_ramp                      = 0;
             m_vector_size               = 0;
-            m_channels_peaks            = Signal<T>::alloc(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves());
-            m_over_leds                 = new size_t[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
-            m_top                       = new Path[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
-            m_bottom                    = new Path[Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves()];
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            m_channels_peaks            = Signal<T>::alloc(ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves());
+            m_over_leds                 = new size_t[ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves()];
+            m_top                       = new Path[ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves()];
+            m_bottom                    = new Path[ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves()];
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
                 m_channels_peaks[i] = 0;
                 m_over_leds[i]      = 0;
@@ -280,7 +280,7 @@ namespace hoa
         {
             Signal<T>::free(m_channels_peaks);
             delete [] m_over_leds;
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
                 m_top[i].clear();
                 m_bottom[i].clear();
@@ -341,7 +341,7 @@ namespace hoa
          */
         inline void tick(const size_t time) hoa_noexcept
         {
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
                 if(m_channels_peaks[i] >= 1.)
                 {
@@ -363,14 +363,14 @@ namespace hoa
             if(m_ramp++ == m_vector_size)
             {
                 m_ramp = 0;
-                for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+                for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
                 {
                     m_channels_peaks[i] = fabs(*inputs++);
                 }
             }
             else
             {
-                for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+                for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
                 {
                     const T peak = fabs(*inputs++);
                     if(peak > m_channels_peaks[i])
@@ -398,14 +398,14 @@ namespace hoa
         {
             Voronoi<Hoa3d> voronoi;
 
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
-                voronoi.add(Point(Processor<Hoa3d, T>::Planewaves::getPlanewaveAbscissa(i), Processor<Hoa3d, T>::Planewaves::getPlanewaveOrdinate(i), -Processor<Hoa3d, T>::Planewaves::getPlanewaveHeight(i)));
+                voronoi.add(Point(ProcessorPlanewaves<Hoa3d, T>::getPlanewaveAbscissa(i), ProcessorPlanewaves<Hoa3d, T>::getPlanewaveOrdinate(i), -ProcessorPlanewaves<Hoa3d, T>::getPlanewaveHeight(i)));
                 m_bottom[i].clear();
             }
             voronoi.compute();
             Path const& bottom = voronoi.getPoints();
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
                 for(size_t j = 0; j < bottom[i].bounds.size(); j++)
                 {
@@ -415,14 +415,14 @@ namespace hoa
             }
 
             voronoi.clear();
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
-                voronoi.add(Point(Processor<Hoa3d, T>::Planewaves::getPlanewaveAbscissa(i), Processor<Hoa3d, T>::Planewaves::getPlanewaveOrdinate(i), Processor<Hoa3d, T>::Planewaves::getPlanewaveHeight(i)));
+                voronoi.add(Point(ProcessorPlanewaves<Hoa3d, T>::getPlanewaveAbscissa(i), ProcessorPlanewaves<Hoa3d, T>::getPlanewaveOrdinate(i), ProcessorPlanewaves<Hoa3d, T>::getPlanewaveHeight(i)));
                 m_top[i].clear();
             }
             voronoi.compute();
             Path const& top = voronoi.getPoints();
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
                 for(size_t j = 0; j < top[i].bounds.size(); j++)
                 {

@@ -64,7 +64,7 @@ namespace hoa
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-    template <typename T> class Scope<Hoa2d, T> : public Encoder<Hoa2d, T>::Basic, protected Processor<Hoa2d, T>::Planewaves
+    template <typename T> class Scope<Hoa2d, T> : public Encoder<Hoa2d, T>::Basic, protected ProcessorPlanewaves<Hoa2d, T>
     {
     private:
         T*  m_matrix;
@@ -79,10 +79,10 @@ namespace hoa
          */
         Scope(size_t order, size_t numberOfPoints) hoa_noexcept :
         Encoder<Hoa2d, T>::Basic(order),
-        Processor<Hoa2d, T>::Planewaves(numberOfPoints)
+        ProcessorPlanewaves<Hoa2d, T>(numberOfPoints)
         {
-            m_matrix = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics());
-            m_vector = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves());
+            m_matrix = Signal<T>::alloc(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics());
+            m_vector = Signal<T>::alloc(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves());
             computeRendering();
         }
 
@@ -100,7 +100,7 @@ namespace hoa
          */
         inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) hoa_noexcept
         {
-            Processor<Hoa2d, T>::Planewaves::setPlanewavesRotation(x_axe, y_axe, z_axe);
+            ProcessorPlanewaves<Hoa2d, T>::setPlanewavesRotation(x_axe, y_axe, z_axe);
         }
 
         //! Get the value of the z rotation.
@@ -108,7 +108,7 @@ namespace hoa
          */
         inline T getViewRotationZ() const hoa_noexcept
         {
-            return Processor<Hoa2d, T>::Planewaves::getPlanewavesRotationZ();
+            return ProcessorPlanewaves<Hoa2d, T>::getPlanewavesRotationZ();
         }
 
         //! Compute the values of the summation of every harmonic to the representation of the sound field
@@ -117,13 +117,13 @@ namespace hoa
         void computeRendering() hoa_noexcept
         {
             const T factor = 1. / (T)(Encoder<Hoa2d, T>::getDecompositionOrder() + 1.);
-            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
-                Encoder<Hoa2d, T>::Basic::setAzimuth(Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(i));
+                Encoder<Hoa2d, T>::Basic::setAzimuth(ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(i));
                 Encoder<Hoa2d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa2d, T>::getNumberOfHarmonics());
                 m_matrix[i * Encoder<Hoa2d, T>::getNumberOfHarmonics()] = factor * 0.5;
             }
-            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
                 m_vector[i] = 0.;
             }
@@ -136,7 +136,7 @@ namespace hoa
          */
         inline size_t getNumberOfPoints() const hoa_noexcept
         {
-            return Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves();
+            return ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves();
         }
 
         //! Retrieve the value of a point of the circular harmonics projection.
@@ -166,7 +166,7 @@ namespace hoa
          */
         inline T getPointAzimuth(const size_t index) const hoa_noexcept
         {
-            return Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(index);
+            return ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(index);
         }
 
         //! Retrieve the abscissa of a point of the circular harmonics projection.
@@ -179,7 +179,7 @@ namespace hoa
          */
         inline double getPointAbscissa(const size_t index) const hoa_noexcept
         {
-            return fabs(m_vector[index]) * Processor<Hoa2d, T>::Planewaves::getPlanewaveAbscissa(index);
+            return fabs(m_vector[index]) * ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAbscissa(index);
         }
 
         //! Retrieve the ordinate of a point of the circular harmonics projection.
@@ -192,7 +192,7 @@ namespace hoa
          */
         inline double getPointOrdinate(const size_t index) const hoa_noexcept
         {
-            return fabs(m_vector[index]) * Processor<Hoa2d, T>::Planewaves::getPlanewaveOrdinate(index);
+            return fabs(m_vector[index]) * ProcessorPlanewaves<Hoa2d, T>::getPlanewaveOrdinate(index);
         }
 
         //! This method performs the circular harmonics projection.
@@ -201,11 +201,11 @@ namespace hoa
          */
         inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
-            Signal<T>::mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
-            m_maximum = fabs(Signal<T>::max(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
+            Signal<T>::mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
+            m_maximum = fabs(Signal<T>::max(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(), m_vector));
             if(m_maximum > 1.)
             {
-                Signal<T>::scale(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
+                Signal<T>::scale(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
             }
         }
 
@@ -215,16 +215,16 @@ namespace hoa
          */
         inline void process(const T* inputs) hoa_noexcept
         {
-            Signal<T>::mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
-            m_maximum = fabs(Signal<T>::max(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
+            Signal<T>::mul(Encoder<Hoa2d, T>::getNumberOfHarmonics(), ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
+            m_maximum = fabs(Signal<T>::max(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(), m_vector));
             if(m_maximum > 1.)
             {
-                Signal<T>::scale(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
+                Signal<T>::scale(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
             }
         }
     };
 
-    template <typename T> class Scope<Hoa3d, T> : public Encoder<Hoa3d, T>::Basic, protected Processor<Hoa3d, T>::Planewaves
+    template <typename T> class Scope<Hoa3d, T> : public Encoder<Hoa3d, T>::Basic, protected ProcessorPlanewaves<Hoa3d, T>
     {
     private:
         const size_t m_number_of_rows;
@@ -243,7 +243,7 @@ namespace hoa
          */
         Scope(size_t order, size_t numberOfRow, size_t numberOfColumn) hoa_noexcept :
         Encoder<Hoa3d, T>::Basic(order),
-        Processor<Hoa3d, T>::Planewaves(numberOfRow * numberOfColumn),
+        ProcessorPlanewaves<Hoa3d, T>(numberOfRow * numberOfColumn),
         m_number_of_rows(numberOfRow),
         m_number_of_columns(numberOfColumn)
         {
@@ -252,13 +252,13 @@ namespace hoa
                 const T elevation = (T)i  * HOA_PI / (T)(m_number_of_rows - 1) - HOA_PI2;
                 for(size_t j = 0; j < m_number_of_columns; j++)
                 {
-                    Processor<Hoa3d, T>::Planewaves::setPlanewaveAzimuth(i * m_number_of_columns + j, (T)j * HOA_2PI / (T)m_number_of_columns);
-                    Processor<Hoa3d, T>::Planewaves::setPlanewaveElevation(i * m_number_of_columns + j, elevation);
+                    ProcessorPlanewaves<Hoa3d, T>::setPlanewaveAzimuth(i * m_number_of_columns + j, (T)j * HOA_2PI / (T)m_number_of_columns);
+                    ProcessorPlanewaves<Hoa3d, T>::setPlanewaveElevation(i * m_number_of_columns + j, elevation);
                 }
             }
 
-            m_matrix = Signal<T>::alloc(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa3d, T>::getNumberOfHarmonics());
-            m_vector = Signal<T>::alloc(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves());
+            m_matrix = Signal<T>::alloc(ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves() * Encoder<Hoa3d, T>::getNumberOfHarmonics());
+            m_vector = Signal<T>::alloc(ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves());
             computeRendering();
         }
 
@@ -356,7 +356,7 @@ namespace hoa
          */
         inline void setViewRotation(const T x_axe, const T y_axe, const T z_axe) hoa_noexcept
         {
-            Processor<Hoa3d, T>::Planewaves::setPlanewavesRotation(x_axe, y_axe, z_axe);
+            ProcessorPlanewaves<Hoa3d, T>::setPlanewavesRotation(x_axe, y_axe, z_axe);
         }
 
         //! Get the value of the x rotation.
@@ -364,7 +364,7 @@ namespace hoa
          */
         inline T getViewRotationX() const hoa_noexcept
         {
-            return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationX();
+            return ProcessorPlanewaves<Hoa3d, T>::getPlanewavesRotationX();
         }
 
         //! Get the value of the y rotation.
@@ -372,7 +372,7 @@ namespace hoa
          */
         inline T getViewRotationY() const hoa_noexcept
         {
-            return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationY();
+            return ProcessorPlanewaves<Hoa3d, T>::getPlanewavesRotationY();
         }
 
         //! Get the value of the z rotation.
@@ -380,7 +380,7 @@ namespace hoa
          */
         inline T getViewRotationZ() const hoa_noexcept
         {
-            return Processor<Hoa3d, T>::Planewaves::getPlanewavesRotationZ();
+            return ProcessorPlanewaves<Hoa3d, T>::getPlanewavesRotationZ();
         }
 
         //! Compute the values of the summation of every harmonic to the representation of the sound field
@@ -389,10 +389,10 @@ namespace hoa
         void computeRendering() hoa_noexcept
         {
             const T factor = 12.5 / (T)(Encoder<Hoa3d, T>::getNumberOfHarmonics());
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
-                Encoder<Hoa3d, T>::Basic::setAzimuth(Processor<Hoa3d, T>::Planewaves::getPlanewaveAzimuth(i));
-                Encoder<Hoa3d, T>::Basic::setElevation(Processor<Hoa3d, T>::Planewaves::getPlanewaveElevation(i));
+                Encoder<Hoa3d, T>::Basic::setAzimuth(ProcessorPlanewaves<Hoa3d, T>::getPlanewaveAzimuth(i));
+                Encoder<Hoa3d, T>::Basic::setElevation(ProcessorPlanewaves<Hoa3d, T>::getPlanewaveElevation(i));
                 Encoder<Hoa3d, T>::Basic::process(&factor, m_matrix + i * Encoder<Hoa3d, T>::getNumberOfHarmonics());
                 for(size_t j = 0; j < Encoder<Hoa3d, T>::getNumberOfHarmonics(); j++)
                 {
@@ -407,7 +407,7 @@ namespace hoa
                     }
                 }
             }
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
                 m_vector[i] = 0.;
             }
@@ -421,11 +421,11 @@ namespace hoa
          */
         inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
-            Signal<T>::mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
-            m_maximum = fabs(Signal<T>::max(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
+            Signal<T>::mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
+            m_maximum = fabs(Signal<T>::max(ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(), m_vector));
             if(m_maximum > 1.)
             {
-                Signal<T>::scale(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
+                Signal<T>::scale(ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
             }
         }
 
@@ -436,11 +436,11 @@ namespace hoa
          */
         inline void process(const T* inputs) hoa_noexcept
         {
-            Signal<T>::mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
-            m_maximum = fabs(Signal<T>::max(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), m_vector));
+            Signal<T>::mul(Encoder<Hoa3d, T>::getNumberOfHarmonics(), ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(), inputs, m_matrix, m_vector);
+            m_maximum = fabs(Signal<T>::max(ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(), m_vector));
             if(m_maximum > 1.)
             {
-                Signal<T>::scale(Processor<Hoa3d, T>::Planewaves::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
+                Signal<T>::scale(ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(), (1. / m_maximum), m_vector);
             }
         }
     };

@@ -20,7 +20,7 @@ namespace hoa
     //! The ambisonic recomposer.
     /** The recomposer should be in the planewaves domain to come back the the circular harmonics domain. The recomposition is similar to the several encoding except that we consider planewaves (or virtual microphones) instead of sources. The number of channels (or planewaves) must be a least the number of harmonics, the first angle is 0 radian and the angular distances between the channels are equals.
      */
-    template <Dimension D, typename T> class Recomposer : public EncoderBasic<D, T>, public Processor<D, T>::Planewaves
+    template <Dimension D, typename T> class Recomposer : public EncoderBasic<D, T>, public ProcessorPlanewaves<D, T>
     {
         enum Recomposition
         {
@@ -37,7 +37,7 @@ namespace hoa
          */
         Recomposer(size_t order, size_t numberOfPlanewaves) hoa_noexcept :
         EncoderBasic<D, T>(order),
-        Processor<D, T>::Planewaves(numberOfPlanewaves) {}
+        ProcessorPlanewaves<D, T>(numberOfPlanewaves) {}
         
         //! The destructor.
         /** The destructor free the memory.
@@ -180,7 +180,7 @@ namespace hoa
     //! The ambisonic recomposer.
     /** The recomposer should be in the planewaves domain to come back the the circular harmonics domain. The recomposition is similar to the several encoding except that we consider planewaves (or virtual microphones) instead of sources. The number of channels (or planewaves) must be a least the number of harmonics, the first angle is 0 radian and the angular distances between the channels are equals.
      */
-    template <typename T> class Recomposer<Hoa2d, T> : public EncoderBasic<Hoa2d, T>, public Processor<Hoa2d, T>::Planewaves
+    template <typename T> class Recomposer<Hoa2d, T> : public EncoderBasic<Hoa2d, T>, public ProcessorPlanewaves<Hoa2d, T>
     {
     public:
         enum Recomposition
@@ -198,7 +198,7 @@ namespace hoa
          */
         Recomposer(size_t order, size_t numberOfPlanewaves) hoa_noexcept :
         EncoderBasic<Hoa2d, T>(order),
-        Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves) {}
+        ProcessorPlanewaves<Hoa2d, T>(numberOfPlanewaves) {}
         
         //! The destructor.
         /** The destructor free the memory.
@@ -238,14 +238,14 @@ namespace hoa
         {
             const T factor = 1.;
             T* vector   = Signal<T>::alloc(Encoder<Hoa2d, T>::getNumberOfHarmonics());
-            m_matrix    = Signal<T>::alloc(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics());
-            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            m_matrix    = Signal<T>::alloc(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics());
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
-                EncoderBasic<Hoa2d, T>::setAzimuth(Processor<Hoa2d, T>::Planewaves::getPlanewaveAzimuth(i));
+                EncoderBasic<Hoa2d, T>::setAzimuth(ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(i));
                 EncoderBasic<Hoa2d, T>::process(&factor, vector);
                 for(size_t j = 0; j < Encoder<Hoa2d, T>::getNumberOfHarmonics(); j++)
                 {
-                    m_matrix[j * Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() + i] = vector[j];
+                    m_matrix[j * ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves() + i] = vector[j];
                 }
             }
             Signal<T>::free(vector);
@@ -266,7 +266,7 @@ namespace hoa
          */
         void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
-            Signal<T>::mul(Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(), Encoder<Hoa2d, T>::getNumberOfHarmonics(), inputs, m_matrix, outputs);
+            Signal<T>::mul(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(), Encoder<Hoa2d, T>::getNumberOfHarmonics(), inputs, m_matrix, outputs);
         }
     };
 
@@ -283,7 +283,7 @@ namespace hoa
          */
         RecomposerFisheye(size_t order, size_t numberOfPlanewaves) hoa_noexcept : Recomposer<Hoa2d, T>(order, numberOfPlanewaves)
         {
-            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
                 m_encoders.push_back(new EncoderBasic<Hoa2d, T>(order));
             }
@@ -294,7 +294,7 @@ namespace hoa
          */
         ~RecomposerFisheye()
         {
-            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
                 delete m_encoders[i];
             }
@@ -308,9 +308,9 @@ namespace hoa
         inline void setFisheye(const T fisheye) hoa_noexcept hoa_override
         {
             T factor = 1. - Math<T>::clip(fisheye, (T)0., (T)1.);
-            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
-                T azimuth = (T)i / (T)Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves() * HOA_2PI;
+                T azimuth = (T)i / (T)ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves() * HOA_2PI;
                 if(azimuth < HOA_PI)
                 {
                     azimuth *= factor;
@@ -331,7 +331,7 @@ namespace hoa
         inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
             m_encoders[0]->process(inputs, outputs);
-            for(size_t i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 1; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
                 m_encoders[i]->processAdd(++inputs, outputs);
             }
@@ -350,7 +350,7 @@ namespace hoa
          */
         RecomposerFree(size_t order, size_t numberOfPlanewaves) hoa_noexcept : Recomposer<Hoa2d, T>(order, numberOfPlanewaves)
         {
-            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
                 m_encoders.push_back(new EncoderDC<Hoa2d, T>(order));
                 m_encoders[i]->setAzimuth(i * (HOA_2PI / numberOfPlanewaves));
@@ -362,7 +362,7 @@ namespace hoa
          */
         ~RecomposerFree()
         {
-            for(size_t i = 0; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
                 delete m_encoders[i];
             }
@@ -415,7 +415,7 @@ namespace hoa
         inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
         {
             m_encoders[0]->process(inputs, outputs);
-            for(size_t i = 1; i < Processor<Hoa2d, T>::Planewaves::getNumberOfPlanewaves(); i++)
+            for(size_t i = 1; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
                 m_encoders[i]->processAdd(++inputs, outputs);
             }
