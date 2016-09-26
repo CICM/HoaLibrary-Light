@@ -7,8 +7,6 @@
 #include <Hoa.hpp>
 #include "catch.hpp"
 
-#include <iostream>
-
 using namespace hoa;
 typedef float hoa_float_t;
 
