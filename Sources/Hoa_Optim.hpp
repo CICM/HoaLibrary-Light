@@ -16,33 +16,94 @@
 
 namespace hoa
 {
-    //! The optim class optimizes the ambisonic sound field for several restitution systems.
-    /** The optim should be used to optimize the ambisonic sound field. There are 3 optimizations, Basic (no optimization), MaxRe (energy vector optimization) and InPhase (energy and velocity vector optimization). Basic has no effect, it should be used (or not) with a perfect ambisonic channels arrangement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle of the sphere. MaxRe should be used should be used for an auditory confined to the center of the circle of the sphere. InPhase should be used when the auditory covers the entire channels area and when the channels arrangement is not a perfect circle or a perfect sphere or when the channels are not to equal distance. Note that the optimizations decrease the precision of the sound field restitution thus it can be compared to particular cases of the fractional orders.
-     */
+    //! @brief The class optimizes the ambisonic sound field for several restitution systems.
+    //! @details The class should be used to optimize the ambisonic sound field. There are 3
+    //! optimizations, basic (no optimization), max-re (energy vector optimization) and
+    //! in-phase (energy and velocity vector optimization).\n
+    //! The basic optimization has no effect, it should be used (or not) with a perfect
+    //! ambisonic channels arrangement where all the channels are to equal distance on a
+    //! circle or a sphere, and for a listener placed at the perfect center of the circle of
+    //! the sphere.\n
+    //! The max-re should be used should be used for an auditory confined to the center of the
+    //! circle or the sphere.\n
+    //! The in-phase optimization should be used when the auditory covers the entire channels
+    //! area and/or when the channels arrangement is not a perfect circle or a perfect sphere
+    //! (when the channels are not to equal distance for example).\n
+    //! Note that the optimizations decrease the precision of the sound field restitution thus
+    //! it can be compared to particular cases of the fractional orders.
     template <Dimension D, typename T> class Optim : public Processor<D, T>::Harmonics
     {
-    protected:
-        T*  m_weights;
     public:
+        
+        //! @brief The different optimization mode.
+        //! @see getMode(), setMode()
+        enum Mode
+        {
+            Basic = 0,  //!< The basic optimization
+            MaxRe = 1,  //!< The max-re optimization
+            InPhase = 2 //!< The in-phase optimization
+        };
 
-        //! The optim constructor.
-        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
-         @param     order	The order.
-         */
-        Optim(const size_t order) hoa_noexcept : Processor<D, T>::Harmonics(order),
-        m_weights(Signal<T>::alloc(Processor<D, T>::Harmonics::getNumberOfHarmonics())) {}
+        //! @brief The constructor.
+        //! @param order The order of decomposition.
+        Optim(size_t order) hoa_noexcept : Processor<D, T>::Harmonics(order),
+        m_weights(Signal<T>::alloc(Processor<D, T>::Harmonics::getNumberOfHarmonics()))
+        { setMode(InPhase); }
 
-        //! The optim destructor.
-        /**	The optim destructor free the memory.
-         */
-		virtual ~Optim() hoa_noexcept hoa_default_f
+        //! @brief The destructor.
+		~Optim() hoa_noexcept { Signal<T>::free(m_weights); }
+        
+        //! @brief Returns the current optimization mode.
+        inline Mode getMode() const hoa_noexcept { return m_mode; }
+        
+        //! @brief Set the optimization mode.
+        //! @details The basic optimization generates a set of weights defined by:\n
+        //!  \f[Y^{optimized}_{l,m} = Y_{l,m}\f]\n
+        //! The max-re optimization generates a set of weights defined by:\n
+        //! \f[Y^{optimized}_{l,m} = \cos{(l \times \frac{\pi}{2N + 2})} Y_{l,m} \f]\n
+        //! The in-phase optimization generates a set of weights defined by:\n
+        //! \f[Y^{optimized}_{l,m} = \frac{N!^2}{(N + l)!(N -l)!} Y_{l,m} \f]\n
+        //! with \f$N\f$ the order of decomposition, \f$l\f$ the degree and \f$m\f$ the
+        //! azimuthal order.
+        //! @param mode The mode of optimization.
+        void setMode(Mode mode) hoa_noexcept
+        {
+            const size_t size   = Processor<D, T>::Harmonics::getNumberOfHarmonics();
+            const size_t order  = Processor<D, T>::Harmonics::getDecompositionOrder();
+            if(mode == Basic)
+            {
+                for(size_t i = 0; i < size;  ++i) {
+                    m_weights[i] = 1.;
+                }
+            }
+            else if(mode == MaxRe)
+            {
+                m_weights[0] = T(1.);
+                for(size_t i = 1; i < size; i++) {
+                    const size_t degree = Processor<D, T>::Harmonics::getHarmonicDegree(i);
+                    m_weights[i] = cos(T(degree) *  T(HOA_PI) / T(2. * order + 2.));
+                }
+            }
+            else
+            {
+                m_weights[0] = T(1.);
+                const T facn = Math<T>::factorial(long(order));
+                for(size_t i = 1; i < size; i++) {
+                    const size_t degree = Processor<D, T>::Harmonics::getHarmonicDegree(i);
+                    m_weights[i] = facn / Math<T>::factorial(long(order - degree)) * facn / Math<T>::factorial(long(order + degree));
+                }
+                
+            }
+            m_mode = mode;
+        }
 
-        //! This method performs the optimization.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         @param     inputs   The inputs array.
-         @param     outputs  The outputs array.
-         */
-        virtual void process(T const* inputs, T* outputs) hoa_noexcept
+        //! @brief The method performs the optimization on the harmonics signal.
+        //! @details The method can be used for in-place or not-in-place processing and sample
+        //! by sample. The inputs array and outputs array contains the spherical harmonics
+        //! samples thus the minimum size of the array must be the number of harmonics.
+        //! @param inputs  The inputs array.
+        //! @param outputs The outputs array.
+        void process(T const* inputs, T* outputs) hoa_noexcept hoa_final
         {
             const  size_t size = Processor<D, T>::Harmonics::getNumberOfHarmonics();
             const T* weights = m_weights;
@@ -62,96 +123,10 @@ namespace hoa
                 outputs[0] = inputs[0] * weights[0];
             }
         }
+    protected:
+        Mode m_mode;
+        T*   m_weights;
     };
-    
-    //! The basic optim.
-    /** The basic optim has no effect, it should be used (or not) with a perfect ambisonic channels arrangement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle of the sphere. This method performs the basic optimization.
-        \f[Y^{optimized}_{l,m} = Y_{l,m}\f]
-        with \f$l\f$ the degree and \f$m\f$ the order.
-     */
-    template <Dimension D, typename T> class OptimBasic : public Optim<D, T>
-    {
-    public:
-        
-        //! The optim constructor.
-        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
-         @param     order	The order.
-         */
-        OptimBasic(const size_t order) hoa_noexcept : Optim<D, T>(order)
-        {
-            const  size_t size = Processor<D, T>::Harmonics::getNumberOfHarmonics();
-            T* weights = Optim<D, T>::m_weights;
-            for(size_t i = 0; i < size;  ++i)
-            {
-                weights[i] = 1.;
-            }
-        }
-        
-        //! The optim destructor.
-        /**	The optim destructor free the memory.
-         */
-        ~OptimBasic() hoa_noexcept hoa_default_f
-    };
-    
-    //! The maxre optim.
-    /** The maxre optim should be used for an auditory confined to the center of the circle of the sphere. \f[Y^{optimized}_{l,m} = \cos{(l \times \frac{\pi}{2N + 2})} Y_{l,m} \f]
-     with \f$N\f$ the order of decomposition, \f$l\f$ the degree and \f$m\f$ the order.
-     */
-    template <Dimension D, typename T> class OptimMaxRe : public Optim<D, T>
-    {
-    public:
-        //! The optim constructor.
-        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1. 
-         @param     order	The order.
-         */
-        OptimMaxRe(const size_t order) hoa_noexcept : Optim<D, T>(order)
-        {
-            const  size_t size = Processor<D, T>::Harmonics::getNumberOfHarmonics();
-            T* weights = Optim<D, T>::m_weights;
-            weights[0] = T(1.);
-            for(size_t i = 1; i < size; i++)
-            {
-                const size_t degree = Processor<D, T>::Harmonics::getHarmonicDegree(i);
-                weights[i] = cos(T(degree) *  T(HOA_PI) / T(2. * order + 2.));
-            }
-        }
-        
-        //! The optim destructor.
-        /**	The optim destructor free the memory.
-         */
-        ~OptimMaxRe() hoa_noexcept hoa_default_f
-    };
-    
-    //! The inphase optim.
-    /** The inphase optim should be used when the auditory covers the entire channels area and when the channels arrangement is not a perfect circle or a perfect sphere or when the channels are not to equal distance. \f[Y^{optimized}_{l,m} = \frac{N!^2}{(N + l)!(N -l)!} Y_{l,m} \f]
-     with \f$N\f$ the order of decomposition, \f$l\f$ the degree and \f$m\f$ the order.
-     */
-    template <Dimension D, typename T> class OptimInPhase : public Optim<D, T>
-    {
-    public:
-        //! The optim constructor.
-        /**	The optim constructor allocates and initialize the member values to computes spherical harmonics weighted coefficients depending on a order of decomposition. The order must be at least 1.
-         @param     order	The order.
-         */
-        OptimInPhase(const size_t order) hoa_noexcept : Optim<D, T>(order)
-        {
-            const  size_t size = Processor<D, T>::Harmonics::getNumberOfHarmonics();
-            T* weights = Optim<D, T>::m_weights;
-            weights[0] = T(1.);
-            const T facn = Math<T>::factorial(long(order));
-            for(size_t i = 1; i < size; i++)
-            {
-                const size_t degree = Processor<D, T>::Harmonics::getHarmonicDegree(i);
-                weights[i] = facn / Math<T>::factorial(long(order - degree)) * facn / Math<T>::factorial(long(order + degree));
-            }
-        }
-        
-        //! The optim destructor.
-        /**	The optim destructor free the memory.
-         */
-        ~OptimInPhase() hoa_noexcept hoa_default_f;
-    };
-
 }
 
 #endif

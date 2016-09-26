@@ -12,14 +12,15 @@ typedef float hoa_float_t;
 
 TEST_CASE("Optim 2D", "[Optim] [2D]")
 {
+    Optim<Hoa2d, hoa_float_t> optim(7);
     const float epsilon = FLT_EPSILON;
     std::vector<hoa_float_t> inputs(15);
     std::vector<hoa_float_t> ouputs(15);
     SECTION("Basic")
     {
-        OptimBasic<Hoa2d, hoa_float_t> basic(7);
+        optim.setMode(Optim<Hoa2d, hoa_float_t>::Basic);
         std::fill(inputs.begin(), inputs.end(), 1.);
-        basic.process(inputs.data(), ouputs.data());
+        optim.process(inputs.data(), ouputs.data());
         
         CHECK(ouputs[0] == inputs[0]);
         CHECK(ouputs[1] == inputs[1]);
@@ -40,9 +41,9 @@ TEST_CASE("Optim 2D", "[Optim] [2D]")
 
     SECTION("MaxRe")
     {
-        OptimMaxRe<Hoa2d, hoa_float_t> basic(7);
+        optim.setMode(Optim<Hoa2d, hoa_float_t>::MaxRe);
         std::fill(inputs.begin(), inputs.end(), 1.);
-        basic.process(inputs.data(), ouputs.data());
+        optim.process(inputs.data(), ouputs.data());
         
         CHECK(ouputs[0] == inputs[0]);
         CHECK(fabs(ouputs[1] - inputs[1] * 0.9807852506) < epsilon);
@@ -63,9 +64,9 @@ TEST_CASE("Optim 2D", "[Optim] [2D]")
 
     SECTION("InPhase")
     {
-        OptimInPhase<Hoa2d, hoa_float_t> basic(7);
+        optim.setMode(Optim<Hoa2d, hoa_float_t>::InPhase);
         std::fill(inputs.begin(), inputs.end(), 1.);
-        basic.process(inputs.data(), ouputs.data());
+        optim.process(inputs.data(), ouputs.data());
         
         CHECK(ouputs[0] == inputs[0]);
         CHECK(fabs(ouputs[1] - inputs[1] * 0.8750000000) < epsilon);
@@ -87,14 +88,15 @@ TEST_CASE("Optim 2D", "[Optim] [2D]")
 
 TEST_CASE("Optim 3D", "[Optim] [3D]")
 {
+    Optim<Hoa3d, hoa_float_t> optim(7);
     const float epsilon = FLT_EPSILON;
     std::vector<hoa_float_t> inputs(64);
     std::vector<hoa_float_t> ouputs(64);
     SECTION("Basic")
     {
-        OptimBasic<Hoa3d, hoa_float_t> basic(7);
+        optim.setMode(Optim<Hoa3d, hoa_float_t>::Basic);
         std::fill(inputs.begin(), inputs.end(), 1.);
-        basic.process(inputs.data(), ouputs.data());
+        optim.process(inputs.data(), ouputs.data());
         
         CHECK(ouputs[0] == inputs[0]);
         CHECK(ouputs[1] == inputs[1]);
@@ -119,9 +121,9 @@ TEST_CASE("Optim 3D", "[Optim] [3D]")
     
     SECTION("MaxRe")
     {
-        OptimMaxRe<Hoa3d, hoa_float_t> basic(7);
+        optim.setMode(Optim<Hoa3d, hoa_float_t>::MaxRe);
         std::fill(inputs.begin(), inputs.end(), 1.);
-        basic.process(inputs.data(), ouputs.data());
+        optim.process(inputs.data(), ouputs.data());
         
         CHECK(ouputs[0] == inputs[0]);
         CHECK(fabs(ouputs[1] - inputs[1] * 0.9807852506) < epsilon);
@@ -145,9 +147,9 @@ TEST_CASE("Optim 3D", "[Optim] [3D]")
     
     SECTION("InPhase")
     {
-        OptimInPhase<Hoa3d, hoa_float_t> basic(7);
+        optim.setMode(Optim<Hoa3d, hoa_float_t>::InPhase);
         std::fill(inputs.begin(), inputs.end(), 1.);
-        basic.process(inputs.data(), ouputs.data());
+        optim.process(inputs.data(), ouputs.data());
         
         CHECK(ouputs[0] == inputs[0]);
         CHECK(fabs(ouputs[1] - inputs[1] * 0.8750000000) < epsilon);
