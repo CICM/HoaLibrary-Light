@@ -20,7 +20,7 @@ namespace hoa
     //! The encoder class generates the harmonics for one or several signal according to an azimuth, an elevation and a radius.
     /** The encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and potentially the radius of the signal.
      */
-    template <Dimension D, typename T> class Encoder : public Processor<D, T>::Harmonics
+    template <Dimension D, typename T> class Encoder : public ProcessorHarmonics<D, T>
     {
     public:
 
@@ -324,7 +324,7 @@ namespace hoa
     //! The encoder class generates the harmonics for one or several signal according to an azimuth, an elevation and a radius.
     /** The encoder should be used to encode a signal in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and potentially the radius of the signal.
      */
-    template <typename T> class Encoder<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
+    template <typename T> class Encoder<Hoa2d, T> : public ProcessorHarmonics<Hoa2d, T>
     {
     public:
 
@@ -332,7 +332,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const size_t order) hoa_noexcept : Processor<Hoa2d, T>::Harmonics(order) {}
+        Encoder(const size_t order) hoa_noexcept : ProcessorHarmonics<Hoa2d, T>(order) {}
 
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
@@ -420,7 +420,7 @@ namespace hoa
                 (*outputs++)    = (*input);                         // Hamonic [0,0]
                 (*outputs++)    = (*input) * sin_x;                 // Hamonic [1,-1]
                 (*outputs++)    = (*input) * cos_x;                 // Hamonic [1,1]
-                for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+                for(size_t i = 2; i <= ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder(); i++)
                 {
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
                     sin_x   = tcos_x * m_sinx + sin_x * m_cosx;
@@ -431,7 +431,7 @@ namespace hoa
             }
             else
             {
-                for(size_t i = 0; i < Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(); i++)
+                for(size_t i = 0; i < ProcessorHarmonics<Hoa2d, T>::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -455,7 +455,7 @@ namespace hoa
                 (*outputs++)    += (*input);                         // Hamonic [0,0]
                 (*outputs++)    += (*input) * sin_x;                 // Hamonic [1,-1]
                 (*outputs++)    += (*input) * cos_x;                 // Hamonic [1,1]
-                for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+                for(size_t i = 2; i <= ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder(); i++)
                 {
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
                     sin_x   = tcos_x * m_sinx + sin_x * m_cosx;
@@ -571,15 +571,15 @@ namespace hoa
                 T cos_x = m_cosx;
                 T sin_x = m_sinx;
                 T tcos_x = cos_x;
-                const T gain1   = (m_gain * Processor<Hoa2d, T>::Harmonics::getDecompositionOrder());
+                const T gain1   = (m_gain * ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder());
                 const T factor1 = (cos(Math<T>::clip(m_factor, 0., T(HOA_PI))) + 1.) * T(0.5) * T((gain1 - m_gain) + m_distance);
 
                 (*outputs++) = (*input) * (gain1 + m_distance);            // Hamonic [0,0]
                 (*outputs++) = (*input) * sin_x * factor1;                 // Hamonic [1,-1]
                 (*outputs++) = (*input) * cos_x * factor1;                 // Hamonic [1,1]
-                for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+                for(size_t i = 2; i <= ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder(); i++)
                 {
-                    const T gain    = (m_gain * (Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - i) + m_distance);
+                    const T gain    = (m_gain * (ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder() - i) + m_distance);
                     const T factor  = (cos(Math<T>::clip(m_factor * i, 0., T(HOA_PI))) + 1.) * T(0.5);
 
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
@@ -592,7 +592,7 @@ namespace hoa
             }
             else
             {
-                for(size_t i = 0; i < Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics(); i++)
+                for(size_t i = 0; i < ProcessorHarmonics<Hoa2d, T>::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -613,15 +613,15 @@ namespace hoa
                 T cos_x = m_cosx;
                 T sin_x = m_sinx;
                 T tcos_x = cos_x;
-                const T gain1   = (m_gain * Processor<Hoa2d, T>::Harmonics::getDecompositionOrder());
+                const T gain1   = (m_gain * ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder());
                 const T factor1 = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - m_gain) + m_distance);
 
                 (*outputs++) += (*input) * (gain1 + m_distance);            // Hamonic [0,0]
                 (*outputs++) += (*input) * sin_x * factor1;                 // Hamonic [1,-1]
                 (*outputs++) += (*input) * cos_x * factor1;                 // Hamonic [1,1]
-                for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+                for(size_t i = 2; i <= ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder(); i++)
                 {
-                    const T gain    = (m_gain * (Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() - i) + m_distance);
+                    const T gain    = (m_gain * (ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder() - i) + m_distance);
                     const T factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
 
                     cos_x   = tcos_x * m_cosx - sin_x * m_sinx;
@@ -751,7 +751,7 @@ namespace hoa
     
     
     
-    template <typename T> class Encoder<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics
+    template <typename T> class Encoder<Hoa3d, T> : public ProcessorHarmonics<Hoa3d, T>
     {
     public:
 
@@ -759,7 +759,7 @@ namespace hoa
         /**	The encoder constructor allocates and initialize the member values to computes harmonics coefficients for the encoding. The order must be at least 1.
          @param     order	The order.
          */
-        Encoder(const size_t order) hoa_noexcept : Processor<Hoa3d, T>::Harmonics(order) {}
+        Encoder(const size_t order) hoa_noexcept : ProcessorHarmonics<Hoa3d, T>(order) {}
 
         //! The encoder destructor.
         /**	The encoder destructor free the memory.
@@ -796,10 +796,10 @@ namespace hoa
          */
         EncoderBasic(const size_t order) hoa_noexcept : Encoder<Hoa3d, T>(order)
         {
-            m_normalization = Signal<T>::alloc(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics());
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
+            m_normalization = Signal<T>::alloc(ProcessorHarmonics<Hoa3d, T>::getNumberOfHarmonics());
+            for(size_t i = 0; i < ProcessorHarmonics<Hoa3d, T>::getNumberOfHarmonics(); i++)
             {
-                m_normalization[i] = Processor<Hoa3d, T>::Harmonics::getHarmonicSemiNormalization(i);
+                m_normalization[i] = ProcessorHarmonics<Hoa3d, T>::getHarmonicSemiNormalization(i);
             }
             setMute(false);
             setAzimuth(0.);
@@ -880,7 +880,7 @@ namespace hoa
         {
             if(!m_muted)
             {
-                const size_t order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
+                const size_t order = ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -956,7 +956,7 @@ namespace hoa
             }
             else
             {
-                for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
+                for(size_t i = 0; i < ProcessorHarmonics<Hoa3d, T>::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -981,7 +981,7 @@ namespace hoa
         {
             if(!m_muted)
             {
-                const size_t order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
+                const size_t order = ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -1057,7 +1057,7 @@ namespace hoa
             }
             else
             {
-                for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
+                for(size_t i = 0; i < ProcessorHarmonics<Hoa3d, T>::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -1089,12 +1089,12 @@ namespace hoa
          */
         EncoderDC(const size_t order) hoa_noexcept : Encoder<Hoa3d, T>(order)
         {
-            m_normalization = Signal<T>::alloc(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics());
-            for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
+            m_normalization = Signal<T>::alloc(ProcessorHarmonics<Hoa3d, T>::getNumberOfHarmonics());
+            for(size_t i = 0; i < ProcessorHarmonics<Hoa3d, T>::getNumberOfHarmonics(); i++)
             {
-                m_normalization[i] = Processor<Hoa3d, T>::Harmonics::getHarmonicSemiNormalization(i);
+                m_normalization[i] = ProcessorHarmonics<Hoa3d, T>::getHarmonicSemiNormalization(i);
             }
-            m_distance = Signal<T>::alloc(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder());
+            m_distance = Signal<T>::alloc(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder());
             setMute(false);
             setAzimuth(0.);
             setElevation(0.);
@@ -1174,13 +1174,13 @@ namespace hoa
                 dist        = 1. / radius;
             }
 
-            const T gain1   = (gain * Processor<Hoa3d, T>::Harmonics::getDecompositionOrder());
+            const T gain1   = (gain * ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder());
             m_distance[0] = (gain1 + dist);
             m_distance[1] = (cos(Math<T>::clip(factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain1 - gain) + dist);
 
-            for(size_t i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder(); i++)
             {
-                const T gain2   = (gain * (Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() - i) + dist);
+                const T gain2   = (gain * (ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() - i) + dist);
                 const T factor1 = (cos(Math<T>::clip(factor * i, 0., HOA_PI)) + 1.) * 0.5;
                 m_distance[i]   = factor1 * gain2;
             }
@@ -1224,7 +1224,7 @@ namespace hoa
         {
             if(!m_muted)
             {
-                const size_t order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
+                const size_t order = ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;
@@ -1301,7 +1301,7 @@ namespace hoa
             }
             else
             {
-                for(size_t i = 0; i < Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics(); i++)
+                for(size_t i = 0; i < ProcessorHarmonics<Hoa3d, T>::getNumberOfHarmonics(); i++)
                 {
                     (*outputs++) = 0.;
                 }
@@ -1319,7 +1319,7 @@ namespace hoa
         {
             if(!m_muted)
             {
-                const size_t order = Processor<Hoa3d, T>::Harmonics::getDecompositionOrder();
+                const size_t order = ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder();
                 const T cos_theta = m_cos_theta;
                 const T sqr_theta = -m_sqrt_rmin;
                 const T cos_phi   = (m_elevation >= -HOA_PI2 && m_elevation <= HOA_PI2) ? m_cos_phi : -m_cos_phi;

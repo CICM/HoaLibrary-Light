@@ -19,7 +19,7 @@ namespace hoa
     //! The rotate class rotates a sound field in the harmonics domain (2d available only).
     /** The rotate should be used to rotate a sound field by weighting the harmonics depending on the rotation.
      */
-    template <Dimension D, typename T> class Rotate : public  Processor<D, T>::Harmonics
+    template <Dimension D, typename T> class Rotate : public  ProcessorHarmonics<D, T>
     {
     public:
         
@@ -63,7 +63,7 @@ namespace hoa
     
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
     
-    template <typename T> class Rotate<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
+    template <typename T> class Rotate<Hoa2d, T> : public ProcessorHarmonics<Hoa2d, T>
     {
     private:
         T   m_yaw;
@@ -75,7 +75,7 @@ namespace hoa
         /**	The rotate constructor allocates and initialize the member values to computes spherical harmonics rotation depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Rotate(const size_t order) hoa_noexcept : Processor<Hoa2d, T>::Harmonics(order)
+        Rotate(const size_t order) hoa_noexcept : ProcessorHarmonics<Hoa2d, T>(order)
         {
             ;
         }
@@ -123,7 +123,7 @@ namespace hoa
             T sig = (*inputs++);
             (*outputs++) = sin_x * (*inputs) + cos_x * sig;
             (*outputs++) = cos_x * (*inputs++) - sin_x * sig;
-            for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder(); i++)
             {
                 cos_x = tcos_x * m_cosx - sin_x * m_sinx;
                 sin_x = tcos_x * m_sinx + sin_x * m_cosx;

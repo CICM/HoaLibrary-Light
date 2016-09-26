@@ -31,7 +31,7 @@ namespace hoa
     //! (when the channels are not to equal distance for example).\n
     //! Note that the optimizations decrease the precision of the sound field restitution thus
     //! it can be compared to particular cases of the fractional orders.
-    template <Dimension D, typename T> class Optim : public Processor<D, T>::Harmonics
+    template <Dimension D, typename T> class Optim : public ProcessorHarmonics<D, T>
     {
     public:
         
@@ -46,8 +46,8 @@ namespace hoa
 
         //! @brief The constructor.
         //! @param order The order of decomposition.
-        Optim(size_t order) hoa_noexcept : Processor<D, T>::Harmonics(order),
-        m_weights(Signal<T>::alloc(Processor<D, T>::Harmonics::getNumberOfHarmonics()))
+        Optim(size_t order) hoa_noexcept : ProcessorHarmonics<D, T>(order),
+        m_weights(Signal<T>::alloc(ProcessorHarmonics<D, T>::getNumberOfHarmonics()))
         { setMode(InPhase); }
 
         //! @brief The destructor.
@@ -68,8 +68,8 @@ namespace hoa
         //! @param mode The mode of optimization.
         void setMode(Mode mode) hoa_noexcept
         {
-            const size_t size   = Processor<D, T>::Harmonics::getNumberOfHarmonics();
-            const size_t order  = Processor<D, T>::Harmonics::getDecompositionOrder();
+            const size_t size   = ProcessorHarmonics<D, T>::getNumberOfHarmonics();
+            const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
             if(mode == Basic)
             {
                 for(size_t i = 0; i < size;  ++i) {
@@ -80,7 +80,7 @@ namespace hoa
             {
                 m_weights[0] = T(1.);
                 for(size_t i = 1; i < size; i++) {
-                    const size_t degree = Processor<D, T>::Harmonics::getHarmonicDegree(i);
+                    const size_t degree = ProcessorHarmonics<D, T>::getHarmonicDegree(i);
                     m_weights[i] = cos(T(degree) *  T(HOA_PI) / T(2. * order + 2.));
                 }
             }
@@ -89,7 +89,7 @@ namespace hoa
                 m_weights[0] = T(1.);
                 const T facn = Math<T>::factorial(long(order));
                 for(size_t i = 1; i < size; i++) {
-                    const size_t degree = Processor<D, T>::Harmonics::getHarmonicDegree(i);
+                    const size_t degree = ProcessorHarmonics<D, T>::getHarmonicDegree(i);
                     m_weights[i] = facn / Math<T>::factorial(long(order - degree)) * facn / Math<T>::factorial(long(order + degree));
                 }
                 
@@ -105,7 +105,7 @@ namespace hoa
         //! @param outputs The outputs array.
         void process(T const* inputs, T* outputs) hoa_noexcept hoa_final
         {
-            const  size_t size = Processor<D, T>::Harmonics::getNumberOfHarmonics();
+            const  size_t size = ProcessorHarmonics<D, T>::getNumberOfHarmonics();
             const T* weights = m_weights;
             for(size_t i = size>>3; i; --i, inputs += 8, weights += 8, outputs += 8)
             {

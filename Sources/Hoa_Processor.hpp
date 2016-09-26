@@ -17,157 +17,83 @@
 
 namespace hoa
 {
-    //! The processor.
-    /** The processor owns a set of harmonics or planewaves and performs digital signal processing.
-     */
+    //! @brief The processor.
+    //! @details The processor the performs digital signal processing.
     template <Dimension D, typename T> class Processor
     {
     public:
-
-        inline virtual ~Processor() {}
+        //! @brief The destructor.
+        virtual ~Processor() hoa_noexcept hoa_default_f
         
-        //! This method performs the processing.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array and the outputs array depends of the template and the processing.
-         @param     input  The input array.
-         @param     outputs The outputs array.
-         */
+        //! @brief The pure virtual method performs that performs the digital signal processing.
+        //! @param inputs  The inputs array.
+        //! @param outputs The outputs array.
         virtual void process(const T* input, T* outputs) hoa_noexcept = 0;
-
-        class Harmonics;
 
         class Planewaves;
     };
 
-    //! The harmonic processor.
-    /** The harmonic processor owns a set of harmonics depending on the order of decomposition.
-     */
-    template <Dimension D, typename T> class Processor<D, T>::Harmonics : virtual public Processor<D, T>
+    //! @brief The harmonic processor.
+    //! @details The harmonic processor owns a set of harmonics depending on the order of decomposition \f$N\f$.
+    template <Dimension D, typename T> class ProcessorHarmonics : virtual public Processor<D, T>
     {
-    private:
-
-        const size_t                 m_order_of_decomposition;
-        const size_t                 m_number_of_harmonics;
-        std::vector< Harmonic<D, T> >    m_harmonics;
     public:
 
-        //! The harmonics constructor.
-        /** The harmonics constructor allocates and initializes the general member values depending on a order of decomposition \f$N\f$.
-         @param order    The order of decomposition \f$N\f$, must be at least 1.
-         */
-        Harmonics(const size_t order) hoa_noexcept :
-        m_order_of_decomposition(order),
-        m_number_of_harmonics(Harmonic<D, T>::getNumberOfHarmonics(order))
+        //! @brief The harmonics constructor.
+        //! @param order The order of decomposition \f$N\f$, must be at least 1.
+        ProcessorHarmonics(const size_t order) hoa_noexcept :
+        m_order_of_decomposition(order)
         {
-            for(size_t i = 0; i < m_number_of_harmonics; i++)
+            for(size_t i = 0; i < Harmonic<D, T>::getNumberOfHarmonics(order); ++i)
             {
                 m_harmonics.push_back(Harmonic<D, T>(i));
             }
         }
 
-        //! The harmonics destructor.
-        /** The harmonics destructor.
-         */
-        virtual ~Harmonics() hoa_noexcept
-        {
-            m_harmonics.clear();
-        }
+        //! @brief The harmonics destructor.
+        virtual ~ProcessorHarmonics() hoa_noexcept { m_harmonics.clear(); }
 
-        //! Retrieve the order of decomposition.
-        /** Retrieve the order of decomposition \f$N\f$.
-         @return The order.
-         */
-        inline size_t getDecompositionOrder() const hoa_noexcept
-        {
-            return m_order_of_decomposition;
-        }
+        //! @brief Returns the order of decomposition \f$N\f$.
+        inline size_t getDecompositionOrder() const hoa_noexcept { return m_order_of_decomposition; }
 
-        //! Retrieve the number of harmonics.
-        /** Retrieve the number of harmonics.
-         @return The number of harmonics.
-         */
-        inline size_t getNumberOfHarmonics() const hoa_noexcept
-        {
-            return m_number_of_harmonics;
-        }
+        //! @brief Returns the number of harmonics.
+        inline size_t getNumberOfHarmonics() const hoa_noexcept { return m_harmonics.size(); }
 
-        //! Retrieve the degree of an harmonic.
-        /** The method retrieves the degrees \f$l\f$of the harmonics are in the range \f$0\f$ to \f$N\f$.
-         @param     index	The index of an harmonic.
-         @return    The method returns the degree \f$l\f$ of the harmonic.
-         @see       getHarmonicOrder()
-         @see       getHarmonicName()
-         */
-        inline size_t getHarmonicDegree(const size_t index) const hoa_noexcept
-        {
-            return m_harmonics[index].getDegree();
-        }
+        //! @brief Returns the degree \f$l\f$ of an harmonic in the range \f$0\f$ to \f$N\f$.
+        //! @param index The index of an harmonic.
+        inline size_t getHarmonicDegree(const size_t index) const hoa_noexcept {
+            return m_harmonics[index].getDegree(); }
 
-        //! Retrieve the order of an harmonic.
-        /** The method retrieves the orders \f$m\f$ of the harmonic are in the range \f$-l\f$ to \f$l\f$.
-         @param     index	The index of an harmonic.
-         @return    The method returns the order \f$m\f$ of the harmonic.
-         @see       getHarmonicDegree()
-         @see       getHarmonicName()
-         */
-        inline long getHarmonicOrder(const size_t index) const hoa_noexcept
-        {
-            return m_harmonics[index].getOrder();
-        }
+        //! @brief Returns the azimuthal order \f$m\f of an harmonic in the range \f$-l\f$ to \f$l\f$.
+        //! @param index The index of an harmonic.
+        inline long getHarmonicOrder(const size_t index) const hoa_noexcept {
+            return m_harmonics[index].getOrder(); }
 
-        //! Retrieve the index of an harmonic.
-        /** The method retrieves the index of an harmonic in the range \f$0\f$ to number of harmonics - 1.
-         @param degree  The degree of the harmonic.
-         @param order   The order of the harmonic.
-         @return    The method returns the index of the harmonic.
-         @see       getHarmonicOrder()
-         @see       getHarmonicName()
-         */
-        inline size_t getHarmonicIndex(const size_t degree, long order) const hoa_noexcept
-        {
-            return Harmonic<D, T>::getIndex(degree, order);
-        }
+        //! @brief Returns the index of an harmonic given the degree \f$l\f$ and the azimuthal order \f$m\f$ in the range \f$0\f$ to number of harmonics - 1.
+        //! @param degree The degree of the harmonic.
+        //! @param order  The azimuthal order of the harmonic.
+        inline size_t getHarmonicIndex(const size_t degree, long order) const hoa_noexcept {
+            return Harmonic<D, T>::getIndex(degree, order); }
 
-        //! Retrieve the name of an harmonic.
-        /** Retrieve the name of an harmonic.
-         @param     index	The index of an harmonic.
-         @return    The method returns the name of the harmonic that contains its degree and its order.
-         @see       getHarmonicDegree()
-         @see       getHarmonicOrder()
-         */
-        inline std::string getHarmonicName(const size_t index) const hoa_noexcept
-        {
-            return m_harmonics[index].getName();
-        }
+        //! @brief Returns the name of an harmonic.
+        //! @param index The index of an harmonic.
+        inline std::string getHarmonicName(const size_t index) const hoa_noexcept {
+            return m_harmonics[index].getName(); }
         
-        //! Get the normalization of an harmonic.
-        /** The method returns the normalization of an harmonics.
-         @param     index	The index of an harmonic.
-         @return     The normalization of an harmonics.
-         */
-        inline T getHarmonicNormalization(const size_t index) const hoa_noexcept
-        {
-            return m_harmonics[index].getNormalization();
-        }
+        //! @brief Returns the normalization of an harmonic.
+        //! @param index The index of an harmonic.
+        inline T getHarmonicNormalization(const size_t index) const hoa_noexcept {
+            return m_harmonics[index].getNormalization(); }
         
-        //! Get the semi-normalization of an harmonic.
-        /** The method returns the semi-normalization of an harmonics.
-         @param     index	The index of an harmonic.
-         @return    The semi-normalization of the harmonics.
-         */
-        inline T getHarmonicSemiNormalization(const size_t index) const hoa_noexcept
-        {
-            return m_harmonics[index].getSemiNormalization();
-        }
-
-        //! This method performs the processing.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array and the outputs array depends of the template and the processing.
-         @param     input  The input array.
-         @param     outputs The outputs array.
-         */
-        virtual void process(const T* input, T* outputs) hoa_noexcept
-        {
-            ;
-        }
+        //! @brief Returns the semi-normalization of an harmonic.
+        //! @param index The index of an harmonic.
+        inline T getHarmonicSemiNormalization(const size_t index) const hoa_noexcept {
+            return m_harmonics[index].getSemiNormalization(); }
+        
+    private:
+        
+        const size_t                  m_order_of_decomposition;
+        std::vector< Harmonic<D, T> > m_harmonics;
     };
 
 

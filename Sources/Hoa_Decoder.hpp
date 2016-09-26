@@ -20,7 +20,7 @@ namespace hoa
     //! The decoder class decodes a sound field in the harmonics domain through the planewaves domain.
     /** The decoder should be used to decode a set the harmonics domain to a set of planewaves for loudspeakers. There are three types of decoder. Regular for a perfect circle or sphere of loudspeakers. Irregular when the loudspeakers are not equally spaced on the circle or the sphere. Binaural for headphone restitution.
      */
-    template <Dimension D, typename T> class Decoder : public Processor<D, T>::Harmonics, public Processor<D, T>::Planewaves
+    template <Dimension D, typename T> class Decoder : public ProcessorHarmonics<D, T>, public Processor<D, T>::Planewaves
     {
     public:
         //! The decoder constructor.
@@ -169,7 +169,7 @@ namespace hoa
     //! The decoder class decodes a sound field in the harmonics domain through the planewaves domain.
     /** The decoder should be used to decode a set the harmonics domain to a set of planewaves for loudspeakers. There are three types of decoder. Regular for a perfect circle or sphere of loudspeakers. Irregular when the loudspeakers are not equally spaced on the circle or the sphere. Binaural for headphone restitution.
      */
-    template <typename T> class Decoder<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics, public Processor<Hoa2d, T>::Planewaves
+    template <typename T> class Decoder<Hoa2d, T> : public ProcessorHarmonics<Hoa2d, T>, public Processor<Hoa2d, T>::Planewaves
     {
     public:
         enum Mode
@@ -185,7 +185,7 @@ namespace hoa
          @param     numberOfPlanewaves     The number of channels.
          */
         Decoder(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept :
-        Processor<Hoa2d, T>::Harmonics(order),
+        ProcessorHarmonics<Hoa2d, T>(order),
         Processor<Hoa2d, T>::Planewaves(numberOfPlanewaves)
         {
             ;
@@ -620,7 +620,7 @@ namespace hoa
     //! The decoder class decodes a sound field in the harmonics domain through the planewaves domain.
     /** The decoder should be used to decode a set the harmonics domain to a set of planewaves for loudspeakers. There are three types of decoder. Regular for a perfect circle or sphere of loudspeakers. Irregular when the loudspeakers are not equally spaced on the circle or the sphere. Binaural for headphone restitution.
      */
-    template <typename T> class Decoder<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics, public Processor<Hoa3d, T>::Planewaves
+    template <typename T> class Decoder<Hoa3d, T> : public ProcessorHarmonics<Hoa3d, T>, public Processor<Hoa3d, T>::Planewaves
     {
     public:
 
@@ -636,7 +636,7 @@ namespace hoa
          @param     numberOfPlanewaves     The number of channels.
          */
         Decoder(const size_t order, const size_t numberOfPlanewaves) hoa_noexcept :
-        Processor<Hoa3d, T>::Harmonics(order),
+        ProcessorHarmonics<Hoa3d, T>(order),
         Processor<Hoa3d, T>::Planewaves(numberOfPlanewaves)
         {
             ;

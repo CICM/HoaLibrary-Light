@@ -20,7 +20,7 @@ namespace hoa
     //! The scope class offers a representation a the sound field in the harmonics domain.
     /** The scope discretize a circle for the 2d or a sphere for the 3d by a set of point and uses a decoder to project the  harmonics on it. This class should be used for graphical interfaces outside the digital signal processing. If the number of points for the discretization is very large, then you should prefer to record snapshot of the harmonics and to call the process method at an interval adapted to a graphical rendering.
      */
-    template <Dimension D, typename T> class Scope : public Processor<D, T>::Harmonics
+    template <Dimension D, typename T> class Scope : public ProcessorHarmonics<D, T>
     {
     public:
 

@@ -19,7 +19,7 @@ namespace hoa
     //! The echanger class renumber and normalize the harmonics channels.
     /** The echanger should be used to renumber and normalize the harmonics channels. The library uses the Ambisonics Channels Numbering (ACN), this class allows to convert channels arrengements from Furse-Malham (B-format) or Single Index (SID) to  Ambisonics Channels Numbering (ACN) and conversely. Furse-Malham and SID never reach up to 3rd order so the maximum order of decomposition should be 3. The library uses the semi-normalization (SN2D and SN3D), this class allows to normalize the channels to the full normalization (N2D and N3D) or to MaxN (B-format) and conversely.
      */
-    template <Dimension D, typename T> class Exchanger : public Processor<D, T>::Harmonics
+    template <Dimension D, typename T> class Exchanger : public ProcessorHarmonics<D, T>
     {
     public:
 
@@ -121,7 +121,7 @@ namespace hoa
 
 //! @cond
 
-    template <typename T> class Exchanger<Hoa2d, T> : public Processor<Hoa2d, T>::Harmonics
+    template <typename T> class Exchanger<Hoa2d, T> : public ProcessorHarmonics<Hoa2d, T>
     {
     public:
         //! The numbering conversion.
@@ -155,7 +155,7 @@ namespace hoa
         /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
          @param     order	The order.
          */
-        inline Exchanger(const size_t order) hoa_noexcept : Processor<Hoa2d, T>::Harmonics(order),
+        inline Exchanger(const size_t order) hoa_noexcept : ProcessorHarmonics<Hoa2d, T>(order),
         m_numbering(ACN),
         m_normalization(SN2D)
         {
@@ -247,12 +247,12 @@ namespace hoa
             {
                 case fromMaxN:
                     outputs[0] = ins[0] * T(sqrt(2.));
-                    Signal<T>::copy(Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics() - 1, ins+1, outputs+1);
+                    Signal<T>::copy(ProcessorHarmonics<Hoa2d, T>::getNumberOfHarmonics() - 1, ins+1, outputs+1);
                     ins = outputs;
                     break;
                 case toMaxN:
                     outputs[0] = ins[0] / T(sqrt(2.));
-                    Signal<T>::copy(Processor<Hoa2d, T>::Harmonics::getNumberOfHarmonics() - 1, ins+1, outputs+1);
+                    Signal<T>::copy(ProcessorHarmonics<Hoa2d, T>::getNumberOfHarmonics() - 1, ins+1, outputs+1);
                     ins = outputs;
                     break;
                 default:
@@ -279,12 +279,12 @@ namespace hoa
             *(outputs++) = inputs[0]; // W -> 0
             *(outputs++) = inputs[2]; // Y -> 1
             *(outputs++) = temp;      // X -> 2
-            if(Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() > 1ul)
+            if(ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder() > 1ul)
             {
                 temp       = inputs[3];
                 *(outputs++) = inputs[4]; // V -> 3
                 *(outputs++) = temp;      // U -> 4
-                if(Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() > 2ul)
+                if(ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder() > 2ul)
                 {
                     temp       = inputs[5];
                     *(outputs++) = inputs[6]; // Q -> 5
@@ -304,7 +304,7 @@ namespace hoa
             *(outputs++) = inputs[0]; // 0 -> 0
             *(outputs++) = inputs[2]; // 2 -> 1
             *(outputs++) = temp;      // 1 -> 2
-            for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder(); i++)
             {
                 temp         = inputs[(i-1)*2+1];
                 *(outputs++) = inputs[(i-1)*2+2];
@@ -323,12 +323,12 @@ namespace hoa
             *(outputs++) = inputs[0]; // 0 -> W
             *(outputs++) = inputs[2]; // 2 -> X
             *(outputs++) = temp;      // 1 -> Y
-            if(Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() > 1ul)
+            if(ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder() > 1ul)
             {
                 temp       = inputs[3];
                 *(outputs++) = inputs[4]; // 4 -> U
                 *(outputs++) = temp;      // 3 -> V
-                if(Processor<Hoa2d, T>::Harmonics::getDecompositionOrder() > 2ul)
+                if(ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder() > 2ul)
                 {
                     temp       = inputs[5];
                     *(outputs++) = inputs[6]; // 6 -> U
@@ -348,7 +348,7 @@ namespace hoa
             *(outputs++) = inputs[0]; // 0 -> 0
             *(outputs++) = inputs[2]; // 2 -> 1
             *(outputs++) = temp;      // 1 -> 2
-            for(size_t i = 2; i <= Processor<Hoa2d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder(); i++)
             {
                 temp         = inputs[(i-1)*2+1];
                 *(outputs++) = inputs[(i-1)*2+2];
@@ -366,8 +366,8 @@ namespace hoa
         long getInputHarmonicOrder(const size_t index) const hoa_noexcept
         {
             const Numbering numb = getNumbering();
-            const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID) || (Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index) > 3);
-            return Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * (acn ? 1l : -1l);
+            const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID) || (ProcessorHarmonics<Hoa2d, T>::getHarmonicDegree(index) > 3);
+            return ProcessorHarmonics<Hoa2d, T>::getHarmonicOrder(index) * (acn ? 1l : -1l);
         }
         
         //! Retrieve the harmonic order of an output depending on the current numbering configuration.
@@ -380,8 +380,8 @@ namespace hoa
         long getOutputHarmonicOrder(const size_t index) const hoa_noexcept
         {
             const Numbering numb = getNumbering();
-            const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID) || (Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index) > 3);
-            return Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * (acn ? 1l : -1l);
+            const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID) || (ProcessorHarmonics<Hoa2d, T>::getHarmonicDegree(index) > 3);
+            return ProcessorHarmonics<Hoa2d, T>::getHarmonicOrder(index) * (acn ? 1l : -1l);
         }
         
         //! Retrieve the name of an harmonic depending on the current numbering configuration.
@@ -402,7 +402,7 @@ namespace hoa
             if(acn || (malham && index > 6))
             {
                 // [0, 0], [1, -1], [1, 1], [2, -2], [2, 2], [3, -3], [3, 3]...
-                return Processor<Hoa2d, T>::Harmonics::getHarmonicName(index);
+                return ProcessorHarmonics<Hoa2d, T>::getHarmonicName(index);
             }
             else if(malham)
             {
@@ -422,8 +422,8 @@ namespace hoa
             else
             {
                 // [0, 0], [1, 1], [1, -1], [2, 2], [2, -2], [3, 3], [3, -3]...
-                size_t hdegree = Processor<Hoa2d, T>::Harmonics::getHarmonicDegree(index);
-                size_t horder  = Processor<Hoa2d, T>::Harmonics::getHarmonicOrder(index) * -1l;
+                size_t hdegree = ProcessorHarmonics<Hoa2d, T>::getHarmonicDegree(index);
+                size_t horder  = ProcessorHarmonics<Hoa2d, T>::getHarmonicOrder(index) * -1l;
                 return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
             }
         }
@@ -432,7 +432,7 @@ namespace hoa
     
     
 
-    template <typename T> class Exchanger<Hoa3d, T> : public Processor<Hoa3d, T>::Harmonics
+    template <typename T> class Exchanger<Hoa3d, T> : public ProcessorHarmonics<Hoa3d, T>
     {
     public:
         //! The numbering conversion.
@@ -470,7 +470,7 @@ namespace hoa
         /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
          @param     order	The order.
          */
-        inline Exchanger(const size_t order) hoa_noexcept : Processor<Hoa3d, T>::Harmonics(order),
+        inline Exchanger(const size_t order) hoa_noexcept : ProcessorHarmonics<Hoa3d, T>(order),
         m_numbering(ACN),
         m_normalization(SN3D)
         {
@@ -618,7 +618,7 @@ namespace hoa
             outputs[1] = inputs[2]; // Y(2) -> 1
             outputs[2] = inputs[3]; // Z(3) -> 2
             outputs[3] = temp;      // X(1) -> 3
-            if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
+            if(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() > 1ul)
             {
                 temp         = inputs[4];
                 T temp2      = inputs[5];
@@ -628,7 +628,7 @@ namespace hoa
                 outputs[6] = temp;      // R(4) -> 6
                 outputs[7] = temp2;     // S(5) -> 7
                 outputs[8] = temp3;     // U(7) -> 8
-                if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
+                if(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() > 2ul)
                 {
                     temp      = inputs[9];
                     temp2     = inputs[10];
@@ -641,9 +641,9 @@ namespace hoa
                     outputs[13] = temp2;     // L(10) -> 13
                     outputs[14] = temp3;     // N(12) -> 14
                     outputs[15] = temp4;     // P(14) -> 15
-                    if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 3ul)
+                    if(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() > 3ul)
                     {
-                        Signal<T>::copy(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics() - 16ul, inputs+16, outputs+16);
+                        Signal<T>::copy(ProcessorHarmonics<Hoa3d, T>::getNumberOfHarmonics() - 16ul, inputs+16, outputs+16);
                     }
                 }
             }
@@ -662,7 +662,7 @@ namespace hoa
             outputs[1] = inputs[3]; // 3 -> X(1)
             outputs[2] = temp;      // 1 -> Y(2)
             outputs[3] = temp2;     // 2 -> Z(3)
-            if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
+            if(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() > 1ul)
             {
                 temp       = inputs[4];
                 temp2      = inputs[5];
@@ -671,7 +671,7 @@ namespace hoa
                 outputs[6] = temp2;     // 5 -> T(6)
                 outputs[7] = inputs[8]; // 8 -> U(7)
                 outputs[8] = temp;      // 4 -> V(8)
-                if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
+                if(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() > 2ul)
                 {
                     temp            = inputs[9];
                     temp2           = inputs[10];
@@ -682,9 +682,9 @@ namespace hoa
                     outputs[13] = temp2;     // 10 -> 0(13)
                     outputs[14] = inputs[15];// 15 -> P(14)
                     outputs[15] = temp;      // 9  -> Q(15)
-                    if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 3ul)
+                    if(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() > 3ul)
                     {
-                        Signal<T>::copy(Processor<Hoa3d, T>::Harmonics::getNumberOfHarmonics() - 16ul, inputs+16, outputs+16);
+                        Signal<T>::copy(ProcessorHarmonics<Hoa3d, T>::getNumberOfHarmonics() - 16ul, inputs+16, outputs+16);
                     }
                 }
             }
@@ -698,7 +698,7 @@ namespace hoa
         void numberFromSID(T const* inputs, T* outputs) hoa_noexcept
         {
             *(outputs++) = *(inputs++);
-            for(size_t i = 1ul; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 1ul; i <= ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder(); i++)
             {
                 for(size_t j = 0; j < 2ul * i + 1ul; j++)
                 {
@@ -725,7 +725,7 @@ namespace hoa
         void numberToSID(T const* inputs, T* outputs) hoa_noexcept
         {
             *(outputs++) = *(inputs++);
-            for(size_t i = 1ul; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 1ul; i <= ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder(); i++)
             {
                 for(size_t j = 0; j < 2ul * i + 1ul; j++)
                 {
@@ -754,14 +754,14 @@ namespace hoa
             outputs[1] = inputs[1] * T(sqrt(3.));
             outputs[2] = inputs[2] * T(sqrt(3.));
             outputs[3] = inputs[3] * T(sqrt(3.));
-            if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
+            if(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() > 1ul)
             {
                 outputs[4] = inputs[4] * T(sqrt(15.) / 2.);
                 outputs[5] = inputs[5] * T(sqrt(15.) / 2.);
                 outputs[6] = inputs[6] * T(sqrt(5.));
                 outputs[7] = inputs[7] * T(sqrt(15.) / 2.);
                 outputs[8] = inputs[8] * T(sqrt(15.) / 2.);
-                if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
+                if(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() > 2ul)
                 {
                     outputs[9]  = inputs[9]  * T(sqrt(35. / 8.));
                     outputs[10] = inputs[10] * T(sqrt(35.) / 3.);
@@ -786,14 +786,14 @@ namespace hoa
             outputs[1] = inputs[1] / T(sqrt(3.));
             outputs[2] = inputs[2] / T(sqrt(3.));
             outputs[3] = inputs[3] / T(sqrt(3.));
-            if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 1ul)
+            if(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() > 1ul)
             {
                 outputs[4] = inputs[4] / T(sqrt(15.) / 2.);
                 outputs[5] = inputs[5] / T(sqrt(15.) / 2.);
                 outputs[6] = inputs[6] / T(sqrt(5.));
                 outputs[7] = inputs[7] / T(sqrt(15.) / 2.);
                 outputs[8] = inputs[8] / T(sqrt(15.) / 2.);
-                if(Processor<Hoa3d, T>::Harmonics::getDecompositionOrder() > 2ul)
+                if(ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() > 2ul)
                 {
                     outputs[9]  = inputs[9]  / T(sqrt(35. / 8.));
                     outputs[10] = inputs[10] / T(sqrt(35.) / 3.);
@@ -819,7 +819,7 @@ namespace hoa
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
-            for(size_t i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder(); i++)
             {
                 norm = T(sqrt(2. * T(i) + 1.));
                 for(size_t j = 0; j < i * 2ul + 1ul; j++)
@@ -841,7 +841,7 @@ namespace hoa
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
             *(outputs++) = *(inputs++) * norm;
-            for(size_t i = 2; i <= Processor<Hoa3d, T>::Harmonics::getDecompositionOrder(); i++)
+            for(size_t i = 2; i <= ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder(); i++)
             {
                 norm = T(1. / sqrt(2. * T(i) + 1.));
                 for(size_t j = 0; j < i * 2ul + 1ul; j++)
@@ -866,7 +866,7 @@ namespace hoa
             
             if(acn || (malham && index > 15))
             {
-                return Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(index);
+                return ProcessorHarmonics<Hoa3d, T>::getHarmonicOrder(index);
             }
             else
             {
@@ -892,7 +892,7 @@ namespace hoa
             
             if(acn || (malham && index > 15))
             {
-                return Processor<Hoa3d, T>::Harmonics::getHarmonicOrder(index);
+                return ProcessorHarmonics<Hoa3d, T>::getHarmonicOrder(index);
             }
             else
             {
@@ -921,7 +921,7 @@ namespace hoa
             if(acn || (malham && index > 15))
             {
                 // [0, 0], [1, -1], [1, 0], [1, 1], [2, -2], [2, -1], [2, 0], [2, 1], [2, 2] ...
-                return Processor<Hoa3d, T>::Harmonics::getHarmonicName(index);
+                return ProcessorHarmonics<Hoa3d, T>::getHarmonicName(index);
             }
             else if(malham)
             {
