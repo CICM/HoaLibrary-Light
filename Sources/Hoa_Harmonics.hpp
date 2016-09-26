@@ -116,6 +116,8 @@ namespace hoa
          */
         static T getSemiNormalization(const size_t degree, const long order) hoa_noexcept;
     };
+    
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 
     //! The harmonic class owns basic harmonics ordering informations.
     /** The harmonic allows to retrieves informations about its ACN ordering, the degree and the order.
@@ -347,6 +349,8 @@ namespace hoa
             }
         }
     };
+#endif
+    
 }
 
 #endif
