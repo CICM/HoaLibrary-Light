@@ -34,13 +34,6 @@ namespace hoa
         /**	The encoder destructor free the memory.
          */
 		virtual ~Encoder() hoa_noexcept = 0;
-
-        //! This method performs the encoding.
-        /**	You should use this method for not-in-place processing and sample by sample. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         @param     input   The pointer to the input sample.
-         @param     outputs  The outputs array.
-         */
-        virtual void process(const T* input, T* outputs) hoa_noexcept;
     };
     
     //! The basic encoder class generates the harmonics for one signal according to an azimuth and an elevation.
