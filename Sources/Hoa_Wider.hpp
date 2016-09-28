@@ -16,9 +16,13 @@
 
 namespace hoa
 {
-    //! The wider class wides the diffusion of the sound field in the harmonics domain.
-    /** The wider simulates fractional orders to diffuse a sound field from omni directional when the widening factor is \f$0\f$ to the most directional when the widening factor is \f$1\f$.
-     */
+    //! @brief The class widens the propagation of the sounds in a sound field.
+    //! @details The class simulates fractional orders of decomposition to reduce the
+    //! precision of the sound field. When the factor of widening is \f$0\f$ sound field, only
+    //! the first hamonic \f$Y_{0,0}\f$ remains and the sound field is omni directional. By
+    //! increasing the factor of widening toward \f$1\f$, the other harmonics appears in a
+    //! logarithmic way, increasing the precision of the sound field that becomes more and
+    //! more directional until all the harmonics appeared.
     template <Dimension D, typename T> class Wider : public ProcessorHarmonics<D, T>
     {
     public:
