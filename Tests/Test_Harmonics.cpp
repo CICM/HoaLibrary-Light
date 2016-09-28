@@ -79,6 +79,16 @@ TEST_CASE("Harmonics 2D", "[Harmonics] [2D]")
         CHECK(Harmonic::getNumberOfHarmonics(7) == 15);
         CHECK(Harmonic::getNumberOfHarmonics(11) == 23);
     }
+    
+    SECTION("Static Number of Harmonics In Degree")
+    {
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(0) == 1);
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(1) == 2);
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(2) == 2);
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(3) == 2);
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(7) == 2);
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(11) == 2);
+    }
 
     SECTION("Static Normalization")
     {
@@ -335,6 +345,16 @@ TEST_CASE("Harmonics 3D", "[Harmonics] [3D]")
         CHECK(Harmonic::getNumberOfHarmonics(3) == 16);
         CHECK(Harmonic::getNumberOfHarmonics(7) == 64);
         CHECK(Harmonic::getNumberOfHarmonics(11) == 144);
+    }
+    
+    SECTION("Static Number of Harmonics In Degree")
+    {
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(0) == 1);
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(1) == 3);
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(2) == 5);
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(3) == 7);
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(7) == 15);
+        CHECK(Harmonic::getNumberOfHarmonicsInDegree(11) == 23);
     }
 
     /*

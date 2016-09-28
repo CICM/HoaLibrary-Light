@@ -23,12 +23,18 @@ namespace hoa
     //! The basic optimization has no effect, it should be used (or not) with a perfect
     //! ambisonic channels arrangement where all the channels are to equal distance on a
     //! circle or a sphere, and for a listener placed at the perfect center of the circle of
-    //! the sphere.\n
+    //! the sphere. The basic optimization generates a set of weights defined by:\n
+    //! \f[W^{basic}_{l,m} = 1\f]\n
     //! The max-re should be used should be used for an auditory confined to the center of the
-    //! circle or the sphere.\n
+    //! circle or the sphere. The max-re optimization generates a set of weights defined by:\n
+    //! \f[W^{max-re}_{l,m} = \cos{(l \times \frac{\pi}{2N + 2})}\f]\n
     //! The in-phase optimization should be used when the auditory covers the entire channels
     //! area and/or when the channels arrangement is not a perfect circle or a perfect sphere
-    //! (when the channels are not to equal distance for example).\n
+    //! (when the channels are not to equal distance for example).The in-phase optimization
+    //! generates a set of weights defined by:\n
+    //! \f[W^{in-phase}_{l,m} = \frac{N!^2}{(N + l)!(N -l)!}\f]\n
+    //! with \f$N\f$ the order of decomposition, \f$l\f$ the degree and \f$m\f$ the
+    //! azimuthal order.
     //! Note that the optimizations decrease the precision of the sound field restitution thus
     //! it can be compared to particular cases of the fractional orders.
     template <Dimension D, typename T> class Optim : public ProcessorHarmonics<D, T>
@@ -57,14 +63,6 @@ namespace hoa
         inline Mode getMode() const hoa_noexcept { return m_mode; }
         
         //! @brief Set the optimization mode.
-        //! @details The basic optimization generates a set of weights defined by:\n
-        //!  \f[Y^{optimized}_{l,m} = Y_{l,m}\f]\n
-        //! The max-re optimization generates a set of weights defined by:\n
-        //! \f[Y^{optimized}_{l,m} = \cos{(l \times \frac{\pi}{2N + 2})} Y_{l,m} \f]\n
-        //! The in-phase optimization generates a set of weights defined by:\n
-        //! \f[Y^{optimized}_{l,m} = \frac{N!^2}{(N + l)!(N -l)!} Y_{l,m} \f]\n
-        //! with \f$N\f$ the order of decomposition, \f$l\f$ the degree and \f$m\f$ the
-        //! azimuthal order.
         //! @param mode The mode of optimization.
         void setMode(Mode mode) hoa_noexcept
         {
@@ -105,7 +103,7 @@ namespace hoa
         //! @param outputs The outputs array.
         void process(T const* inputs, T* outputs) hoa_noexcept hoa_final
         {
-            const  size_t size = ProcessorHarmonics<D, T>::getNumberOfHarmonics();
+            const size_t size = ProcessorHarmonics<D, T>::getNumberOfHarmonics();
             const T* weights = m_weights;
             for(size_t i = size>>3; i; --i, inputs += 8, weights += 8, outputs += 8)
             {

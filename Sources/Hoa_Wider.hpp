@@ -22,199 +22,54 @@ namespace hoa
     //! the first hamonic \f$Y_{0,0}\f$ remains and the sound field is omni directional. By
     //! increasing the factor of widening toward \f$1\f$, the other harmonics appears in a
     //! logarithmic way, increasing the precision of the sound field that becomes more and
-    //! more directional until all the harmonics appeared.
+    //! more directional until all the harmonics appeared. The weight of the harmonics are
+    //! defined by:
+    //! \f[W_{l,m}(x) = x^l((1-x)(N-l)+1)\f]\n
+    //! with \f$N\f$ the order of decomposition, \f$l\f$ the degree, \f$m\f$ the
+    //! azimuthal order and \f$x\f$ the factor of widening.
     template <Dimension D, typename T> class Wider : public ProcessorHarmonics<D, T>
     {
     public:
 
-        //! The wider constructor.
-        /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
-         @param     order	The order.
-         */
-        Wider(const size_t order) hoa_noexcept;
+        //! @brief The constructor.
+        //! @param order The order of decomposition.
+        Wider(size_t order) hoa_noexcept : ProcessorHarmonics<D, T>(order), m_widening(1.) {}
 
-        //! The wider destructor.
-        /**	The wider destructor free the memory.
-         */
-		virtual ~Wider() hoa_noexcept = 0;
+        //! @brief The destructor.
+        ~Wider() hoa_noexcept {}
 
-        //! This method set the widening value.
-        /**	The the widening value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is omni directional and at \f$1\f$ the sound field is intact.
-         @param     radius   The radius.
-         @see       setAzimuth()
-         */
-		virtual void setWidening(const T radius) hoa_noexcept = 0;
+        //! @brief This method set factor of widening.
+        //! @param value The factor of widening.
+        inline void setWidening(T value) hoa_noexcept { m_widening = std::max(std::min(value, T(1)), T(0)); }
 
-        //! Get the the widening value.
-        /** The method returns the the widening value.
-         @return     The widening value.
-         */
-		virtual T getWidening() const hoa_noexcept = 0;
+        //! @brief returns the the widening value.
+		inline T getWidening() const hoa_noexcept { return m_widening; }
 
-        //! This method perform the widening.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics. \n
-         If \f$l = 0\f$
-         \f[Y^{widened}_{0,0}(x) = (g_x \times N + 1) \times Y_{l,m}\f]
-         else
-         \f[Y^{widened}_{l,m}(x) = \frac{(g_x \times (N - 1) + 1) (\cos{(\min{(0, \max{(a_x \times l, \pi)})})} + 1)}{2} \times Y_{l,m}\f]
-         with
-         \f[a_x = (1 - x)\pi\f]
-         and
-         \f[g_x = \frac{\sin{(a_x - \frac{\pi}{2} + 1)}}{2}\f]
-         with \f$x \in{[0, 1]} \f$ the widening factor, \f$N\f$ the order of decomposition, \f$l\f$ the degree and \f$m\f$ the order.
-         @param     inputs	The input array.
-         @param     outputs The output array.
-         */
-		virtual void process(const T* inputs, T* outputs) hoa_noexcept = 0;
-
-    };
-
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
-
-    template <typename T> class Wider<Hoa2d, T> : public ProcessorHarmonics<Hoa2d, T>
-    {
-    private:
-        T   m_widening;
-        T   m_gain;
-        T   m_factor;
-    public:
-
-        //! The wider constructor.
-        /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
-         @param     order	The order.
-         */
-        Wider(const size_t order) hoa_noexcept : ProcessorHarmonics<Hoa2d, T>(order)
+        //! @brief The method performs the optimization on the harmonics signal.
+        //! @details The method can be used for in-place or not-in-place processing and sample
+        //! by sample. The inputs array and outputs array contains the spherical harmonics
+        //! samples thus the minimum size of the array must be the number of harmonics.
+        //! @param inputs  The inputs array.
+        //! @param outputs The outputs array.
+		void process(const T* inputs, T* outputs) hoa_noexcept hoa_final
         {
-            setWidening(1.);
-        }
-
-        //! The wider destructor.
-        /**	The wider destructor free the memory.
-         */
-        ~Wider() hoa_noexcept
-        {
-            ;
-        }
-
-        //! This method set the widening value.
-        /**	The the widening value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is omni directional and at \f$1\f$ the sound field is intact.
-         @param     widening   The widening value.
-         @see       setAzimuth()
-         */
-        inline void setWidening(const T widening) hoa_noexcept
-        {
-            m_widening  = Math<T>::clip(widening, (T)0., (T)1.);
-            m_factor    = (1. - m_widening) * HOA_PI;
-            m_gain      = (sin(m_factor - HOA_PI2) + 1.) * 0.5;
-        }
-
-        //! Get the the widening value.
-        /** The method returns the the widening value.
-         @return     The widening value.
-         */
-        inline T getWidening() const hoa_noexcept
-        {
-            return m_widening;
-        }
-
-        //! This method perform the widening.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         @param     inputs	The input array.
-         @param     outputs The output array.
-         */
-        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
-        {
-            T gain   = (m_gain * ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder());
-            T factor = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain - m_gain) + 1.);
-
-            (*outputs++) = (*inputs++) * (gain + 1.);            // Hamonic [0,0]
-            (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,-1]
-            (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,1]
-            for(size_t i = 2; i <= ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder(); i++)
+            const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
+            const T      temp   = 1 - m_widening;
+            (*outputs++) = (*inputs++) * (T(order) * temp + T(1.));
+            for(size_t i = 1; i <= order; ++i)
             {
-                gain    = (m_gain * (ProcessorHarmonics<Hoa2d, T>::getDecompositionOrder() - i) + 1.);
-                factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
-
-                (*outputs++)    = (*inputs++) * factor * gain;    // Hamonic [i,-i]
-                (*outputs++)    = (*inputs++) * factor * gain;    // Hamonic [i,i]
-            }
-        }
-    };
-
-    template <typename T> class Wider<Hoa3d, T> : public ProcessorHarmonics<Hoa3d, T>
-    {
-    private:
-        T   m_widening;
-        T   m_gain;
-        T   m_factor;
-    public:
-
-        //! The wider constructor.
-        /**	The wider constructor allocates and initialize the member values. The order must be at least 1.
-         @param     order	The order.
-         */
-        Wider(const size_t order) hoa_noexcept : ProcessorHarmonics<Hoa3d, T>(order)
-        {
-            setWidening(1.);
-        }
-
-        //! The wider destructor.
-        /**	The wider destructor free the memory.
-         */
-        ~Wider() hoa_noexcept
-        {
-            ;
-        }
-
-        //! This method set the widening value.
-        /**	The widening value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound field is omni directional and at \f$1\f$ the sound field is intact.
-         @param     radius   The radius.
-         @see       setAzimuth()
-         */
-        inline void setWidening(const T radius) hoa_noexcept
-        {
-            m_widening  = Math<T>::clip(radius, (T)0., (T)1.);
-            m_factor    = (1. - m_widening) * HOA_PI;
-            m_gain      = (sin(m_factor - HOA_PI2) + 1.) * 0.5;
-        }
-
-        //! Get the the widening value.
-        /** The method returns the the widening value.
-         @return     The widening value.
-         */
-        inline T getWidening() const hoa_noexcept
-        {
-            return m_widening;
-        }
-
-        //! This method perform the widening.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         @param     inputs	The input array.
-         @param     outputs The output array.
-         */
-        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
-        {
-            T gain   = (m_gain * ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder());
-            T factor = (cos(Math<T>::clip(m_factor, 0., HOA_PI)) + 1.) * 0.5 * ((gain - m_gain) + 1.);
-
-            (*outputs++) = (*inputs++) * (gain + 1.);            // Hamonic [0,0]
-            (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,-1]
-            (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,0]
-            (*outputs++) = (*inputs++) * factor;                 // Hamonic [1,1]
-            for(size_t i = 2; i <= ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder(); i++)
-            {
-                gain    = (m_gain * (ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder() - i) + 1.);
-                factor  = (cos(Math<T>::clip(m_factor * i, 0., HOA_PI)) + 1.) * 0.5 ;
-
-                for(size_t j = 0; j < 2 * i + 1; j++)
+                const size_t nharmo = Harmonic<D, T>::getNumberOfHarmonicsInDegree(i);
+                const T      factor = std::pow(m_widening, T(i)) * (temp * T(order - i) + T(1.));
+                for(size_t j = 0; j < nharmo; ++j)
                 {
-                    (*outputs++)    = (*inputs++) * factor * gain;    // Hamonic [i, ~j]
+                    (*outputs++) = (*inputs++) * factor;
                 }
             }
         }
+        
+    private:
+        T m_widening;
     };
-
-#endif
 }
 
 #endif

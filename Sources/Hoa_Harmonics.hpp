@@ -99,6 +99,13 @@ namespace hoa
          @return        The number of harmonics.
          */
         static size_t getNumberOfHarmonics(const size_t order) hoa_noexcept;
+        
+        //! Get the number of harmonics for in a degree.
+        /** The method returns the number of harmonics for a degree.
+         @param degree  The degree.
+         @return        The number of harmonics.
+         */
+        static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) hoa_noexcept;
 
         //! Get the normalization of an harmonic.
         /** The method returns the normalization of an harmonics.
@@ -211,6 +218,13 @@ namespace hoa
          @return        The number of harmonics.
          */
         static inline size_t getNumberOfHarmonics(const size_t order) hoa_noexcept { return order * 2 + 1; }
+        
+        //! Get the number of harmonics for in a degree.
+        /** The method returns the number of harmonics for a degree.
+         @param degree  The degree.
+         @return        The number of harmonics.
+         */
+        static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) hoa_noexcept { return (degree != 0) + 1; }
 
         //! Get the normalization of an harmonic.
         /** The method returns the normalization of an harmonics.
@@ -320,6 +334,14 @@ namespace hoa
         static inline size_t getNumberOfHarmonics(const size_t order) hoa_noexcept  {
             return (order + 1) * (order + 1); }
 
+        //! Get the number of harmonics for in a degree.
+        /** The method returns the number of harmonics for a degree.
+         @param degree  The degree.
+         @return        The number of harmonics.
+         */
+        static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) hoa_noexcept {
+            return degree * 2 + 1; }
+        
         //! Get the normalization of an harmonic.
         /** The method returns the normalization of an harmonics.
          @param degree  The degree of the harmonic.
