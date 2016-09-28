@@ -2,7 +2,7 @@ var searchData=
 [
   ['abscissa',['abscissa',['../classhoa_1_1_math.html#a705e0b3fdd99c26c102b2ed3cf72ee27',1,'hoa::Math']]],
   ['acn',['ACN',['../classhoa_1_1_exchanger.html#a97018f59ae98bb947c08356b85e91071abb50bb426e10ba916b9fe15a5cffb6ab',1,'hoa::Exchanger']]],
-  ['add',['add',['../classhoa_1_1_signal.html#ab176b3313e0a6614cd1e05f2865bca08',1,'hoa::Signal::add(const ulong size, const T *in, T *out) noexcept'],['../classhoa_1_1_signal.html#a6339a1b4173e7bc0579f4537363b37df',1,'hoa::Signal::add(const ulong size, const T *source, const ulong incs, T *dest, const ulong incd) noexcept']]],
-  ['alloc',['alloc',['../classhoa_1_1_signal.html#ad2d05c2b0f191cf25610bbece2066bb0',1,'hoa::Signal']]],
+  ['add',['add',['../classhoa_1_1_signal.html#ab1e43fc4e4e5a881b79e82e11d410f5f',1,'hoa::Signal::add(const size_t size, const T *in, T *out) hoa_noexcept'],['../classhoa_1_1_signal.html#a1f3de5cc028804439549d3a81ee7f872',1,'hoa::Signal::add(const size_t size, const T *source, const size_t incs, T *dest, const size_t incd) hoa_noexcept']]],
+  ['alloc',['alloc',['../classhoa_1_1_signal.html#a1c31b8b1b9503e0db4309e236df4b6a1',1,'hoa::Signal']]],
   ['azimuth',['azimuth',['../classhoa_1_1_math.html#ac8c84f85b42f7196487cf88f64ff2505',1,'hoa::Math']]]
 ];

@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['radius',['radius',['../classhoa_1_1_math.html#a33664dc295c1611a6ef3750a945fbd5f',1,'hoa::Math']]],
-  ['regular',['Regular',['../classhoa_1_1_decoder_1_1_regular.html#af5bcee9f4cf477bdd9735c36832fd8c4',1,'hoa::Decoder::Regular']]],
-  ['rotate',['Rotate',['../classhoa_1_1_rotate.html#a35cfa37a0fa13fa840e28acb4cdf4e73',1,'hoa::Rotate']]]
+  ['vector',['Vector',['../classhoa_1_1_vector.html#acbccada9e51e2b3d742b95425078f1a0',1,'hoa::Vector']]]
 ];

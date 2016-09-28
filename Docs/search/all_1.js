@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['basic',['Basic',['../classhoa_1_1_encoder_1_1_basic.html',1,'hoa::Encoder']]],
-  ['basic',['Basic',['../classhoa_1_1_optim_1_1_basic.html',1,'hoa::Optim']]],
-  ['basic',['Basic',['../classhoa_1_1_encoder_1_1_basic.html#a4872d736f86cd8da34d05bc52ffcedd1',1,'hoa::Encoder::Basic::Basic()'],['../classhoa_1_1_optim_1_1_basic.html#a4872d736f86cd8da34d05bc52ffcedd1',1,'hoa::Optim::Basic::Basic()']]],
-  ['binaural',['Binaural',['../classhoa_1_1_decoder_1_1_binaural.html',1,'hoa::Decoder']]],
-  ['binaural',['Binaural',['../classhoa_1_1_decoder_1_1_binaural.html#a9aa61321c3dff21c603465b782322aa9',1,'hoa::Decoder::Binaural']]]
+  ['basic',['Basic',['../classhoa_1_1_optim.html#a46c8a310cf4c094f8c80e1cb8dc1f911ae7daa0df03dc17e169eb5190f575f3ef',1,'hoa::Optim']]]
 ];

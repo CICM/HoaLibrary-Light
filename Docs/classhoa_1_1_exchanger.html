@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HOA Library
-   &#160;<span id="projectnumber">beta 2.2</span>
+   &#160;<span id="projectnumber">beta 2.3</span>
    </div>
    <div id="projectbrief">High Order Ambisonics Library</div>
   </td>
@@ -104,15 +104,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>The echanger class renumber and normalize the harmonics channels.  
  <a href="classhoa_1_1_exchanger.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="_exchanger_8hpp_source.html">Exchanger.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="_hoa___exchanger_8hpp_source.html">Hoa_Exchanger.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for Exchanger&lt; D, T &gt;:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classhoa_1_1_exchanger.png" usemap="#Exchanger_3C_20D_2C_20T_20_3E_map" alt=""/>
   <map id="Exchanger_3C_20D_2C_20T_20_3E_map" name="Exchanger&lt; D, T &gt;_map">
-<area href="classhoa_1_1_processor_1_1_harmonics.html" title="The harmonic processor. " alt="Processor&lt; D, T &gt;::Harmonics" shape="rect" coords="0,56,122,80"/>
-<area href="classhoa_1_1_processor.html" title="The processor. " alt="Processor&lt; D, T &gt;" shape="rect" coords="0,0,122,24"/>
+<area href="classhoa_1_1_processor_harmonics.html" title="The harmonic processor. " alt="ProcessorHarmonics&lt; D, T &gt;" shape="rect" coords="0,56,179,80"/>
+<area href="classhoa_1_1_processor.html" title="The processor. " alt="Processor&lt; D, T &gt;" shape="rect" coords="0,0,179,24"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -121,70 +121,74 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5aae2b5f41f8b58e3d4037c023403632"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a5aae2b5f41f8b58e3d4037c023403632">Exchanger</a> (const ulong order) noexcept</td></tr>
-<tr class="memdesc:a5aae2b5f41f8b58e3d4037c023403632"><td class="mdescLeft">&#160;</td><td class="mdescRight">The exchanger constructor.  <a href="#a5aae2b5f41f8b58e3d4037c023403632">More...</a><br /></td></tr>
-<tr class="separator:a5aae2b5f41f8b58e3d4037c023403632"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6867ca443d9faa47d69e5d0f43904ba"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#ab6867ca443d9faa47d69e5d0f43904ba">~Exchanger</a> () noexcept=0</td></tr>
-<tr class="memdesc:ab6867ca443d9faa47d69e5d0f43904ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">The exchanger destructor.  <a href="#ab6867ca443d9faa47d69e5d0f43904ba">More...</a><br /></td></tr>
-<tr class="separator:ab6867ca443d9faa47d69e5d0f43904ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0a319ff943fd078bbe567aff59f1de8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#ab0a319ff943fd078bbe567aff59f1de8">process</a> (T const *inputs, T *outputs) noexcept</td></tr>
-<tr class="memdesc:ab0a319ff943fd078bbe567aff59f1de8"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method performs the numbering and the normalization.  <a href="#ab0a319ff943fd078bbe567aff59f1de8">More...</a><br /></td></tr>
-<tr class="separator:ab0a319ff943fd078bbe567aff59f1de8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa701fca6eab1ba354a7afa6b3f4814a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#aaa701fca6eab1ba354a7afa6b3f4814a">setNumbering</a> (const <a class="el" href="classhoa_1_1_exchanger.html#a97018f59ae98bb947c08356b85e91071">Numbering</a> mode) noexcept</td></tr>
-<tr class="memdesc:aaa701fca6eab1ba354a7afa6b3f4814a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the numbering conversion.  <a href="#aaa701fca6eab1ba354a7afa6b3f4814a">More...</a><br /></td></tr>
-<tr class="separator:aaa701fca6eab1ba354a7afa6b3f4814a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17472b92e1f52ca556644465cfd89156"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhoa_1_1_exchanger.html#a97018f59ae98bb947c08356b85e91071">Numbering</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a17472b92e1f52ca556644465cfd89156">getNumbering</a> () const  noexcept</td></tr>
-<tr class="memdesc:a17472b92e1f52ca556644465cfd89156"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the numbering conversion.  <a href="#a17472b92e1f52ca556644465cfd89156">More...</a><br /></td></tr>
-<tr class="separator:a17472b92e1f52ca556644465cfd89156"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3300029a4b92ae591389b4a19e83c0c6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a3300029a4b92ae591389b4a19e83c0c6">setNormalization</a> (const <a class="el" href="classhoa_1_1_exchanger.html#a268aac553a187f781fad176cf0ada14e">Normalization</a> mode) noexcept</td></tr>
-<tr class="memdesc:a3300029a4b92ae591389b4a19e83c0c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the normalization conversion.  <a href="#a3300029a4b92ae591389b4a19e83c0c6">More...</a><br /></td></tr>
-<tr class="separator:a3300029a4b92ae591389b4a19e83c0c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ee43b24fe60b5a6f2debc9e03aec869"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhoa_1_1_exchanger.html#a268aac553a187f781fad176cf0ada14e">Normalization</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a7ee43b24fe60b5a6f2debc9e03aec869">getNormalization</a> () const  noexcept</td></tr>
-<tr class="memdesc:a7ee43b24fe60b5a6f2debc9e03aec869"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the normalization conversion.  <a href="#a7ee43b24fe60b5a6f2debc9e03aec869">More...</a><br /></td></tr>
-<tr class="separator:a7ee43b24fe60b5a6f2debc9e03aec869"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36dcfd2bdc8404b83e51f4f480599f1c"><td class="memItemLeft" align="right" valign="top">virtual long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a36dcfd2bdc8404b83e51f4f480599f1c">getInputHarmonicOrder</a> (const ulong index) const  noexcept</td></tr>
-<tr class="memdesc:a36dcfd2bdc8404b83e51f4f480599f1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the harmonic order of an input depending on the current numbering configuration.  <a href="#a36dcfd2bdc8404b83e51f4f480599f1c">More...</a><br /></td></tr>
-<tr class="separator:a36dcfd2bdc8404b83e51f4f480599f1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c2d9569f6568c8747b94922d6dd5d4b"><td class="memItemLeft" align="right" valign="top">virtual long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a7c2d9569f6568c8747b94922d6dd5d4b">getOutputHarmonicOrder</a> (const ulong index) const  noexcept</td></tr>
-<tr class="memdesc:a7c2d9569f6568c8747b94922d6dd5d4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the harmonic order of an output depending on the current numbering configuration.  <a href="#a7c2d9569f6568c8747b94922d6dd5d4b">More...</a><br /></td></tr>
-<tr class="separator:a7c2d9569f6568c8747b94922d6dd5d4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adbeb61fb5ba1e5a13a080b734e9f56d2"><td class="memItemLeft" align="right" valign="top">virtual string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#adbeb61fb5ba1e5a13a080b734e9f56d2">getHarmonicName</a> (const ulong index, const bool isInput) const  noexcept</td></tr>
-<tr class="memdesc:adbeb61fb5ba1e5a13a080b734e9f56d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the name of an harmonic depending on the current numbering configuration.  <a href="#adbeb61fb5ba1e5a13a080b734e9f56d2">More...</a><br /></td></tr>
-<tr class="separator:adbeb61fb5ba1e5a13a080b734e9f56d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classhoa_1_1_processor_1_1_harmonics"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhoa_1_1_processor_1_1_harmonics')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhoa_1_1_processor_1_1_harmonics.html">Processor&lt; D, T &gt;::Harmonics</a></td></tr>
-<tr class="memitem:a1b59736b461633dbef98364fe500a6c3 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#a1b59736b461633dbef98364fe500a6c3">Harmonics</a> (const ulong order) noexcept</td></tr>
-<tr class="memdesc:a1b59736b461633dbef98364fe500a6c3 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">The harmonics constructor.  <a href="#a1b59736b461633dbef98364fe500a6c3">More...</a><br /></td></tr>
-<tr class="separator:a1b59736b461633dbef98364fe500a6c3 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6abb832ce0c38d6ba566071526a7cb4f inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#a6abb832ce0c38d6ba566071526a7cb4f">~Harmonics</a> () noexcept</td></tr>
-<tr class="memdesc:a6abb832ce0c38d6ba566071526a7cb4f inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">The harmonics destructor.  <a href="#a6abb832ce0c38d6ba566071526a7cb4f">More...</a><br /></td></tr>
-<tr class="separator:a6abb832ce0c38d6ba566071526a7cb4f inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e3f8fc918ee64ebfa0fb11a089cbf24 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">ulong&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#a9e3f8fc918ee64ebfa0fb11a089cbf24">getDecompositionOrder</a> () const  noexcept</td></tr>
-<tr class="memdesc:a9e3f8fc918ee64ebfa0fb11a089cbf24 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the order of decomposition.  <a href="#a9e3f8fc918ee64ebfa0fb11a089cbf24">More...</a><br /></td></tr>
-<tr class="separator:a9e3f8fc918ee64ebfa0fb11a089cbf24 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02179727ed763b2b4c71516528dfdf66 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">ulong&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#a02179727ed763b2b4c71516528dfdf66">getNumberOfHarmonics</a> () const  noexcept</td></tr>
-<tr class="memdesc:a02179727ed763b2b4c71516528dfdf66 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the number of harmonics.  <a href="#a02179727ed763b2b4c71516528dfdf66">More...</a><br /></td></tr>
-<tr class="separator:a02179727ed763b2b4c71516528dfdf66 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3824ab53811a3ef3fd97aa24184fc737 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">ulong&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#a3824ab53811a3ef3fd97aa24184fc737">getHarmonicDegree</a> (const ulong index) const  noexcept</td></tr>
-<tr class="memdesc:a3824ab53811a3ef3fd97aa24184fc737 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the degree of an harmonic.  <a href="#a3824ab53811a3ef3fd97aa24184fc737">More...</a><br /></td></tr>
-<tr class="separator:a3824ab53811a3ef3fd97aa24184fc737 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3ab02315dad9733fd1cebdc46a085e4 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#ae3ab02315dad9733fd1cebdc46a085e4">getHarmonicOrder</a> (const ulong index) const  noexcept</td></tr>
-<tr class="memdesc:ae3ab02315dad9733fd1cebdc46a085e4 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the order of an harmonic.  <a href="#ae3ab02315dad9733fd1cebdc46a085e4">More...</a><br /></td></tr>
-<tr class="separator:ae3ab02315dad9733fd1cebdc46a085e4 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4bfadef8b7fefe60f9dbdd924919281 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">ulong&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#ae4bfadef8b7fefe60f9dbdd924919281">getHarmonicIndex</a> (const ulong degree, long order) const  noexcept</td></tr>
-<tr class="memdesc:ae4bfadef8b7fefe60f9dbdd924919281 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the index of an harmonic.  <a href="#ae4bfadef8b7fefe60f9dbdd924919281">More...</a><br /></td></tr>
-<tr class="separator:ae4bfadef8b7fefe60f9dbdd924919281 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd96e2de011644842c079bd532e88d0d inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#afd96e2de011644842c079bd532e88d0d">getHarmonicName</a> (const ulong index) const  noexcept</td></tr>
-<tr class="memdesc:afd96e2de011644842c079bd532e88d0d inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the name of an harmonic.  <a href="#afd96e2de011644842c079bd532e88d0d">More...</a><br /></td></tr>
-<tr class="separator:afd96e2de011644842c079bd532e88d0d inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a280cf8c51c26c8a879045cfb29251d6b inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#a280cf8c51c26c8a879045cfb29251d6b">getHarmonicNormalization</a> (const ulong index) const  noexcept</td></tr>
-<tr class="memdesc:a280cf8c51c26c8a879045cfb29251d6b inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the normalization of an harmonic.  <a href="#a280cf8c51c26c8a879045cfb29251d6b">More...</a><br /></td></tr>
-<tr class="separator:a280cf8c51c26c8a879045cfb29251d6b inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab720f3ee95fcfa8961c8c228e9d8d0bc inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#ab720f3ee95fcfa8961c8c228e9d8d0bc">getHarmonicSemiNormalization</a> (const ulong index) const  noexcept</td></tr>
-<tr class="memdesc:ab720f3ee95fcfa8961c8c228e9d8d0bc inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the semi-normalization of an harmonic.  <a href="#ab720f3ee95fcfa8961c8c228e9d8d0bc">More...</a><br /></td></tr>
-<tr class="separator:ab720f3ee95fcfa8961c8c228e9d8d0bc inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e8284983e16c794378c7946dd6680d0 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#a7e8284983e16c794378c7946dd6680d0">process</a> (const T *input, T *outputs) noexcept</td></tr>
-<tr class="memdesc:a7e8284983e16c794378c7946dd6680d0 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method performs the processing.  <a href="#a7e8284983e16c794378c7946dd6680d0">More...</a><br /></td></tr>
-<tr class="separator:a7e8284983e16c794378c7946dd6680d0 inherit pub_methods_classhoa_1_1_processor_1_1_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a099c9f280a55ccffb65140f81f2b8620"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a099c9f280a55ccffb65140f81f2b8620">Exchanger</a> (const size_t order) hoa_noexcept</td></tr>
+<tr class="memdesc:a099c9f280a55ccffb65140f81f2b8620"><td class="mdescLeft">&#160;</td><td class="mdescRight">The exchanger constructor.  <a href="#a099c9f280a55ccffb65140f81f2b8620">More...</a><br /></td></tr>
+<tr class="separator:a099c9f280a55ccffb65140f81f2b8620"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38bc2bebb51d43680a591863db3a3e81"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a38bc2bebb51d43680a591863db3a3e81">~Exchanger</a> () hoa_noexcept=0</td></tr>
+<tr class="memdesc:a38bc2bebb51d43680a591863db3a3e81"><td class="mdescLeft">&#160;</td><td class="mdescRight">The exchanger destructor.  <a href="#a38bc2bebb51d43680a591863db3a3e81">More...</a><br /></td></tr>
+<tr class="separator:a38bc2bebb51d43680a591863db3a3e81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d10b9e7beb51cb2d4506eb271f7046f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a2d10b9e7beb51cb2d4506eb271f7046f">process</a> (T const *inputs, T *outputs) hoa_noexcept</td></tr>
+<tr class="memdesc:a2d10b9e7beb51cb2d4506eb271f7046f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method performs the numbering and the normalization.  <a href="#a2d10b9e7beb51cb2d4506eb271f7046f">More...</a><br /></td></tr>
+<tr class="separator:a2d10b9e7beb51cb2d4506eb271f7046f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9a0e7f076c748194109cc4e5a75e871"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#ac9a0e7f076c748194109cc4e5a75e871">setNumbering</a> (const <a class="el" href="classhoa_1_1_exchanger.html#a97018f59ae98bb947c08356b85e91071">Numbering</a> mode) hoa_noexcept</td></tr>
+<tr class="memdesc:ac9a0e7f076c748194109cc4e5a75e871"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the numbering conversion.  <a href="#ac9a0e7f076c748194109cc4e5a75e871">More...</a><br /></td></tr>
+<tr class="separator:ac9a0e7f076c748194109cc4e5a75e871"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f117055955987537395194efc850dbd"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhoa_1_1_exchanger.html#a97018f59ae98bb947c08356b85e91071">Numbering</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a3f117055955987537395194efc850dbd">getNumbering</a> () const hoa_noexcept</td></tr>
+<tr class="memdesc:a3f117055955987537395194efc850dbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the numbering conversion.  <a href="#a3f117055955987537395194efc850dbd">More...</a><br /></td></tr>
+<tr class="separator:a3f117055955987537395194efc850dbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78de10e731491e642a2001b96015ef10"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a78de10e731491e642a2001b96015ef10">setNormalization</a> (const <a class="el" href="classhoa_1_1_exchanger.html#a268aac553a187f781fad176cf0ada14e">Normalization</a> mode) hoa_noexcept</td></tr>
+<tr class="memdesc:a78de10e731491e642a2001b96015ef10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the normalization conversion.  <a href="#a78de10e731491e642a2001b96015ef10">More...</a><br /></td></tr>
+<tr class="separator:a78de10e731491e642a2001b96015ef10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74dc5d1cc2a07bf912c648786b74253e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classhoa_1_1_exchanger.html#a268aac553a187f781fad176cf0ada14e">Normalization</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a74dc5d1cc2a07bf912c648786b74253e">getNormalization</a> () const hoa_noexcept</td></tr>
+<tr class="memdesc:a74dc5d1cc2a07bf912c648786b74253e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the normalization conversion.  <a href="#a74dc5d1cc2a07bf912c648786b74253e">More...</a><br /></td></tr>
+<tr class="separator:a74dc5d1cc2a07bf912c648786b74253e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35cd2746ddc3b9fbf9981c63417f1650"><td class="memItemLeft" align="right" valign="top">virtual long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a35cd2746ddc3b9fbf9981c63417f1650">getInputHarmonicOrder</a> (const size_t index) const hoa_noexcept</td></tr>
+<tr class="memdesc:a35cd2746ddc3b9fbf9981c63417f1650"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the harmonic order of an input depending on the current numbering configuration.  <a href="#a35cd2746ddc3b9fbf9981c63417f1650">More...</a><br /></td></tr>
+<tr class="separator:a35cd2746ddc3b9fbf9981c63417f1650"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae899bf997e2c5c88358fcc924b79b22"><td class="memItemLeft" align="right" valign="top">virtual long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#aae899bf997e2c5c88358fcc924b79b22">getOutputHarmonicOrder</a> (const size_t index) const hoa_noexcept</td></tr>
+<tr class="memdesc:aae899bf997e2c5c88358fcc924b79b22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the harmonic order of an output depending on the current numbering configuration.  <a href="#aae899bf997e2c5c88358fcc924b79b22">More...</a><br /></td></tr>
+<tr class="separator:aae899bf997e2c5c88358fcc924b79b22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b9d0eda301900048344fae472a47c70"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_exchanger.html#a5b9d0eda301900048344fae472a47c70">getHarmonicName</a> (const size_t index, const bool isInput) const hoa_noexcept</td></tr>
+<tr class="memdesc:a5b9d0eda301900048344fae472a47c70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the name of an harmonic depending on the current numbering configuration.  <a href="#a5b9d0eda301900048344fae472a47c70">More...</a><br /></td></tr>
+<tr class="separator:a5b9d0eda301900048344fae472a47c70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classhoa_1_1_processor_harmonics"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhoa_1_1_processor_harmonics')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhoa_1_1_processor_harmonics.html">ProcessorHarmonics&lt; D, T &gt;</a></td></tr>
+<tr class="memitem:a6c046a8eea082c04363643b4d5a861c5 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a6c046a8eea082c04363643b4d5a861c5">ProcessorHarmonics</a> (const size_t order) hoa_noexcept</td></tr>
+<tr class="memdesc:a6c046a8eea082c04363643b4d5a861c5 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">The harmonics constructor.  <a href="#a6c046a8eea082c04363643b4d5a861c5">More...</a><br /></td></tr>
+<tr class="separator:a6c046a8eea082c04363643b4d5a861c5 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae356bc4bd84a253c316bce3b84d11a1e inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae356bc4bd84a253c316bce3b84d11a1e"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#ae356bc4bd84a253c316bce3b84d11a1e">~ProcessorHarmonics</a> () hoa_noexcept</td></tr>
+<tr class="memdesc:ae356bc4bd84a253c316bce3b84d11a1e inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">The harmonics destructor. <br /></td></tr>
+<tr class="separator:ae356bc4bd84a253c316bce3b84d11a1e inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a022c96904c6016c6a984b70107a3f574 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a022c96904c6016c6a984b70107a3f574"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a022c96904c6016c6a984b70107a3f574">getDecompositionOrder</a> () const hoa_noexcept</td></tr>
+<tr class="memdesc:a022c96904c6016c6a984b70107a3f574 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the order of decomposition. <br /></td></tr>
+<tr class="separator:a022c96904c6016c6a984b70107a3f574 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2bfb1d90e280e369b1d4f0a445e491f inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2bfb1d90e280e369b1d4f0a445e491f"></a>
+size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#ae2bfb1d90e280e369b1d4f0a445e491f">getNumberOfHarmonics</a> () const hoa_noexcept</td></tr>
+<tr class="memdesc:ae2bfb1d90e280e369b1d4f0a445e491f inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of harmonics. <br /></td></tr>
+<tr class="separator:ae2bfb1d90e280e369b1d4f0a445e491f inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a4ac723612a8fd301322c7f649db738 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a1a4ac723612a8fd301322c7f649db738">getHarmonicDegree</a> (const size_t index) const hoa_noexcept</td></tr>
+<tr class="memdesc:a1a4ac723612a8fd301322c7f649db738 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the degree of an harmonic.  <a href="#a1a4ac723612a8fd301322c7f649db738">More...</a><br /></td></tr>
+<tr class="separator:a1a4ac723612a8fd301322c7f649db738 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04933264f971ac86125ead92b4cf1177 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a04933264f971ac86125ead92b4cf1177">getHarmonicOrder</a> (const size_t index) const hoa_noexcept</td></tr>
+<tr class="memdesc:a04933264f971ac86125ead92b4cf1177 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the azimuthal order of an harmonic.  <a href="#a04933264f971ac86125ead92b4cf1177">More...</a><br /></td></tr>
+<tr class="separator:a04933264f971ac86125ead92b4cf1177 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a672cf7f1f84b45ab962d8e6b9869c336 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a672cf7f1f84b45ab962d8e6b9869c336">getHarmonicIndex</a> (const size_t degree, long order) const hoa_noexcept</td></tr>
+<tr class="memdesc:a672cf7f1f84b45ab962d8e6b9869c336 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of an harmonic given the degree and the azimuthal order.  <a href="#a672cf7f1f84b45ab962d8e6b9869c336">More...</a><br /></td></tr>
+<tr class="separator:a672cf7f1f84b45ab962d8e6b9869c336 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a847895cc614362e651d755ce1150e51d inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a847895cc614362e651d755ce1150e51d">getHarmonicName</a> (const size_t index) const hoa_noexcept</td></tr>
+<tr class="memdesc:a847895cc614362e651d755ce1150e51d inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of an harmonic.  <a href="#a847895cc614362e651d755ce1150e51d">More...</a><br /></td></tr>
+<tr class="separator:a847895cc614362e651d755ce1150e51d inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23f022db7c23e001a36d172279b63376 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a23f022db7c23e001a36d172279b63376">getHarmonicNormalization</a> (const size_t index) const hoa_noexcept</td></tr>
+<tr class="memdesc:a23f022db7c23e001a36d172279b63376 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the normalization of an harmonic.  <a href="#a23f022db7c23e001a36d172279b63376">More...</a><br /></td></tr>
+<tr class="separator:a23f022db7c23e001a36d172279b63376 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1819efdb4d5088d8c94d1366bcc0d9c3 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a1819efdb4d5088d8c94d1366bcc0d9c3">getHarmonicSemiNormalization</a> (const size_t index) const hoa_noexcept</td></tr>
+<tr class="memdesc:a1819efdb4d5088d8c94d1366bcc0d9c3 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the semi-normalization of an harmonic.  <a href="#a1819efdb4d5088d8c94d1366bcc0d9c3">More...</a><br /></td></tr>
+<tr class="separator:a1819efdb4d5088d8c94d1366bcc0d9c3 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classhoa_1_1_processor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classhoa_1_1_processor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classhoa_1_1_processor.html">Processor&lt; D, T &gt;</a></td></tr>
+<tr class="memitem:aa5f7895290f633856af92d5c0bcc8b22 inherit pub_methods_classhoa_1_1_processor"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor.html#aa5f7895290f633856af92d5c0bcc8b22">~Processor</a> () hoa_noexcept hoa_default_f virtual void process(const T *input</td></tr>
+<tr class="memdesc:aa5f7895290f633856af92d5c0bcc8b22 inherit pub_methods_classhoa_1_1_processor"><td class="mdescLeft">&#160;</td><td class="mdescRight">The destructor.  <a href="#aa5f7895290f633856af92d5c0bcc8b22">More...</a><br /></td></tr>
+<tr class="separator:aa5f7895290f633856af92d5c0bcc8b22 inherit pub_methods_classhoa_1_1_processor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;Dimension D, typename T&gt;<br />
@@ -193,7 +197,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
 <p>The echanger class renumber and normalize the harmonics channels. </p>
 <p>The echanger should be used to renumber and normalize the harmonics channels. The library uses the Ambisonics Channels Numbering (ACN), this class allows to convert channels arrengements from Furse-Malham (B-format) or Single Index (SID) to Ambisonics Channels Numbering (ACN) and conversely. Furse-Malham and SID never reach up to 3rd order so the maximum order of decomposition should be 3. The library uses the semi-normalization (SN2D and SN3D), this class allows to normalize the channels to the full normalization (N2D and N3D) or to MaxN (B-format) and conversely. </p>
 
-<p>Definition at line <a class="el" href="_exchanger_8hpp_source.html#l00017">17</a> of file <a class="el" href="_exchanger_8hpp_source.html">Exchanger.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___exchanger_8hpp_source.html#l00022">22</a> of file <a class="el" href="_hoa___exchanger_8hpp_source.html">Hoa_Exchanger.hpp</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="a97018f59ae98bb947c08356b85e91071"></a>
 <div class="memitem">
@@ -225,7 +229,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="_exchanger_8hpp_source.html#l00024">24</a> of file <a class="el" href="_exchanger_8hpp_source.html">Exchanger.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___exchanger_8hpp_source.html#l00029">29</a> of file <a class="el" href="_hoa___exchanger_8hpp_source.html">Hoa_Exchanger.hpp</a>.</p>
 
 </div>
 </div>
@@ -262,31 +266,23 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
 </td></tr>
 </table>
 
-<p>Definition at line <a class="el" href="_exchanger_8hpp_source.html#l00036">36</a> of file <a class="el" href="_exchanger_8hpp_source.html">Exchanger.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___exchanger_8hpp_source.html#l00041">41</a> of file <a class="el" href="_hoa___exchanger_8hpp_source.html">Hoa_Exchanger.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a5aae2b5f41f8b58e3d4037c023403632"></a>
+<a class="anchor" id="a099c9f280a55ccffb65140f81f2b8620"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classhoa_1_1_exchanger.html">Exchanger</a> </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>order</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>The exchanger constructor. </p>
@@ -299,7 +295,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
 
 </div>
 </div>
-<a class="anchor" id="ab6867ca443d9faa47d69e5d0f43904ba"></a>
+<a class="anchor" id="a38bc2bebb51d43680a591863db3a3e81"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -315,7 +311,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -326,7 +322,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ab0a319ff943fd078bbe567aff59f1de8"></a>
+<a class="anchor" id="a2d10b9e7beb51cb2d4506eb271f7046f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -353,7 +349,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -369,7 +365,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
 
 </div>
 </div>
-<a class="anchor" id="aaa701fca6eab1ba354a7afa6b3f4814a"></a>
+<a class="anchor" id="ac9a0e7f076c748194109cc4e5a75e871"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -386,7 +382,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -401,7 +397,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
 
 </div>
 </div>
-<a class="anchor" id="a17472b92e1f52ca556644465cfd89156"></a>
+<a class="anchor" id="a3f117055955987537395194efc850dbd"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -417,7 +413,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -427,7 +423,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
 
 </div>
 </div>
-<a class="anchor" id="a3300029a4b92ae591389b4a19e83c0c6"></a>
+<a class="anchor" id="a78de10e731491e642a2001b96015ef10"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -444,7 +440,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -459,7 +455,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
 
 </div>
 </div>
-<a class="anchor" id="a7ee43b24fe60b5a6f2debc9e03aec869"></a>
+<a class="anchor" id="a74dc5d1cc2a07bf912c648786b74253e"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -475,7 +471,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -485,7 +481,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
 
 </div>
 </div>
-<a class="anchor" id="a36dcfd2bdc8404b83e51f4f480599f1c"></a>
+<a class="anchor" id="a35cd2746ddc3b9fbf9981c63417f1650"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -495,14 +491,14 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
         <tr>
           <td class="memname">virtual long getInputHarmonicOrder </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -515,13 +511,13 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The harmonic order. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#a3824ab53811a3ef3fd97aa24184fc737" title="Retrieve the degree of an harmonic. ">getHarmonicDegree()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classhoa_1_1_processor_harmonics.html#a1a4ac723612a8fd301322c7f649db738" title="Returns the degree of an harmonic. ">getHarmonicDegree()</a> </dd>
 <dd>
-<a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#ae3ab02315dad9733fd1cebdc46a085e4" title="Retrieve the order of an harmonic. ">getHarmonicOrder()</a> </dd></dl>
+<a class="el" href="classhoa_1_1_processor_harmonics.html#a04933264f971ac86125ead92b4cf1177" title="Returns the azimuthal order of an harmonic. ">getHarmonicOrder()</a> </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a7c2d9569f6568c8747b94922d6dd5d4b"></a>
+<a class="anchor" id="aae899bf997e2c5c88358fcc924b79b22"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -531,14 +527,14 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
         <tr>
           <td class="memname">virtual long getOutputHarmonicOrder </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -551,13 +547,13 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The harmonic order. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#a3824ab53811a3ef3fd97aa24184fc737" title="Retrieve the degree of an harmonic. ">getHarmonicDegree()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classhoa_1_1_processor_harmonics.html#a1a4ac723612a8fd301322c7f649db738" title="Returns the degree of an harmonic. ">getHarmonicDegree()</a> </dd>
 <dd>
-<a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#ae3ab02315dad9733fd1cebdc46a085e4" title="Retrieve the order of an harmonic. ">getHarmonicOrder()</a> </dd></dl>
+<a class="el" href="classhoa_1_1_processor_harmonics.html#a04933264f971ac86125ead92b4cf1177" title="Returns the azimuthal order of an harmonic. ">getHarmonicOrder()</a> </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="adbeb61fb5ba1e5a13a080b734e9f56d2"></a>
+<a class="anchor" id="a5b9d0eda301900048344fae472a47c70"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -565,9 +561,9 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual string getHarmonicName </td>
+          <td class="memname">virtual std::string getHarmonicName </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>index</em>, </td>
         </tr>
         <tr>
@@ -584,7 +580,7 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -598,16 +594,16 @@ class hoa::Exchanger&lt; D, T &gt;</h3>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The name of the harmonic. </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#a3824ab53811a3ef3fd97aa24184fc737" title="Retrieve the degree of an harmonic. ">getHarmonicDegree()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classhoa_1_1_processor_harmonics.html#a1a4ac723612a8fd301322c7f649db738" title="Returns the degree of an harmonic. ">getHarmonicDegree()</a> </dd>
 <dd>
-<a class="el" href="classhoa_1_1_processor_1_1_harmonics.html#ae3ab02315dad9733fd1cebdc46a085e4" title="Retrieve the order of an harmonic. ">getHarmonicOrder()</a> </dd></dl>
+<a class="el" href="classhoa_1_1_processor_harmonics.html#a04933264f971ac86125ead92b4cf1177" title="Returns the azimuthal order of an harmonic. ">getHarmonicOrder()</a> </dd></dl>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 11 2016 12:43:32 for HOA Library by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Sep 28 2016 13:27:06 for HOA Library by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

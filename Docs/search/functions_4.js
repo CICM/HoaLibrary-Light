@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['elevation',['elevation',['../classhoa_1_1_math.html#af20cd74c119dd8ed2da0a159c70ac148',1,'hoa::Math']]],
-  ['encoder',['Encoder',['../classhoa_1_1_encoder.html#a786bea398c5803ea8649f5b66b6da137',1,'hoa::Encoder']]],
-  ['exchanger',['Exchanger',['../classhoa_1_1_exchanger.html#a5aae2b5f41f8b58e3d4037c023403632',1,'hoa::Exchanger']]]
+  ['factorial',['factorial',['../classhoa_1_1_math.html#a55723f5ff05380aeaa15a3bd7b447476',1,'hoa::Math']]],
+  ['free',['free',['../classhoa_1_1_signal.html#adc70908ac2310c83f964bae3ce06703d',1,'hoa::Signal']]]
 ];

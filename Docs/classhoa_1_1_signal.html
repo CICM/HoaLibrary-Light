@@ -30,7 +30,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">HOA Library
-   &#160;<span id="projectnumber">beta 2.2</span>
+   &#160;<span id="projectnumber">beta 2.3</span>
    </div>
    <div id="projectbrief">High Order Ambisonics Library</div>
   </td>
@@ -103,49 +103,49 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>The signal class perform all the signal operations with matrix and vector.  
  <a href="classhoa_1_1_signal.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad2d05c2b0f191cf25610bbece2066bb0"><td class="memItemLeft" align="right" valign="top">static T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#ad2d05c2b0f191cf25610bbece2066bb0">alloc</a> (const ulong size) noexcept</td></tr>
-<tr class="memdesc:ad2d05c2b0f191cf25610bbece2066bb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates a vector.  <a href="#ad2d05c2b0f191cf25610bbece2066bb0">More...</a><br /></td></tr>
-<tr class="separator:ad2d05c2b0f191cf25610bbece2066bb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a6a0859fcd7b7497cd617b594544c56"><td class="memItemLeft" align="right" valign="top">static T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a6a6a0859fcd7b7497cd617b594544c56">free</a> (T *vec) noexcept</td></tr>
-<tr class="memdesc:a6a6a0859fcd7b7497cd617b594544c56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees a vector.  <a href="#a6a6a0859fcd7b7497cd617b594544c56">More...</a><br /></td></tr>
-<tr class="separator:a6a6a0859fcd7b7497cd617b594544c56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a703c3d2b550be2957109b470b65483c1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a703c3d2b550be2957109b470b65483c1">mul</a> (const ulong colsize, const ulong rowsize, const T *in, const T *in2, T *output) noexcept</td></tr>
-<tr class="memdesc:a703c3d2b550be2957109b470b65483c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies a matrix by a vector.  <a href="#a703c3d2b550be2957109b470b65483c1">More...</a><br /></td></tr>
-<tr class="separator:a703c3d2b550be2957109b470b65483c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa06d4be15f3fcf66cb1cef69e882ab64"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#aa06d4be15f3fcf66cb1cef69e882ab64">mul</a> (const ulong m, const ulong n, const ulong l, const T *in1, const T *in2, T *output) noexcept</td></tr>
-<tr class="memdesc:aa06d4be15f3fcf66cb1cef69e882ab64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies a matrix by a matrix.  <a href="#aa06d4be15f3fcf66cb1cef69e882ab64">More...</a><br /></td></tr>
-<tr class="separator:aa06d4be15f3fcf66cb1cef69e882ab64"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ff436a31dbce41a98dc24b6df0bc573"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a1ff436a31dbce41a98dc24b6df0bc573">max</a> (const ulong vectorsize, const T *vector) noexcept</td></tr>
-<tr class="memdesc:a1ff436a31dbce41a98dc24b6df0bc573"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the maximum of the absolute values of a vector.  <a href="#a1ff436a31dbce41a98dc24b6df0bc573">More...</a><br /></td></tr>
-<tr class="separator:a1ff436a31dbce41a98dc24b6df0bc573"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e94f5f5111583e9b84202d755481c31"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a2e94f5f5111583e9b84202d755481c31">sum</a> (const ulong size, const T *vector) noexcept</td></tr>
-<tr class="memdesc:a2e94f5f5111583e9b84202d755481c31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the sum of each element of a vector.  <a href="#a2e94f5f5111583e9b84202d755481c31">More...</a><br /></td></tr>
-<tr class="separator:a2e94f5f5111583e9b84202d755481c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f3f45d91bf88ad120778f02d0df980d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a2f3f45d91bf88ad120778f02d0df980d">scale</a> (const ulong size, const T factor, T *vector) noexcept</td></tr>
-<tr class="memdesc:a2f3f45d91bf88ad120778f02d0df980d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies each element of a vector by a factor.  <a href="#a2f3f45d91bf88ad120778f02d0df980d">More...</a><br /></td></tr>
-<tr class="separator:a2f3f45d91bf88ad120778f02d0df980d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e02251c16814fbcce45d2ca9c1482cf"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a3e02251c16814fbcce45d2ca9c1482cf">clear</a> (const ulong size, T *vector) noexcept</td></tr>
-<tr class="memdesc:a3e02251c16814fbcce45d2ca9c1482cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears a vector.  <a href="#a3e02251c16814fbcce45d2ca9c1482cf">More...</a><br /></td></tr>
-<tr class="separator:a3e02251c16814fbcce45d2ca9c1482cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42738927289e8d4bafdffb5c374cc2a1"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a42738927289e8d4bafdffb5c374cc2a1">copy</a> (const ulong size, const T *source, T *dest) noexcept</td></tr>
-<tr class="memdesc:a42738927289e8d4bafdffb5c374cc2a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a vector into an other.  <a href="#a42738927289e8d4bafdffb5c374cc2a1">More...</a><br /></td></tr>
-<tr class="separator:a42738927289e8d4bafdffb5c374cc2a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3849d3be1d008a8a5cc08fe349e8e22"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#ad3849d3be1d008a8a5cc08fe349e8e22">copy</a> (const ulong size, const T *source, const ulong incs, T *dest, const ulong incd) noexcept</td></tr>
-<tr class="memdesc:ad3849d3be1d008a8a5cc08fe349e8e22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a vector into an other.  <a href="#ad3849d3be1d008a8a5cc08fe349e8e22">More...</a><br /></td></tr>
-<tr class="separator:ad3849d3be1d008a8a5cc08fe349e8e22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab176b3313e0a6614cd1e05f2865bca08"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#ab176b3313e0a6614cd1e05f2865bca08">add</a> (const ulong size, const T *in, T *out) noexcept</td></tr>
-<tr class="memdesc:ab176b3313e0a6614cd1e05f2865bca08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a vector to an other.  <a href="#ab176b3313e0a6614cd1e05f2865bca08">More...</a><br /></td></tr>
-<tr class="separator:ab176b3313e0a6614cd1e05f2865bca08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6339a1b4173e7bc0579f4537363b37df"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a6339a1b4173e7bc0579f4537363b37df">add</a> (const ulong size, const T *source, const ulong incs, T *dest, const ulong incd) noexcept</td></tr>
-<tr class="memdesc:a6339a1b4173e7bc0579f4537363b37df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a vector to an other.  <a href="#a6339a1b4173e7bc0579f4537363b37df">More...</a><br /></td></tr>
-<tr class="separator:a6339a1b4173e7bc0579f4537363b37df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d832486913d0163081ccedcccc3000a"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a1d832486913d0163081ccedcccc3000a">dot</a> (const ulong size, const T *in1, const T *in2) noexcept</td></tr>
-<tr class="memdesc:a1d832486913d0163081ccedcccc3000a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the dot product of two vectors.  <a href="#a1d832486913d0163081ccedcccc3000a">More...</a><br /></td></tr>
-<tr class="separator:a1d832486913d0163081ccedcccc3000a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c31b8b1b9503e0db4309e236df4b6a1"><td class="memItemLeft" align="right" valign="top">static T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a1c31b8b1b9503e0db4309e236df4b6a1">alloc</a> (const size_t size) hoa_noexcept</td></tr>
+<tr class="memdesc:a1c31b8b1b9503e0db4309e236df4b6a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates a vector.  <a href="#a1c31b8b1b9503e0db4309e236df4b6a1">More...</a><br /></td></tr>
+<tr class="separator:a1c31b8b1b9503e0db4309e236df4b6a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc70908ac2310c83f964bae3ce06703d"><td class="memItemLeft" align="right" valign="top">static T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#adc70908ac2310c83f964bae3ce06703d">free</a> (T *vec) hoa_noexcept</td></tr>
+<tr class="memdesc:adc70908ac2310c83f964bae3ce06703d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Frees a vector.  <a href="#adc70908ac2310c83f964bae3ce06703d">More...</a><br /></td></tr>
+<tr class="separator:adc70908ac2310c83f964bae3ce06703d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3eb1260575e55287f8f6a40761cb6a52"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a3eb1260575e55287f8f6a40761cb6a52">mul</a> (const size_t colsize, const size_t rowsize, const T *in, const T *in2, T *output) hoa_noexcept</td></tr>
+<tr class="memdesc:a3eb1260575e55287f8f6a40761cb6a52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies a matrix by a vector.  <a href="#a3eb1260575e55287f8f6a40761cb6a52">More...</a><br /></td></tr>
+<tr class="separator:a3eb1260575e55287f8f6a40761cb6a52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a439a39c623108026e55699f6c3462e33"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a439a39c623108026e55699f6c3462e33">mul</a> (const size_t m, const size_t n, const size_t l, const T *in1, const T *in2, T *output) hoa_noexcept</td></tr>
+<tr class="memdesc:a439a39c623108026e55699f6c3462e33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies a matrix by a matrix.  <a href="#a439a39c623108026e55699f6c3462e33">More...</a><br /></td></tr>
+<tr class="separator:a439a39c623108026e55699f6c3462e33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63833d706743923e9cf90fcebaa464a6"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a63833d706743923e9cf90fcebaa464a6">max</a> (const size_t vectorsize, const T *vector) hoa_noexcept</td></tr>
+<tr class="memdesc:a63833d706743923e9cf90fcebaa464a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the maximum of the absolute values of a vector.  <a href="#a63833d706743923e9cf90fcebaa464a6">More...</a><br /></td></tr>
+<tr class="separator:a63833d706743923e9cf90fcebaa464a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c783d412cc89c7015e9b421294ea563"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a9c783d412cc89c7015e9b421294ea563">sum</a> (const size_t size, const T *vector) hoa_noexcept</td></tr>
+<tr class="memdesc:a9c783d412cc89c7015e9b421294ea563"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the sum of each element of a vector.  <a href="#a9c783d412cc89c7015e9b421294ea563">More...</a><br /></td></tr>
+<tr class="separator:a9c783d412cc89c7015e9b421294ea563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add2d26027bbb97e65f24277bf7d7dd7f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#add2d26027bbb97e65f24277bf7d7dd7f">scale</a> (const size_t size, const T factor, T *vector) hoa_noexcept</td></tr>
+<tr class="memdesc:add2d26027bbb97e65f24277bf7d7dd7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Multiplies each element of a vector by a factor.  <a href="#add2d26027bbb97e65f24277bf7d7dd7f">More...</a><br /></td></tr>
+<tr class="separator:add2d26027bbb97e65f24277bf7d7dd7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a8f4d5569544a32a75cc160b770868b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a8a8f4d5569544a32a75cc160b770868b">clear</a> (const size_t size, T *vector) hoa_noexcept</td></tr>
+<tr class="memdesc:a8a8f4d5569544a32a75cc160b770868b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears a vector.  <a href="#a8a8f4d5569544a32a75cc160b770868b">More...</a><br /></td></tr>
+<tr class="separator:a8a8f4d5569544a32a75cc160b770868b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc55a86e8692327e6c8048e74309e13d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#acc55a86e8692327e6c8048e74309e13d">copy</a> (const size_t size, const T *source, T *dest) hoa_noexcept</td></tr>
+<tr class="memdesc:acc55a86e8692327e6c8048e74309e13d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a vector into an other.  <a href="#acc55a86e8692327e6c8048e74309e13d">More...</a><br /></td></tr>
+<tr class="separator:acc55a86e8692327e6c8048e74309e13d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3df1be0d29ee7520600d6dae128cb435"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a3df1be0d29ee7520600d6dae128cb435">copy</a> (const size_t size, const T *source, const size_t incs, T *dest, const size_t incd) hoa_noexcept</td></tr>
+<tr class="memdesc:a3df1be0d29ee7520600d6dae128cb435"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copies a vector into an other.  <a href="#a3df1be0d29ee7520600d6dae128cb435">More...</a><br /></td></tr>
+<tr class="separator:a3df1be0d29ee7520600d6dae128cb435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1e43fc4e4e5a881b79e82e11d410f5f"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#ab1e43fc4e4e5a881b79e82e11d410f5f">add</a> (const size_t size, const T *in, T *out) hoa_noexcept</td></tr>
+<tr class="memdesc:ab1e43fc4e4e5a881b79e82e11d410f5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a vector to an other.  <a href="#ab1e43fc4e4e5a881b79e82e11d410f5f">More...</a><br /></td></tr>
+<tr class="separator:ab1e43fc4e4e5a881b79e82e11d410f5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f3de5cc028804439549d3a81ee7f872"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#a1f3de5cc028804439549d3a81ee7f872">add</a> (const size_t size, const T *source, const size_t incs, T *dest, const size_t incd) hoa_noexcept</td></tr>
+<tr class="memdesc:a1f3de5cc028804439549d3a81ee7f872"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a vector to an other.  <a href="#a1f3de5cc028804439549d3a81ee7f872">More...</a><br /></td></tr>
+<tr class="separator:a1f3de5cc028804439549d3a81ee7f872"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84df170f12947c40b2cd644bdd73bf9"><td class="memItemLeft" align="right" valign="top">static T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_signal.html#ac84df170f12947c40b2cd644bdd73bf9">dot</a> (const size_t size, const T *in1, const T *in2) hoa_noexcept</td></tr>
+<tr class="memdesc:ac84df170f12947c40b2cd644bdd73bf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the dot product of two vectors.  <a href="#ac84df170f12947c40b2cd644bdd73bf9">More...</a><br /></td></tr>
+<tr class="separator:ac84df170f12947c40b2cd644bdd73bf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
@@ -154,9 +154,9 @@ class hoa::Signal&lt; T &gt;</h3>
 <p>The signal class perform all the signal operations with matrix and vector. </p>
 <p>The signal class has to be used for every hoa signal operation. </p>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00017">17</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00022">22</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ad2d05c2b0f191cf25610bbece2066bb0"></a>
+<a class="anchor" id="a1c31b8b1b9503e0db4309e236df4b6a1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -166,14 +166,14 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static T* alloc </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>size</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -187,11 +187,11 @@ class hoa::Signal&lt; T &gt;</h3>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to a vector. </dd></dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00026">26</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00031">31</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a6a6a0859fcd7b7497cd617b594544c56"></a>
+<a class="anchor" id="adc70908ac2310c83f964bae3ce06703d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -208,7 +208,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -222,11 +222,11 @@ class hoa::Signal&lt; T &gt;</h3>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to a vector. </dd></dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00048">48</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00053">53</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a703c3d2b550be2957109b470b65483c1"></a>
+<a class="anchor" id="a3eb1260575e55287f8f6a40761cb6a52"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -236,13 +236,13 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static void mul </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>colsize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>rowsize</em>, </td>
         </tr>
         <tr>
@@ -271,7 +271,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -288,11 +288,11 @@ class hoa::Signal&lt; T &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00073">73</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00078">78</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aa06d4be15f3fcf66cb1cef69e882ab64"></a>
+<a class="anchor" id="a439a39c623108026e55699f6c3462e33"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -302,19 +302,19 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static void mul </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>l</em>, </td>
         </tr>
         <tr>
@@ -343,7 +343,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -361,11 +361,11 @@ class hoa::Signal&lt; T &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00101">101</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00106">106</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1ff436a31dbce41a98dc24b6df0bc573"></a>
+<a class="anchor" id="a63833d706743923e9cf90fcebaa464a6"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -375,7 +375,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static T max </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>vectorsize</em>, </td>
         </tr>
         <tr>
@@ -392,7 +392,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -407,11 +407,11 @@ class hoa::Signal&lt; T &gt;</h3>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The maximum of the absolute values of the vector </dd></dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00133">133</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00138">138</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2e94f5f5111583e9b84202d755481c31"></a>
+<a class="anchor" id="a9c783d412cc89c7015e9b421294ea563"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -421,7 +421,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static T sum </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>size</em>, </td>
         </tr>
         <tr>
@@ -438,7 +438,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -453,11 +453,11 @@ class hoa::Signal&lt; T &gt;</h3>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The sum of each element of the vector </dd></dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00153">153</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00158">158</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a2f3f45d91bf88ad120778f02d0df980d"></a>
+<a class="anchor" id="add2d26027bbb97e65f24277bf7d7dd7f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -467,7 +467,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static void scale </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>size</em>, </td>
         </tr>
         <tr>
@@ -490,7 +490,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -505,11 +505,11 @@ class hoa::Signal&lt; T &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00169">169</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00174">174</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a3e02251c16814fbcce45d2ca9c1482cf"></a>
+<a class="anchor" id="a8a8f4d5569544a32a75cc160b770868b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -519,7 +519,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static void clear </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>size</em>, </td>
         </tr>
         <tr>
@@ -536,7 +536,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -550,11 +550,11 @@ class hoa::Signal&lt; T &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00182">182</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00187">187</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a42738927289e8d4bafdffb5c374cc2a1"></a>
+<a class="anchor" id="acc55a86e8692327e6c8048e74309e13d"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -564,7 +564,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static void copy </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>size</em>, </td>
         </tr>
         <tr>
@@ -587,7 +587,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -602,11 +602,11 @@ class hoa::Signal&lt; T &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00193">193</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00198">198</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ad3849d3be1d008a8a5cc08fe349e8e22"></a>
+<a class="anchor" id="a3df1be0d29ee7520600d6dae128cb435"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -616,7 +616,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static void copy </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>size</em>, </td>
         </tr>
         <tr>
@@ -628,7 +628,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>incs</em>, </td>
         </tr>
         <tr>
@@ -640,7 +640,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>incd</em>&#160;</td>
         </tr>
         <tr>
@@ -651,7 +651,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -668,11 +668,11 @@ class hoa::Signal&lt; T &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00206">206</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00211">211</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ab176b3313e0a6614cd1e05f2865bca08"></a>
+<a class="anchor" id="ab1e43fc4e4e5a881b79e82e11d410f5f"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -682,7 +682,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static void add </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>size</em>, </td>
         </tr>
         <tr>
@@ -705,7 +705,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -720,11 +720,11 @@ class hoa::Signal&lt; T &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00224">224</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00229">229</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a6339a1b4173e7bc0579f4537363b37df"></a>
+<a class="anchor" id="a1f3de5cc028804439549d3a81ee7f872"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -734,7 +734,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static void add </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>size</em>, </td>
         </tr>
         <tr>
@@ -746,7 +746,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>incs</em>, </td>
         </tr>
         <tr>
@@ -758,7 +758,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>incd</em>&#160;</td>
         </tr>
         <tr>
@@ -769,7 +769,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -786,11 +786,11 @@ class hoa::Signal&lt; T &gt;</h3>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00245">245</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00250">250</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1d832486913d0163081ccedcccc3000a"></a>
+<a class="anchor" id="ac84df170f12947c40b2cd644bdd73bf9"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -800,7 +800,7 @@ class hoa::Signal&lt; T &gt;</h3>
         <tr>
           <td class="memname">static T dot </td>
           <td>(</td>
-          <td class="paramtype">const ulong&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>size</em>, </td>
         </tr>
         <tr>
@@ -823,7 +823,7 @@ class hoa::Signal&lt; T &gt;</h3>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -839,14 +839,14 @@ class hoa::Signal&lt; T &gt;</h3>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The dot product of the two vectors. </dd></dl>
 
-<p>Definition at line <a class="el" href="_signal_8hpp_source.html#l00264">264</a> of file <a class="el" href="_signal_8hpp_source.html">Signal.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___signal_8hpp_source.html#l00269">269</a> of file <a class="el" href="_hoa___signal_8hpp_source.html">Hoa_Signal.hpp</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jun 11 2016 12:43:32 for HOA Library by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Sep 28 2016 13:27:07 for HOA Library by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

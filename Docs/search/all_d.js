@@ -1,8 +1,12 @@
 var searchData=
 [
   ['radius',['radius',['../classhoa_1_1_math.html#a33664dc295c1611a6ef3750a945fbd5f',1,'hoa::Math']]],
-  ['regular',['Regular',['../classhoa_1_1_decoder_1_1_regular.html#af5bcee9f4cf477bdd9735c36832fd8c4',1,'hoa::Decoder::Regular']]],
-  ['regular',['Regular',['../classhoa_1_1_decoder_1_1_regular.html',1,'hoa::Decoder']]],
+  ['recomposer',['Recomposer',['../classhoa_1_1_recomposer.html',1,'hoa']]],
+  ['recomposer',['Recomposer',['../classhoa_1_1_recomposer.html#adcf5f6d9a62e623d8ab946d91660623c',1,'hoa::Recomposer::Recomposer()'],['../classhoa_1_1_recomposer_3_01_hoa2d_00_01_t_01_4.html#adcf5f6d9a62e623d8ab946d91660623c',1,'hoa::Recomposer&lt; Hoa2d, T &gt;::Recomposer()']]],
+  ['recomposer_3c_20hoa2d_2c_20t_20_3e',['Recomposer&lt; Hoa2d, T &gt;',['../classhoa_1_1_recomposer_3_01_hoa2d_00_01_t_01_4.html',1,'hoa']]],
+  ['recomposerfixe',['RecomposerFixe',['../classhoa_1_1_recomposer_fixe.html#a70e74a963b35744f3f0fe266ffe6f8c5',1,'hoa::RecomposerFixe::RecomposerFixe()'],['../classhoa_1_1_recomposer_fixe_3_01_hoa2d_00_01_t_01_4.html#a70e74a963b35744f3f0fe266ffe6f8c5',1,'hoa::RecomposerFixe&lt; Hoa2d, T &gt;::RecomposerFixe()']]],
+  ['recomposerfixe',['RecomposerFixe',['../classhoa_1_1_recomposer_fixe.html',1,'hoa']]],
+  ['recomposerfixe_3c_20hoa2d_2c_20t_20_3e',['RecomposerFixe&lt; Hoa2d, T &gt;',['../classhoa_1_1_recomposer_fixe_3_01_hoa2d_00_01_t_01_4.html',1,'hoa']]],
   ['rotate',['Rotate',['../classhoa_1_1_rotate.html',1,'hoa']]],
-  ['rotate',['Rotate',['../classhoa_1_1_rotate.html#a35cfa37a0fa13fa840e28acb4cdf4e73',1,'hoa::Rotate']]]
+  ['rotate',['Rotate',['../classhoa_1_1_rotate.html#abaff700a4d9875379e137e95998a8229',1,'hoa::Rotate']]]
 ];

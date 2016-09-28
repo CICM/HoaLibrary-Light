@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['sn2d',['SN2D',['../classhoa_1_1_exchanger.html#a268aac553a187f781fad176cf0ada14eaddb5a7f35808fb7da8dadafa740a9f31',1,'hoa::Exchanger']]],
-  ['sn3d',['SN3D',['../classhoa_1_1_exchanger.html#a268aac553a187f781fad176cf0ada14eaa24e53b3ed90e84d7e1c272aab2e3b2c',1,'hoa::Exchanger']]]
+  ['hoa2d',['Hoa2d',['../namespacehoa.html#afeeb3ea8d8350f7e9c636d23679a4dcaa779b07b50e82744f519d182e16ad8d02',1,'hoa']]],
+  ['hoa3d',['Hoa3d',['../namespacehoa.html#afeeb3ea8d8350f7e9c636d23679a4dcaa8c4ed07441a35763f9e4975625283399',1,'hoa']]]
 ];
