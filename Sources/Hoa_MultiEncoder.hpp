@@ -145,7 +145,7 @@ namespace hoa
             inline T getRadius() const { return encoder->getRadius(); }
             inline T getAzimuth() const { return encoder->getAzimuth(); }
             inline T getElevation() const { return encoder->getElevation(); }
-            inline T getMute() const { return muted; }
+            inline bool getMute() const { return muted; }
             inline void process(const T* input, T* outputs) hoa_noexcept {
                 if(!muted) { encoder->process(input, outputs); }
             }

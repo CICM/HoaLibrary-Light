@@ -12,6 +12,7 @@
 using namespace hoa;
 typedef double hoa_float_t;
 
+/*
 TEST_CASE("MultiEncoder 2D", "[Encoder] [2D]")
 {
     MultiEncoder<Hoa2d, hoa_float_t> encoder(7, 3);
@@ -91,6 +92,6 @@ TEST_CASE("MultiEncoder 3D", "[Encoder] [3D]")
     CHECK(encoder.getMute(2) == false);
     
     encoder.process(inputs.data(), ouputs.data());
-    
 }
+ */
 
