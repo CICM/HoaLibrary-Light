@@ -13,7 +13,6 @@
 #define DEF_HOA_ENCODER_LIGHT
 
 #include "Hoa_Processor.hpp"
-#include <iostream>
 
 namespace hoa
 {
@@ -64,6 +63,7 @@ namespace hoa
     //! \f[k_{l, m} = 1\f]
     //! else
     //! \f[k_{l, m} = \sqrt{\frac{(l - \left|m\right|)!}{(l + \left|m\right|)!}}\sqrt{2} \f]
+    //! @todo Check the azimuth offset
     template <Dimension D, typename T> class Encoder : public ProcessorHarmonics<D, T>
     {
     public:
@@ -300,166 +300,6 @@ namespace hoa
         T*  m_azimuth_coeffs;
         T*  m_elevation_coeffs;
         T*  m_normalization_coeffs;
-    };
-    
-
-
-
-
-   
-    //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
-    /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
-     */
-    template <Dimension D, typename T> class EncoderMulti : public ProcessorHarmonics<D, T>
-    {
-    private:
-        const size_t                     m_number_of_sources;
-        std::vector< Encoder<D, T> *> m_encoders;
-    public:
-
-        //! The map constructor.
-        /**	The map constructor allocates and initialize the member values and classes depending on a order of decomposition and the number of sources. The order and the number of sources must be at least 1.
-
-         @param     order            The order.
-         @param     numberOfSources	The number of sources.
-         */
-        EncoderMulti(const size_t order, size_t numberOfSources) hoa_noexcept : ProcessorHarmonics<Hoa3d, T>(order),
-        m_number_of_sources(numberOfSources)
-        {
-            for(size_t i = 0; i < m_number_of_sources; i++)
-            {
-                m_encoders.push_back(new Encoder<Hoa3d, T>(order));
-            }
-        }
-
-        //! The map destructor.
-        /**	The map destructor free the memory and deallocate the member classes.
-         */
-        ~EncoderMulti() hoa_noexcept
-        {
-            for(size_t i = 0; i < m_number_of_sources; i++)
-            {
-                delete m_encoders[i];
-            }
-            m_encoders.clear();
-        }
-
-        //! This method retrieve the number of sources.
-        /** Retrieve the number of sources.
-
-         @return The number of sources.
-         */
-        inline size_t getNumberOfSources() const hoa_noexcept
-        {
-            return m_number_of_sources;
-        }
-
-        //! This method set the angle of azimuth of a source.
-        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield. The index must be between 0 and the number of sources - 1.
-
-         @param     index	The index of the source.
-         @param     azimuth	The azimuth.
-         @see       setRadius()
-         */
-        inline void setAzimuth(const size_t index, const T azimuth) hoa_noexcept
-        {
-            m_encoders[index]->setAzimuth(azimuth);
-        }
-
-        //! This method set the angle of azimuth of a source.
-        /**	The angle of azimuth in radian and you should prefer to use it between 0 and 2 π to avoid recursive wrapping of the value. The direction of rotation is counterclockwise. The 0 radian is π/2 phase shifted relative to a mathematical representation of a circle, then the 0 radian is at the "front" of the soundfield. The index must be between 0 and the number of sources - 1.
-
-         @param     index	The index of the source.
-         @param     azimuth	The azimuth.
-         @see       setRadius()
-         */
-        inline void setElevation(const size_t index, const T elevation) hoa_noexcept
-        {
-            m_encoders[index]->setElevation(elevation);
-        }
-
-        //! This method set the radius of a source.
-        /**	The radius is between 0 and infinity. At 0, the source is in the center of the ambisonic circle and at 1, the source is at the limit of the ambisonic circle. Over 1, the source get away the ambisonic circle. The index must be between 0 and the number of sources - 1.
-
-         @param     index	The index of the source.
-         @param     radius   The radius.
-         @see       setAzimuth()
-         */
-        inline void setRadius(const size_t index, const T radius) hoa_noexcept
-        {
-            m_encoders[index]->setRadius(radius);
-        }
-
-        //! This method mute or unmute a source.
-        /**	Mute or unmute a source with a boolean value. The index must be between 0 and the number of sources - 1.
-
-         @param     index	The index of the source.
-         @param     muted	The mute state.
-         */
-        inline void setMute(const size_t index, const bool muted) hoa_noexcept
-        {
-            m_encoders[index]->setMute(muted);
-        }
-
-        //! This method retrieve the azimuth of a source.
-        /** Retrieve the azimuth of a source.
-
-         @param     index	The index of the source.
-         @return The azimuth of the source if the source exists, otherwise the function generates an error.
-         */
-        inline T getAzimuth(const size_t index) const hoa_noexcept
-        {
-            return m_encoders[index]->getAzimuth();
-        }
-
-        //! This method retrieve the elevation of a source.
-        /** Retrieve the elevation of a source.
-
-         @param     index	The index of the source.
-         @return The elevation of the source if the source exists, otherwise the function generates an error.
-         */
-        inline T getElevation(const size_t index) const hoa_noexcept
-        {
-            return m_encoders[index]->getElevation();
-        }
-
-        //! This method retrieve the radius of a source.
-        /** Retrieve the radius of a source.
-
-         @param     index	The index of the source.
-         @return The radius of the source if the source exists, otherwise the function generates an error.
-         */
-        inline T getRadius(const size_t index) const hoa_noexcept
-        {
-            return m_encoders[index]->getRadius();
-        }
-
-        //! This method retrieve the mute or unmute state of a source.
-        /**	Get the Mute state of a source.
-
-         @param     index	The index of the source.
-         @return    The mute state of the source if the source exists, otherwise the function generates an error.
-         @see       setMute()
-         */
-        inline bool getMute(const size_t index) const hoa_noexcept
-        {
-            return m_encoders[index]->getMute();
-        }
-
-
-        //! This method performs the encoding with distance compensation.
-        /**	You should use this method for in-place or not-in-place processing and sample by sample. The input array contains the samples of the sources and the minimum size should be the number of sources. The outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
-         @param     input  The input array.
-         @param     outputs The outputs array.
-         */
-        inline void process(const T* input, T* outputs) hoa_noexcept hoa_override
-        {
-            m_encoders[0]->process(input, outputs);
-            for(size_t i = 1; i < m_number_of_sources; i++)
-            {
-                m_encoders[i]->processAdd(++input, outputs);
-            }
-        }
     };
 }
 

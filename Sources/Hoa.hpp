@@ -15,6 +15,7 @@
 #include "Hoa_Harmonics.hpp"
 #include "Hoa_Planewaves.hpp"
 #include "Hoa_Encoder.hpp"
+#include "Hoa_MultiEncoder.hpp"
 #include "Hoa_Optim.hpp"
 #include "Hoa_Rotate.hpp"
 #include "Hoa_Decoder.hpp"
