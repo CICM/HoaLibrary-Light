@@ -361,11 +361,23 @@ namespace hoa
          */
         static inline T getSemiNormalization(const size_t degree, const long order) hoa_noexcept
         {
-            const T fac1 = T(Math<T>::factorial(long(degree) - long(std::abs(order))));
-            const T fac2 = T(Math<T>::factorial(long(degree) + long(std::abs(order))));
+            const long double fac1 = hfactorial(long(degree) - long(std::abs(order)));
+            const long double fac2 = hfactorial(long(degree) + long(std::abs(order)));
             //return T(sqrt(fac1 / fac2)) * (bool(order == 0) ? T(0.2820947918) : T(0.3989422804));
             //return T(sqrt(fac1 / fac2)) * (bool(order == 0) ? T(1.) : T(1.41421356237309504880168872420969808));
-            return T(sqrt((bool(order == 0) ? T(1.) : T(2.)) * fac1 / fac2));
+            return T(sqrt((bool(order == 0) ? T(1.) : T(2.)) * T(fac1 / fac2)));
+        }
+    private:
+        
+        static inline long double hfactorial(long n)
+        {
+            long double result = n;
+            if(n == 0)
+                return 1;
+            while(--n > 0)
+                result *= n;
+            
+            return result;
         }
     };
 #endif
