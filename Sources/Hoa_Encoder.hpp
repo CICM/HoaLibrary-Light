@@ -13,6 +13,7 @@
 #define DEF_HOA_ENCODER_LIGHT
 
 #include "Hoa_Processor.hpp"
+#include <iostream>
 
 namespace hoa
 {
@@ -208,9 +209,10 @@ namespace hoa
             m_elevation = elevation;
             T* coeffs   = m_elevation_coeffs;
             const size_t order = ProcessorHarmonics<D, T>::getDecompositionOrder();
-            const T cos_theta = T(std::sin(elevation));
-            const T sqr_theta = -T(std::sqrt(1 - cos_theta * cos_theta));
-            // Organization [0, 0], [1, 1], [1, 0], [2, 2], [2, 1], [2, 0], [3, 3], ...
+            const T cos_theta = T(std::sin(elevation)); // In fact we use sinus to offset the elvation
+            const T sqr_theta = -T(std::sqrt(T(1.) - cos_theta * cos_theta));
+            // Organization [0, 0], [1, 1], [1, 0], [2, 2], [2, 1], [2, 0], [3, 3],
+            // [3, 2], [3, 1], [3, 0], [4, 4], ...
             
             *(coeffs++) = 1;            // P(0, 0)(x) = 1
             *(coeffs++) = sqr_theta;    // P(1, 1)(x) = -(2*0+1)sqrt(1-x^2)P(0,0)(x) = -sqrt(1-x^2)
@@ -218,7 +220,7 @@ namespace hoa
             for(size_t i = 2; i <= order; ++i)
             {
                 const T ratio = 2 * T(i-1) + 1;
-                const T previous = *(coeffs-2);
+                const T previous = *(coeffs-i);
                 // P(l+1,l+1)(x) = -(2l+1) sqrt(1-x^2) P(l,l)(x)
                 *(coeffs++) = ratio * sqr_theta * previous;
                 // P(l+1,l)(x)   = x(2l+1) P(l,l)(x)
@@ -264,22 +266,25 @@ namespace hoa
                 T const* radius_coeffs      = m_radius_coeffs;
                 T const* azimuth_coeffs     = m_azimuth_coeffs+order;
                 T const* elevation_coeffs   = m_elevation_coeffs;
-                T const* normalization_coeffs   = m_normalization_coeffs;
-                (*outputs++) = (*input) * (*radius_coeffs++) * (*azimuth_coeffs--) * (*elevation_coeffs++) * (*normalization_coeffs++);
+                T const* norm_coeffs        = m_normalization_coeffs;
+                (*outputs++) = (*input) * (*radius_coeffs++) * (*azimuth_coeffs--) * (*elevation_coeffs++) * (*norm_coeffs++);
                 for(size_t i = 1; i <= order; ++i)
                 {
-                    const T factor              = (*radius_coeffs++);
-                    T const* azimuth_coeffs2    = azimuth_coeffs--;
-                    T const* elevation_coeffs2  = elevation_coeffs;
+                    const T factor      = (*radius_coeffs++);
+                    T const* az_coeffs2 = azimuth_coeffs--;
+                    T const* el_coeffs2 = elevation_coeffs;
                     elevation_coeffs = elevation_coeffs+(i+1);
                     for(size_t j = i; j; --j)
                     {
-                        (*outputs++) = (*input) * factor * (*azimuth_coeffs2++) * (*elevation_coeffs2++) * (*normalization_coeffs++);
+                        //(*outputs++) = (*el_coeffs2++);
+                        (*outputs++) = (*input) * factor * (*az_coeffs2++) * (*el_coeffs2++) * (*norm_coeffs++);
                     }
-                    (*outputs++) = (*input) * factor * (*azimuth_coeffs2++) * (*elevation_coeffs2--) * (*normalization_coeffs++);
+                    //(*outputs++) = (*el_coeffs2--);
+                    (*outputs++) = (*input) * factor * (*az_coeffs2++) * (*el_coeffs2--) * (*norm_coeffs++);
                     for(size_t j = i; j; --j)
                     {
-                        (*outputs++) = (*input) * factor * (*azimuth_coeffs2++) * (*elevation_coeffs2--) * (*normalization_coeffs++);
+                        //(*outputs++) = (*el_coeffs2--);
+                        (*outputs++) = (*input) * factor * (*az_coeffs2++) * (*el_coeffs2--) * (*norm_coeffs++);
                     }
                 }
             }
