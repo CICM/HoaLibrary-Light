@@ -102,10 +102,10 @@ namespace hoa
         inline T getRadius() const hoa_noexcept { return m_radius; }
         
         //! @brief Returns the azimuth.
-        inline T getAzimuth() const hoa_noexcept { return Math<T>::wrap_twopi(m_azimuth); }
+        inline T getAzimuth() const hoa_noexcept { return m_azimuth; }
         
         //! @brief Returns the elevation.
-        inline T getElevation()  const hoa_noexcept { return Math<T>::wrap_pi(m_elevation); }
+        inline T getElevation()  const hoa_noexcept { return m_elevation; }
         
         //! @brief Sets the radius.
         //! @param radius The new radius.

@@ -25,9 +25,13 @@ namespace hoa
         //! @brief The map constructor.
         //! @param order            The order.
         //! @param numberOfSources  The number of sources.
-        MultiEncoder(size_t order, size_t numberOfSources) hoa_noexcept : ProcessorHarmonics<D, T>(order),
-        m_encoders(numberOfSources, order) {
+        MultiEncoder(size_t order, size_t numberOfSources) : ProcessorHarmonics<D, T>(order), m_encoders(numberOfSources)
+        {
             m_temp = new T[ProcessorHarmonics<D, T>::getNumberOfHarmonics()];
+            for(size_t i = 0; i < numberOfSources; ++i)
+            {
+                m_encoders[i].encoder = new Encoder<D, T>(order);
+            }
         }
 
         //! @brief The map destructor.
@@ -131,8 +135,8 @@ namespace hoa
             Encoder<D, T>*  encoder;
             bool            muted;
             
-            EncoderWrap(size_t order) : encoder(new Encoder<D, T>(order)), muted(false) {}
-            ~EncoderWrap() { delete encoder; }
+            EncoderWrap() : encoder(hoa_nullptr), muted(false) {}
+            ~EncoderWrap() { if(encoder != hoa_nullptr){delete encoder;} }
             
             inline void setRadius(T radius) hoa_noexcept { encoder->setRadius(radius); }
             inline void setAzimuth(T azimuth) hoa_noexcept { encoder->setAzimuth(azimuth); }
