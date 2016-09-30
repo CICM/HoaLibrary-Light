@@ -10,8 +10,12 @@ build_script:
     - cd build
     - cmake .. -G"%msvc%" -DCMAKE_BUILD_TYPE=Debug
     - cmake --build .
+
+test_script:
     - cd %APPVEYOR_BUILD_FOLDER%\build\Debug
-    - test.exe    
+    - dir
+    - test.exe
+    - dir
 
 notifications:
   - provider: Email
