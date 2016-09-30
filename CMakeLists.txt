@@ -10,7 +10,7 @@ file(GLOB HOASOURCES ${PROJECT_SOURCE_DIR}/Sources/*.cpp ${PROJECT_SOURCE_DIR}/S
 source_group(Hoa FILES ${HOASOURCES})
 include_directories(${PROJECT_SOURCE_DIR}/Sources)
 
-file(GLOB TESTSOURCES ${PROJECT_SOURCE_DIR}/Tests/*.cpp)
+file(GLOB TESTSOURCES ${PROJECT_SOURCE_DIR}/Tests/Test.cpp)
 source_group(Tests FILES ${TESTSOURCES})
 include_directories(${PROJECT_SOURCE_DIR}/Tests)
 
