@@ -36,6 +36,10 @@ namespace hoa
 
         //! @brief The map destructor.
         ~MultiEncoder() {
+            for(size_t i = 0; i < getNumberOfSources(); ++i)
+            {
+                delete m_encoders[i].encoder;
+            }
             delete [] m_temp;
         }
 
@@ -136,7 +140,7 @@ namespace hoa
             bool            muted;
             
             EncoderWrap() : encoder(hoa_nullptr), muted(false) {}
-            ~EncoderWrap() { if(encoder != hoa_nullptr){delete encoder;} }
+            ~EncoderWrap() { }
             
             inline void setRadius(T radius) hoa_noexcept { encoder->setRadius(radius); }
             inline void setAzimuth(T azimuth) hoa_noexcept { encoder->setAzimuth(azimuth); }
