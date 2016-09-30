@@ -166,7 +166,7 @@ namespace hoa
          @param     n     The interger.
          @return    The function return the factorial of n.
          */
-        static inline long double factorial(long n)
+        static inline size_t factorial(long n)
         {
             long double result = n;
             if(n == 0)

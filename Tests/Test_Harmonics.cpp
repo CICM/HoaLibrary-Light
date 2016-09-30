@@ -6,6 +6,8 @@
 
 #include <Hoa.hpp>
 #include "catch.hpp"
+#include <cfloat>
+#include <iostream>
 
 using namespace hoa;
 typedef float hoa_float_t;
@@ -206,6 +208,7 @@ TEST_CASE("Harmonics 2D", "[Harmonics] [2D]")
 
 TEST_CASE("Harmonics 3D", "[Harmonics] [3D]")
 {
+    const float epsilon = FLT_EPSILON;
     typedef Harmonic<Hoa3d, hoa_float_t> Harmonic;
     Harmonic Harmonic0(0);
 
@@ -357,37 +360,73 @@ TEST_CASE("Harmonics 3D", "[Harmonics] [3D]")
         CHECK(Harmonic::getNumberOfHarmonicsInDegree(11) == 23);
     }
 
-    /*
+    
     SECTION("Static Normalization")
     {
-        CHECK(Harmonic::getSemiNormalization(0, 0) == 1.);
-        CHECK(Harmonic::getSemiNormalization(1, -1) == 1.);
-        CHECK(Harmonic::getSemiNormalization(1, 1) == 1.);
-        CHECK(Harmonic::getSemiNormalization(2, -2) == 1.);
-        CHECK(Harmonic::getSemiNormalization(2, 2) == 1.);
-        CHECK(Harmonic::getSemiNormalization(3, -3) == 1.);
-        CHECK(Harmonic::getSemiNormalization(3, 3) == 1.);
-        CHECK(Harmonic::getSemiNormalization(7, -7) == 1.);
-        CHECK(Harmonic::getSemiNormalization(7, 7) == 1.);
-        CHECK(Harmonic::getSemiNormalization(11, -11) == 1.);
-        CHECK(Harmonic::getSemiNormalization(11, 11) == 1.);
-    }
+        CHECK(Harmonic::getNormalization(0, 0) == 1.);
 
+        CHECK(fabs(Harmonic::getNormalization(1, -1) - 1.7320507764816284) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(1, 0) -  1.7320507764816284) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(1, 1) -  1.7320507764816284) < epsilon);
+        
+        CHECK(fabs(Harmonic::getNormalization(3, -3) - 0.13944333791732788) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(3, -2) - 0.34156504273414612) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(3, -1) - 1.0801234245300293) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(3, 0) - 2.6457512378692627) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(3, 1) - 1.0801234245300293) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(3, 2) - 0.34156504273414612) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(3, 3) - 0.13944333791732788) < epsilon);
+        
+    
+        CHECK(fabs(Harmonic::getNormalization(7, -7) - 0.000018550535969552584) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, -6) - 0.000069409754360094666) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, -5) - 0.00035392167046666145) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, -4) - 0.0021235300227999687) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, -3) - 0.014085904695093632) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, -2) - 0.099602386355400085) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, -1) - 0.73192507028579712) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, 0) - 3.872983455657959) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, 1) - 0.73192507028579712) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, 2) - 0.099602386355400085) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, 3) - 0.014085904695093632) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, 4) - 0.0021235300227999687) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, 5) - 0.00035392167046666145) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, 6) - 0.000069409754360094666) < epsilon);
+        CHECK(fabs(Harmonic::getNormalization(7, 7) - 0.000018550535969552584) < epsilon);
+    }
+    
     SECTION("Static Semi Normalization")
     {
         CHECK(Harmonic::getSemiNormalization(0, 0) == 1.);
-        CHECK(Harmonic::getSemiNormalization(1, -1) == 1.);
-        CHECK(Harmonic::getSemiNormalization(1, 1) == 1.);
-        CHECK(Harmonic::getSemiNormalization(2, -2) == 1.);
-        CHECK(Harmonic::getSemiNormalization(2, 2) == 1.);
-        CHECK(Harmonic::getSemiNormalization(3, -3) == 1.);
-        CHECK(Harmonic::getSemiNormalization(3, 3) == 1.);
-        CHECK(Harmonic::getSemiNormalization(7, -7) == 1.);
-        CHECK(Harmonic::getSemiNormalization(7, 7) == 1.);
-        CHECK(Harmonic::getSemiNormalization(11, -11) == 1.);
-        CHECK(Harmonic::getSemiNormalization(11, 11) == 1.);
+        
+        CHECK(fabs(Harmonic::getSemiNormalization(1, -1) - 1.) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(1, 0) - 1) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(1, 1) - 1.) < epsilon);
+        
+        CHECK(fabs(Harmonic::getSemiNormalization(3, -3) - 0.05270462765) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(3, -2) - 0.1290994448) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(3, -1) - 0.4082482904) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(3, 0) - 1) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(3, 1) - 0.4082482904) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(3, 2) - 0.1290994448) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(3, 3) - 0.05270462765) < epsilon);
+        
+        CHECK(fabs(Harmonic::getSemiNormalization(7, -7) - 0.000004789727674) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, -6) - 0.00001792151992) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, -5) - 0.00009138217984) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, -4) - 0.0005482930789) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, -3) - 0.003636964836) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, -2) - 0.02571722499) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, -1) - 0.1889822365) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, 0) - 1) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, 1) - 0.1889822365) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, 2) - 0.02571722499) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, 3) - 0.003636964836) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, 4) - 0.0005482930789) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, 5) - 0.00009138217984) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, 6) - 0.00001792151992) < epsilon);
+        CHECK(fabs(Harmonic::getSemiNormalization(7, 7) - 0.000004789727674) < epsilon);
     }
-    */
 
 
 
@@ -492,35 +531,69 @@ TEST_CASE("Harmonics 3D", "[Harmonics] [3D]")
         CHECK(Harmonic63.getIndex()== 63);
     }
 
-    /*
     SECTION("Local Normalization")
     {
         CHECK(Harmonic0.getNormalization() == 1.);
-        CHECK(Harmonic1.getNormalization() == 1.);
-        CHECK(Harmonic2.getNormalization() == 1.);
-        CHECK(Harmonic3.getNormalization() == 1.);
-        CHECK(Harmonic4.getNormalization() == 1.);
-        CHECK(Harmonic5.getNormalization() == 1.);
-        CHECK(Harmonic6.getNormalization() == 1.);
-        CHECK(Harmonic13.getNormalization() == 1.);
-        CHECK(Harmonic14.getNormalization() == 1.);
-        CHECK(Harmonic21.getNormalization() == 1.);
-        CHECK(Harmonic22.getNormalization() == 1.);
+        
+        CHECK(fabs(Harmonic1.getNormalization() - 1.7320507764816284) < epsilon);
+        CHECK(fabs(Harmonic2.getNormalization() - 1.7320507764816284) < epsilon);
+        CHECK(fabs(Harmonic3.getNormalization() - 1.7320507764816284) < epsilon);
+        
+        CHECK(fabs(Harmonic9.getNormalization() - 0.13944333791732788) < epsilon);
+        CHECK(fabs(Harmonic10.getNormalization() - 0.34156504273414612) < epsilon);
+        CHECK(fabs(Harmonic11.getNormalization() - 1.0801234245300293) < epsilon);
+        CHECK(fabs(Harmonic12.getNormalization() - 2.6457512378692627) < epsilon);
+        CHECK(fabs(Harmonic13.getNormalization() - 1.0801234245300293) < epsilon);
+        CHECK(fabs(Harmonic14.getNormalization() - 0.34156504273414612) < epsilon);
+        CHECK(fabs(Harmonic15.getNormalization() - 0.13944333791732788) < epsilon);
+        
+        CHECK(fabs(Harmonic49.getNormalization() - 0.000018550535969552584) < epsilon);
+        CHECK(fabs(Harmonic50.getNormalization() - 0.000069409754360094666) < epsilon);
+        CHECK(fabs(Harmonic51.getNormalization() - 0.00035392167046666145) < epsilon);
+        CHECK(fabs(Harmonic52.getNormalization() - 0.0021235300227999687) < epsilon);
+        CHECK(fabs(Harmonic53.getNormalization() - 0.014085904695093632) < epsilon);
+        CHECK(fabs(Harmonic54.getNormalization() - 0.099602386355400085) < epsilon);
+        CHECK(fabs(Harmonic55.getNormalization() - 0.73192507028579712) < epsilon);
+        CHECK(fabs(Harmonic56.getNormalization() - 1) < 3.872983455657959);
+        CHECK(fabs(Harmonic57.getNormalization() - 0.73192507028579712) < epsilon);
+        CHECK(fabs(Harmonic58.getNormalization() - 0.099602386355400085) < epsilon);
+        CHECK(fabs(Harmonic59.getNormalization() - 0.014085904695093632) < epsilon);
+        CHECK(fabs(Harmonic60.getNormalization() - 0.0021235300227999687) < epsilon);
+        CHECK(fabs(Harmonic61.getNormalization() - 0.00035392167046666145) < epsilon);
+        CHECK(fabs(Harmonic62.getNormalization() - 0.000069409754360094666) < epsilon);
+        CHECK(fabs(Harmonic63.getNormalization() - 0.000018550535969552584) < epsilon);
     }
-
+    
     SECTION("Local Semi Normalization")
     {
-        CHECK(Harmonic0.getNormalization() == 1.);
-        CHECK(Harmonic1.getNormalization() == 1.);
-        CHECK(Harmonic2.getNormalization() == 1.);
-        CHECK(Harmonic3.getNormalization() == 1.);
-        CHECK(Harmonic4.getNormalization() == 1.);
-        CHECK(Harmonic5.getNormalization() == 1.);
-        CHECK(Harmonic6.getNormalization() == 1.);
-        CHECK(Harmonic13.getNormalization() == 1.);
-        CHECK(Harmonic14.getNormalization() == 1.);
-        CHECK(Harmonic21.getNormalization() == 1.);
-        CHECK(Harmonic22.getNormalization() == 1.);
+        CHECK(Harmonic0.getSemiNormalization() == 1.);
+        
+        CHECK(fabs(Harmonic1.getSemiNormalization() - 1.) < epsilon);
+        CHECK(fabs(Harmonic2.getSemiNormalization() - 1) < epsilon);
+        CHECK(fabs(Harmonic3.getSemiNormalization() - 1.) < epsilon);
+        
+        CHECK(fabs(Harmonic9.getSemiNormalization() - 0.05270462765) < epsilon);
+        CHECK(fabs(Harmonic10.getSemiNormalization() - 0.1290994448) < epsilon);
+        CHECK(fabs(Harmonic11.getSemiNormalization() - 0.4082482904) < epsilon);
+        CHECK(fabs(Harmonic12.getSemiNormalization() - 1) < epsilon);
+        CHECK(fabs(Harmonic13.getSemiNormalization() - 0.4082482904) < epsilon);
+        CHECK(fabs(Harmonic14.getSemiNormalization() - 0.1290994448) < epsilon);
+        CHECK(fabs(Harmonic15.getSemiNormalization() - 0.05270462765) < epsilon);
+        
+        CHECK(fabs(Harmonic49.getSemiNormalization() - 0.000004789727674) < epsilon);
+        CHECK(fabs(Harmonic50.getSemiNormalization() - 0.00001792151992) < epsilon);
+        CHECK(fabs(Harmonic51.getSemiNormalization() - 0.00009138217984) < epsilon);
+        CHECK(fabs(Harmonic52.getSemiNormalization() - 0.0005482930789) < epsilon);
+        CHECK(fabs(Harmonic53.getSemiNormalization() - 0.003636964836) < epsilon);
+        CHECK(fabs(Harmonic54.getSemiNormalization() - 0.02571722499) < epsilon);
+        CHECK(fabs(Harmonic55.getSemiNormalization() - 0.1889822365) < epsilon);
+        CHECK(fabs(Harmonic56.getSemiNormalization() - 1) < epsilon);
+        CHECK(fabs(Harmonic57.getSemiNormalization() - 0.1889822365) < epsilon);
+        CHECK(fabs(Harmonic58.getSemiNormalization() - 0.02571722499) < epsilon);
+        CHECK(fabs(Harmonic59.getSemiNormalization() - 0.003636964836) < epsilon);
+        CHECK(fabs(Harmonic60.getSemiNormalization() - 0.0005482930789) < epsilon);
+        CHECK(fabs(Harmonic61.getSemiNormalization() - 0.00009138217984) < epsilon);
+        CHECK(fabs(Harmonic62.getSemiNormalization() - 0.00001792151992) < epsilon);
+        CHECK(fabs(Harmonic63.getSemiNormalization() - 0.000004789727674) < epsilon);
     }
-     */
 }

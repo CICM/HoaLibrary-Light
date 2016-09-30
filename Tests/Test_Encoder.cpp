@@ -7,13 +7,13 @@
 #include <Hoa.hpp>
 #include "catch.hpp"
 #include <cfloat>
+#include <iostream>
 
 using namespace hoa;
 typedef double hoa_float_t;
 
 TEST_CASE("Encoder 2D", "[Encoder] [2D]")
 {
-    int test_radius_too;
     Encoder<Hoa2d, hoa_float_t> encoder(7);
     const float epsilon = FLT_EPSILON;
     hoa_float_t              input(1.);
@@ -206,93 +206,59 @@ TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     }
 }
 
-/*
-TEST_CASE("Wider 3D", "[Wider] [3D]")
+
+TEST_CASE("Encoder 3D", "[Encoder] [3D]")
 {
-    Wider<Hoa3d, hoa_float_t> wider(7);
+    Encoder<Hoa3d, hoa_float_t> encoder(7);
     const float epsilon = FLT_EPSILON;
-    std::vector<hoa_float_t> inputs(64);
+    hoa_float_t              input(1.);
     std::vector<hoa_float_t> ouputs(64);
-    
-    for(size_t i = 0; i < 64; ++i){
-        inputs[i] = 1.;
-    }
-    
-    SECTION("Widening factor 1")
+
+    SECTION("Azimuth 0 Elevation 0")
     {
-        wider.setWidening(1.);
-        wider.process(inputs.data(), ouputs.data());
+        encoder.setAzimuth(0.);
+        encoder.setElevation(0.);
+        encoder.process(&input, ouputs.data());
+        std::cout.precision(16);
+        std::cout << "\n";
+        for(size_t  i = 0, k = 0; i < 7; ++i)
+        {
+            for(size_t j = 0; j < i * 2 + 1; ++j)
+                std::cout << ouputs[k++] << " ";
+            std::cout << "\n";
+        }
         
-        CHECK(ouputs[0] == inputs[0]);
-        CHECK(ouputs[1] == inputs[1]);
-        CHECK(ouputs[2] == inputs[2]);
-        CHECK(ouputs[3] == inputs[3]);
-        CHECK(ouputs[4] == inputs[4]);
-        CHECK(ouputs[5] == inputs[5]);
-        CHECK(ouputs[6] == inputs[6]);
-        CHECK(ouputs[7] == inputs[7]);
-        CHECK(ouputs[8] == inputs[8]);
-        CHECK(ouputs[9] == inputs[9]);
-        CHECK(ouputs[10] == inputs[10]);
-        CHECK(ouputs[11] == inputs[11]);
-        CHECK(ouputs[12] == inputs[12]);
-        CHECK(ouputs[13] == inputs[13]);
-        CHECK(ouputs[14] == inputs[14]);
-        CHECK(ouputs[15] == inputs[15]);
+        CHECK(fabs(ouputs[0] - 1.) < epsilon);
         
-        CHECK(ouputs[49] == inputs[49]);
-        CHECK(ouputs[63] == inputs[63]);
-    }
-    
-    SECTION("Widening factor 0")
-    {
-        wider.setWidening(0.);
-        wider.process(inputs.data(), ouputs.data());
+        CHECK(fabs(ouputs[1] - 0.) < epsilon);
+        CHECK(fabs(ouputs[2] - 0.) < epsilon);
+        CHECK(fabs(ouputs[3] - -1.) < epsilon);
         
-        CHECK(ouputs[0] == 8);
-        CHECK(ouputs[1] == 0.);
-        CHECK(ouputs[2] == 0.);
-        CHECK(ouputs[3] == 0.);
-        CHECK(ouputs[4] == 0);
-        CHECK(ouputs[5] == 0.);
-        CHECK(ouputs[6] == 0.);
-        CHECK(ouputs[7] == 0.);
-        CHECK(ouputs[8] == 0.);
-        CHECK(ouputs[9] == 0.);
-        CHECK(ouputs[10] == 0.);
-        CHECK(ouputs[11] == 0.);
-        CHECK(ouputs[12] == 0.);
-        CHECK(ouputs[13] == 0.);
-        CHECK(ouputs[14] == 0.);
-        CHECK(ouputs[15] == 0.);
+        CHECK(fabs(ouputs[4] - 0.) < epsilon);
+        CHECK(fabs(ouputs[5] - 0.) < epsilon);
+        CHECK(fabs(ouputs[6] - -0.5) < epsilon);
+        CHECK(fabs(ouputs[7] - 0.) < epsilon);
+        CHECK(fabs(ouputs[8] - 0.8660254037844386) < epsilon);
         
-        CHECK(ouputs[49] == 0.);
-        CHECK(ouputs[63] == 0.);
-    }
-    
-    
-    SECTION("Widening factor 0.5")
-    {
-        wider.setWidening(0.5);
-        wider.process(inputs.data(), ouputs.data());
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
-            sum_of_elems += *it;
+        CHECK(fabs(ouputs[9] - 0.) < epsilon);
+        CHECK(fabs(ouputs[10] - 0.) < epsilon);
+        CHECK(fabs(ouputs[11] - 0.) < epsilon);
+        CHECK(fabs(ouputs[12] - 0.) < epsilon);
+        CHECK(fabs(ouputs[13] - 0.6123724356957945) < epsilon);
+        CHECK(fabs(ouputs[14] - 0.) < epsilon);
+        CHECK(fabs(ouputs[15] - 0.) < epsilon); // 0.790569
         
-        int todo_after_encoder;
-        //CHECK(sum_of_elems == 8);
-    }
-    
-    SECTION("Widening factor 0.75")
-    {
-        wider.setWidening(0.75);
-        wider.process(inputs.data(), ouputs.data());
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
-            sum_of_elems += *it;
-        
-        int todo_after_encoder;
-        //CHECK(sum_of_elems == 8);
+        CHECK(fabs(ouputs[26] - 0.) < epsilon);
+        CHECK(fabs(ouputs[27] - 0.) < epsilon);
+        CHECK(fabs(ouputs[28] - 0.) < epsilon);
+        CHECK(fabs(ouputs[29] - 0.) < epsilon);
+        CHECK(fabs(ouputs[30] - 0) < epsilon);
+        CHECK(fabs(ouputs[31] - -0.4841229182759271) < epsilon);
+        CHECK(fabs(ouputs[32] - 0.) < epsilon);
+        CHECK(fabs(ouputs[33] - 0) < epsilon);
+        CHECK(fabs(ouputs[34] - 0.) < epsilon);
+        CHECK(fabs(ouputs[35] - 0.) < epsilon);
+        CHECK(fabs(ouputs[36] - 0.) < epsilon); // -0.701561
     }
 }
- */
+

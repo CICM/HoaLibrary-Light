@@ -350,7 +350,7 @@ namespace hoa
          */
         static inline T getNormalization(const size_t degree, const long order) hoa_noexcept
         {
-            return getSemiNormalization(degree, order) * sqrt(2. * double(degree) + 1.);
+            return getSemiNormalization(degree, order) * T(sqrt(T(2.) * T(degree) + T(1.)));
         }
 
         //! Get the semi-normalization of an harmonic.
@@ -361,14 +361,11 @@ namespace hoa
          */
         static inline T getSemiNormalization(const size_t degree, const long order) hoa_noexcept
         {
-            if(order == 0)
-            {
-                return T(sqrt(Math<T>::factorial(long(degree) - long(std::abs(order))) / Math<T>::factorial(long(order) + long(std::abs(order))))) * T(sqrt(T(1.) / T(4. * HOA_PI)));
-            }
-            else
-            {
-                return T(sqrt(Math<T>::factorial(long(degree) - std::abs(order)) / Math<T>::factorial(long(degree) + std::abs(order))) * sqrt(T(2.) / T(4. * HOA_PI)));
-            }
+            const T fac1 = T(Math<T>::factorial(long(degree) - long(std::abs(order))));
+            const T fac2 = T(Math<T>::factorial(long(degree) + long(std::abs(order))));
+            //return T(sqrt(fac1 / fac2)) * (bool(order == 0) ? T(0.2820947918) : T(0.3989422804));
+            //return T(sqrt(fac1 / fac2)) * (bool(order == 0) ? T(1.) : T(1.41421356237309504880168872420969808));
+            return T(sqrt((bool(order == 0) ? T(1.) : T(2.)) * fac1 / fac2));
         }
     };
 #endif
