@@ -9,17 +9,16 @@
 #include <cfloat>
 
 using namespace hoa;
-typedef float hoa_float_t;
 
 TEST_CASE("Wider 2D", "[Wider] [2D]")
 {
-    Wider<Hoa2d, hoa_float_t> wider(7);
+    Wider<Hoa2d, float> wider(7);
     const float epsilon = FLT_EPSILON;
-    std::vector<hoa_float_t> inputs(15);
-    std::vector<hoa_float_t> ouputs(15);
+    std::vector<float> inputs(15);
+    std::vector<float> ouputs(15);
     
     for(size_t i = 0; i < 15; ++i){
-        inputs[i] = hoa_float_t(i%2 == 0);
+        inputs[i] = float(i%2 == 0);
     }
     
     SECTION("Widening factor 1")
@@ -70,8 +69,8 @@ TEST_CASE("Wider 2D", "[Wider] [2D]")
     {
         wider.setWidening(0.25);
         wider.process(inputs.data(), ouputs.data());
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
+        float sum_of_elems = 0.;
+        for(std::vector<float>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
         CHECK(sum_of_elems == 8);
@@ -81,8 +80,8 @@ TEST_CASE("Wider 2D", "[Wider] [2D]")
     {
         wider.setWidening(0.5);
         wider.process(inputs.data(), ouputs.data());
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
+        float sum_of_elems = 0.;
+        for(std::vector<float>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
         CHECK(sum_of_elems == 8);
@@ -92,8 +91,8 @@ TEST_CASE("Wider 2D", "[Wider] [2D]")
     {
         wider.setWidening(0.75);
         wider.process(inputs.data(), ouputs.data());
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
+        float sum_of_elems = 0.;
+        for(std::vector<float>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
         CHECK(sum_of_elems == 8);
@@ -103,10 +102,10 @@ TEST_CASE("Wider 2D", "[Wider] [2D]")
 
 TEST_CASE("Wider 3D", "[Wider] [3D]")
 {
-    Wider<Hoa3d, hoa_float_t> wider(7);
+    Wider<Hoa3d, float> wider(7);
     const float epsilon = FLT_EPSILON;
-    std::vector<hoa_float_t> inputs(64);
-    std::vector<hoa_float_t> ouputs(64);
+    std::vector<float> inputs(64);
+    std::vector<float> ouputs(64);
     
     for(size_t i = 0; i < 64; ++i){
         inputs[i] = 1.;
@@ -169,8 +168,8 @@ TEST_CASE("Wider 3D", "[Wider] [3D]")
     {
         wider.setWidening(0.5);
         wider.process(inputs.data(), ouputs.data());
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
+        float sum_of_elems = 0.;
+        for(std::vector<float>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
         int todo_after_encoder;
@@ -181,8 +180,8 @@ TEST_CASE("Wider 3D", "[Wider] [3D]")
     {
         wider.setWidening(0.75);
         wider.process(inputs.data(), ouputs.data());
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
+        float sum_of_elems = 0.;
+        for(std::vector<float>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
         int todo_after_encoder;

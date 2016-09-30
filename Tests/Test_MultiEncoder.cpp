@@ -7,17 +7,15 @@
 #include <Hoa.hpp>
 #include "catch.hpp"
 #include <cfloat>
-#include <iostream>
 
 using namespace hoa;
-typedef double hoa_float_t;
 
 TEST_CASE("MultiEncoder 2D", "[Encoder] [2D]")
 {
-    MultiEncoder<Hoa2d, hoa_float_t> encoder(7, 3);
+    MultiEncoder<Hoa2d, float> encoder(7, 3);
     const float epsilon = FLT_EPSILON;
-    std::vector<hoa_float_t> inputs(5);
-    std::vector<hoa_float_t> ouputs(15);
+    std::vector<float> inputs(5);
+    std::vector<float> ouputs(15);
     
     encoder.setRadius(0, 0.);
     encoder.setAzimuth(0, 0.);
@@ -55,10 +53,10 @@ TEST_CASE("MultiEncoder 2D", "[Encoder] [2D]")
 
 TEST_CASE("MultiEncoder 3D", "[Encoder] [3D]")
 {
-    MultiEncoder<Hoa3d, hoa_float_t> encoder(7, 3);
+    MultiEncoder<Hoa3d, float> encoder(7, 3);
     const float epsilon = FLT_EPSILON;
-    std::vector<hoa_float_t> inputs(5);
-    std::vector<hoa_float_t> ouputs(64);
+    std::vector<float> inputs(5);
+    std::vector<float> ouputs(64);
     
     encoder.setRadius(0, 0.);
     encoder.setAzimuth(0, 0.);

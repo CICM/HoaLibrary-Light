@@ -7,17 +7,17 @@
 #include <Hoa.hpp>
 #include "catch.hpp"
 #include <cfloat>
-#include <iostream>
+#include <cmath>
+//#include <iostream>
 
 using namespace hoa;
-typedef double hoa_float_t;
 
 TEST_CASE("Encoder 2D", "[Encoder] [2D]")
 {
-    Encoder<Hoa2d, hoa_float_t> encoder(7);
-    const float epsilon = FLT_EPSILON;
-    hoa_float_t              input(1.);
-    std::vector<hoa_float_t> ouputs(15);
+    Encoder<Hoa2d, float> encoder(7);
+    const float epsilon = FLT_EPSILON * 10.f;
+    float              input(1.);
+    std::vector<float> ouputs(15);
     
     SECTION("Azimuth 0")
     {
@@ -46,21 +46,21 @@ TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setAzimuth(0.25*HOA_PI);
         encoder.process(&input, ouputs.data());
         
-        CHECK(fabs(ouputs[0] - 1) < epsilon);
-        CHECK(fabs(ouputs[1] - 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[2] - 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[3] - 1) < epsilon);
-        CHECK(fabs(ouputs[4] - 0.) < epsilon);
-        CHECK(fabs(ouputs[5] - 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[6] + 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[7] - 0.) < epsilon);
-        CHECK(fabs(ouputs[8] + 1) < epsilon);
-        CHECK(fabs(ouputs[9] + 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[10] + 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[11] + 1) < epsilon);
-        CHECK(fabs(ouputs[12] - 0) < epsilon);
-        CHECK(fabs(ouputs[13] + 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[14] - 0.7071067812) < epsilon);
+        CHECK(std::abs(ouputs[0] - float(1)) < epsilon);
+        CHECK(std::abs(ouputs[1] - float(0.707106812)) < epsilon);
+        CHECK(std::abs(ouputs[2] - float(0.707106812)) < epsilon);
+        CHECK(std::abs(ouputs[3] - float(1)) < epsilon);
+        CHECK(std::abs(ouputs[4] - float(0.)) < epsilon);
+        CHECK(std::abs(ouputs[5] - float(0.707106812)) < epsilon);
+        CHECK(std::abs(ouputs[6] + float(0.707106812)) < epsilon);
+        CHECK(std::abs(ouputs[7] - float(0.)) < epsilon);
+        CHECK(std::abs(ouputs[8] + float(1)) < epsilon);
+        CHECK(std::abs(ouputs[9] + float(0.707106812)) < epsilon);
+        CHECK(std::abs(ouputs[10] + float(0.707106812)) < epsilon);
+        CHECK(std::abs(ouputs[11] + float(1)) < epsilon);
+        CHECK(std::abs(ouputs[12] - float(0)) < epsilon);
+        CHECK(std::abs(ouputs[13] + float(0.707106812)) < epsilon);
+        CHECK(std::abs(ouputs[14] - float(0.7071067812)) < epsilon);
     }
     
     SECTION("Azimuth 0.5pi")
@@ -68,21 +68,21 @@ TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setAzimuth(0.5*HOA_PI);
         encoder.process(&input, ouputs.data());
         
-        CHECK(fabs(ouputs[0] - 1.) < epsilon);
-        CHECK(fabs(ouputs[1] - 1.) < epsilon);
-        CHECK(fabs(ouputs[2] - 0.) < epsilon);
-        CHECK(fabs(ouputs[3] - 0.) < epsilon);
-        CHECK(fabs(ouputs[4] + 1.) < epsilon);
-        CHECK(fabs(ouputs[5] + 1.) < epsilon);
-        CHECK(fabs(ouputs[6] + 0.) < epsilon);
-        CHECK(fabs(ouputs[7] - 0.) < epsilon);
-        CHECK(fabs(ouputs[8] - 1.) < epsilon);
-        CHECK(fabs(ouputs[9] - 1.) < epsilon);
-        CHECK(fabs(ouputs[10] + 0.) < epsilon);
-        CHECK(fabs(ouputs[11] + 0.) < epsilon);
-        CHECK(fabs(ouputs[12] + 1.) < epsilon);
-        CHECK(fabs(ouputs[13] + 1.) < epsilon);
-        CHECK(fabs(ouputs[14] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[0] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[1] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[2] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[3] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[4] + 1.) < epsilon);
+        CHECK(std::abs(ouputs[5] + 1.) < epsilon);
+        CHECK(std::abs(ouputs[6] + 0.) < epsilon);
+        CHECK(std::abs(ouputs[7] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[8] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[9] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[10] + 0.) < epsilon);
+        CHECK(std::abs(ouputs[11] + 0.) < epsilon);
+        CHECK(std::abs(ouputs[12] + 1.) < epsilon);
+        CHECK(std::abs(ouputs[13] + 1.) < epsilon);
+        CHECK(std::abs(ouputs[14] - 0.) < epsilon);
     }
     
     SECTION("Azimuth 0.75pi")
@@ -90,21 +90,21 @@ TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setAzimuth(0.75*HOA_PI);
         encoder.process(&input, ouputs.data());
         
-        CHECK(fabs(ouputs[0] - 1) < epsilon);
-        CHECK(fabs(ouputs[1] - 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[2] + 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[3] + 1) < epsilon);
-        CHECK(fabs(ouputs[4] - 0.) < epsilon);
-        CHECK(fabs(ouputs[5] - 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[6] - 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[7] - 0.) < epsilon);
-        CHECK(fabs(ouputs[8] + 1) < epsilon);
-        CHECK(fabs(ouputs[9] + 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[10] - 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[11] - 1) < epsilon);
-        CHECK(fabs(ouputs[12] - 0) < epsilon);
-        CHECK(fabs(ouputs[13] + 0.707106812) < epsilon);
-        CHECK(fabs(ouputs[14] + 0.7071067812) < epsilon);
+        CHECK(std::abs(ouputs[0] - 1) < epsilon);
+        CHECK(std::abs(ouputs[1] - 0.707106812) < epsilon);
+        CHECK(std::abs(ouputs[2] + 0.707106812) < epsilon);
+        CHECK(std::abs(ouputs[3] + 1) < epsilon);
+        CHECK(std::abs(ouputs[4] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[5] - 0.707106812) < epsilon);
+        CHECK(std::abs(ouputs[6] - 0.707106812) < epsilon);
+        CHECK(std::abs(ouputs[7] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[8] + 1) < epsilon);
+        CHECK(std::abs(ouputs[9] + 0.707106812) < epsilon);
+        CHECK(std::abs(ouputs[10] - 0.707106812) < epsilon);
+        CHECK(std::abs(ouputs[11] - 1) < epsilon);
+        CHECK(std::abs(ouputs[12] - 0) < epsilon);
+        CHECK(std::abs(ouputs[13] + 0.707106812) < epsilon);
+        CHECK(std::abs(ouputs[14] + 0.7071067812) < epsilon);
     }
     
     SECTION("Radius 1")
@@ -159,8 +159,8 @@ TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setRadius(0.);
         encoder.process(&input, ouputs.data());
         
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
+        float sum_of_elems = 0.;
+        for(std::vector<float>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
         CHECK(sum_of_elems == 8);
@@ -172,8 +172,8 @@ TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setRadius(0.5);
         encoder.process(&input, ouputs.data());
         
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
+        float sum_of_elems = 0.;
+        for(std::vector<float>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
         CHECK(sum_of_elems == 8);
@@ -185,8 +185,8 @@ TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setRadius(0.75);
         encoder.process(&input, ouputs.data());
         
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
+        float sum_of_elems = 0.;
+        for(std::vector<float>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
         CHECK(sum_of_elems == 8);
@@ -198,8 +198,8 @@ TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setRadius(2.);
         encoder.process(&input, ouputs.data());
         
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
+        float sum_of_elems = 0.;
+        for(std::vector<float>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
         CHECK(sum_of_elems == 4);
@@ -209,10 +209,10 @@ TEST_CASE("Encoder 2D", "[Encoder] [2D]")
 
 TEST_CASE("Encoder 3D", "[Encoder] [3D]")
 {
-    Encoder<Hoa3d, hoa_float_t> encoder(7);
-    const float epsilon = FLT_EPSILON;
-    hoa_float_t              input(1.);
-    std::vector<hoa_float_t> ouputs(64);
+    Encoder<Hoa3d, float> encoder(7);
+    const float epsilon = FLT_EPSILON * float(10.f);
+    float              input(1.);
+    std::vector<float> ouputs(64);
 
     SECTION("Azimuth 0 Elevation 0")
     {
@@ -220,53 +220,53 @@ TEST_CASE("Encoder 3D", "[Encoder] [3D]")
         encoder.setElevation(0.);
         encoder.process(&input, ouputs.data());
         
-        CHECK(fabs(ouputs[0] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[0] - 1.) < epsilon);
         
-        CHECK(fabs(ouputs[1] - 0.) < epsilon);
-        CHECK(fabs(ouputs[2] - 0.) < epsilon);
-        CHECK(fabs(ouputs[3] - -1.) < epsilon);
+        CHECK(std::abs(ouputs[1] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[2] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[3] - -1.) < epsilon);
         
-        CHECK(fabs(ouputs[4] - 0.) < epsilon);
-        CHECK(fabs(ouputs[5] - 0.) < epsilon);
-        CHECK(fabs(ouputs[6] - -0.5) < epsilon);
-        CHECK(fabs(ouputs[7] - 0.) < epsilon);
-        CHECK(fabs(ouputs[8] - 0.8660254037844386) < epsilon);
+        CHECK(std::abs(ouputs[4] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[5] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[6] - -0.5) < epsilon);
+        CHECK(std::abs(ouputs[7] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[8] - 0.8660254037844386) < epsilon);
         
-        CHECK(fabs(ouputs[9] - 0.) < epsilon);
-        CHECK(fabs(ouputs[10] - 0.) < epsilon);
-        CHECK(fabs(ouputs[11] - 0.) < epsilon);
-        CHECK(fabs(ouputs[12] - 0.) < epsilon);
-        CHECK(fabs(ouputs[13] - 0.6123724356957945) < epsilon);
-        CHECK(fabs(ouputs[14] - 0.) < epsilon);
-        CHECK(fabs(ouputs[15] - -0.7905694150420948) < epsilon);
+        CHECK(std::abs(ouputs[9] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[10] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[11] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[12] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[13] - 0.6123724356957945) < epsilon);
+        CHECK(std::abs(ouputs[14] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[15] - -0.7905694150420948) < epsilon);
         
-        CHECK(fabs(ouputs[25] - 0.) < epsilon);
-        CHECK(fabs(ouputs[26] - 0.) < epsilon);
-        CHECK(fabs(ouputs[27] - 0.) < epsilon);
-        CHECK(fabs(ouputs[28] - 0.) < epsilon);
-        CHECK(fabs(ouputs[29] - 0.) < epsilon);
-        CHECK(fabs(ouputs[30] - 0.) < epsilon);
-        CHECK(fabs(ouputs[31] - -0.4841229182759271) < epsilon);
-        CHECK(fabs(ouputs[32] - 0.) < epsilon);
-        CHECK(fabs(ouputs[33] - 0.5229125165837972) < epsilon);
-        CHECK(fabs(ouputs[34] - 0.) < epsilon);
-        CHECK(fabs(ouputs[35] - -0.701560760020114) < epsilon);
+        CHECK(std::abs(ouputs[25] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[26] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[27] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[28] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[29] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[30] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[31] - -0.4841229182759271) < epsilon);
+        CHECK(std::abs(ouputs[32] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[33] - 0.5229125165837972) < epsilon);
+        CHECK(std::abs(ouputs[34] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[35] - -0.701560760020114) < epsilon);
         
-        CHECK(fabs(ouputs[49] - 0.) < epsilon);
-        CHECK(fabs(ouputs[50] - 0.) < epsilon);
-        CHECK(fabs(ouputs[51] - 0.) < epsilon);
-        CHECK(fabs(ouputs[52] - 0.) < epsilon);
-        CHECK(fabs(ouputs[53] - 0.) < epsilon);
-        CHECK(fabs(ouputs[54] - 0.) < epsilon);
-        CHECK(fabs(ouputs[55] - 0.) < epsilon);
-        CHECK(fabs(ouputs[56] - 0.) < epsilon);
-        CHECK(fabs(ouputs[57] - 0.4133986423538423) < epsilon);
-        CHECK(fabs(ouputs[58] - 0.) < epsilon);
-        CHECK(fabs(ouputs[59] - -0.42961647140211) < epsilon);
-        CHECK(fabs(ouputs[60] - 0.) < epsilon);
-        CHECK(fabs(ouputs[61] - 0.4749588797990832) < epsilon);
-        CHECK(fabs(ouputs[62] - 0.) < epsilon);
-        CHECK(fabs(ouputs[63] - -0.6472598492877494) < epsilon);
+        CHECK(std::abs(ouputs[49] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[50] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[51] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[52] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[53] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[54] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[55] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[56] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[57] - 0.4133986423538423) < epsilon);
+        CHECK(std::abs(ouputs[58] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[59] - -0.42961647140211) < epsilon);
+        CHECK(std::abs(ouputs[60] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[61] - 0.4749588797990832) < epsilon);
+        CHECK(std::abs(ouputs[62] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[63] - -0.6472598492877494) < epsilon);
     }
     
     SECTION("Azimuth 0.5pi Elevation 0")
@@ -275,53 +275,53 @@ TEST_CASE("Encoder 3D", "[Encoder] [3D]")
         encoder.setElevation(0.);
         encoder.process(&input, ouputs.data());
         
-        CHECK(fabs(ouputs[0] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[0] - 1.) < epsilon);
         
-        CHECK(fabs(ouputs[1] - -1.) < epsilon);
-        CHECK(fabs(ouputs[2] - 0.) < epsilon);
-        CHECK(fabs(ouputs[3] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[1] - -1.) < epsilon);
+        CHECK(std::abs(ouputs[2] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[3] - 0.) < epsilon);
         
-        CHECK(fabs(ouputs[4] - 0.) < epsilon);
-        CHECK(fabs(ouputs[5] - 0.) < epsilon);
-        CHECK(fabs(ouputs[6] - -0.5) < epsilon);
-        CHECK(fabs(ouputs[7] - 0.) < epsilon);
-        CHECK(fabs(ouputs[8] - -0.8660254037844386) < epsilon);
+        CHECK(std::abs(ouputs[4] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[5] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[6] - -0.5) < epsilon);
+        CHECK(std::abs(ouputs[7] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[8] - -0.8660254037844386) < epsilon);
         
-        CHECK(fabs(ouputs[9] - 0.7905694150420948) < epsilon);
-        CHECK(fabs(ouputs[10] - 0.) < epsilon);
-        CHECK(fabs(ouputs[11] - 00.6123724356957945) < epsilon);
-        CHECK(fabs(ouputs[12] - 0.) < epsilon);
-        CHECK(fabs(ouputs[13] - 0.) < epsilon);
-        CHECK(fabs(ouputs[14] - 0.) < epsilon);
-        CHECK(fabs(ouputs[15] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[9] - 0.7905694150420948) < epsilon);
+        CHECK(std::abs(ouputs[10] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[11] - 00.6123724356957945) < epsilon);
+        CHECK(std::abs(ouputs[12] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[13] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[14] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[15] - 0.) < epsilon);
         
-        CHECK(fabs(ouputs[25] - -0.701560760020114) < epsilon);
-        CHECK(fabs(ouputs[26] - 0.) < epsilon);
-        CHECK(fabs(ouputs[27] - -0.5229125165837972) < epsilon);
-        CHECK(fabs(ouputs[28] - 0.) < epsilon);
-        CHECK(fabs(ouputs[29] - -0.4841229182759271) < epsilon);
-        CHECK(fabs(ouputs[30] - 0.) < epsilon);
-        CHECK(fabs(ouputs[31] - 0.) < epsilon);
-        CHECK(fabs(ouputs[32] - 0.) < epsilon);
-        CHECK(fabs(ouputs[33] - 0.) < epsilon);
-        CHECK(fabs(ouputs[34] - 0.) < epsilon);
-        CHECK(fabs(ouputs[35] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[25] - -0.701560760020114) < epsilon);
+        CHECK(std::abs(ouputs[26] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[27] - -0.5229125165837972) < epsilon);
+        CHECK(std::abs(ouputs[28] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[29] - -0.4841229182759271) < epsilon);
+        CHECK(std::abs(ouputs[30] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[31] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[32] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[33] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[34] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[35] - 0.) < epsilon);
         
-        CHECK(fabs(ouputs[49] - 0.6472598492877494) < epsilon);
-        CHECK(fabs(ouputs[50] - 0.) < epsilon);
-        CHECK(fabs(ouputs[51] - 0.4749588797990832) < epsilon);
-        CHECK(fabs(ouputs[52] - 0.) < epsilon);
-        CHECK(fabs(ouputs[53] - 0.42961647140211) < epsilon);
-        CHECK(fabs(ouputs[54] - 0.) < epsilon);
-        CHECK(fabs(ouputs[55] - 0.4133986423538423) < epsilon);
-        CHECK(fabs(ouputs[56] - 0.) < epsilon);
-        CHECK(fabs(ouputs[57] - 0.) < epsilon);
-        CHECK(fabs(ouputs[58] - 0.) < epsilon);
-        CHECK(fabs(ouputs[59] - 0.) < epsilon);
-        CHECK(fabs(ouputs[60] - 0.) < epsilon);
-        CHECK(fabs(ouputs[61] - 0.) < epsilon);
-        CHECK(fabs(ouputs[62] - 0.) < epsilon);
-        CHECK(fabs(ouputs[63] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[49] - 0.6472598492877494) < epsilon);
+        CHECK(std::abs(ouputs[50] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[51] - 0.4749588797990832) < epsilon);
+        CHECK(std::abs(ouputs[52] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[53] - 0.42961647140211) < epsilon);
+        CHECK(std::abs(ouputs[54] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[55] - 0.4133986423538423) < epsilon);
+        CHECK(std::abs(ouputs[56] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[57] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[58] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[59] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[60] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[61] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[62] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[63] - 0.) < epsilon);
     }
     
     SECTION("Azimuth 1pi Elevation 0")
@@ -330,53 +330,53 @@ TEST_CASE("Encoder 3D", "[Encoder] [3D]")
         encoder.setElevation(0.);
         encoder.process(&input, ouputs.data());
         
-        CHECK(fabs(ouputs[0] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[0] - 1.) < epsilon);
         
-        CHECK(fabs(ouputs[1] - 0.) < epsilon);
-        CHECK(fabs(ouputs[2] - 0.) < epsilon);
-        CHECK(fabs(ouputs[3] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[1] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[2] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[3] - 1.) < epsilon);
         
-        CHECK(fabs(ouputs[4] - 0.) < epsilon);
-        CHECK(fabs(ouputs[5] - 0.) < epsilon);
-        CHECK(fabs(ouputs[6] - -0.5) < epsilon);
-        CHECK(fabs(ouputs[7] - 0.) < epsilon);
-        CHECK(fabs(ouputs[8] - 0.8660254037844386) < epsilon);
+        CHECK(std::abs(ouputs[4] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[5] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[6] - -0.5) < epsilon);
+        CHECK(std::abs(ouputs[7] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[8] - 0.8660254037844386) < epsilon);
         
-        CHECK(fabs(ouputs[9] - 0.) < epsilon);
-        CHECK(fabs(ouputs[10] - 0.) < epsilon);
-        CHECK(fabs(ouputs[11] - 0.) < epsilon);
-        CHECK(fabs(ouputs[12] - 0.) < epsilon);
-        CHECK(fabs(ouputs[13] - -0.6123724356957945) < epsilon);
-        CHECK(fabs(ouputs[14] - 0.) < epsilon);
-        CHECK(fabs(ouputs[15] - 0.7905694150420948) < epsilon);
+        CHECK(std::abs(ouputs[9] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[10] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[11] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[12] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[13] - -0.6123724356957945) < epsilon);
+        CHECK(std::abs(ouputs[14] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[15] - 0.7905694150420948) < epsilon);
         
-        CHECK(fabs(ouputs[25] - 0.) < epsilon);
-        CHECK(fabs(ouputs[26] - 0.) < epsilon);
-        CHECK(fabs(ouputs[27] - 0.) < epsilon);
-        CHECK(fabs(ouputs[28] - 0.) < epsilon);
-        CHECK(fabs(ouputs[29] - 0.) < epsilon);
-        CHECK(fabs(ouputs[30] - 0.) < epsilon);
-        CHECK(fabs(ouputs[31] - 0.4841229182759271) < epsilon);
-        CHECK(fabs(ouputs[32] - 0.) < epsilon);
-        CHECK(fabs(ouputs[33] - -0.5229125165837972) < epsilon);
-        CHECK(fabs(ouputs[34] - 0.) < epsilon);
-        CHECK(fabs(ouputs[35] - 0.701560760020114) < epsilon);
+        CHECK(std::abs(ouputs[25] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[26] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[27] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[28] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[29] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[30] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[31] - 0.4841229182759271) < epsilon);
+        CHECK(std::abs(ouputs[32] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[33] - -0.5229125165837972) < epsilon);
+        CHECK(std::abs(ouputs[34] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[35] - 0.701560760020114) < epsilon);
         
-        CHECK(fabs(ouputs[49] - 0.) < epsilon);
-        CHECK(fabs(ouputs[50] - 0.) < epsilon);
-        CHECK(fabs(ouputs[51] - 0.) < epsilon);
-        CHECK(fabs(ouputs[52] - 0.) < epsilon);
-        CHECK(fabs(ouputs[53] - 0.) < epsilon);
-        CHECK(fabs(ouputs[54] - 0.) < epsilon);
-        CHECK(fabs(ouputs[55] - 0.) < epsilon);
-        CHECK(fabs(ouputs[56] - 0.) < epsilon);
-        CHECK(fabs(ouputs[57] - -0.4133986423538423) < epsilon);
-        CHECK(fabs(ouputs[58] - 0.) < epsilon);
-        CHECK(fabs(ouputs[59] - 0.42961647140211) < epsilon);
-        CHECK(fabs(ouputs[60] - 0.) < epsilon);
-        CHECK(fabs(ouputs[61] - -0.4749588797990832) < epsilon);
-        CHECK(fabs(ouputs[62] - 0.) < epsilon);
-        CHECK(fabs(ouputs[63] - 0.6472598492877494) < epsilon);
+        CHECK(std::abs(ouputs[49] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[50] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[51] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[52] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[53] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[54] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[55] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[56] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[57] - -0.4133986423538423) < epsilon);
+        CHECK(std::abs(ouputs[58] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[59] - 0.42961647140211) < epsilon);
+        CHECK(std::abs(ouputs[60] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[61] - -0.4749588797990832) < epsilon);
+        CHECK(std::abs(ouputs[62] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[63] - 0.6472598492877494) < epsilon);
     }
     
     SECTION("Azimuth 0 pi Elevation pi/2")
@@ -385,53 +385,53 @@ TEST_CASE("Encoder 3D", "[Encoder] [3D]")
         encoder.setElevation(HOA_PI2);
         encoder.process(&input, ouputs.data());
         
-        CHECK(fabs(ouputs[0] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[0] - 1.) < epsilon);
         
-        CHECK(fabs(ouputs[1] - 0.) < epsilon);
-        CHECK(fabs(ouputs[2] - 1.) < epsilon);
-        CHECK(fabs(ouputs[3] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[1] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[2] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[3] - 0.) < epsilon);
         
-        CHECK(fabs(ouputs[4] - 0.) < epsilon);
-        CHECK(fabs(ouputs[5] - 0.) < epsilon);
-        CHECK(fabs(ouputs[6] - 1.) < epsilon);
-        CHECK(fabs(ouputs[7] - 0.) < epsilon);
-        CHECK(fabs(ouputs[8] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[4] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[5] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[6] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[7] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[8] - 0.) < epsilon);
         
-        CHECK(fabs(ouputs[9] - 0.) < epsilon);
-        CHECK(fabs(ouputs[10] - 0.) < epsilon);
-        CHECK(fabs(ouputs[11] - 0.) < epsilon);
-        CHECK(fabs(ouputs[12] - 1.) < epsilon);
-        CHECK(fabs(ouputs[13] - 0.) < epsilon);
-        CHECK(fabs(ouputs[14] - 0.) < epsilon);
-        CHECK(fabs(ouputs[15] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[9] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[10] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[11] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[12] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[13] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[14] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[15] - 0.) < epsilon);
         
-        CHECK(fabs(ouputs[25] - 0.) < epsilon);
-        CHECK(fabs(ouputs[26] - 0.) < epsilon);
-        CHECK(fabs(ouputs[27] - 0.) < epsilon);
-        CHECK(fabs(ouputs[28] - 0.) < epsilon);
-        CHECK(fabs(ouputs[29] - 0.) < epsilon);
-        CHECK(fabs(ouputs[30] - 1.) < epsilon);
-        CHECK(fabs(ouputs[31] - 0.) < epsilon);
-        CHECK(fabs(ouputs[32] - 0.) < epsilon);
-        CHECK(fabs(ouputs[33] - 0.) < epsilon);
-        CHECK(fabs(ouputs[34] - 0.) < epsilon);
-        CHECK(fabs(ouputs[35] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[25] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[26] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[27] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[28] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[29] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[30] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[31] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[32] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[33] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[34] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[35] - 0.) < epsilon);
         
-        CHECK(fabs(ouputs[49] - 0.) < epsilon);
-        CHECK(fabs(ouputs[50] - 0.) < epsilon);
-        CHECK(fabs(ouputs[51] - 0.) < epsilon);
-        CHECK(fabs(ouputs[52] - 0.) < epsilon);
-        CHECK(fabs(ouputs[53] - 0.) < epsilon);
-        CHECK(fabs(ouputs[54] - 0.) < epsilon);
-        CHECK(fabs(ouputs[55] - 0.) < epsilon);
-        CHECK(fabs(ouputs[56] - 1.) < epsilon);
-        CHECK(fabs(ouputs[57] - 0.) < epsilon);
-        CHECK(fabs(ouputs[58] - 0.) < epsilon);
-        CHECK(fabs(ouputs[59] - 0.) < epsilon);
-        CHECK(fabs(ouputs[60] - 0.) < epsilon);
-        CHECK(fabs(ouputs[61] - 0.) < epsilon);
-        CHECK(fabs(ouputs[62] - 0.) < epsilon);
-        CHECK(fabs(ouputs[63] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[49] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[50] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[51] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[52] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[53] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[54] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[55] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[56] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[57] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[58] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[59] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[60] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[61] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[62] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[63] - 0.) < epsilon);
     }
     
     SECTION("Azimuth 0 pi Elevation pi/4")
@@ -439,67 +439,54 @@ TEST_CASE("Encoder 3D", "[Encoder] [3D]")
         encoder.setAzimuth(HOA_PI4);
         encoder.setElevation(HOA_PI4);
         encoder.process(&input, ouputs.data());
-        /*
-        std::cout.precision(16);
         
-        std::cout << "\n";
-        for(size_t  i = 0, k = 0; i <= 7; ++i)
-        {
-            for(size_t j = 0; j < (i * 2 + 1); ++j)
-            {
-                std::cout << "[" << k << ":"<< ouputs[k] << "] ";
-                k++;
-            }
-            std::cout << "\n";
-        }*/
+        CHECK(std::abs(ouputs[0] - 1.) < epsilon);
         
-        CHECK(fabs(ouputs[0] - 1.) < epsilon);
+        CHECK(std::abs(ouputs[1] - -0.5) < epsilon);
+        CHECK(std::abs(ouputs[2] - 0.7071067811865475) < epsilon);
+        CHECK(std::abs(ouputs[3] - -0.5) < epsilon);
         
-        CHECK(fabs(ouputs[1] - -0.5) < epsilon);
-        CHECK(fabs(ouputs[2] - 0.7071067811865475) < epsilon);
-        CHECK(fabs(ouputs[3] - -0.5) < epsilon);
+        CHECK(std::abs(ouputs[4] - 0.4330127018922194) < epsilon);
+        CHECK(std::abs(ouputs[5] - -0.6123724356957945) < epsilon);
+        CHECK(std::abs(ouputs[6] - 0.2499999999999999) < epsilon);
+        CHECK(std::abs(ouputs[7] - -0.6123724356957946) < epsilon);
+        CHECK(std::abs(ouputs[8] - 0.) < epsilon);
         
-        CHECK(fabs(ouputs[4] - 0.4330127018922194) < epsilon);
-        CHECK(fabs(ouputs[5] - -0.6123724356957945) < epsilon);
-        CHECK(fabs(ouputs[6] - 0.2499999999999999) < epsilon);
-        CHECK(fabs(ouputs[7] - -0.6123724356957946) < epsilon);
-        CHECK(fabs(ouputs[8] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[9] - -0.1976423537605238) < epsilon);
+        CHECK(std::abs(ouputs[10] - 0.6846531968814576) < epsilon);
+        CHECK(std::abs(ouputs[11] - -0.4592793267718457) < epsilon);
+        CHECK(std::abs(ouputs[12] - -0.176776695296637) < epsilon);
+        CHECK(std::abs(ouputs[13] - -0.4592793267718458) < epsilon);
+        CHECK(std::abs(ouputs[14] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[15] - 0.1976423537605237) < epsilon);
         
-        CHECK(fabs(ouputs[9] - -0.1976423537605238) < epsilon);
-        CHECK(fabs(ouputs[10] - 0.6846531968814576) < epsilon);
-        CHECK(fabs(ouputs[11] - -0.4592793267718457) < epsilon);
-        CHECK(fabs(ouputs[12] - -0.176776695296637) < epsilon);
-        CHECK(fabs(ouputs[13] - -0.4592793267718458) < epsilon);
-        CHECK(fabs(ouputs[14] - 0.) < epsilon);
-        CHECK(fabs(ouputs[15] - 0.1976423537605237) < epsilon);
+        CHECK(std::abs(ouputs[25] - 0.08769509500251425) < epsilon);
+        CHECK(std::abs(ouputs[26] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[27] - -0.4575484520108226) < epsilon);
+        CHECK(std::abs(ouputs[28] - 0.4528555233184198) < epsilon);
+        CHECK(std::abs(ouputs[29] - 0.1815460943534729) < epsilon);
+        CHECK(std::abs(ouputs[30] - -0.3756504775053533) < epsilon);
+        CHECK(std::abs(ouputs[31] - 0.1815460943534729) < epsilon);
+        CHECK(std::abs(ouputs[32] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[33] - 0.4575484520108223) < epsilon);
+        CHECK(std::abs(ouputs[34] - -0.3921843874378481) < epsilon);
+        CHECK(std::abs(ouputs[35] - 0.08769509500251432) < epsilon);
         
-        CHECK(fabs(ouputs[25] - 0.08769509500251425) < epsilon);
-        CHECK(fabs(ouputs[26] - 0.) < epsilon);
-        CHECK(fabs(ouputs[27] - -0.4575484520108226) < epsilon);
-        CHECK(fabs(ouputs[28] - 0.4528555233184198) < epsilon);
-        CHECK(fabs(ouputs[29] - 0.1815460943534729) < epsilon);
-        CHECK(fabs(ouputs[30] - -0.3756504775053533) < epsilon);
-        CHECK(fabs(ouputs[31] - 0.1815460943534729) < epsilon);
-        CHECK(fabs(ouputs[32] - 0.) < epsilon);
-        CHECK(fabs(ouputs[33] - 0.4575484520108223) < epsilon);
-        CHECK(fabs(ouputs[34] - -0.3921843874378481) < epsilon);
-        CHECK(fabs(ouputs[35] - 0.08769509500251432) < epsilon);
-        
-        CHECK(fabs(ouputs[49] - 0.04045374058048438) < epsilon);
-        CHECK(fabs(ouputs[50] - -0.2140610743565666) < epsilon);
-        CHECK(fabs(ouputs[51] - 0.3265342298618697) < epsilon);
-        CHECK(fabs(ouputs[52] - 0.) < epsilon);
-        CHECK(fabs(ouputs[53] - -0.2058578925468442) < epsilon);
-        CHECK(fabs(ouputs[54] - -0.3043116672431614) < epsilon);
-        CHECK(fabs(ouputs[55] - 0.3152164647948047) < epsilon);
-        CHECK(fabs(ouputs[56] - 0.1270582497444579) < epsilon);
-        CHECK(fabs(ouputs[57] - 0.3152164647948047) < epsilon);
-        CHECK(fabs(ouputs[58] - 0.) < epsilon);
-        CHECK(fabs(ouputs[59] - 0.2058578925468441) < epsilon);
-        CHECK(fabs(ouputs[60] - -0.5877316282087218) < epsilon);
-        CHECK(fabs(ouputs[61] - 0.3265342298618699) < epsilon);
-        CHECK(fabs(ouputs[62] - 0.) < epsilon);
-        CHECK(fabs(ouputs[63] - -0.04045374058048434) < epsilon);
+        CHECK(std::abs(ouputs[49] - 0.04045374058048438) < epsilon);
+        CHECK(std::abs(ouputs[50] - -0.2140610743565666) < epsilon);
+        CHECK(std::abs(ouputs[51] - 0.3265342298618697) < epsilon);
+        CHECK(std::abs(ouputs[52] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[53] - -0.2058578925468442) < epsilon);
+        CHECK(std::abs(ouputs[54] - -0.3043116672431614) < epsilon);
+        CHECK(std::abs(ouputs[55] - 0.3152164647948047) < epsilon);
+        CHECK(std::abs(ouputs[56] - 0.1270582497444579) < epsilon);
+        CHECK(std::abs(ouputs[57] - 0.3152164647948047) < epsilon);
+        CHECK(std::abs(ouputs[58] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[59] - 0.2058578925468441) < epsilon);
+        CHECK(std::abs(ouputs[60] - -0.5877316282087218) < epsilon);
+        CHECK(std::abs(ouputs[61] - 0.3265342298618699) < epsilon);
+        CHECK(std::abs(ouputs[62] - 0.) < epsilon);
+        CHECK(std::abs(ouputs[63] - -0.04045374058048434) < epsilon);
     }
 }
 
