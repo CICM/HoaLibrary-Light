@@ -33,19 +33,36 @@ namespace hoa
 
         //! @brief The constructor.
         //! @param order The order of decomposition.
-        Wider(size_t order) hoa_noexcept : ProcessorHarmonics<D, T>(order), m_widening(1.) {}
+        Wider(size_t order) : ProcessorHarmonics<D, T>(order)
+        {
+            m_coeffs = new T[order + 1];
+            setWidening(1.);
+        }
 
         //! @brief The destructor.
-        ~Wider() hoa_noexcept {}
+        ~Wider() {
+            delete [] m_coeffs;
+        }
 
         //! @brief This method set factor of widening.
         //! @param value The factor of widening.
-        inline void setWidening(T value) hoa_noexcept { m_widening = std::max(std::min(value, T(1)), T(0)); }
+        inline void setWidening(T value) hoa_noexcept {
+            m_widening = std::max(std::min(value, T(1)), T(0));
+            const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
+            const T      temp   = 1 - m_widening;
+            T* coeff            = m_coeffs;
+            
+            (*coeff++) = (T(order) * temp + T(1.));
+            for(size_t i = 1; i <= order; ++i)
+            {
+                (*coeff++) = std::pow(m_widening, T(i)) * (temp * T(order - i) + T(1.));
+            }
+        }
 
         //! @brief returns the the widening value.
 		inline T getWidening() const hoa_noexcept { return m_widening; }
 
-        //! @brief The method performs the optimization on the harmonics signal.
+        //! @brief The method performs the widening on the harmonics signal.
         //! @details The method can be used for in-place or not-in-place processing and sample
         //! by sample. The inputs array and outputs array contains the spherical harmonics
         //! samples thus the minimum size of the array must be the number of harmonics.
@@ -54,12 +71,12 @@ namespace hoa
 		void process(const T* inputs, T* outputs) hoa_noexcept hoa_final
         {
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
-            const T      temp   = 1 - m_widening;
-            (*outputs++) = (*inputs++) * (T(order) * temp + T(1.));
+            T* coeff     = m_coeffs;
+            (*outputs++) = (*inputs++) * (*coeff++);
             for(size_t i = 1; i <= order; ++i)
             {
                 const size_t nharmo = Harmonic<D, T>::getNumberOfHarmonicsInDegree(i);
-                const T      factor = std::pow(m_widening, T(i)) * (temp * T(order - i) + T(1.));
+                const T      factor = (*coeff++);
                 for(size_t j = 0; j < nharmo; ++j)
                 {
                     (*outputs++) = (*inputs++) * factor;
@@ -68,7 +85,8 @@ namespace hoa
         }
         
     private:
-        T m_widening;
+        T   m_widening;
+        T*  m_coeffs;
     };
 }
 

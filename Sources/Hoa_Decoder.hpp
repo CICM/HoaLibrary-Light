@@ -266,7 +266,7 @@ namespace hoa
          */
         void computeRendering(const size_t vectorsize = 64) hoa_override
         {
-            EncoderBasic<Hoa2d, T> encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
+            Encoder<Hoa2d, T> encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
             const T factor = 1. / (T)(Decoder<Hoa2d, T>::getDecompositionOrder() + 1.);
             for(size_t i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
@@ -328,7 +328,7 @@ namespace hoa
          */
         void computeRendering(const size_t vectorsize = 64)  hoa_override
         {
-            EncoderBasic<Hoa2d, T> encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
+            Encoder<Hoa2d, T> encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
             Signal<T>::clear(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
             T* vector_harmonics = Signal<T>::alloc(Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
@@ -717,7 +717,7 @@ namespace hoa
          */
         void computeRendering(const size_t vectorsize = 64)  hoa_override
         {
-            EncoderBasic<Hoa3d, T> encoder(Decoder<Hoa3d, T>::getDecompositionOrder());
+            Encoder<Hoa3d, T> encoder(Decoder<Hoa3d, T>::getDecompositionOrder());
             const T factor = 1. / (T)(Decoder<Hoa3d, T>::getNumberOfPlanewaves());
             for(size_t i = 0; i < Decoder<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {

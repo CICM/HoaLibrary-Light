@@ -20,7 +20,7 @@ namespace hoa
     //! The ambisonic recomposer.
     /** The recomposer should be in the planewaves domain to come back the the circular harmonics domain. The recomposition is similar to the several encoding except that we consider planewaves (or virtual microphones) instead of sources. The number of channels (or planewaves) must be a least the number of harmonics, the first angle is 0 radian and the angular distances between the channels are equals.
      */
-    template <Dimension D, typename T> class Recomposer : public EncoderBasic<D, T>, public ProcessorPlanewaves<D, T>
+    template <Dimension D, typename T> class Recomposer : public Encoder<D, T>, public ProcessorPlanewaves<D, T>
     {
         enum Recomposition
         {
@@ -36,7 +36,7 @@ namespace hoa
          @param     numberOfPlanewaves      The number of channels.
          */
         Recomposer(size_t order, size_t numberOfPlanewaves) hoa_noexcept :
-        EncoderBasic<D, T>(order),
+        Encoder<D, T>(order),
         ProcessorPlanewaves<D, T>(numberOfPlanewaves) {}
         
         //! The destructor.
@@ -180,7 +180,7 @@ namespace hoa
     //! The ambisonic recomposer.
     /** The recomposer should be in the planewaves domain to come back the the circular harmonics domain. The recomposition is similar to the several encoding except that we consider planewaves (or virtual microphones) instead of sources. The number of channels (or planewaves) must be a least the number of harmonics, the first angle is 0 radian and the angular distances between the channels are equals.
      */
-    template <typename T> class Recomposer<Hoa2d, T> : public EncoderBasic<Hoa2d, T>, public ProcessorPlanewaves<Hoa2d, T>
+    template <typename T> class Recomposer<Hoa2d, T> : public Encoder<Hoa2d, T>, public ProcessorPlanewaves<Hoa2d, T>
     {
     public:
         enum Recomposition
@@ -197,7 +197,7 @@ namespace hoa
          @param     numberOfPlanewaves      The number of channels.
          */
         Recomposer(size_t order, size_t numberOfPlanewaves) hoa_noexcept :
-        EncoderBasic<Hoa2d, T>(order),
+        Encoder<Hoa2d, T>(order),
         ProcessorPlanewaves<Hoa2d, T>(numberOfPlanewaves) {}
         
         //! The destructor.
@@ -241,8 +241,8 @@ namespace hoa
             m_matrix    = Signal<T>::alloc(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves() * Encoder<Hoa2d, T>::getNumberOfHarmonics());
             for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
-                EncoderBasic<Hoa2d, T>::setAzimuth(ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(i));
-                EncoderBasic<Hoa2d, T>::process(&factor, vector);
+                Encoder<Hoa2d, T>::setAzimuth(ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(i));
+                Encoder<Hoa2d, T>::process(&factor, vector);
                 for(size_t j = 0; j < Encoder<Hoa2d, T>::getNumberOfHarmonics(); j++)
                 {
                     m_matrix[j * ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves() + i] = vector[j];
@@ -274,7 +274,7 @@ namespace hoa
     template <typename T> class RecomposerFisheye<Hoa2d, T> : public Recomposer<Hoa2d, T>
     {
     private:
-        std::vector< EncoderBasic<Hoa2d, T>*>m_encoders;
+        std::vector< Encoder<Hoa2d, T>*>m_encoders;
     public:
         //! The decoder constructor.
         /**	The decoder constructor allocates and initialize the base classes.
@@ -285,7 +285,7 @@ namespace hoa
         {
             for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
-                m_encoders.push_back(new EncoderBasic<Hoa2d, T>(order));
+                m_encoders.push_back(new Encoder<Hoa2d, T>(order));
             }
         }
 
@@ -333,7 +333,8 @@ namespace hoa
             m_encoders[0]->process(inputs, outputs);
             for(size_t i = 1; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
-                m_encoders[i]->processAdd(++inputs, outputs);
+                int todo;
+                //m_encoders[i]->processAdd(++inputs, outputs);
             }
         }
     };
@@ -341,7 +342,7 @@ namespace hoa
     template <typename T> class RecomposerFree<Hoa2d, T> : public Recomposer<Hoa2d, T>
     {
     private:
-        std::vector< EncoderDC<Hoa2d, T>* >  m_encoders;
+        std::vector< Encoder<Hoa2d, T>* >  m_encoders;
     public:
         //! The decoder constructor.
         /**	The decoder constructor allocates and initialize the base classes.
@@ -352,7 +353,7 @@ namespace hoa
         {
             for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
-                m_encoders.push_back(new EncoderDC<Hoa2d, T>(order));
+                m_encoders.push_back(new Encoder<Hoa2d, T>(order));
                 m_encoders[i]->setAzimuth(i * (HOA_2PI / numberOfPlanewaves));
             }
         }
@@ -417,7 +418,8 @@ namespace hoa
             m_encoders[0]->process(inputs, outputs);
             for(size_t i = 1; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
-                m_encoders[i]->processAdd(++inputs, outputs);
+                int todo;
+                //m_encoders[i]->processAdd(++inputs, outputs);
             }
         }
     };
