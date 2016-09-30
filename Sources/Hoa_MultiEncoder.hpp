@@ -13,13 +13,11 @@
 #define DEF_HOA_MULTIENCODER_LIGHT
 
 #include "Hoa_Encoder.hpp"
-#include <iostream>
 
 namespace hoa
 {
-    //! The multi encoder class generates the harmonics for several signals according to an azimuth, an elevation and a radius for each one.
-    /** The multi encoder should be used to encode several signals in the harmonics domain depending on an order of decomposition. It allows to control the azimuth, the elevation and the radius of each signal. The class uses a set of dc encoders.
-     */
+    //! @brief The class generates manages a set of encoders.
+    //! @brief The class is just a wrapper to manage a set encoders that can be muted.
     template <Dimension D, typename T> class MultiEncoder : public ProcessorHarmonics<D, T>
     {
     public:

@@ -1,9 +1,6 @@
 var searchData=
 [
   ['elevation',['elevation',['../classhoa_1_1_math.html#af20cd74c119dd8ed2da0a159c70ac148',1,'hoa::Math']]],
-  ['encoder',['Encoder',['../classhoa_1_1_encoder.html#aaba0ae5648112218c4df182994be83bb',1,'hoa::Encoder::Encoder()'],['../classhoa_1_1_encoder_3_01_hoa2d_00_01_t_01_4.html#aaba0ae5648112218c4df182994be83bb',1,'hoa::Encoder&lt; Hoa2d, T &gt;::Encoder()']]],
-  ['encoderbasic',['EncoderBasic',['../classhoa_1_1_encoder_basic.html#a228f6d3da5fba2592e255f9b6fc030ea',1,'hoa::EncoderBasic::EncoderBasic()'],['../classhoa_1_1_encoder_basic_3_01_hoa2d_00_01_t_01_4.html#a228f6d3da5fba2592e255f9b6fc030ea',1,'hoa::EncoderBasic&lt; Hoa2d, T &gt;::EncoderBasic()'],['../classhoa_1_1_encoder_basic_3_01_hoa3d_00_01_t_01_4.html#a228f6d3da5fba2592e255f9b6fc030ea',1,'hoa::EncoderBasic&lt; Hoa3d, T &gt;::EncoderBasic()']]],
-  ['encoderdc',['EncoderDC',['../classhoa_1_1_encoder_d_c.html#a0ed770399914a93e60ed853848bb7db3',1,'hoa::EncoderDC::EncoderDC()'],['../classhoa_1_1_encoder_d_c_3_01_hoa2d_00_01_t_01_4.html#a0ed770399914a93e60ed853848bb7db3',1,'hoa::EncoderDC&lt; Hoa2d, T &gt;::EncoderDC()'],['../classhoa_1_1_encoder_d_c_3_01_hoa3d_00_01_t_01_4.html#a0ed770399914a93e60ed853848bb7db3',1,'hoa::EncoderDC&lt; Hoa3d, T &gt;::EncoderDC()']]],
-  ['encodermulti',['EncoderMulti',['../classhoa_1_1_encoder_multi.html#a74f3637d13de19214966cd67ae1dfaa6',1,'hoa::EncoderMulti::EncoderMulti()'],['../classhoa_1_1_encoder_multi_3_01_hoa2d_00_01_t_01_4.html#a74f3637d13de19214966cd67ae1dfaa6',1,'hoa::EncoderMulti&lt; Hoa2d, T &gt;::EncoderMulti()'],['../classhoa_1_1_encoder_multi_3_01_hoa3d_00_01_t_01_4.html#a74f3637d13de19214966cd67ae1dfaa6',1,'hoa::EncoderMulti&lt; Hoa3d, T &gt;::EncoderMulti()']]],
+  ['encoder',['Encoder',['../classhoa_1_1_encoder.html#a42b547a98e69ed5b0c071540d478ad14',1,'hoa::Encoder']]],
   ['exchanger',['Exchanger',['../classhoa_1_1_exchanger.html#a099c9f280a55ccffb65140f81f2b8620',1,'hoa::Exchanger']]]
 ];
