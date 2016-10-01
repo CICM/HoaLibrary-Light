@@ -1,22 +1,22 @@
 cmake_minimum_required(VERSION 2.8)
 
+project(Hoa)
+
 set(CMAKE_MACOSX_RPATH On)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
-
-project(Hoa)
+enable_testing()
 option(GCOV_SUPPORT "Build for gcov" Off)
 
-file(GLOB HOASOURCES ${PROJECT_SOURCE_DIR}/Sources/*.cpp ${PROJECT_SOURCE_DIR}/Sources/*.hpp)
+file(GLOB HOASOURCES ${PROJECT_SOURCE_DIR}/Sources/*.hpp)
 source_group(Hoa FILES ${HOASOURCES})
 include_directories(${PROJECT_SOURCE_DIR}/Sources)
 
-file(GLOB TESTSOURCES ${PROJECT_SOURCE_DIR}/Tests/Test.cpp)
+file(GLOB TESTSOURCES ${PROJECT_SOURCE_DIR}/Tests/*.cpp)
 source_group(Tests FILES ${TESTSOURCES})
 include_directories(${PROJECT_SOURCE_DIR}/Tests)
 
 add_executable(hoatest ${HOASOURCES} ${TESTSOURCES})
-set_target_properties(hoatest PROPERTIES OUTPUT_NAME test)
-set_target_properties(hoatest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
+add_test(hoatestall hoatest)
 
 if(${GCOV_SUPPORT} STREQUAL "On")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
