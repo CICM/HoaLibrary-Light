@@ -210,7 +210,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     }
 }
 
-
+/*
 CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
 {
     Encoder<Hoa3d, hoa_float_t> encoder(7);
@@ -493,4 +493,5 @@ CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
         CATCH_CHECK(std::abs(ouputs[63] - -0.04045374058048434) < epsilon);
     }
 }
+ */
 
