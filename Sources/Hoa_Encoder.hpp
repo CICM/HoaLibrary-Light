@@ -72,6 +72,7 @@ namespace hoa
         //! @param order The order of decomposition.
         Encoder(size_t order) : ProcessorHarmonics<D, T>(order)
         {
+            /*
             order = order >= 1 ? order : 1;
             size_t const nharmo = Harmonic<Hoa3d, T>::getNumberOfHarmonics(order);
             m_radius_coeffs         = new T[ProcessorHarmonics<D, T>::getDecompositionOrder() + 1];
@@ -86,15 +87,18 @@ namespace hoa
             {
                 m_normalization_coeffs[i] = ProcessorHarmonics<D, T>::getHarmonicSemiNormalization(i);
             }
+             */
         }
 
         //! The destructor.
         ~Encoder()
         {
+            /*
             delete [] m_radius_coeffs;
             delete [] m_azimuth_coeffs;
             delete [] m_elevation_coeffs;
             delete [] m_normalization_coeffs;
+             */
         }
         
         
