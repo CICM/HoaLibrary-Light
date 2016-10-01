@@ -4,6 +4,7 @@ project(Hoa)
 
 set(CMAKE_MACOSX_RPATH On)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
+set(CMAKE_SUPPRESS_REGENERATION true)
 enable_testing()
 option(GCOV_SUPPORT "Build for gcov" Off)
 
