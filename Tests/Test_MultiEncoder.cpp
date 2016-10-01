@@ -4,13 +4,16 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#include <Hoa.hpp>
-#include "catch.hpp"
 #include <cfloat>
+#include <cmath>
 
+#include <Hoa.hpp>
 using namespace hoa;
 
-TEST_CASE("MultiEncoder 2D", "[Encoder] [2D]")
+#define CATCH_CONFIG_PREFIX_ALL
+#include "catch.hpp"
+
+CATCH_TEST_CASE("MultiEncoder 2D", "[Encoder] [2D]")
 {
     MultiEncoder<Hoa2d, float> encoder(7, 3);
     const float epsilon = FLT_EPSILON;
@@ -32,26 +35,26 @@ TEST_CASE("MultiEncoder 2D", "[Encoder] [2D]")
     encoder.setElevation(2, 2.);
     encoder.setMute(2, false);
     
-    CHECK(encoder.getRadius(0) == 0.);
-    CHECK(encoder.getAzimuth(0) == 0.);
-    CHECK(encoder.getElevation(0) == 0.);
-    CHECK(encoder.getMute(0) == false);
+    CATCH_CHECK(encoder.getRadius(0) == 0.);
+    CATCH_CHECK(encoder.getAzimuth(0) == 0.);
+    CATCH_CHECK(encoder.getElevation(0) == 0.);
+    CATCH_CHECK(encoder.getMute(0) == false);
     
-    CHECK(encoder.getRadius(1) == 1.);
-    CHECK(encoder.getAzimuth(1) == 1.);
-    CHECK(encoder.getElevation(1) == 1.);
-    CHECK(encoder.getMute(1) == false);
+    CATCH_CHECK(encoder.getRadius(1) == 1.);
+    CATCH_CHECK(encoder.getAzimuth(1) == 1.);
+    CATCH_CHECK(encoder.getElevation(1) == 1.);
+    CATCH_CHECK(encoder.getMute(1) == false);
     
-    CHECK(encoder.getRadius(2) == 2.);
-    CHECK(encoder.getAzimuth(2) == 2.);
-    CHECK(encoder.getElevation(2) == 2.);
-    CHECK(encoder.getMute(2) == false);
+    CATCH_CHECK(encoder.getRadius(2) == 2.);
+    CATCH_CHECK(encoder.getAzimuth(2) == 2.);
+    CATCH_CHECK(encoder.getElevation(2) == 2.);
+    CATCH_CHECK(encoder.getMute(2) == false);
     
     encoder.process(inputs.data(), ouputs.data());
 }
 
 
-TEST_CASE("MultiEncoder 3D", "[Encoder] [3D]")
+CATCH_TEST_CASE("MultiEncoder 3D", "[Encoder] [3D]")
 {
     MultiEncoder<Hoa3d, float> encoder(7, 3);
     const float epsilon = FLT_EPSILON;
@@ -73,20 +76,20 @@ TEST_CASE("MultiEncoder 3D", "[Encoder] [3D]")
     encoder.setElevation(2, 2.);
     encoder.setMute(2, false);
     
-    CHECK(encoder.getRadius(0) == 0.);
-    CHECK(encoder.getAzimuth(0) == 0.);
-    CHECK(encoder.getElevation(0) == 0.);
-    CHECK(encoder.getMute(0) == false);
+    CATCH_CHECK(encoder.getRadius(0) == 0.);
+    CATCH_CHECK(encoder.getAzimuth(0) == 0.);
+    CATCH_CHECK(encoder.getElevation(0) == 0.);
+    CATCH_CHECK(encoder.getMute(0) == false);
     
-    CHECK(encoder.getRadius(1) == 1.);
-    CHECK(encoder.getAzimuth(1) == 1.);
-    CHECK(encoder.getElevation(1) == 1.);
-    CHECK(encoder.getMute(1) == false);
+    CATCH_CHECK(encoder.getRadius(1) == 1.);
+    CATCH_CHECK(encoder.getAzimuth(1) == 1.);
+    CATCH_CHECK(encoder.getElevation(1) == 1.);
+    CATCH_CHECK(encoder.getMute(1) == false);
     
-    CHECK(encoder.getRadius(2) == 2.);
-    CHECK(encoder.getAzimuth(2) == 2.);
-    CHECK(encoder.getElevation(2) == 2.);
-    CHECK(encoder.getMute(2) == false);
+    CATCH_CHECK(encoder.getRadius(2) == 2.);
+    CATCH_CHECK(encoder.getAzimuth(2) == 2.);
+    CATCH_CHECK(encoder.getElevation(2) == 2.);
+    CATCH_CHECK(encoder.getMute(2) == false);
     
     encoder.process(inputs.data(), ouputs.data());
     

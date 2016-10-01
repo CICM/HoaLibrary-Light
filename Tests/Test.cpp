@@ -12,10 +12,13 @@
 using namespace hoa;
 
 #define CATCH_CONFIG_RUNNER
+#define CATCH_CONFIG_PREFIX_ALL
 #include "catch.hpp"
 
 int main(int argc, char* const argv[])
 {
     std::cout << "HOA Library Testing...\n";
-    return Catch::Session().run(argc, argv);
+    int result = Catch::Session().run(argc, argv);
+    std::cout << "...End.\n";
+    return result;
 }
