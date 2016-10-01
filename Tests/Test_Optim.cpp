@@ -24,7 +24,7 @@ CATCH_TEST_CASE("Optim 2D", "[Optim] [2D]")
     CATCH_SECTION("Basic")
     {
         optim.setMode(Optim<Hoa2d, hoa_float_t>::Basic);
-        std::fill(inputs.begin(), inputs.end(), 1.);
+        std::fill(inputs.begin(), inputs.end(), hoa_float_t(1.));
         optim.process(inputs.data(), ouputs.data());
         
         CATCH_CHECK(ouputs[0] == inputs[0]);
@@ -47,7 +47,7 @@ CATCH_TEST_CASE("Optim 2D", "[Optim] [2D]")
     CATCH_SECTION("MaxRe")
     {
         optim.setMode(Optim<Hoa2d, hoa_float_t>::MaxRe);
-        std::fill(inputs.begin(), inputs.end(), 1.);
+        std::fill(inputs.begin(), inputs.end(), hoa_float_t(1.));
         optim.process(inputs.data(), ouputs.data());
         
         CATCH_CHECK(std::abs(ouputs[0]  - inputs[0]) < epsilon);
@@ -70,7 +70,7 @@ CATCH_TEST_CASE("Optim 2D", "[Optim] [2D]")
     CATCH_SECTION("InPhase")
     {
         optim.setMode(Optim<Hoa2d, hoa_float_t>::InPhase);
-        std::fill(inputs.begin(), inputs.end(), 1.);
+        std::fill(inputs.begin(), inputs.end(), hoa_float_t(1.));
         optim.process(inputs.data(), ouputs.data());
         
         CATCH_CHECK(std::abs(ouputs[0]  - inputs[0]) < epsilon);
@@ -101,7 +101,7 @@ CATCH_TEST_CASE("Optim 3D", "[Optim] [3D]")
     CATCH_SECTION("Basic")
     {
         optim.setMode(Optim<Hoa3d, float>::Basic);
-        std::fill(inputs.begin(), inputs.end(), 1.);
+        std::fill(inputs.begin(), inputs.end(), hoa_float_t(1.));
         optim.process(inputs.data(), ouputs.data());
         
         CATCH_CHECK(ouputs[0] == inputs[0]);
@@ -128,7 +128,7 @@ CATCH_TEST_CASE("Optim 3D", "[Optim] [3D]")
     CATCH_SECTION("MaxRe")
     {
         optim.setMode(Optim<Hoa3d, hoa_float_t>::MaxRe);
-        std::fill(inputs.begin(), inputs.end(), 1.);
+        std::fill(inputs.begin(), inputs.end(), hoa_float_t(1.));
         optim.process(inputs.data(), ouputs.data());
         
         CATCH_CHECK(ouputs[0] == inputs[0]);
@@ -154,7 +154,7 @@ CATCH_TEST_CASE("Optim 3D", "[Optim] [3D]")
     CATCH_SECTION("InPhase")
     {
         optim.setMode(Optim<Hoa3d, hoa_float_t>::InPhase);
-        std::fill(inputs.begin(), inputs.end(), 1.);
+        std::fill(inputs.begin(), inputs.end(), hoa_float_t(1.));
         optim.process(inputs.data(), ouputs.data());
         
         CATCH_CHECK(ouputs[0] == inputs[0]);
