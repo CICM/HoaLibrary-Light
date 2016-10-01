@@ -24,14 +24,14 @@ namespace hoa
 
         //! @brief The map constructor.
         //! @param order            The order.
-        //! @param numberOfSources  The number of sources.
-        MultiEncoder(size_t order, size_t numberOfSources) : ProcessorHarmonics<D, T>(order), m_encoders(numberOfSources)
+        //! @param nsources  The number of sources.
+        MultiEncoder(size_t order, size_t nsources) : ProcessorHarmonics<D, T>(order), m_encoders(nsources)
         {
             m_temp = new T[ProcessorHarmonics<D, T>::getNumberOfHarmonics()];
-            for(size_t i = 0; i < numberOfSources; ++i)
+            for(size_t i = 0; i < nsources; ++i)
             {
                 m_encoders[i].encoder = new Encoder<D, T>(order);
-                m_encoders[i].encoder->setAzimuth(T(i) * (T(HOA_2PI) / T(numberOfSources)));
+                m_encoders[i].encoder->setAzimuth(T(i) * (T(HOA_2PI) / T(nsources)));
             }
         }
 
