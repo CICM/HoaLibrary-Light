@@ -22,7 +22,6 @@
 #include "Hoa_Vector.hpp"
 #include "Hoa_Meter.hpp"
 #include "Hoa_Projector.hpp"
-#include "Hoa_Recomposer.hpp"
 #include "Hoa_Scope.hpp"
 #include "Hoa_Wider.hpp"
 #include "Hoa_Source.hpp"

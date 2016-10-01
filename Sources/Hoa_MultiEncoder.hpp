@@ -31,6 +31,7 @@ namespace hoa
             for(size_t i = 0; i < numberOfSources; ++i)
             {
                 m_encoders[i].encoder = new Encoder<D, T>(order);
+                m_encoders[i].encoder->setAzimuth(T(i) * (T(HOA_2PI) / T(numberOfSources)));
             }
         }
 
@@ -52,6 +53,13 @@ namespace hoa
         inline void setRadius(size_t index, T radius) hoa_noexcept {
             m_encoders[index].setRadius(radius);
         }
+        
+        //! @brief Sets the widening factor of a source (wrapper for radius).
+        //! @param     index	The index of the source.
+        //! @param     widening	The widening value.
+        inline void setWidening(size_t index, T widening) hoa_noexcept {
+            m_encoders[index].setRadius((widening > T(1.)) ? T(1.) : ((widening < T(0.)) ? T(0.) : widening));
+        }
 
         //! @brief Sets the azimuth of a source.
         //! @param     index	The index of the source.
@@ -67,12 +75,31 @@ namespace hoa
             m_encoders[index].setElevation(elevation);
         }
 
-
         //! @brief Mutes or unmutes a source.
         //! @param     index	The index of the source.
         //! @param     muted	The mute status.
         inline void setMute(size_t index, const bool muted) {
             m_encoders[index].setMute(muted);
+        }
+        
+        //! @brief Applies a fisheye effect on the sources positions.
+        //! @details The fishEye value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound
+        //! field all the sources are equally dispatched around the equator and at \f$1\f$,
+        //! the the sources are are concentrer in front of the audience.
+        inline void setFisheye(T fisheye) hoa_noexcept hoa_override
+        {
+            const size_t nsources = getNumberOfSources();
+            const T factor = 1. - ((fisheye > T(1.)) ? T(1.) : ((fisheye < T(0.)) ? T(0.) : fisheye));
+            for(size_t i = 0; i < nsources; ++i)
+            {
+                const T azimuth = (T)i / nsources * T(HOA_2PI);
+                if(azimuth < T(HOA_PI)) {
+                    m_encoders[i]->setAzimuth(azimuth * factor);
+                }
+                else {
+                    m_encoders[i]->setAzimuth(T(HOA_2PI) - ((T(HOA_2PI) - azimuth) * factor));
+                }
+            }
         }
 
         //! @brief Returns the radius of a source.
