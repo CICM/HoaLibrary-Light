@@ -97,9 +97,8 @@ namespace hoa
         {
             delete [] m_radius_coeffs;
             delete [] m_azimuth_coeffs;
-            /*
-            
             delete [] m_elevation_coeffs;
+            /*
             delete [] m_normalization_coeffs;
              */
         }
