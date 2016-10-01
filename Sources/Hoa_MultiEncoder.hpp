@@ -58,7 +58,7 @@ namespace hoa
         //! @param     index	The index of the source.
         //! @param     widening	The widening value.
         inline void setWidening(size_t index, T widening) hoa_noexcept {
-            m_encoders[index].setRadius((widening > T(1.)) ? T(1.) : ((widening < T(0.)) ? T(0.) : widening));
+            m_encoders[index].setRadius((widening > T(1.)) ? T(1.) : widening);
         }
 
         //! @brief Sets the azimuth of a source.
@@ -94,10 +94,10 @@ namespace hoa
             {
                 const T azimuth = (T)i / nsources * T(HOA_2PI);
                 if(azimuth < T(HOA_PI)) {
-                    m_encoders[i]->setAzimuth(azimuth * factor);
+                    m_encoders[i].setAzimuth(azimuth * factor);
                 }
                 else {
-                    m_encoders[i]->setAzimuth(T(HOA_2PI) - ((T(HOA_2PI) - azimuth) * factor));
+                    m_encoders[i].setAzimuth(T(HOA_2PI) - ((T(HOA_2PI) - azimuth) * factor));
                 }
             }
         }
@@ -105,6 +105,11 @@ namespace hoa
         //! @brief Returns the radius of a source.
         inline T getRadius(size_t index) const {
             return m_encoders[index].getRadius();
+        }
+        
+        //! @brief Returns the radius of a source.
+        inline T getWidening(size_t index) const {
+            return m_encoders[index].getRadius() > T(1.) ? T(1.) : m_encoders[index].getRadius();
         }
         
         //! @brief Returns the azimuth of a source.
