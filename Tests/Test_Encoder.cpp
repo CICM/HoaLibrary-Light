@@ -25,7 +25,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     
     CATCH_SECTION("Azimuth 0")
     {
-        encoder.setAzimuth(0.);
+        encoder.setAzimuth(hoa_float_t(0.));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(ouputs[0] == 1.);
@@ -47,7 +47,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     
     CATCH_SECTION("Azimuth 0.25pi")
     {
-        encoder.setAzimuth(0.25*HOA_PI);
+        encoder.setAzimuth(hoa_float_t(0.25*HOA_PI));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(std::abs(ouputs[0]  - hoa_float_t(1.0000000000000000)) < epsilon);
@@ -69,7 +69,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     
     CATCH_SECTION("Azimuth 0.5pi")
     {
-        encoder.setAzimuth(0.5*HOA_PI);
+        encoder.setAzimuth(hoa_float_t(0.5*HOA_PI));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(std::abs(ouputs[0]  - hoa_float_t(1.0000000000000000)) < epsilon);
@@ -91,7 +91,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     
     CATCH_SECTION("Azimuth 0.75pi")
     {
-        encoder.setAzimuth(0.75*HOA_PI);
+        encoder.setAzimuth(hoa_float_t(0.75*HOA_PI));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(std::abs(ouputs[0]  - hoa_float_t(1.0000000000000000)) < epsilon);
@@ -113,8 +113,8 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     
     CATCH_SECTION("Radius 1")
     {
-        encoder.setAzimuth(0.);
-        encoder.setRadius(1.);
+        encoder.setAzimuth(hoa_float_t(0.));
+        encoder.setRadius(hoa_float_t(1.));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(ouputs[0] == 1.);
@@ -136,8 +136,8 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     
     CATCH_SECTION("Radius 0")
     {
-        encoder.setAzimuth(0.);
-        encoder.setRadius(0.);
+        encoder.setAzimuth(hoa_float_t(0.));
+        encoder.setRadius(hoa_float_t(0.));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(ouputs[0] == 8);
@@ -159,8 +159,8 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     
     CATCH_SECTION("Radius 0.25")
     {
-        encoder.setAzimuth(0.25);
-        encoder.setRadius(0.);
+        encoder.setAzimuth(hoa_float_t(0.25));
+        encoder.setRadius(hoa_float_t(0.));
         encoder.process(&input, ouputs.data());
         
         hoa_float_t sum_of_elems = 0.;
@@ -172,8 +172,8 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     
     CATCH_SECTION("Radius 0.5")
     {
-        encoder.setAzimuth(0.);
-        encoder.setRadius(0.5);
+        encoder.setAzimuth(hoa_float_t(0.));
+        encoder.setRadius(hoa_float_t(0.5));
         encoder.process(&input, ouputs.data());
         
         hoa_float_t sum_of_elems = 0.;
@@ -185,8 +185,8 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     
     CATCH_SECTION("Radius 0.75")
     {
-        encoder.setAzimuth(0.);
-        encoder.setRadius(0.75);
+        encoder.setAzimuth(hoa_float_t(0.));
+        encoder.setRadius(hoa_float_t(0.75));
         encoder.process(&input, ouputs.data());
         
         hoa_float_t sum_of_elems = 0.;
@@ -198,8 +198,8 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     
     CATCH_SECTION("Radius 2.")
     {
-        encoder.setAzimuth(0.);
-        encoder.setRadius(2.);
+        encoder.setAzimuth(hoa_float_t(0.));
+        encoder.setRadius(hoa_float_t(2.));
         encoder.process(&input, ouputs.data());
         
         hoa_float_t sum_of_elems = 0.;
@@ -219,8 +219,8 @@ CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
 
     CATCH_SECTION("Azimuth 0 Elevation 0")
     {
-        encoder.setAzimuth(0.);
-        encoder.setElevation(0.);
+        encoder.setAzimuth(hoa_float_t(0.));
+        encoder.setElevation(hoa_float_t(0.));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(std::abs(ouputs[0] - 1.) < epsilon);
@@ -274,8 +274,8 @@ CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
     
     CATCH_SECTION("Azimuth 0.5pi Elevation 0")
     {
-        encoder.setAzimuth(HOA_PI2);
-        encoder.setElevation(0.);
+        encoder.setAzimuth(hoa_float_t(HOA_PI2));
+        encoder.setElevation(hoa_float_t(0.));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(std::abs(ouputs[0] - 1.) < epsilon);
@@ -329,8 +329,8 @@ CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
     
     CATCH_SECTION("Azimuth 1pi Elevation 0")
     {
-        encoder.setAzimuth(HOA_PI);
-        encoder.setElevation(0.);
+        encoder.setAzimuth(hoa_float_t(HOA_PI));
+        encoder.setElevation(hoa_float_t(0.));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(std::abs(ouputs[0] - 1.) < epsilon);
@@ -384,8 +384,8 @@ CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
     
     CATCH_SECTION("Azimuth 0 pi Elevation pi/2")
     {
-        encoder.setAzimuth(0);
-        encoder.setElevation(HOA_PI2);
+        encoder.setAzimuth(hoa_float_t(0));
+        encoder.setElevation(hoa_float_t(HOA_PI2));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(std::abs(ouputs[0] - 1.) < epsilon);
@@ -439,8 +439,8 @@ CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
     
     CATCH_SECTION("Azimuth 0 pi Elevation pi/4")
     {
-        encoder.setAzimuth(HOA_PI4);
-        encoder.setElevation(HOA_PI4);
+        encoder.setAzimuth(hoa_float_t(HOA_PI4));
+        encoder.setElevation(hoa_float_t(HOA_PI4));
         encoder.process(&input, ouputs.data());
         
         CATCH_CHECK(std::abs(ouputs[0] - 1.) < epsilon);
