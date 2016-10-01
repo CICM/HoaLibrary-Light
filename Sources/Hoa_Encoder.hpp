@@ -81,7 +81,6 @@ namespace hoa
             m_elevation_coeffs      = new T[nharmo / 2 + (order + 1)];
             m_normalization_coeffs  = new T[nharmo];
             
-            setAzimuth(0.);
             setElevation(0.);
             
             for(size_t i = 0; i < nharmo; ++i)
@@ -90,15 +89,16 @@ namespace hoa
             }
              */
             setRadius(1.);
+            setAzimuth(0.);
         }
 
         //! The destructor.
         ~Encoder()
         {
-            
             delete [] m_radius_coeffs;
-            /*
             delete [] m_azimuth_coeffs;
+            /*
+            
             delete [] m_elevation_coeffs;
             delete [] m_normalization_coeffs;
              */
