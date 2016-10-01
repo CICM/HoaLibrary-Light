@@ -112,7 +112,12 @@ namespace hoa
         //! @param elevation The new elevation.
         inline void setCoordinates(T radius, T azimuth, T elevation) hoa_noexcept {
             setRadius(radius);
-            elevation = Math<T>::wrap_pi(elevation);
+            while(elevation < -HOA_PI) {
+                elevation += (T)HOA_2PI;
+            }
+            while(elevation >= HOA_PI) {
+                elevation -= (T)HOA_2PI;
+            }
             if(elevation >= -HOA_PI2 && elevation <= HOA_PI2)
             {
                 setAzimuth(azimuth);

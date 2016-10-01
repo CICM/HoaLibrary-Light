@@ -350,7 +350,14 @@ namespace hoa
                 std::vector<Planewave<Hoa2d, T> > channels;
                 for(size_t i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
-                    channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(Decoder<Hoa2d, T>::getPlanewaveAzimuth(i)), 0.));
+                    T nazimtuh = Decoder<Hoa2d, T>::getPlanewaveAzimuth(i);
+                    while(nazimtuh < T(0.)) {
+                        nazimtuh += T(HOA_2PI);
+                    }
+                    while(nazimtuh >= T(HOA_2PI)) {
+                        nazimtuh -= T(HOA_2PI);
+                    }
+                    channels.push_back(Planewave<Hoa2d, T>(i, nazimtuh, 0.));
                 }
 
                 sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);

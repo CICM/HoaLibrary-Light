@@ -19,7 +19,8 @@ namespace hoa
 {
     //! @brief The class owns basic harmonics informations.
     //! @details The class allows to retrieves several informations about the harmonics: the
-    //! numbering (ACN), the normalization (SN3D/N3D), the degree, the aziumthal order, etc.
+    //! numbering (ACN), the normalizations (SN2D/N2D/SN3D/N3D), the degree, the aziumthal
+    //! order, etc.
     template <Dimension D, typename T> class Harmonic
     {
     public:
@@ -29,8 +30,6 @@ namespace hoa
         Harmonic(const size_t index) hoa_noexcept;
 
         //! @brief The harmonic destructor.
-        /** The harmonic destructor free the memory.
-         */
 		~Harmonic() hoa_noexcept = 0;
 
         //! @brief Returns the index of the harmonic.
@@ -72,12 +71,22 @@ namespace hoa
         //! @param degree  The degree.
         static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) hoa_noexcept;
 
-        //! @brief Returns the normalization of an harmonic.
+        //! @brief Returns the normalization N3D or N2D of an harmonic.
+        //! @details The semi-normalization \f$k^{n2d}_{l, m}\f$ and \f$k^{n3d}_{l, m}\f$
+        //! are defined by:
+        //! \f[k^{n2d}_{l, m} = 1 \f]
+        //! \f[k^{n3d}_{l, m} = k^{sn3d}_{l, m}\sqrt{2l+1} \f]
+        //! with\f$l\f$ the degree, \f$m\f$ the azimuthal order,
         //! @param degree  The degree of the harmonic.
         //! @param order   The order of the harmonic.
         static T getNormalization(const size_t degree, const long order) hoa_noexcept;
 
-        //! @brief Returns the semi-normalization of an harmonic.
+        //! @brief Returns the semi-normalization SN3D or SN2D of an harmonic.
+        //! @details The semi-normalization \f$k^{sn2d}_{l, m}\f$ and \f$k^{sn3d}_{l, m}\f$
+        //! are defined by:
+        //! \f[k^{sn2d}_{l, m} = 1 \f]
+        //! \f[k^{sn3d}_{l, m} = \sqrt{\frac{(l - \left|m\right|)!}{(l + \left|m\right|)!}}\sqrt{2} \f]
+        //! with\f$l\f$ the degree, \f$m\f$ the azimuthal order,
         //! @param degree  The degree of the harmonic.
         //! @param order   The order of the harmonic.
         static T getSemiNormalization(const size_t degree, const long order) hoa_noexcept;
@@ -150,7 +159,12 @@ namespace hoa
         //! @param degree  The degree.
         static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) hoa_noexcept { return (degree != 0) + 1; }
 
-        //! @brief Returns the normalization of an harmonic.
+        //! @brief Returns the normalization N3D or N2D of an harmonic.
+        //! @details The semi-normalization \f$k^{n2d}_{l, m}\f$ and \f$k^{n3d}_{l, m}\f$
+        //! are defined by:
+        //! \f[k^{n2d}_{l, m} = 1 \f]
+        //! \f[k^{n3d}_{l, m} = k^{sn3d}_{l, m}\sqrt{2l+1} \f]
+        //! with\f$l\f$ the degree, \f$m\f$ the azimuthal order,
         //! @param degree  The degree of the harmonic.
         //! @param order   The order of the harmonic.
         static inline T getNormalization(const size_t degree, const long order) hoa_noexcept { return 1.; }
@@ -228,7 +242,12 @@ namespace hoa
         static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) hoa_noexcept {
             return degree * 2 + 1; }
         
-        //! @brief Returns the normalization of an harmonic.
+        //! @brief Returns the normalization N3D or N2D of an harmonic.
+        //! @details The semi-normalization \f$k^{n2d}_{l, m}\f$ and \f$k^{n3d}_{l, m}\f$
+        //! are defined by:
+        //! \f[k^{n2d}_{l, m} = 1 \f]
+        //! \f[k^{n3d}_{l, m} = k^{sn3d}_{l, m}\sqrt{2l+1} \f]
+        //! with\f$l\f$ the degree, \f$m\f$ the azimuthal order,
         //! @param degree  The degree of the harmonic.
         //! @param order   The order of the harmonic.
         static inline T getNormalization(const size_t degree, const long order) hoa_noexcept
@@ -236,15 +255,18 @@ namespace hoa
             return getSemiNormalization(degree, order) * T(sqrt(T(2.) * T(degree) + T(1.)));
         }
 
-        //! @brief Returns the semi-normalization of an harmonic.
+        //! @brief Returns the semi-normalization SN3D or SN2D of an harmonic.
+        //! @details The semi-normalization \f$k^{sn2d}_{l, m}\f$ and \f$k^{sn3d}_{l, m}\f$
+        //! are defined by:
+        //! \f[k^{sn2d}_{l, m} = 1 \f]
+        //! \f[k^{sn3d}_{l, m} = \sqrt{\frac{(l - \left|m\right|)!}{(l + \left|m\right|)!}}\sqrt{2} \f]
+        //! with\f$l\f$ the degree, \f$m\f$ the azimuthal order,
         //! @param degree  The degree of the harmonic.
         //! @param order   The order of the harmonic.
         static inline T getSemiNormalization(const size_t degree, const long order) hoa_noexcept
         {
             const long double fac1 = hfactorial(long(degree) - long(std::abs(order)));
             const long double fac2 = hfactorial(long(degree) + long(std::abs(order)));
-            //return T(sqrt(fac1 / fac2)) * (bool(order == 0) ? T(0.2820947918) : T(0.3989422804));
-            //return T(sqrt(fac1 / fac2)) * (bool(order == 0) ? T(1.) : T(1.41421356237309504880168872420969808));
             return T(sqrt((bool(order == 0) ? T(1.) : T(2.)) * T(fac1 / fac2)));
         }
     private:

@@ -239,6 +239,7 @@ namespace hoa
         }
     };
 
+    
     template <typename T> class Meter<Hoa3d, T> : public ProcessorPlanewaves<Hoa3d, T>
     {
     public:
