@@ -24,6 +24,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <sstream>
 
 // avoid min and max to be defined when compiling on VS
 #ifdef _MSC_VER
@@ -70,44 +71,6 @@
  */
 namespace hoa
 {
-#if (__cplusplus <= 199711L)
-    inline std::string to_string(const unsigned long& val)
-    {
-        char buffer[1024];
-        sprintf(buffer, "%lu", val);
-        return buffer;
-    }
-    
-    inline std::string to_string(const unsigned int& val)
-    {
-        char buffer[1024];
-		sprintf(buffer, "%iu", val);
-        return buffer;
-    }
-
-    inline std::string to_string(const long& val)
-    {
-        char buffer[1024];
-        sprintf(buffer, "%ld", val);
-        return buffer;
-    }
-
-    inline std::string to_string(const float& val)
-    {
-        char buffer[1024];
-        sprintf(buffer, "%f", val);
-        return buffer;
-    }
-
-    inline std::string to_string(const double& val)
-    {
-        char buffer[1024];
-        sprintf(buffer, "%lf", val);
-        return buffer;
-    }
-
-#endif
-
     //! The dimension of class.
     /** Most of the classes are specialized for 2d or 3d.
      */

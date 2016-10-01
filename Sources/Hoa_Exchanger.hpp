@@ -424,7 +424,9 @@ namespace hoa
                 // [0, 0], [1, 1], [1, -1], [2, 2], [2, -2], [3, 3], [3, -3]...
                 size_t hdegree = ProcessorHarmonics<Hoa2d, T>::getHarmonicDegree(index);
                 size_t horder  = ProcessorHarmonics<Hoa2d, T>::getHarmonicOrder(index) * -1l;
-                return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
+                std::ostringstream ostr;
+                ostr <<  "Harmonic " << hdegree << " " << horder;
+                return ostr.str();
             }
         }
     };
@@ -947,7 +949,9 @@ namespace hoa
                 const long tmp = long(index) - (hdegree) * (hdegree);
                 const long sign = (tmp % 2) ? -1l : 1l;
                 const long horder = sign * long(hdegree + 1l - ((tmp - 1l) / 2. + 1l));
-                return "Harmonic " + to_string(hdegree) + " " + to_string(horder);
+                std::ostringstream ostr;
+                ostr <<  "Harmonic " << hdegree << " " << horder;
+                return ostr.str();
             }
         }
     };

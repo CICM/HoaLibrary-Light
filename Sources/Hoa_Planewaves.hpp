@@ -251,9 +251,10 @@ namespace hoa
         /** The method returns the name \f$planewave_{index}\f$ of the planewave.
          @return     The name.
          */
-        inline std::string getName() const hoa_noexcept
-        {
-            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth(0., 0., 0.) / HOA_2PI * 360.) + "°";
+        std::string getName() const hoa_noexcept {
+            std::ostringstream ostr;
+            ostr <<  "Planewave " << getIndex() << " " << (getAzimuth(0., 0., 0.) / HOA_2PI * 360.) << "°";
+            return ostr.str();
         }
 
         //! Compare the azimuth of two planewaves.
@@ -450,7 +451,9 @@ namespace hoa
          */
         inline std::string getName() const hoa_noexcept
         {
-            return "Planewave " + to_string(getIndex()) + " " + to_string(getAzimuth(0., 0., 0.) / HOA_2PI * 360.) + "° " + to_string(getElevation(0., 0., 0.) / HOA_2PI * 360.) + "°";
+            std::ostringstream ostr;
+            ostr <<  "Planewave " << getIndex() << " " << (getAzimuth(0., 0., 0.) / HOA_2PI * 360.) << "° " << (getElevation(0., 0., 0.) / HOA_2PI * 360.) << "°";
+            return ostr.str();
         }
 
         //! Compare the azimuth of two planewaves.

@@ -17,118 +17,77 @@
 
 namespace hoa
 {
-    //! The harmonic class owns basic harmonics ordering informations.
-    /** The harmonic allows to retrieves informations about its ACN ordering, the degree and the order.
-     */
+    //! @brief The class owns basic harmonics informations.
+    //! @details The class allows to retrieves several informations about the harmonics: the
+    //! numbering (ACN), the normalization (SN3D/N3D), the degree, the aziumthal order, etc.
     template <Dimension D, typename T> class Harmonic
     {
     public:
 
-        //! The harmonic constructor.
-        /** The harmonic constructor allocates and initializes the general member values depending on an index.
-         @param index    The index must be at least 1.
-         */
+        //! @brief The harmonic constructor.
+        //! @param index    The index must be at least 1.
         Harmonic(const size_t index) hoa_noexcept;
 
-        //! The harmonic destructor.
+        //! @brief The harmonic destructor.
         /** The harmonic destructor free the memory.
          */
 		~Harmonic() hoa_noexcept = 0;
 
-        //! Get the index of the harmonic.
-        /** The method returns the index \f$i\f$ of the harmonic.
-         @return     The index.
-         */
+        //! @brief Returns the index of the harmonic.
         size_t getIndex() const hoa_noexcept;
 
-        //! Get the degree of the harmonic.
-        /** The method returns the degree \f$l\f$ of the harmonic.
-         @return     The degree.
-         */
+        //! @brief Returns the degree of the harmonic.
         size_t getDegree() const hoa_noexcept;
 
-        //! Get the order of the harmonic.
-        /** The method returns the order \f$m\f$ of the harmonic.
-         @return     The order.
-         */
+        //! @brief Returns the azimuthal order of the harmonic.
         long getOrder() const hoa_noexcept;
 
-        //! Get the name of the harmonic.
-        /** The method returns the name \f$harmonic_{l,m}\f$ of the harmonic.
-         @return     The name.
-         */
+        //! @brief Returns the name of the harmonic.
         std::string getName() const hoa_noexcept;
 
-        //! Get the normalization of the harmonic.
-        /** The method returns the normalization of the harmonics.
-         @return        The normalization of the harmonics.
-         */
+        //! @brief Returns the normalization of the harmonic.
         T getNormalization() const hoa_noexcept;
 
-        //! Get the semi-normalization of the harmonic.
-        /** The method returns the semi-normalization of the harmonics.
-         @return        The semi-normalization of the harmonics.
-         */
+        //! @brief Returns the semi-normalization of the harmonic.
         T getSemiNormalization() const hoa_noexcept;
 
-        //! Get the index of an harmonic with its degree and its order.
-        /** The method returns the index of the harmonic.
-         @param degree  The degree of the harmonic.
-         @param order   The order of the harmonic.
-         @return        The index.
-         */
+        //! @brief Returns the index of an harmonic for a specific degree and azimuthal order.
+        //! @param degree  The degree of the harmonic.
+        //! @param order   The order of the harmonic.
         static size_t getHarmonicIndex(const size_t degree, const long order) hoa_noexcept;
 
-        //! Get the degree of an harmonic with an index.
-        /** The method returns the degree of the harmonic.
-         @param index  The index of the harmonic.
-         @return        The degree.
-         */
+        //! @brief Returns the degree of an harmonic for an index.
+        //! @param index  The index of the harmonic.
         static size_t getHarmonicDegree(const size_t index) hoa_noexcept;
 
-        //! Get the order of an harmonic with an index.
-        /** The method returns the order of the harmonic.
-         @param index  The index of the harmonic.
-         @return        The degree.
-         */
+        //! @brief Returns the azimuthal order of an harmonic for an index.
+        //! @param index  The index of the harmonic.
         static size_t getHarmonicOrder(const size_t index) hoa_noexcept;
 
-        //! Get the number of harmonics for an order of decomposition.
-        /** The method returns the number of harmonics for a order of decomposition \f$N\f$.
-         @param order   The order of decomposition.
-         @return        The number of harmonics.
-         */
+        //! @brief Returns the number of harmonics for an order of decomposition.
+        //! @param order   The order of decomposition.
         static size_t getNumberOfHarmonics(const size_t order) hoa_noexcept;
         
-        //! Get the number of harmonics for in a degree.
-        /** The method returns the number of harmonics for a degree.
-         @param degree  The degree.
-         @return        The number of harmonics.
-         */
+        //! @brief Returns the number of harmonics for a degree.
+        //! @param degree  The degree.
         static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) hoa_noexcept;
 
-        //! Get the normalization of an harmonic.
-        /** The method returns the normalization of an harmonics.
-         @param degree  The degree of the harmonic.
-         @param order   The order of the harmonic.
-         @return        The normalization of the harmonics.
-         */
+        //! @brief Returns the normalization of an harmonic.
+        //! @param degree  The degree of the harmonic.
+        //! @param order   The order of the harmonic.
         static T getNormalization(const size_t degree, const long order) hoa_noexcept;
 
-        //! Get the semi-normalization of an harmonic.
-        /** The method returns the semi-normalization of an harmonics.
-         @param degree  The degree of the harmonic.
-         @param order   The order of the harmonic.
-         @return        The semi-normalization of the harmonics.
-         */
+        //! @brief Returns the semi-normalization of an harmonic.
+        //! @param degree  The degree of the harmonic.
+        //! @param order   The order of the harmonic.
         static T getSemiNormalization(const size_t degree, const long order) hoa_noexcept;
     };
     
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 
-    //! The harmonic class owns basic harmonics ordering informations.
-    /** The harmonic allows to retrieves informations about its ACN ordering, the degree and the order.
-     */
+    //! @brief The class owns basic harmonics informations.
+    //! @details The class allows to retrieves several informations about the harmonics: the
+    //! numbering (ACN), the normalization (SN3D/N3D), the degree, the aziumthal order, etc.
     template<typename T> class Harmonic<Hoa2d, T>
     {
     private:
@@ -137,112 +96,74 @@ namespace hoa
         long   m_order;
     public:
 
-        //! The harmonic constructor.
-        /** The harmonic constructor allocates and initializes the general member values depending on an index.
-         @param index    The index must be at least 1.
-         */
+        //! @brief The harmonic constructor.
+        //! @param index    The index must be at least 1.
         inline Harmonic(const size_t index) hoa_noexcept :
         m_index(index), m_degree(getDegree(index)), m_order(getOrder(index)) {}
 
-        //! The harmonic destructor.
-        /** The harmonic destructor free the memory.
-         */
+        //! @brief The harmonic destructor.
         inline ~Harmonic() hoa_noexcept hoa_default_f
 
-        //! Get the index of the harmonic.
-        /** The method returns the index of the harmonic.
-         @return     The index.
-         */
+        //! @brief Returns the index of the harmonic.
         inline size_t getIndex() const hoa_noexcept { return m_index; }
 
-        //! Get the degree of the harmonic.
-        /** The method returns the degree of the harmonic.
-         @return     The degree.
-         */
+        //! @brief Returns the degree of the harmonic.
         inline size_t getDegree() const hoa_noexcept { return m_degree; }
 
-        //! Get the order of the harmonic.
-        /** The method returns the order of the harmonic.
-         @return     The order.
-         */
+        //! @brief Returns the azimuthal order of the harmonic.
         inline long getOrder() const hoa_noexcept { return m_order; }
+        
+        //! @brief Returns the name of the harmonic.
+        std::string getName() const hoa_noexcept {
+            std::ostringstream ostr;
+            ostr <<  "Harmonic " << m_degree << " " << m_order;
+            return ostr.str();
+        }
 
-        //! Get the name of the harmonic.
-        /** The method returns the name of the harmonic.
-         @return     The name.
-         */
-        inline std::string getName() const hoa_noexcept {
-            return "Harmonic " + to_string(m_degree) + " " + to_string(m_order); }
-
-        //! Get the normalization of the harmonic.
-        /** The method returns the normalization of the harmonics.
-         @return        The normalization of the harmonics.
-         */
+        //! @brief Returns the normalization of the harmonic.
         inline T getNormalization() const hoa_noexcept { return getNormalization(m_degree, m_order); }
 
-        //! Get the semi-normalization of the harmonic.
-        /** The method returns the semi-normalization of the harmonics.
-         @return        The semi-normalization of the harmonics.
-         */
+        //! @brief Returns the semi-normalization of the harmonic.
         inline T getSemiNormalization() const hoa_noexcept { return getSemiNormalization(m_degree, m_order); }
 
+        //! @brief Returns the index of an harmonic for a specific degree and azimuthal order.
+        //! @param degree  The degree of the harmonic.
+        //! @param order   The order of the harmonic.
+        static inline long getIndex(const size_t degree, const long order) hoa_noexcept {
+            return std::abs(order) *  2 - long(order < 0); }
         
-        //! Get the degree of an harmonic with an index.
-        /** The method returns the degree of the harmonic.
-         @param index  The index of the harmonic.
-         @return        The degree.
-         */
+        //! @brief Returns the degree of an harmonic for an index.
+        //! @param index  The index of the harmonic.
         static inline size_t getDegree(const size_t index) hoa_noexcept {
             return (index + index % 2) / 2ul; }
 
-        //! Get the order of an harmonic with an index.
-        /** The method returns the order of the harmonic.
-         @param index  The index of the harmonic.
-         @return        The order.
-         */
+        //! @brief Returns the azimuthal order of an harmonic for an index.
+        //! @param index  The index of the harmonic.
         static inline long getOrder(const size_t index) hoa_noexcept {
             return long(long(index + index % 2l) / 2l) * (1l - (long)(index % 2) * 2l); }
 
-        //! Get the index of an harmonic with its degree and its order.
-        /** The method returns the index of the harmonic.
-         @param degree  The degree of the harmonic.
-         @param order   The order of the harmonic.
-         @return        The index.
-         */
-        static inline long getIndex(const size_t degree, const long order) hoa_noexcept {
-            return std::abs(order) *  2 - long(order < 0); }
-
-        //! Get the number of harmonics for an order of decomposition.
-        /** The method returns the number of harmonics for a order of decomposition.
-         @param order   The order of decomposition.
-         @return        The number of harmonics.
-         */
+        //! @brief Returns the number of harmonics for an order of decomposition.
+        //! @param order   The order of decomposition.
         static inline size_t getNumberOfHarmonics(const size_t order) hoa_noexcept { return order * 2 + 1; }
         
-        //! Get the number of harmonics for in a degree.
-        /** The method returns the number of harmonics for a degree.
-         @param degree  The degree.
-         @return        The number of harmonics.
-         */
+        //! @brief Returns the number of harmonics for a degree.
+        //! @param degree  The degree.
         static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) hoa_noexcept { return (degree != 0) + 1; }
 
-        //! Get the normalization of an harmonic.
-        /** The method returns the normalization of an harmonics.
-         @param degree  The degree of the harmonic.
-         @param order   The order of the harmonic.
-         @return        The normalization of the harmonics.
-         */
+        //! @brief Returns the normalization of an harmonic.
+        //! @param degree  The degree of the harmonic.
+        //! @param order   The order of the harmonic.
         static inline T getNormalization(const size_t degree, const long order) hoa_noexcept { return 1.; }
 
-        //! Get the semi-normalization of an harmonic.
-        /** The method returns the semi-normalization of an harmonics.
-         @param degree  The degree of the harmonic.
-         @param order   The order of the harmonic.
-         @return        The semi-normalization of the harmonics.
-         */
+        //! @brief Returns the semi-normalization of an harmonic.
+        //! @param degree  The degree of the harmonic.
+        //! @param order   The order of the harmonic.
         static inline T getSemiNormalization(const size_t degree, const long order) hoa_noexcept { return 1.; }
     };
 
+    //! @brief The class owns basic harmonics informations.
+    //! @details The class allows to retrieves several informations about the harmonics: the
+    //! numbering (ACN), the normalization (SN3D/N3D), the degree, the aziumthal order, etc.
     template <typename T> class Harmonic<Hoa3d, T>
     {
     private:
@@ -251,114 +172,73 @@ namespace hoa
         long   m_order;
     public:
 
-        //! The harmonic constructor.
-        /** The harmonic constructor allocates and initializes the general member values depending on an index.
-         @param index    The index must be at least 1.
-         */
+        //! @brief The harmonic constructor.
+        //! @param index    The index must be at least 1.
         Harmonic(const size_t index) hoa_noexcept :
         m_index(index), m_degree(getDegree(index)), m_order(getOrder(index)) {}
 
-        //! The harmonic destructor.
-        /** The harmonic destructor free the memory.
-         */
+        //! @brief The harmonic destructor.
         ~Harmonic() hoa_noexcept hoa_default_f
 
-        //! Get the index of the harmonic.
-        /** The method returns the index of the harmonic.
-         @return     The index.
-         */
+        //! @brief Returns the index of the harmonic.
         inline size_t getIndex() const hoa_noexcept { return m_index; }
 
-        //! Get the degree of the harmonic.
-        /** The method returns the degree of the harmonic.
-         @return     The degree.
-         */
+        //! @brief Returns the degree of the harmonic.
         inline size_t getDegree() const hoa_noexcept {return m_degree; }
 
-        //! Get the order of the harmonic.
-        /** The method returns the order of the harmonic.
-         @return     The order.
-         */
+        //! @brief Returns the azimuthal order of the harmonic.
         inline long getOrder() const hoa_noexcept { return m_order; }
 
-        //! Get the name of the harmonic.
-        /** The method returns the name of the harmonic.
-         @return     The name.
-         */
-        inline std::string getName() const hoa_noexcept {
-            return "Harmonic " + to_string(m_degree) + " " + to_string(m_order); }
+        //! @brief Returns the name of the harmonic.
+        std::string getName() const hoa_noexcept {
+            std::ostringstream ostr;
+            ostr <<  "Harmonic " << m_degree << " " << m_order;
+            return ostr.str();
+        }
 
-        //! Get the normalization of the harmonic.
-        /** The method returns the normalization of the harmonics.
-         @return        The normalization of the harmonics.
-         */
+        //! @brief Returns the normalization of the harmonic.
         inline T getNormalization() const hoa_noexcept { return getNormalization(m_degree, m_order); }
 
-        //! Get the semi-normalization of the harmonic.
-        /** The method returns the semi-normalization of the harmonics.
-         @return        The semi-normalization of the harmonics.
-         */
+        //! @brief Returns the semi-normalization of the harmonic.
         inline T getSemiNormalization() const hoa_noexcept { return getSemiNormalization(m_degree, m_order); }
         
-
-        //! Get the degree of an harmonic with an index.
-        /** The method returns the degree of the harmonic.
-         @param index  The index of the harmonic.
-         @return        The degree.
-         */
+        //! @brief Returns the degree of an harmonic for an index.
+        //! @param index  The index of the harmonic.
         static inline size_t getDegree(const size_t index) hoa_noexcept {
             return size_t(sqrt(double(index))); }
 
-        //! Get the order of an harmonic with an index.
-        /** The method returns the order of the harmonic.
-         @param index  The index of the harmonic.
-         @return        The order.
-         */
+        //! @brief Returns the azimuthal order of an harmonic for an index.
+        //! @param index  The index of the harmonic.
         static inline long getOrder(const size_t index) hoa_noexcept {
             return long(index) - (long(sqrt(double(index))) * (long(sqrt(double(index))) + 1)); }
 
-        //! Get the index of an harmonic with its degree and its order.
-        /** The method returns the index of the harmonic.
-         @param degree  The degree of the harmonic.
-         @param order   The order of the harmonic.
-         @return        The index.
-         */
+        //! @brief Returns the index of an harmonic for a specific degree and azimuthal order.
+        //! @param degree  The degree of the harmonic.
+        //! @param order   The order of the harmonic.
         static inline size_t getIndex(const size_t degree, const long order) hoa_noexcept {
             return size_t(long(degree * (degree + 1)) + order); }
 
-        //! Get the number of harmonics for an order of decomposition.
-        /** The method returns the number of harmonics for a order of decomposition.
-         @param order   The order of decomposition.
-         @return        The number of harmonics.
-         */
+        //! @brief Returns the number of harmonics for an order of decomposition.
+        //! @param order   The order of decomposition.
         static inline size_t getNumberOfHarmonics(const size_t order) hoa_noexcept  {
             return (order + 1) * (order + 1); }
 
-        //! Get the number of harmonics for in a degree.
-        /** The method returns the number of harmonics for a degree.
-         @param degree  The degree.
-         @return        The number of harmonics.
-         */
+        //! @brief Returns the number of harmonics for a degree.
+        //! @param degree  The degree.
         static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) hoa_noexcept {
             return degree * 2 + 1; }
         
-        //! Get the normalization of an harmonic.
-        /** The method returns the normalization of an harmonics.
-         @param degree  The degree of the harmonic.
-         @param order   The order of the harmonic.
-         @return        The normalization of the harmonics.
-         */
+        //! @brief Returns the normalization of an harmonic.
+        //! @param degree  The degree of the harmonic.
+        //! @param order   The order of the harmonic.
         static inline T getNormalization(const size_t degree, const long order) hoa_noexcept
         {
             return getSemiNormalization(degree, order) * T(sqrt(T(2.) * T(degree) + T(1.)));
         }
 
-        //! Get the semi-normalization of an harmonic.
-        /** The method returns the semi-normalization of an harmonics.
-         @param degree  The degree of the harmonic.
-         @param order   The order of the harmonic.
-         @return        The semi-normalization of the harmonics.
-         */
+        //! @brief Returns the semi-normalization of an harmonic.
+        //! @param degree  The degree of the harmonic.
+        //! @param order   The order of the harmonic.
         static inline T getSemiNormalization(const size_t degree, const long order) hoa_noexcept
         {
             const long double fac1 = hfactorial(long(degree) - long(std::abs(order)));
