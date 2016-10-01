@@ -72,9 +72,9 @@ namespace hoa
         //! @param order The order of decomposition.
         Encoder(size_t order) : ProcessorHarmonics<D, T>(order)
         {
-            /*
             order = order >= 1 ? order : 1;
             size_t const nharmo = Harmonic<Hoa3d, T>::getNumberOfHarmonics(order);
+            /*
             m_radius_coeffs         = new T[ProcessorHarmonics<D, T>::getDecompositionOrder() + 1];
             m_azimuth_coeffs        = new T[ProcessorHarmonics<D, T>::getDecompositionOrder() * 2 + 1];
             m_elevation_coeffs      = new T[nharmo / 2 + (order + 1)];
