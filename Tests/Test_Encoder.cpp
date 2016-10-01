@@ -22,7 +22,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
     const hoa_float_t epsilon = std::numeric_limits<hoa_float_t>::epsilon() * hoa_float_t(10);
     hoa_float_t              input(1.);
     std::vector<hoa_float_t> ouputs(15);
-    /*
+    
     CATCH_SECTION("Azimuth 0")
     {
         encoder.setAzimuth(0.);
@@ -208,10 +208,8 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         
         CATCH_CHECK(std::abs(sum_of_elems  - hoa_float_t(4.)) < epsilon);
     }
-     */
 }
 
-/*
 CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
 {
     Encoder<Hoa3d, hoa_float_t> encoder(7);
@@ -494,5 +492,4 @@ CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
         CATCH_CHECK(std::abs(ouputs[63] - -0.04045374058048434) < epsilon);
     }
 }
- */
 
