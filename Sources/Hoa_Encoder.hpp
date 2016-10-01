@@ -77,19 +77,14 @@ namespace hoa
             m_radius_coeffs         = new T[order+ 1];
             m_azimuth_coeffs        = new T[order * 2 + 1];
             m_elevation_coeffs      = new T[((order + 1) * (order + 1)) / 2 + (order + 1)];
-            /*
-            m_normalization_coeffs  = new T[nharmo];
-            
-            
-            
-            for(size_t i = 0; i < nharmo; ++i)
-            {
-                m_normalization_coeffs[i] = ProcessorHarmonics<D, T>::getHarmonicSemiNormalization(i);
-            }
-             */
+            m_normalization_coeffs  = new T[ProcessorHarmonics<D, T>::getNumberOfHarmonics()];
             setRadius(1.);
             setAzimuth(0.);
             setElevation(0.);
+            for(size_t i = 0; i < ProcessorHarmonics<D, T>::getNumberOfHarmonics(); ++i)
+            {
+                m_normalization_coeffs[i] = ProcessorHarmonics<D, T>::getHarmonicSemiNormalization(i);
+            }
         }
 
         //! The destructor.
@@ -98,9 +93,7 @@ namespace hoa
             delete [] m_radius_coeffs;
             delete [] m_azimuth_coeffs;
             delete [] m_elevation_coeffs;
-            /*
             delete [] m_normalization_coeffs;
-             */
         }
         
         
