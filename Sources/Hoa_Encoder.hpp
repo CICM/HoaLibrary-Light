@@ -74,13 +74,13 @@ namespace hoa
         {
             order = order >= 1 ? order : 1;
             size_t const nharmo = Harmonic<Hoa3d, T>::getNumberOfHarmonics(order);
-            m_radius_coeffs         = new T[order + 1];
-            m_azimuth_coeffs        = new T[order * 2 + 1];
+            m_radius_coeffs         = new T[ProcessorHarmonics<D, T>::getDecompositionOrder() + 1];
+            m_azimuth_coeffs        = new T[ProcessorHarmonics<D, T>::getDecompositionOrder() * 2 + 1];
             m_elevation_coeffs      = new T[nharmo / 2 + (order + 1)];
             m_normalization_coeffs  = new T[nharmo];
             setRadius(1.);
-            //setAzimuth(0.);
-            //setElevation(0.);
+            setAzimuth(0.);
+            setElevation(0.);
             
             for(size_t i = 0; i < nharmo; ++i)
             {
@@ -89,14 +89,12 @@ namespace hoa
         }
 
         //! The destructor.
-        ~Encoder() hoa_noexcept
+        ~Encoder()
         {
-            /*
             delete [] m_radius_coeffs;
             delete [] m_azimuth_coeffs;
             delete [] m_elevation_coeffs;
             delete [] m_normalization_coeffs;
-             */
         }
         
         
