@@ -85,10 +85,10 @@ namespace hoa
             else
             {
                 m_weights[0] = T(1.);
-                const T facn = Math<T>::factorial(long(order));
+                const long double facn = ofactorial(long(order));
                 for(size_t i = 1; i < size; i++) {
                     const size_t degree = ProcessorHarmonics<D, T>::getHarmonicDegree(i);
-                    m_weights[i] = facn / Math<T>::factorial(long(order - degree)) * facn / Math<T>::factorial(long(order + degree));
+                    m_weights[i] = T(facn / ofactorial(long(order - degree))) * T(facn / ofactorial(long(order + degree)));
                 }
                 
             }
@@ -122,6 +122,18 @@ namespace hoa
             }
         }
     protected:
+        
+        static inline long double ofactorial(long n)
+        {
+            long double result = n;
+            if(n == 0)
+                return 1;
+            while(--n > 0)
+                result *= n;
+            
+            return result;
+        }
+        
         Mode m_mode;
         T*   m_weights;
     };

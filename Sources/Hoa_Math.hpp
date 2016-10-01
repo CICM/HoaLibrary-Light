@@ -159,23 +159,6 @@ namespace hoa
                 return 0;
             return asin(z / sqrt(x*x + y*y + z*z));
         }
-        
-        //! The factorial
-        /** The function computes the factorial, the product of all positive integers less than or equal to an integer.
-         \f[n! = \prod_{1 \leq i \leq n} i = 1 \times 2 \times {...} \times (n - 1) \times n \f]
-         @param     n     The interger.
-         @return    The function return the factorial of n.
-         */
-        static inline size_t factorial(long n)
-        {
-            long double result = n;
-            if(n == 0)
-                return 1;
-            while(--n > 0)
-                result *= n;
-            
-            return result;
-        }
     };
 }
 
