@@ -11,8 +11,6 @@
 using namespace hoa;
 typedef float hoa_float_t;
 
-
-
 #define CATCH_CONFIG_PREFIX_ALL
 #include "catch.hpp"
 #include <iostream>

@@ -71,7 +71,7 @@ namespace hoa
             if(mode == Basic)
             {
                 for(size_t i = 0; i < size;  ++i) {
-                    m_weights[i] = 1.;
+                    m_weights[i] = T(1.);
                 }
             }
             else if(mode == MaxRe)
@@ -79,7 +79,7 @@ namespace hoa
                 m_weights[0] = T(1.);
                 for(size_t i = 1; i < size; i++) {
                     const size_t degree = ProcessorHarmonics<D, T>::getHarmonicDegree(i);
-                    m_weights[i] = cos(T(degree) *  T(HOA_PI) / T(2. * order + 2.));
+                    m_weights[i] = std::cos(T(degree) *  T(HOA_PI) / T(2. * order + 2.));
                 }
             }
             else

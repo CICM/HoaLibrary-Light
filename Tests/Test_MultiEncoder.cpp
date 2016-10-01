@@ -13,7 +13,7 @@ using namespace hoa;
 #define CATCH_CONFIG_PREFIX_ALL
 #include "catch.hpp"
 
-CATCH_TEST_CASE("MultiEncoder 2D", "[Encoder] [2D]")
+CATCH_TEST_CASE("MultiEncoder 2D", "[Encoder] [MultiEncoder] [2D]")
 {
     MultiEncoder<Hoa2d, float> encoder(7, 3);
     const float epsilon = FLT_EPSILON;
@@ -54,7 +54,7 @@ CATCH_TEST_CASE("MultiEncoder 2D", "[Encoder] [2D]")
 }
 
 
-CATCH_TEST_CASE("MultiEncoder 3D", "[Encoder] [3D]")
+CATCH_TEST_CASE("MultiEncoder 3D", "[Encoder] [MultiEncoder] [3D]")
 {
     MultiEncoder<Hoa3d, float> encoder(7, 3);
     const float epsilon = FLT_EPSILON;
