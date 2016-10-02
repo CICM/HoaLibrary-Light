@@ -22,7 +22,7 @@ CATCH_TEST_CASE("Decoder 2D", "[Decoder] [2D]")
     const hoa_float_t epsilon = std::numeric_limits<hoa_float_t>::epsilon() * hoa_float_t(10);
     hoa_float_t              input(1.);
     std::vector<hoa_float_t> harmonics(15);
-    std::vector<hoa_float_t> outputs(15);
+    std::vector<hoa_float_t> outputs(16);
     
     CATCH_SECTION("Regular")
     {
