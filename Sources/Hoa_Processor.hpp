@@ -14,6 +14,7 @@
 
 #include "Hoa_Harmonics.hpp"
 #include "Hoa_Planewaves.hpp"
+#include <cassert>
 
 namespace hoa
 {
