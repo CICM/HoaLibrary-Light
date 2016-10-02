@@ -23,12 +23,12 @@ namespace hoa
     {
     public:
         //! @brief The destructor.
-        virtual ~Processor() hoa_noexcept hoa_default_f
+        virtual ~Processor() hoa_noexcept {}
         
         //! @brief The pure virtual method performs that performs the digital signal processing.
         //! @param inputs  The inputs array.
         //! @param outputs The outputs array.
-        virtual void process(const T* input, T* outputs) hoa_noexcept = 0;
+        virtual void process(const T* inputs, T* outputs) hoa_noexcept = 0;
     };
 
     
@@ -95,6 +95,24 @@ namespace hoa
         std::vector< Harmonic<D, T> > m_harmonics;
     };
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     //! @brief The planewaves processor.
     //! @details The planewaves processor owns a set of planewaves.
@@ -102,33 +120,33 @@ namespace hoa
     {
     public:
         //! @brief The planewaves constructor.
-        //! @param numberOfPlanewave The number of planewaves.
-        ProcessorPlanewaves(const size_t numberOfPlanewaves) hoa_noexcept :
+        //! @param nplws The number of planewaves.
+        ProcessorPlanewaves(const size_t nplws) hoa_noexcept :
         m_rotation_z(0.), m_rotation_y(0.), m_rotation_x(0.)
         {
             if(D == Hoa2d)
             {
-                generateCicle(numberOfPlanewaves);
+                generateCicle(nplws);
             }
             else
             {
-                if(numberOfPlanewaves == 4) {
+                if(nplws == 4) {
                     generateTetrahedron();
                 }
-                else if(numberOfPlanewaves == 6) {
+                else if(nplws == 6) {
                     generateOctahedron();
                 }
-                else if(numberOfPlanewaves == 8) {
+                else if(nplws == 8) {
                     generateHexahedron();
                 }
-                else if(numberOfPlanewaves == 12) {
+                else if(nplws == 12) {
                     generateIcosahedron();
                 }
-                else if(numberOfPlanewaves == 20) {
+                else if(nplws == 20) {
                     generateDodecahedron();
                 }
                 else {
-                    generatePolyhedron(numberOfPlanewaves);
+                    generatePolyhedron(nplws);
                 }
             }
         }
@@ -145,9 +163,9 @@ namespace hoa
         //! @param z_axe The angle of rotation around the z axis in radian.
         void setPlanewavesRotation(const T x_axe, const T y_axe, const T z_axe) hoa_noexcept
         {
-            m_rotation_x = Math<T>::wrap_twopi(x_axe);
-            m_rotation_y = Math<T>::wrap_twopi(y_axe);
-            m_rotation_z = Math<T>::wrap_twopi(z_axe);
+            m_rotation_x = wrap_twopi(x_axe);
+            m_rotation_y = wrap_twopi(y_axe);
+            m_rotation_z = wrap_twopi(z_axe);
         }
 
         //! @brief Returns the angle of rotation around the x axis in radian of the planewaves.
@@ -169,17 +187,8 @@ namespace hoa
         //! @param index   The index of the planewave.
         //! @param azimuth The azimuth of the planewave.
         inline void setPlanewaveAzimuth(const size_t index, const T azimuth) hoa_noexcept {
-            m_planewaves[index].setAzimuth(Math<T>::wrap_twopi(azimuth)); }
-
-        //! @brief Returns the azimuth of a planewave.
-        //! @details The azimuth of the planewaves is in radian, 0 radian is at the front of
-        //! the soundfield and π is at the back of the sound field.
-        //! @param index    The index of the planewave.
-        //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
-        inline T getPlanewaveAzimuth(const size_t index, const bool rotation = true) const hoa_noexcept {
-            return m_planewaves[index].getAzimuth(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.));
-        }
-
+            m_planewaves[index].setAzimuth(wrap_twopi(azimuth)); }
+        
         //! @brief Sets the azimuth of a planewave in radian.
         //! @details The elevation of the planewaves is in radian, 0 radian is at the equator
         //! of the soundfield, π/2 radian is the top of the sound field and -π/2 radian is the
@@ -187,7 +196,23 @@ namespace hoa
         //! @param index   The index of the planewave.
         //! @param elevation The elevation of the planewave.
         inline void setPlanewaveElevation(const size_t index, const T elevation) hoa_noexcept {
-            m_planewaves[index].setElevation(Math<T>::wrap_pi(elevation)); }
+            m_planewaves[index].setElevation(wrap_pi(elevation)); }
+
+        //! @brief Returns the azimuth of a planewave.
+        //! @details The azimuth of the planewaves is in radian, 0 radian is at the front of
+        //! the soundfield and π is at the back of the sound field.
+        //! @param index    The index of the planewave.
+        //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
+        inline T getPlanewaveAzimuth(const size_t index, const bool rotation = true) const hoa_noexcept
+        {
+            if(rotation)
+            {
+                int todo;
+                const T azimuth = m_planewaves[index].getAzimuth();
+                return azimuth;
+            }
+            return m_planewaves[index].getAzimuth();
+        }
 
         //! @brief Returns the elevation of a planewave.
         //! @details The elevation of the planewaves is in radian, 0 radian is at the equator
@@ -195,33 +220,65 @@ namespace hoa
         //! bottom of the sound field.
         //! @param index    The index of the planewave.
         //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
-        inline T getPlanewaveElevation(const size_t index, const bool rotation = true) const hoa_noexcept {
-            return m_planewaves[index].getElevation(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.)); }
+        inline T getPlanewaveElevation(const size_t index, const bool rotation = true) const hoa_noexcept
+        {
+            if(rotation)
+            {
+                int todo;
+                const T elevation = m_planewaves[index].getElevation();
+                return elevation;
+            }
+            return m_planewaves[index].getElevation();
+        }
 
         //! @brief Returns the abscissa of a planewave.
         //! @details The abscissa is between -1 and 1, -1 is the left of the soundfield, 0 is
         //! the center of the soundfield and 1 is the right of the soundfield.
         //! @param index    The index of the planewave.
         //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
-        inline T getPlanewaveAbscissa(const size_t index, const bool rotation = true) const hoa_noexcept {
-            return m_planewaves[index].getAbscissa(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.)); }
+        inline T getPlanewaveAbscissa(const size_t index, const bool rotation = true) const hoa_noexcept
+        {
+            if(rotation)
+            {
+                int todo;
+                const T azimuth = m_planewaves[index].getAbscissa();
+                return azimuth;
+            }
+            return m_planewaves[index].getAbscissa();
+        }
 
         //! @brief Returns the ordinate of a planewave.
         //! @details The ordinate is between -1 and 1, -1 is the back of the soundfield, 0 is
         //! the center of the soundfield and 1 is the front of the soundfield.
         //! @param index    The index of the planewave.
         //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
-        inline T getPlanewaveOrdinate(const size_t index, const bool rotation = true) const hoa_noexcept {
-            return m_planewaves[index].getOrdinate(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.)); }
+        inline T getPlanewaveOrdinate(const size_t index, const bool rotation = true) const hoa_noexcept
+        {
+            if(rotation)
+            {
+                int todo;
+                const T azimuth = m_planewaves[index].getOrdinate();
+                return azimuth;
+            }
+            return m_planewaves[index].getOrdinate();
+        }
 
         //! @brief Returns the height of a planewave.
         //! @details The height is between -1 and 1, -1 is the back of the soundfield, 0 is
         //! the center of the soundfield and 1 is the front of the soundfield.
         //! @param index    The index of the planewave.
         //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
-        inline T getPlanewaveHeight(const size_t index, const bool rotation = true) const hoa_noexcept {
-            return m_planewaves[index].getHeight(rotation ? m_rotation_x : T(0.), rotation ? m_rotation_y : T(0.), rotation ? m_rotation_z : T(0.)); }
-
+        inline T getPlanewaveHeight(const size_t index, const bool rotation = true) const hoa_noexcept
+        {
+            if(rotation)
+            {
+                int todo;
+                const T azimuth = m_planewaves[index].getHeight();
+                return azimuth;
+            }
+            return m_planewaves[index].getHeight();
+        }
+        
         //! @brief Retruns the name for a planewave.
         //! @details The a name for a planewave is in a std::string format that will be
         //! "Planewave index azimuth (in degrees)".
@@ -234,6 +291,17 @@ namespace hoa
         T                               m_rotation_y;
         T                               m_rotation_x;
 
+        static inline T wrap_twopi(T value)
+        {
+            while(value < T(0.)) {
+                value += T(HOA_2PI);
+            }
+            while(value >= T(HOA_2PI)){
+                value -= T(HOA_2PI);
+            }
+            return value;
+        }
+        
         void generateCicle(size_t nplws) hoa_noexcept
         {
             for(size_t i = 0; i < nplws; i++)

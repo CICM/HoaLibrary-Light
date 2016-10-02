@@ -259,7 +259,7 @@ namespace hoa
         //! The destructor.
         /** The destructor free the memory.
          */
-        virtual ~Decoder() hoa_default_f
+        virtual ~Decoder() {}
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -363,7 +363,7 @@ namespace hoa
                     channels.push_back(Planewave<Hoa2d, T>(i, nazimtuh, 0.));
                 }
 
-                sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);
+                sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::compare_azimuth);
 
                 {
                     const T current_angle   = channels[0].getAzimuth(0., 0., 0.);

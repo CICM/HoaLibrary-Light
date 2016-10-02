@@ -19,6 +19,5 @@ int main(int argc, char* const argv[])
 {
     std::cout << "HOA Library Testing...\n";
     int result = Catch::Session().run(argc, argv);
-    std::cout << "...End.\n";
     return result;
 }

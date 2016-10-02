@@ -101,7 +101,7 @@ namespace hoa
                 {
                     channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(i)), 0.));
                 }
-                std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::sort_azimuth);
+                std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::compare_azimuth);
                 {
                     const T current_angle   = channels[0].getAzimuth(0., 0., 0.);
                     const T previous_angle  = channels[channels.size() - 1].getAzimuth(0., 0., 0.);
