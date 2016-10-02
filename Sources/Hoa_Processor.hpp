@@ -28,7 +28,9 @@ namespace hoa
         //! @brief The pure virtual method performs that performs the digital signal processing.
         //! @param inputs  The inputs array.
         //! @param outputs The outputs array.
-        virtual void process(const T* inputs, T* outputs) hoa_noexcept = 0;
+        virtual void process(const T* inputs, T* outputs) hoa_noexcept {
+            assert(0 && "Nothing should never it this");
+        }
     };
 
     
@@ -124,8 +126,7 @@ namespace hoa
         ProcessorPlanewaves(const size_t nplws) hoa_noexcept :
         m_rotation_z(0.), m_rotation_y(0.), m_rotation_x(0.)
         {
-            if(D == Hoa2d)
-            {
+            if(D == Hoa2d) {
                 generateCicle(nplws);
             }
             else
@@ -163,9 +164,9 @@ namespace hoa
         //! @param z_axe The angle of rotation around the z axis in radian.
         void setPlanewavesRotation(const T x_axe, const T y_axe, const T z_axe) hoa_noexcept
         {
-            m_rotation_x = wrap_twopi(x_axe);
-            m_rotation_y = wrap_twopi(y_axe);
-            m_rotation_z = wrap_twopi(z_axe);
+            m_rotation_x = Planewave<D, T>::wrap_twopi(x_axe);
+            m_rotation_y = Planewave<D, T>::wrap_twopi(y_axe);
+            m_rotation_z = Planewave<D, T>::wrap_twopi(z_axe);
         }
 
         //! @brief Returns the angle of rotation around the x axis in radian of the planewaves.
@@ -187,7 +188,7 @@ namespace hoa
         //! @param index   The index of the planewave.
         //! @param azimuth The azimuth of the planewave.
         inline void setPlanewaveAzimuth(const size_t index, const T azimuth) hoa_noexcept {
-            m_planewaves[index].setAzimuth(wrap_twopi(azimuth)); }
+            m_planewaves[index].setAzimuth(azimuth); }
         
         //! @brief Sets the azimuth of a planewave in radian.
         //! @details The elevation of the planewaves is in radian, 0 radian is at the equator
@@ -196,7 +197,7 @@ namespace hoa
         //! @param index   The index of the planewave.
         //! @param elevation The elevation of the planewave.
         inline void setPlanewaveElevation(const size_t index, const T elevation) hoa_noexcept {
-            m_planewaves[index].setElevation(wrap_pi(elevation)); }
+            m_planewaves[index].setElevation(elevation); }
 
         //! @brief Returns the azimuth of a planewave.
         //! @details The azimuth of the planewaves is in radian, 0 radian is at the front of
@@ -207,9 +208,9 @@ namespace hoa
         {
             if(rotation)
             {
-                int todo;
-                const T azimuth = m_planewaves[index].getAzimuth();
-                return azimuth;
+                T x, y, z;
+                Planewave<D, T>::rotate(m_planewaves[index], m_rotation_x, m_rotation_y, m_rotation_z, x, y, z);
+                return Planewave<D, T>::xyz2azimuth(x, y, z);
             }
             return m_planewaves[index].getAzimuth();
         }
@@ -224,9 +225,9 @@ namespace hoa
         {
             if(rotation)
             {
-                int todo;
-                const T elevation = m_planewaves[index].getElevation();
-                return elevation;
+                T x, y, z;
+                Planewave<D, T>::rotate(m_planewaves[index], m_rotation_x, m_rotation_y, m_rotation_z, x, y, z);
+                return Planewave<D, T>::xyz2elevation(x, y, z);
             }
             return m_planewaves[index].getElevation();
         }
@@ -240,9 +241,9 @@ namespace hoa
         {
             if(rotation)
             {
-                int todo;
-                const T azimuth = m_planewaves[index].getAbscissa();
-                return azimuth;
+                T x, y, z;
+                Planewave<D, T>::rotate(m_planewaves[index], m_rotation_x, m_rotation_y, m_rotation_z, x, y, z);
+                return x;
             }
             return m_planewaves[index].getAbscissa();
         }
@@ -256,9 +257,9 @@ namespace hoa
         {
             if(rotation)
             {
-                int todo;
-                const T azimuth = m_planewaves[index].getOrdinate();
-                return azimuth;
+                T x, y, z;
+                Planewave<D, T>::rotate(m_planewaves[index], m_rotation_x, m_rotation_y, m_rotation_z, x, y, z);
+                return y;
             }
             return m_planewaves[index].getOrdinate();
         }
@@ -272,9 +273,9 @@ namespace hoa
         {
             if(rotation)
             {
-                int todo;
-                const T azimuth = m_planewaves[index].getHeight();
-                return azimuth;
+                T x, y, z;
+                Planewave<D, T>::rotate(m_planewaves[index], m_rotation_x, m_rotation_y, m_rotation_z, x, y, z);
+                return z;
             }
             return m_planewaves[index].getHeight();
         }
@@ -291,17 +292,6 @@ namespace hoa
         T                               m_rotation_y;
         T                               m_rotation_x;
 
-        static inline T wrap_twopi(T value)
-        {
-            while(value < T(0.)) {
-                value += T(HOA_2PI);
-            }
-            while(value >= T(HOA_2PI)){
-                value -= T(HOA_2PI);
-            }
-            return value;
-        }
-        
         void generateCicle(size_t nplws) hoa_noexcept
         {
             for(size_t i = 0; i < nplws; i++)

@@ -201,3 +201,217 @@ CATCH_TEST_CASE("Planewaves 3D", "[Planewaves] [3D]")
     }
 }
 
+CATCH_TEST_CASE("ProcessorPlanewaves 2D", "[Planewaves] [Processor] [2D]")
+{
+    typedef ProcessorPlanewaves<Hoa2d, hoa_float_t> Processor;
+    Processor proc(8);
+    hoa_float_t const epsilon = std::numeric_limits<hoa_float_t>::epsilon() * hoa_float_t(10.);
+    hoa_float_t const zero(0.);
+    hoa_float_t const one(1.);
+    
+    CATCH_CHECK(proc.getPlanewaveIndex(0) == 1);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationX()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationY()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationZ()) < epsilon);
+    
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, false) - hoa_float_t(0. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, true) - hoa_float_t(0. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(1) == 2);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, false) - hoa_float_t(1. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, true) - hoa_float_t(1. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(2) == 3);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, false) - hoa_float_t(2. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, true) - hoa_float_t(2. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(3) == 4);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, false) - hoa_float_t(3. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, true) - hoa_float_t(3. * HOA_2PI / 8.)) < epsilon);
+    
+    CATCH_CHECK(proc.getPlanewaveIndex(4) == 5);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, false) - hoa_float_t(4. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, true) - hoa_float_t(4. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(5) == 6);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, false) - hoa_float_t(5. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, true) - hoa_float_t(5. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(6) == 7);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, false) - hoa_float_t(6. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, true) - hoa_float_t(6. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(7) == 8);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, false) - hoa_float_t(7. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, true) - hoa_float_t(7. * HOA_2PI / 8.)) < epsilon);
+    
+    proc.setPlanewavesRotation(zero, zero, hoa_float_t(HOA_PI));
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationX()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationY()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationZ() - hoa_float_t(HOA_PI)) < epsilon);
+    
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, false) - hoa_float_t(0. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, true) - hoa_float_t(0. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(1) == 2);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, false) - hoa_float_t(1. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, true) - hoa_float_t(1. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(2) == 3);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, false) - hoa_float_t(2. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, true) - hoa_float_t(2. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(3) == 4);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, false) - hoa_float_t(3. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, true) - hoa_float_t(3. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    
+    CATCH_CHECK(proc.getPlanewaveIndex(4) == 5);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, false) - hoa_float_t(4. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, true) - hoa_float_t(4. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(5) == 6);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, false) - hoa_float_t(5. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, true) - hoa_float_t(5. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(6) == 7);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, false) - hoa_float_t(6. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, true) - hoa_float_t(6. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(7) == 8);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, false) - hoa_float_t(7. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, true) - hoa_float_t(7. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    
+    proc.setPlanewavesRotation(zero, zero, zero);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationX()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationY()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationZ()) < epsilon);
+    
+    proc.setPlanewaveAzimuth(0, hoa_float_t(0. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(1, hoa_float_t(1. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(2, hoa_float_t(2. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(3, hoa_float_t(3. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(4, hoa_float_t(4. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(5, hoa_float_t(5. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(6, hoa_float_t(6. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(7, hoa_float_t(7. * HOA_2PI / 8. + HOA_PI));
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, false) - hoa_float_t(0. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, true) - hoa_float_t(0. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(1) == 2);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, false) - hoa_float_t(1. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, true) - hoa_float_t(1. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(2) == 3);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, false) - hoa_float_t(2. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, true) - hoa_float_t(2. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(3) == 4);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, false) - hoa_float_t(3. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, true) - hoa_float_t(3. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    
+    CATCH_CHECK(proc.getPlanewaveIndex(4) == 5);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, false) - hoa_float_t(4. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, true) - hoa_float_t(4. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(5) == 6);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, false) - hoa_float_t(5. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, true) - hoa_float_t(5. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(6) == 7);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, false) - hoa_float_t(6. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, true) - hoa_float_t(6. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(7) == 8);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, false) - hoa_float_t(7. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, true) - hoa_float_t(7. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+}
+
+CATCH_TEST_CASE("ProcessorPlanewaves 3D", "[Planewaves] [Processor] [3D]")
+{
+    typedef ProcessorPlanewaves<Hoa3d, hoa_float_t> Processor;
+    Processor proc(8);
+    hoa_float_t const epsilon = std::numeric_limits<hoa_float_t>::epsilon() * hoa_float_t(10.);
+    hoa_float_t const zero(0.);
+    hoa_float_t const one(1.);
+    
+    CATCH_CHECK(proc.getPlanewaveIndex(0) == 1);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationX()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationY()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationZ()) < epsilon);
+    
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, false) - hoa_float_t(0. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, true) - hoa_float_t(0. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(1) == 2);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, false) - hoa_float_t(1. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, true) - hoa_float_t(1. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(2) == 3);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, false) - hoa_float_t(2. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, true) - hoa_float_t(2. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(3) == 4);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, false) - hoa_float_t(3. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, true) - hoa_float_t(3. * HOA_2PI / 8.)) < epsilon);
+    
+    CATCH_CHECK(proc.getPlanewaveIndex(4) == 5);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, false) - hoa_float_t(4. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, true) - hoa_float_t(4. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(5) == 6);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, false) - hoa_float_t(5. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, true) - hoa_float_t(5. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(6) == 7);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, false) - hoa_float_t(6. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, true) - hoa_float_t(6. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(7) == 8);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, false) - hoa_float_t(7. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, true) - hoa_float_t(7. * HOA_2PI / 8.)) < epsilon);
+    
+    proc.setPlanewavesRotation(zero, zero, hoa_float_t(HOA_PI));
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationX()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationY()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationZ() - hoa_float_t(HOA_PI)) < epsilon);
+    
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, false) - hoa_float_t(0. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, true) - hoa_float_t(0. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(1) == 2);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, false) - hoa_float_t(1. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, true) - hoa_float_t(1. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(2) == 3);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, false) - hoa_float_t(2. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, true) - hoa_float_t(2. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(3) == 4);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, false) - hoa_float_t(3. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, true) - hoa_float_t(3. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    
+    CATCH_CHECK(proc.getPlanewaveIndex(4) == 5);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, false) - hoa_float_t(4. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, true) - hoa_float_t(4. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(5) == 6);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, false) - hoa_float_t(5. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, true) - hoa_float_t(5. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(6) == 7);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, false) - hoa_float_t(6. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, true) - hoa_float_t(6. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(7) == 8);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, false) - hoa_float_t(7. * HOA_2PI / 8.)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, true) - hoa_float_t(7. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    
+    proc.setPlanewavesRotation(zero, zero, zero);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationX()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationY()) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewavesRotationZ()) < epsilon);
+    
+    proc.setPlanewaveAzimuth(0, hoa_float_t(0. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(1, hoa_float_t(1. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(2, hoa_float_t(2. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(3, hoa_float_t(3. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(4, hoa_float_t(4. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(5, hoa_float_t(5. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(6, hoa_float_t(6. * HOA_2PI / 8. + HOA_PI));
+    proc.setPlanewaveAzimuth(7, hoa_float_t(7. * HOA_2PI / 8. + HOA_PI));
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, false) - hoa_float_t(0. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(0, true) - hoa_float_t(0. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(1) == 2);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, false) - hoa_float_t(1. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(1, true) - hoa_float_t(1. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(2) == 3);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, false) - hoa_float_t(2. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(2, true) - hoa_float_t(2. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(3) == 4);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, false) - hoa_float_t(3. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(3, true) - hoa_float_t(3. * HOA_2PI / 8. + HOA_PI)) < epsilon);
+    
+    CATCH_CHECK(proc.getPlanewaveIndex(4) == 5);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, false) - hoa_float_t(4. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(4, true) - hoa_float_t(4. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(5) == 6);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, false) - hoa_float_t(5. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(5, true) - hoa_float_t(5. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(6) == 7);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, false) - hoa_float_t(6. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(6, true) - hoa_float_t(6. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(proc.getPlanewaveIndex(7) == 8);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, false) - hoa_float_t(7. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+    CATCH_CHECK(std::abs(proc.getPlanewaveAzimuth(7, true) - hoa_float_t(7. * HOA_2PI / 8. - HOA_PI)) < epsilon);
+}
+
