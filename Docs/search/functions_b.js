@@ -1,21 +1,4 @@
 var searchData=
 [
-  ['scale',['scale',['../classhoa_1_1_signal.html#add2d26027bbb97e65f24277bf7d7dd7f',1,'hoa::Signal']]],
-  ['scope',['Scope',['../classhoa_1_1_scope.html#a7dbb39d2cdd915012813a535b04d05bd',1,'hoa::Scope']]],
-  ['setazimuth',['setAzimuth',['../classhoa_1_1_encoder.html#a25a8752ae4f5a897bff3e4116b03e10b',1,'hoa::Encoder::setAzimuth()'],['../classhoa_1_1_multi_encoder.html#afcc520643806499a62715532d76e578b',1,'hoa::MultiEncoder::setAzimuth()'],['../classhoa_1_1_planewave.html#a24a05209709a87a1e05f82e728d6d495',1,'hoa::Planewave::setAzimuth()']]],
-  ['setcoordinates',['setCoordinates',['../classhoa_1_1_encoder.html#a4dc48de9f5447f0be70f720eeeb8c795',1,'hoa::Encoder']]],
-  ['setcropsize',['setCropSize',['../classhoa_1_1_decoder_binaural_3_01_hoa2d_00_01_t_01_4.html#a07f0035425c715c2eafcaaba56aad187',1,'hoa::DecoderBinaural&lt; Hoa2d, T &gt;::setCropSize()'],['../classhoa_1_1_decoder_binaural_3_01_hoa3d_00_01_t_01_4.html#a07f0035425c715c2eafcaaba56aad187',1,'hoa::DecoderBinaural&lt; Hoa3d, T &gt;::setCropSize()']]],
-  ['setelevation',['setElevation',['../classhoa_1_1_encoder.html#ac9ca9922e0953331328a0d663ff4a306',1,'hoa::Encoder::setElevation()'],['../classhoa_1_1_multi_encoder.html#a6ddc4acaf9140c8a3bc72f102957fb31',1,'hoa::MultiEncoder::setElevation()'],['../classhoa_1_1_planewave.html#a75d970d9ec795115ab4dfe534bea8ace',1,'hoa::Planewave::setElevation()']]],
-  ['setmode',['setMode',['../classhoa_1_1_optim.html#a243815c506ba18789f14d0f2a4fd963a',1,'hoa::Optim']]],
-  ['setmute',['setMute',['../classhoa_1_1_multi_encoder.html#aee4179de1ddae2b83a74d92995ea4e10',1,'hoa::MultiEncoder']]],
-  ['setnormalization',['setNormalization',['../classhoa_1_1_exchanger.html#a78de10e731491e642a2001b96015ef10',1,'hoa::Exchanger']]],
-  ['setnumbering',['setNumbering',['../classhoa_1_1_exchanger.html#ac9a0e7f076c748194109cc4e5a75e871',1,'hoa::Exchanger']]],
-  ['setplanewaveazimuth',['setPlanewaveAzimuth',['../classhoa_1_1_processor_planewaves.html#ac65cb57ebbe82f7f9e6df505a50933b4',1,'hoa::ProcessorPlanewaves']]],
-  ['setplanewaveelevation',['setPlanewaveElevation',['../classhoa_1_1_processor_planewaves.html#acb1b69deec2243a34bbdeea0b8fef53a',1,'hoa::ProcessorPlanewaves']]],
-  ['setplanewavesrotation',['setPlanewavesRotation',['../classhoa_1_1_processor_planewaves.html#ae8db000417d9499a04bc40527a30814f',1,'hoa::ProcessorPlanewaves']]],
-  ['setradius',['setRadius',['../classhoa_1_1_encoder.html#abb1066342c1004a2656de7f73b4c1fa5',1,'hoa::Encoder::setRadius()'],['../classhoa_1_1_multi_encoder.html#a559770d35748b42e00f7e59ca1dd876c',1,'hoa::MultiEncoder::setRadius()']]],
-  ['setviewrotation',['setViewRotation',['../classhoa_1_1_scope.html#a0d0b92ce56a808a6a3bc6592e098c3b6',1,'hoa::Scope']]],
-  ['setwidening',['setWidening',['../classhoa_1_1_wider.html#a2d6e46ebff718f0a165f69dfde89064e',1,'hoa::Wider']]],
-  ['setyaw',['setYaw',['../classhoa_1_1_rotate.html#a02182755f1ddfdb0e5ae97b8f12d904e',1,'hoa::Rotate']]],
-  ['sum',['sum',['../classhoa_1_1_signal.html#a9c783d412cc89c7015e9b421294ea563',1,'hoa::Signal']]]
+  ['wider',['Wider',['../classhoa_1_1_wider.html#a46105ffbac51a64c2d1a551a1345bc88',1,'hoa::Wider']]]
 ];

@@ -863,7 +863,10 @@ RECURSIVE              = YES
 # run.
 
 EXCLUDE                = Sources/Hoa_HrirIrc1002C2D.hpp \
-                         Sources/Hoa_HrirIrc1002C3D.hpp
+                         Sources/Hoa_HrirIrc1002C3D.hpp \
+                         Sources/Hoa_Math.hpp \
+                         Sources/Hoa_Tools.hpp \
+                         Sources/Hoa_Hrir.hpp
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

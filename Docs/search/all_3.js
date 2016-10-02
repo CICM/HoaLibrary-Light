@@ -8,13 +8,10 @@ var searchData=
   ['decoderbinaural',['DecoderBinaural',['../classhoa_1_1_decoder_binaural.html#a14592c26b99bb95f6450d8df2ba9925b',1,'hoa::DecoderBinaural::DecoderBinaural()'],['../classhoa_1_1_decoder_binaural_3_01_hoa2d_00_01_t_01_4.html#a3269ccc7e474636fdd08d11987647f4c',1,'hoa::DecoderBinaural&lt; Hoa2d, T &gt;::DecoderBinaural()'],['../classhoa_1_1_decoder_binaural_3_01_hoa3d_00_01_t_01_4.html#a14592c26b99bb95f6450d8df2ba9925b',1,'hoa::DecoderBinaural&lt; Hoa3d, T &gt;::DecoderBinaural()']]],
   ['decoderbinaural_3c_20hoa2d_2c_20t_20_3e',['DecoderBinaural&lt; Hoa2d, T &gt;',['../classhoa_1_1_decoder_binaural_3_01_hoa2d_00_01_t_01_4.html',1,'hoa']]],
   ['decoderbinaural_3c_20hoa3d_2c_20t_20_3e',['DecoderBinaural&lt; Hoa3d, T &gt;',['../classhoa_1_1_decoder_binaural_3_01_hoa3d_00_01_t_01_4.html',1,'hoa']]],
-  ['decoderirregular',['DecoderIrregular',['../classhoa_1_1_decoder_irregular.html#aaf78ecd44db12a5a65e354fc19b35110',1,'hoa::DecoderIrregular::DecoderIrregular()'],['../classhoa_1_1_decoder_irregular_3_01_hoa2d_00_01_t_01_4.html#aaf78ecd44db12a5a65e354fc19b35110',1,'hoa::DecoderIrregular&lt; Hoa2d, T &gt;::DecoderIrregular()']]],
   ['decoderirregular',['DecoderIrregular',['../classhoa_1_1_decoder_irregular.html',1,'hoa']]],
+  ['decoderirregular',['DecoderIrregular',['../classhoa_1_1_decoder_irregular.html#aaf78ecd44db12a5a65e354fc19b35110',1,'hoa::DecoderIrregular::DecoderIrregular()'],['../classhoa_1_1_decoder_irregular_3_01_hoa2d_00_01_t_01_4.html#aaf78ecd44db12a5a65e354fc19b35110',1,'hoa::DecoderIrregular&lt; Hoa2d, T &gt;::DecoderIrregular()']]],
   ['decoderirregular_3c_20hoa2d_2c_20t_20_3e',['DecoderIrregular&lt; Hoa2d, T &gt;',['../classhoa_1_1_decoder_irregular_3_01_hoa2d_00_01_t_01_4.html',1,'hoa']]],
   ['decoderregular',['DecoderRegular',['../classhoa_1_1_decoder_regular.html',1,'hoa']]],
-  ['decoderregular',['DecoderRegular',['../classhoa_1_1_decoder_regular.html#a6fd6b918ab79c8a04469186ae905b449',1,'hoa::DecoderRegular::DecoderRegular()'],['../classhoa_1_1_decoder_regular_3_01_hoa2d_00_01_t_01_4.html#a6fd6b918ab79c8a04469186ae905b449',1,'hoa::DecoderRegular&lt; Hoa2d, T &gt;::DecoderRegular()'],['../classhoa_1_1_decoder_regular_3_01_hoa3d_00_01_t_01_4.html#a6fd6b918ab79c8a04469186ae905b449',1,'hoa::DecoderRegular&lt; Hoa3d, T &gt;::DecoderRegular()']]],
-  ['decoderregular_3c_20hoa2d_2c_20t_20_3e',['DecoderRegular&lt; Hoa2d, T &gt;',['../classhoa_1_1_decoder_regular_3_01_hoa2d_00_01_t_01_4.html',1,'hoa']]],
-  ['decoderregular_3c_20hoa3d_2c_20t_20_3e',['DecoderRegular&lt; Hoa3d, T &gt;',['../classhoa_1_1_decoder_regular_3_01_hoa3d_00_01_t_01_4.html',1,'hoa']]],
-  ['dimension',['Dimension',['../namespacehoa.html#afeeb3ea8d8350f7e9c636d23679a4dca',1,'hoa']]],
-  ['dot',['dot',['../classhoa_1_1_signal.html#ac84df170f12947c40b2cd644bdd73bf9',1,'hoa::Signal']]]
+  ['decoderregular',['DecoderRegular',['../classhoa_1_1_decoder_regular.html#a9dd7051671e3f1be529b7ce5716a16f5',1,'hoa::DecoderRegular']]],
+  ['dimension',['Dimension',['../namespacehoa.html#afeeb3ea8d8350f7e9c636d23679a4dca',1,'hoa']]]
 ];
