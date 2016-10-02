@@ -26,31 +26,27 @@ CATCH_TEST_CASE("Decoder 2D", "[Decoder] [2D]")
     
     CATCH_SECTION("Regular")
     {
-        /*
         DecoderRegular<Hoa2d, hoa_float_t> decoder(7, 16);
         encoder.setAzimuth(hoa_float_t(0.));
         encoder.process(&input, harmonics.data());
         decoder.process(harmonics.data(), outputs.data());
         
-        CATCH_CHECK(std::abs(outputs[0]  - hoa_float_t(0.93750000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[1]  - hoa_float_t(0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[2]  - hoa_float_t(-0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[3]  - hoa_float_t(0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[4]  - hoa_float_t(-0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[5]  - hoa_float_t(0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[6]  - hoa_float_t(-0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[7]  - hoa_float_t(0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[8]  - hoa_float_t(-0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[9]  - hoa_float_t(0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[10] - hoa_float_t(-0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[11] - hoa_float_t(0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[12] - hoa_float_t(-0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[13] - hoa_float_t(0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[14] - hoa_float_t(-0.06249989569187164)) < epsilon);
-        CATCH_CHECK(std::abs(outputs[15] - hoa_float_t(0.06249989569187164)) < epsilon);
-        */
-        //test harmonic 0
-        // test
+        CATCH_CHECK(std::abs(outputs[0]  - hoa_float_t(0.5)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[1]  - hoa_float_t(0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[2]  - hoa_float_t(-0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[3]  - hoa_float_t(0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[4]  - hoa_float_t(-0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[5]  - hoa_float_t(0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[6]  - hoa_float_t(-0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[7]  - hoa_float_t(0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[8]  - hoa_float_t(-0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[9]  - hoa_float_t(0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[10] - hoa_float_t(-0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[11] - hoa_float_t(0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[12] - hoa_float_t(-0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[13] - hoa_float_t(0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[14] - hoa_float_t(-0.03333324939012527)) < epsilon);
+        CATCH_CHECK(std::abs(outputs[15] - hoa_float_t(0.03333324939012527)) < epsilon);
     }
 }
 

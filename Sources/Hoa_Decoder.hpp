@@ -133,10 +133,17 @@ namespace hoa
                 encoder.setAzimuth(Decoder<D, T>::getPlanewaveAzimuth(i));
                 encoder.setElevation(Decoder<D, T>::getPlanewaveElevation(i));
                 encoder.process(&factor, m_matrix + i * nharm);
-                for(size_t j = 0; j < nharm; ++j)
+                if(D == Hoa2d)
                 {
-                    const size_t degree = Decoder<D, T>::getHarmonicDegree(j);
-                     m_matrix[i * nharm + j] *= (T(2) * T(degree) + T(1));
+                     m_matrix[i * nharm] *= T(0.5);
+                }
+                else
+                {
+                    for(size_t j = 0; j < nharm; ++j)
+                    {
+                        const size_t degree = Decoder<D, T>::getHarmonicDegree(j);
+                        m_matrix[i * nharm + j] *= (T(2) * T(degree) + T(1));
+                    }
                 }
             }
         }
