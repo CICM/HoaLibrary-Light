@@ -373,8 +373,8 @@ namespace hoa
                 sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::compare_azimuth);
 
                 {
-                    const T current_angle   = channels[0].getAzimuth(0., 0., 0.);
-                    const T previous_angle  = channels[channels.size() - 1].getAzimuth(0., 0., 0.);
+                    const T current_angle   = channels[0].getAzimuth();
+                    const T previous_angle  = channels[channels.size() - 1].getAzimuth();
                     const T previous_portion= (HOA_2PI - previous_angle) + current_angle;
                     if(smallest_distance > previous_portion)
                     {
@@ -384,8 +384,8 @@ namespace hoa
                 }
                 for(size_t i = 1; i < channels.size(); i++)
                 {
-                    const T current_angle   = channels[i].getAzimuth(0., 0., 0.);
-                    const T previous_angle  = channels[i-1].getAzimuth(0., 0., 0.);
+                    const T current_angle   = channels[i].getAzimuth();
+                    const T previous_angle  = channels[i-1].getAzimuth();
                     const T previous_portion= current_angle - previous_angle;
                     if(smallest_distance > previous_portion)
                     {
@@ -407,17 +407,17 @@ namespace hoa
                 {
                     const T angle = T(i) / T(nvirtual) * HOA_2PI;
                     //post("virtual %i :  %f", (int)i , (float)(angle / HOA_2PI * 360.f));
-                    if(angle < channels[0].getAzimuth(0., 0., 0.))
+                    if(angle < channels[0].getAzimuth())
                     {
-                        const T portion = (HOA_2PI - channels[channels.size()-1].getAzimuth(0., 0., 0.)) + channels[0].getAzimuth(0., 0., 0.);
+                        const T portion = (HOA_2PI - channels[channels.size()-1].getAzimuth()) + channels[0].getAzimuth();
 
-                        const T factor1 = (1. - ((channels[0].getAzimuth(0., 0., 0.) - angle) / portion)) * factor;
+                        const T factor1 = (1. - ((channels[0].getAzimuth() - angle) / portion)) * factor;
                         encoder.setAzimuth(angle);
                         encoder.process(&factor1, vector_harmonics);
                         vector_harmonics[0] = factor1 * 0.5;
                         Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
-                        const T factor2 = ((channels[0].getAzimuth(0., 0., 0.) - angle) / portion) * factor;
+                        const T factor2 = ((channels[0].getAzimuth() - angle) / portion) * factor;
                         encoder.process(&factor2, vector_harmonics);
                         vector_harmonics[0] = factor2 * 0.5;
                         Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size() - 1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
@@ -430,17 +430,17 @@ namespace hoa
                         //     (float)(channels[0].getAzimuth() / HOA_2PI * 360.f),
                         //     (float)(factor1 / factor) * 100.f);
                     }
-                    else if(angle >= channels[channels.size() - 1].getAzimuth(0., 0., 0.))
+                    else if(angle >= channels[channels.size() - 1].getAzimuth())
                     {
-                        const T portion = (HOA_2PI - channels[channels.size()-1].getAzimuth(0., 0., 0.)) + channels[0].getAzimuth(0., 0., 0.);
+                        const T portion = (HOA_2PI - channels[channels.size()-1].getAzimuth()) + channels[0].getAzimuth();
 
-                        const T factor1 = (1. - ((angle - channels[channels.size()-1].getAzimuth(0., 0., 0.)) / portion)) * factor;
+                        const T factor1 = (1. - ((angle - channels[channels.size()-1].getAzimuth()) / portion)) * factor;
                         encoder.setAzimuth(angle);
                         encoder.process(&factor1, vector_harmonics);
                         vector_harmonics[0] = factor1 * 0.5;
                         Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[channels.size()-1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
-                        const T factor2 = ((angle - channels[channels.size()-1].getAzimuth(0., 0., 0.)) / portion) * factor;
+                        const T factor2 = ((angle - channels[channels.size()-1].getAzimuth()) / portion) * factor;
                         encoder.process(&factor2, vector_harmonics);
                         vector_harmonics[0] = factor2 * 0.5;
                         Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[0].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
@@ -457,17 +457,17 @@ namespace hoa
                     {
                         for(size_t j = 1; j < channels.size(); j++)
                         {
-                            if(angle < channels[j].getAzimuth(0., 0., 0.) && angle >= channels[j-1].getAzimuth(0., 0., 0.))
+                            if(angle < channels[j].getAzimuth() && angle >= channels[j-1].getAzimuth())
                             {
-                                const T portion = (channels[j].getAzimuth(0., 0., 0.) - channels[j-1].getAzimuth(0., 0., 0.));
+                                const T portion = (channels[j].getAzimuth() - channels[j-1].getAzimuth());
 
-                                const T factor1 = (1. - ((channels[j].getAzimuth(0., 0., 0.) - angle) / portion)) * factor;
+                                const T factor1 = (1. - ((channels[j].getAzimuth() - angle) / portion)) * factor;
                                 encoder.setAzimuth(angle);
                                 encoder.process(&factor1, vector_harmonics);
                                 vector_harmonics[0] = factor1 * 0.5;
                                 Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
 
-                                const T factor2 = ((channels[j].getAzimuth(0., 0., 0.) - angle) / portion) * factor;
+                                const T factor2 = ((channels[j].getAzimuth() - angle) / portion) * factor;
                                 encoder.process(&factor2, vector_harmonics);
                                 vector_harmonics[0] = factor2 * 0.5;
                                 Signal<T>::add(Decoder<Hoa2d, T>::getNumberOfHarmonics(), vector_harmonics, m_matrix + channels[j-1].getIndex() * Decoder<Hoa2d, T>::getNumberOfHarmonics());
