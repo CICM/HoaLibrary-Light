@@ -43,7 +43,7 @@ namespace hoa
         m_index(index), m_azimuth(xyz2azimuth(abscissa, ordinate, height)), m_elevation(xyz2elevation(abscissa, ordinate, height)) {}
 
         //! @brief The plane wave destructor.
-		~Planewave() hoa_noexcept {}
+		virtual ~Planewave() hoa_noexcept {}
 
         //! Returns the index of the plane wave.
         inline size_t getIndex() const hoa_noexcept { return m_index; }

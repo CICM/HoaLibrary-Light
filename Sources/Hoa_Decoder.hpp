@@ -149,7 +149,7 @@ namespace hoa
         }
         
         //! @brief Return the type of the decoder.
-        inline typename Decoder<D, T>::Mode getMode() const hoa_noexcept {return Decoder<D, T>::RegularMode;}
+        inline typename Decoder<D, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<D, T>::RegularMode;}
         
     private:
         T*  m_matrix;
