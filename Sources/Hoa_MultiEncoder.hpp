@@ -107,7 +107,7 @@ namespace hoa
             return m_encoders[index].getRadius();
         }
         
-        //! @brief Returns the radius of a source.
+        //! @brief Returns the widening value of a source.
         inline T getWidening(size_t index) const {
             return m_encoders[index].getRadius() > T(1.) ? T(1.) : m_encoders[index].getRadius();
         }
