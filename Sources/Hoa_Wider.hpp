@@ -49,7 +49,7 @@ namespace hoa
         inline void setWidening(T value) hoa_noexcept {
             m_widening = std::max(std::min(value, T(1)), T(0));
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
-            const T      temp   = 1 - m_widening;
+            const T      temp   = T(1) - m_widening;
             T* coeff            = m_coeffs;
             
             (*coeff++) = (T(order) * temp + T(1.));
