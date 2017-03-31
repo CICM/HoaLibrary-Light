@@ -106,7 +106,7 @@ namespace hoa
         //! @brief Returns the elevation.
         inline T getElevation()  const hoa_noexcept { return m_elevation; }
         
-        //! @brief Sets the radius.
+        //! @brief Sets the coordinates.
         //! @param radius The new radius.
         //! @param azimuth The new azimuth.
         //! @param elevation The new elevation.
