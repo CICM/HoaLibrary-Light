@@ -7,8 +7,9 @@
 #include <cfloat>
 #include <cmath>
 
-#include <Hoa.hpp>
+#include <Hoa_Harmonics.hpp>
 using namespace hoa;
+typedef float hoa_float_t;
 
 #define CATCH_CONFIG_PREFIX_ALL
 #include "catch.hpp"
@@ -95,32 +96,32 @@ CATCH_TEST_CASE("Harmonics 2D", "[Harmonics] [2D]")
 
     CATCH_SECTION("Static Normalization")
     {
-        CATCH_CHECK(Harmonic::getSemiNormalization(0, 0) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(1, -1) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(1, 1) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(2, -2) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(2, 2) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(3, -3) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(3, 3) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(7, -7) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(7, 7) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(11, -11) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(11, 11) == 1.);
+        CATCH_CHECK(Harmonic::getSemiNormalization(0, 0) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(1, -1) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(1, 1) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(2, -2) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(2, 2) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(3, -3) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(3, 3) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(7, -7) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(7, 7) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(11, -11) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(11, 11) == hoa_float_t(1.));
     }
 
     CATCH_SECTION("Static Semi Normalization")
     {
-        CATCH_CHECK(Harmonic::getSemiNormalization(0, 0) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(1, -1) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(1, 1) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(2, -2) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(2, 2) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(3, -3) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(3, 3) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(7, -7) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(7, 7) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(11, -11) == 1.);
-        CATCH_CHECK(Harmonic::getSemiNormalization(11, 11) == 1.);
+        CATCH_CHECK(Harmonic::getSemiNormalization(0, 0) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(1, -1) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(1, 1) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(2, -2) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(2, 2) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(3, -3) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(3, 3) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(7, -7) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(7, 7) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(11, -11) == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic::getSemiNormalization(11, 11) == hoa_float_t(1.));
     }
 
 
@@ -176,32 +177,32 @@ CATCH_TEST_CASE("Harmonics 2D", "[Harmonics] [2D]")
 
     CATCH_SECTION("Local Normalization")
     {
-        CATCH_CHECK(Harmonic0.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic1.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic2.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic3.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic4.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic5.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic6.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic13.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic14.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic21.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic22.getNormalization() == 1.);
+        CATCH_CHECK(Harmonic0.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic1.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic2.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic3.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic4.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic5.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic6.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic13.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic14.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic21.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic22.getNormalization() == hoa_float_t(1.));
     }
 
     CATCH_SECTION("Local Semi Normalization")
     {
-        CATCH_CHECK(Harmonic0.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic1.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic2.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic3.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic4.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic5.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic6.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic13.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic14.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic21.getNormalization() == 1.);
-        CATCH_CHECK(Harmonic22.getNormalization() == 1.);
+        CATCH_CHECK(Harmonic0.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic1.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic2.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic3.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic4.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic5.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic6.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic13.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic14.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic21.getNormalization() == hoa_float_t(1.));
+        CATCH_CHECK(Harmonic22.getNormalization() == hoa_float_t(1.));
     }
 }
 
@@ -364,41 +365,41 @@ CATCH_TEST_CASE("Harmonics 3D", "[Harmonics] [3D]")
     
     CATCH_SECTION("Static Normalization")
     {
-        CATCH_CHECK(Harmonic::getNormalization(0, 0) == 1.);
+        CATCH_CHECK(Harmonic::getNormalization(0, 0) == hoa_float_t(1.));
 
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(1, -1) - 1.7320507764816284) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(1, 0) -  1.7320507764816284) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(1, 1) -  1.7320507764816284) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(1, -1) - hoa_float_t(1.7320507764816284)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(1, 0) - hoa_float_t(1.7320507764816284)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(1, 1) - hoa_float_t(1.7320507764816284)) < epsilon);
         
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, -3) - 0.13944333791732788) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, -2) - 0.34156504273414612) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, -1) - 1.0801234245300293) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, 0) - 2.6457512378692627) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, 1) - 1.0801234245300293) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, 2) - 0.34156504273414612) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, 3) - 0.13944333791732788) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, -3) - hoa_float_t(0.13944333791732788)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, -2) - hoa_float_t(0.34156504273414612)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, -1) - hoa_float_t(1.0801234245300293)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, 0) - hoa_float_t(2.6457512378692627)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, 1) - hoa_float_t(1.0801234245300293)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, 2) - hoa_float_t(0.34156504273414612)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(3, 3) - hoa_float_t(0.13944333791732788)) < epsilon);
         
     
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -7) - 0.000018550535969552584) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -6) - 0.000069409754360094666) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -5) - 0.00035392167046666145) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -4) - 0.0021235300227999687) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -3) - 0.014085904695093632) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -2) - 0.099602386355400085) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -1) - 0.73192507028579712) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 0) - 3.872983455657959) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 1) - 0.73192507028579712) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 2) - 0.099602386355400085) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 3) - 0.014085904695093632) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 4) - 0.0021235300227999687) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 5) - 0.00035392167046666145) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 6) - 0.000069409754360094666) < epsilon);
-        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 7) - 0.000018550535969552584) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -7) - hoa_float_t(0.000018550535969552584)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -6) - hoa_float_t(0.000069409754360094666)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -5) - hoa_float_t(0.00035392167046666145)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -4) - hoa_float_t(0.0021235300227999687)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -3) - hoa_float_t(0.014085904695093632)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -2) - hoa_float_t(0.099602386355400085)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, -1) - hoa_float_t(0.73192507028579712)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 0) - hoa_float_t(3.872983455657959)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 1) - hoa_float_t(0.73192507028579712)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 2) - hoa_float_t(0.099602386355400085)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 3) - hoa_float_t(0.014085904695093632)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 4) - hoa_float_t(0.0021235300227999687)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 5) - hoa_float_t(0.00035392167046666145)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 6) - hoa_float_t(0.000069409754360094666)) < epsilon);
+        CATCH_CHECK(std::abs(Harmonic::getNormalization(7, 7) - hoa_float_t(0.000018550535969552584)) < epsilon);
     }
     
     CATCH_SECTION("Static Semi Normalization")
     {
-        CATCH_CHECK(Harmonic::getSemiNormalization(0, 0) == 1.);
+        CATCH_CHECK(Harmonic::getSemiNormalization(0, 0) == hoa_float_t(1.));
         
         CATCH_CHECK(std::abs(Harmonic::getSemiNormalization(1, -1) - 1.) < epsilon);
         CATCH_CHECK(std::abs(Harmonic::getSemiNormalization(1, 0) - 1) < epsilon);

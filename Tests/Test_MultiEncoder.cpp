@@ -38,17 +38,17 @@ CATCH_TEST_CASE("MultiEncoder 2D", "[Encoder] [MultiEncoder] [2D]")
     CATCH_CHECK(encoder.getRadius(0) == 0.);
     CATCH_CHECK(encoder.getAzimuth(0) == 0.);
     CATCH_CHECK(encoder.getElevation(0) == 0.);
-    CATCH_CHECK(encoder.getMute(0) == false);
+    CATCH_CHECK_FALSE(encoder.getMute(0));
     
     CATCH_CHECK(encoder.getRadius(1) == 1.);
     CATCH_CHECK(encoder.getAzimuth(1) == 1.);
     CATCH_CHECK(encoder.getElevation(1) == 1.);
-    CATCH_CHECK(encoder.getMute(1) == false);
+    CATCH_CHECK_FALSE(encoder.getMute(1));
     
     CATCH_CHECK(encoder.getRadius(2) == 2.);
     CATCH_CHECK(encoder.getAzimuth(2) == 2.);
     CATCH_CHECK(encoder.getElevation(2) == 2.);
-    CATCH_CHECK(encoder.getMute(2) == false);
+    CATCH_CHECK_FALSE(encoder.getMute(2));
     
     encoder.process(inputs.data(), ouputs.data());
 }
@@ -79,17 +79,17 @@ CATCH_TEST_CASE("MultiEncoder 3D", "[Encoder] [MultiEncoder] [3D]")
     CATCH_CHECK(encoder.getRadius(0) == 0.);
     CATCH_CHECK(encoder.getAzimuth(0) == 0.);
     CATCH_CHECK(encoder.getElevation(0) == 0.);
-    CATCH_CHECK(encoder.getMute(0) == false);
+    CATCH_CHECK_FALSE(encoder.getMute(0));
     
     CATCH_CHECK(encoder.getRadius(1) == 1.);
     CATCH_CHECK(encoder.getAzimuth(1) == 1.);
     CATCH_CHECK(encoder.getElevation(1) == 1.);
-    CATCH_CHECK(encoder.getMute(1) == false);
+    CATCH_CHECK_FALSE(encoder.getMute(1));
     
     CATCH_CHECK(encoder.getRadius(2) == 2.);
     CATCH_CHECK(encoder.getAzimuth(2) == 2.);
     CATCH_CHECK(encoder.getElevation(2) == 2.);
-    CATCH_CHECK(encoder.getMute(2) == false);
+    CATCH_CHECK_FALSE(encoder.getMute(2));
     
     encoder.process(inputs.data(), ouputs.data());
     
