@@ -31,7 +31,7 @@ namespace hoa
         static inline T* alloc(const size_t size) hoa_noexcept
         {
 #ifdef __APPLE__
-            T* vec = (T *)malloc(size * sizeof(T));
+            T* vec = static_cast<T*>(malloc(size * sizeof(T)));
             if(vec) {clear(size, vec);}
             return vec;
 #elif _WINDOWS
