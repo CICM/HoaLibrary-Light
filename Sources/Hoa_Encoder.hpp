@@ -113,10 +113,10 @@ namespace hoa
         inline void setCoordinates(T radius, T azimuth, T elevation) hoa_noexcept {
             setRadius(radius);
             while(elevation < -HOA_PI) {
-                elevation += (T)HOA_2PI;
+                elevation += static_cast<T>(HOA_2PI);
             }
             while(elevation >= HOA_PI) {
-                elevation -= (T)HOA_2PI;
+                elevation -= static_cast<T>(HOA_2PI);
             }
             if(elevation >= -HOA_PI2 && elevation <= HOA_PI2)
             {
