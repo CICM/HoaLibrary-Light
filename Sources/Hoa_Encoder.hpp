@@ -213,14 +213,14 @@ namespace hoa
             m_elevation = elevation;
             T* coeffs   = m_elevation_coeffs;
             const size_t order = ProcessorHarmonics<D, T>::getDecompositionOrder();
-            const T cos_theta = T(std::sin(elevation)); // In fact we use sinus to offset the elvation
-            const T sqr_theta = -T(std::sqrt(T(1.) - cos_theta * cos_theta));
+            const T sin_theta = T(std::sin(elevation)); // In fact we use sinus to offset the elevation
+            const T sqr_theta = -T(std::sqrt(T(1.) - sin_theta * sin_theta));
             // Organization [0, 0], [1, 1], [1, 0], [2, 2], [2, 1], [2, 0], [3, 3],
             // [3, 2], [3, 1], [3, 0], [4, 4], ...
             
             *(coeffs++) = 1;            // P(0, 0)(x) = 1
             *(coeffs++) = sqr_theta;    // P(1, 1)(x) = -(2*0+1)sqrt(1-x^2)P(0,0)(x) = -sqrt(1-x^2)
-            *(coeffs++) = cos_theta;    // P(1, 0)(x) = x(2*0+1)P(0,0)(x) = x
+            *(coeffs++) = sin_theta;    // P(1, 0)(x) = x(2*0+1)P(0,0)(x) = x
             for(size_t i = 2; i <= order; ++i)
             {
                 const T ratio = 2 * T(i-1) + 1;
@@ -228,18 +228,18 @@ namespace hoa
                 // P(l+1,l+1)(x) = -(2l+1) sqrt(1-x^2) P(l,l)(x)
                 *(coeffs++) = ratio * sqr_theta * previous;
                 // P(l+1,l)(x)   = x(2l+1) P(l,l)(x)
-                *(coeffs++) = ratio * cos_theta * previous;
+                *(coeffs++) = ratio * sin_theta * previous;
                 for(size_t j = i - 2; j > 0; --j)
                 {
                     const T previous1 = *(coeffs-(i+1));
                     const T previous2 = *(coeffs-(2*i+1));
                     // P(l+1,m)(x)   = (x(2l+1)P(l,m)(x) - (l+m)P(l-1, m)(x)) / (l-m+1)
-                    *(coeffs++) = ((ratio * cos_theta * previous1) - (T(i-1) + T(j)) * previous2) / (T(i-1) - T(j) + 1);
+                    *(coeffs++) = ((ratio * sin_theta * previous1) - (T(i-1) + T(j)) * previous2) / (T(i-1) - T(j) + 1);
                 }
                 const T previous1 = *(coeffs-(i+1));
                 const T previous2 = *(coeffs-(2*i+1));
                 // P(l+1,0)(x)   = (x(2l+1)P(l,0)(x) - (l)P(l-1, 0)(x)) / (l+1)
-                *(coeffs++) = ((ratio * cos_theta * previous1) - T(i-1) * previous2) / (T(i-1) + 1);
+                *(coeffs++) = ((ratio * sin_theta * previous1) - T(i-1) * previous2) / (T(i-1) + 1);
             }
         }
     
