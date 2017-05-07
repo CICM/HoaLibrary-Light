@@ -213,7 +213,7 @@ namespace hoa
             m_elevation = elevation;
             T* coeffs   = m_elevation_coeffs;
             const size_t order = ProcessorHarmonics<D, T>::getDecompositionOrder();
-            const T sin_theta = T(std::sin(elevation)); // In fact we use sinus to offset the elevation
+            const T sin_theta = T(std::sin(elevation));
             const T sqr_theta = -T(std::sqrt(T(1.) - sin_theta * sin_theta));
             // Organization [0, 0], [1, 1], [1, 0], [2, 2], [2, 1], [2, 0], [3, 3],
             // [3, 2], [3, 1], [3, 0], [4, 4], ...
