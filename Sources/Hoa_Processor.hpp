@@ -297,7 +297,7 @@ namespace hoa
         {
             for(size_t i = 0; i < nplws; i++)
             {
-                m_planewaves.push_back(Planewave<D, T>(i+1, (T)i / T(nplws) * HOA_2PI, 0.));
+                m_planewaves.push_back(Planewave<D, T>(i+1, static_cast<T>(i) / static_cast<T>(nplws) * static_cast<T>(HOA_2PI), 0.));
             }
         }
         
@@ -306,10 +306,10 @@ namespace hoa
             const double oh = -(sqrt(2. / 3.) / sqrt(3. / 8.) - 1.);
             const double hc = sqrt(1. - oh * oh);
             const double el = asin(oh / sqrt(hc*hc + oh*oh));
-            m_planewaves.push_back(Planewave<D, T>(1ul,  0., (T)HOA_PI2));
+            m_planewaves.push_back(Planewave<D, T>(1ul,  0., HOA_PI2));
             m_planewaves.push_back(Planewave<D, T>(2ul, 0., el));
-            m_planewaves.push_back(Planewave<D, T>(3ul, (T)(HOA_2PI / 3.), el));
-            m_planewaves.push_back(Planewave<D, T>(4ul, (T)(HOA_2PI / 1.5), el));
+            m_planewaves.push_back(Planewave<D, T>(3ul, T(HOA_2PI / 3.), el));
+            m_planewaves.push_back(Planewave<D, T>(4ul, T(HOA_2PI / 1.5), el));
         }
         
         void generateHexahedron() hoa_noexcept
@@ -327,20 +327,20 @@ namespace hoa
         
         void generateOctahedron() hoa_noexcept
         {
-            m_planewaves.push_back(Planewave<D, T>(1ul, 0., (T)HOA_PI2));
+            m_planewaves.push_back(Planewave<D, T>(1ul, 0., HOA_PI2));
             m_planewaves.push_back(Planewave<D, T>(2ul, 0., 0.));
-            m_planewaves.push_back(Planewave<D, T>(3ul, (T)HOA_PI2, 0.));
-            m_planewaves.push_back(Planewave<D, T>(4ul, (T)(2. * HOA_PI2), 0.));
-            m_planewaves.push_back(Planewave<D, T>(5ul, (T)(3. * HOA_PI2), 0.));
-            m_planewaves.push_back(Planewave<D, T>(6ul, 0., (T)-HOA_PI2));
+            m_planewaves.push_back(Planewave<D, T>(3ul, HOA_PI2, 0.));
+            m_planewaves.push_back(Planewave<D, T>(4ul, (2. * HOA_PI2), 0.));
+            m_planewaves.push_back(Planewave<D, T>(5ul, (3. * HOA_PI2), 0.));
+            m_planewaves.push_back(Planewave<D, T>(6ul, 0., -HOA_PI2));
         }
         
         void generateIcosahedron() hoa_noexcept
         {
-            m_planewaves.push_back(Planewave<D, T>(1, 0., (T)HOA_PI2));
+            m_planewaves.push_back(Planewave<D, T>(1, 0., HOA_PI2));
             for(size_t i = 1; i < 6; i++)
             {
-                m_planewaves.push_back(Planewave<D, T>(i*2, T(i - 1.) / 5. * HOA_2PI, atan(0.5)));
+                m_planewaves.push_back(Planewave<D, T>(i*2, static_cast<T>(i - 1.) / 5. * HOA_2PI, atan(0.5)));
                 m_planewaves.push_back(Planewave<D, T>(i*2+1, T(i - 1.) / 5. * HOA_2PI - HOA_PI / 5., -atan(0.5)));
             }
             m_planewaves.push_back(Planewave<D, T>(12, 0., (T)-HOA_PI2));

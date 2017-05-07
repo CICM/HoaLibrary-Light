@@ -81,7 +81,7 @@ namespace hoa
         //! @param index  The index of the harmonic.
         static inline long getOrder(const size_t index) hoa_noexcept {
             const long l = long(getDegree(index));
-            return (D == Hoa2d) ? (l * (1l - (long)(index % 2) * 2l)) : (long(index) - (l * (l + 1))); }
+            return (D == Hoa2d) ? (l * (1l - static_cast<long>(index % 2) * 2l)) : (static_cast<long>(index) - (l * (l + 1))); }
 
         //! @brief Returns the number of harmonics for an order of decomposition.
         //! @details The computation is \f$2N+1\f$ in 2D and \f$(N+1)^{2}\f$ in 3D.
@@ -116,7 +116,7 @@ namespace hoa
                 return 1.; }
             const long double fac1 = hfactorial(long(degree) - long(std::abs(order)));
             const long double fac2 = hfactorial(long(degree) + long(std::abs(order)));
-            return T(sqrt((bool(order == 0) ? T(1.) : T(2.)) * T(fac1 / fac2))); }
+            return std::sqrt(static_cast<T>(bool(order == 0) ? 1. : 2.) * static_cast<T>(fac1 / fac2)); }
         
     private:
         static inline long double hfactorial(long n)

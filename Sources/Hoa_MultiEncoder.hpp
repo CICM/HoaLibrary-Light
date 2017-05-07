@@ -17,7 +17,7 @@
 namespace hoa
 {
     //! @brief The class generates manages a set of encoders.
-    //! @brief The class is just a wrapper to manage a set encoders that can be muted.
+    //! @details The class is just a wrapper to manage a set encoders that can be muted.
     template <Dimension D, typename T> class MultiEncoder : public ProcessorHarmonics<D, T>
     {
     public:
@@ -92,7 +92,7 @@ namespace hoa
             const T factor = 1. - ((fisheye > T(1.)) ? T(1.) : ((fisheye < T(0.)) ? T(0.) : fisheye));
             for(size_t i = 0; i < nsources; ++i)
             {
-                const T azimuth = (T)i / nsources * T(HOA_2PI);
+                const T azimuth = static_cast<T>(i) / static_cast<T>(nsources) * static_cast<T>(HOA_2PI);
                 if(azimuth < T(HOA_PI)) {
                     m_encoders[i].setAzimuth(azimuth * factor);
                 }
