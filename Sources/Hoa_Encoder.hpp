@@ -132,30 +132,28 @@ namespace hoa
         
         //! @brief Sets the radius.
         //! @param radius The new radius.
-        void setRadius(T radius) hoa_noexcept {
-            m_radius = std::max(radius, T(0.));
+        void setRadius(const T radius) hoa_noexcept {
+            m_radius = std::max(radius, static_cast<T>(0));
             
             if(m_radius >= 1)
             {
                 const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
+                const T gain = static_cast<T>(1) / m_radius;
                 T* coeff     = m_radius_coeffs;
-                const T gain = T(1) / m_radius;
                 (*coeff++) = gain;
-                for(size_t i = 1; i <= order; ++i)
-                {
+                for(size_t i = 1; i <= order; ++i) {
                     (*coeff++) = gain;
                 }
             }
             else
             {
                 const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
-                T* coeff            = m_radius_coeffs;
                 const T widening    = m_radius;
                 const T temp        = 1 - widening;
-                (*coeff++) = (T(order) * temp + T(1.));
-                for(size_t i = 1; i <= order; ++i)
-                {
-                    (*coeff++) = std::pow(widening, T(i)) * (temp * T(order - i) + T(1.));
+                T* coeff            = m_radius_coeffs;
+                (*coeff++) = static_cast<T>(order) * temp + static_cast<T>(1);
+                for(size_t i = 1; i <= order; ++i) {
+                    (*coeff++) = std::pow(widening, static_cast<T>(i)) * (temp * static_cast<T>(order - i) + static_cast<T>(1.));
                 }
             }
             
@@ -163,7 +161,7 @@ namespace hoa
         
         //! @brief Sets the azimuth.
         //! @param azimuth The new azimuth.
-        void setAzimuth(T azimuth) hoa_noexcept {
+        void setAzimuth(const T azimuth) hoa_noexcept {
             m_azimuth   = azimuth;
             T* coeffs   = m_azimuth_coeffs;
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
@@ -175,7 +173,7 @@ namespace hoa
                 T cos_x     = ccos_x;
                 T sin_x     = csin_x;
                 T tcos_x    = cos_x;
-                (*coeffs++) = 1;                                // Hamonic [0]
+                (*coeffs++) = 1;                               // Hamonic [0]
                 (*coeffs++) = sin_x;                           // Hamonic [-1]
                 (*coeffs++) = cos_x;                           // Hamonic [1]
                 for(size_t i = 2; i <= order; i++)
@@ -209,12 +207,13 @@ namespace hoa
         
         //! @brief Sets the elevation.
         //! @param elevation The new elevation.
-        void setElevation(T elevation) hoa_noexcept {
+        void setElevation(const T elevation) hoa_noexcept {
             m_elevation = elevation;
             T* coeffs   = m_elevation_coeffs;
             const size_t order = ProcessorHarmonics<D, T>::getDecompositionOrder();
-            const T sin_theta = T(std::sin(elevation));
-            const T sqr_theta = -T(std::sqrt(T(1.) - sin_theta * sin_theta));
+            const T sin_theta = std::sin(elevation);
+            const T sqr_theta = -std::sqrt(static_cast<T>(1) - sin_theta * sin_theta);
+            
             // Organization [0, 0], [1, 1], [1, 0], [2, 2], [2, 1], [2, 0], [3, 3],
             // [3, 2], [3, 1], [3, 0], [4, 4], ...
             
@@ -223,7 +222,7 @@ namespace hoa
             *(coeffs++) = sin_theta;    // P(1, 0)(x) = x(2*0+1)P(0,0)(x) = x
             for(size_t i = 2; i <= order; ++i)
             {
-                const T ratio = 2 * T(i-1) + 1;
+                const T ratio = 2 * static_cast<T>(i-1) + 1;
                 const T previous = *(coeffs-i);
                 // P(l+1,l+1)(x) = -(2l+1) sqrt(1-x^2) P(l,l)(x)
                 *(coeffs++) = ratio * sqr_theta * previous;
@@ -234,12 +233,12 @@ namespace hoa
                     const T previous1 = *(coeffs-(i+1));
                     const T previous2 = *(coeffs-(2*i+1));
                     // P(l+1,m)(x)   = (x(2l+1)P(l,m)(x) - (l+m)P(l-1, m)(x)) / (l-m+1)
-                    *(coeffs++) = ((ratio * sin_theta * previous1) - (T(i-1) + T(j)) * previous2) / (T(i-1) - T(j) + 1);
+                    *(coeffs++) = ((ratio * sin_theta * previous1) - static_cast<T>(i-1+j) * previous2) / static_cast<T>(i-j);
                 }
                 const T previous1 = *(coeffs-(i+1));
                 const T previous2 = *(coeffs-(2*i+1));
                 // P(l+1,0)(x)   = (x(2l+1)P(l,0)(x) - (l)P(l-1, 0)(x)) / (l+1)
-                *(coeffs++) = ((ratio * sin_theta * previous1) - T(i-1) * previous2) / (T(i-1) + 1);
+                *(coeffs++) = ((ratio * sin_theta * previous1) - static_cast<T>(i-1) * previous2) / static_cast<T>(i);
             }
         }
     
