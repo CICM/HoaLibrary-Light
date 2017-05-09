@@ -13,6 +13,7 @@
 #define DEF_HOA_ENCODER_LIGHT
 
 #include "Hoa_Processor.hpp"
+#include <type_traits>
 
 namespace hoa
 {
@@ -70,10 +71,11 @@ namespace hoa
 
         //! @brief The constructor.
         //! @param order The order of decomposition.
-        Encoder(size_t order) : ProcessorHarmonics<D, T>(order)
+        //! @todo add static assert for order < 1
+        //! @todo use a std::vector instead of C vector
+        Encoder(const size_t order) : ProcessorHarmonics<D, T>(order)
         {
-            order = ProcessorHarmonics<D, T>::getDecompositionOrder() >= 1 ? ProcessorHarmonics<D, T>::getDecompositionOrder() : 1;
-            
+            static_assert(order > 0, "The order must be superior or equal to zero.");            
             m_radius_coeffs         = new T[order+ 1];
             m_azimuth_coeffs        = new T[order * 2 + 1];
             m_elevation_coeffs      = new T[((order + 1) * (order + 1)) / 2 + (order + 1)];
