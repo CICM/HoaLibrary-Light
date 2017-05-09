@@ -82,7 +82,7 @@ namespace hoa
             setElevation(0.);
             for(size_t i = 0; i < ProcessorHarmonics<D, T>::getNumberOfHarmonics(); ++i)
             {
-                m_normalization_coeffs[i] = ProcessorHarmonics<D, T>::getHarmonicSemiNormalization(i);
+                m_normalization_coeffs[i] = ProcessorHarmonics<D, T>::getHarmonicSemiNormalization(i) * std::pow(static_cast<T>(-1), static_cast<T>(ProcessorHarmonics<D, T>::getHarmonicOrder(i)));
             }
         }
 
