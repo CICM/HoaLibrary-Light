@@ -28,21 +28,21 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setAzimuth(hoa_float_t(0.));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(ouputs[0] == 1.);
-        CATCH_CHECK(ouputs[1] == 0.);
-        CATCH_CHECK(ouputs[2] == 1.);
-        CATCH_CHECK(ouputs[3] == 0.);
-        CATCH_CHECK(ouputs[4] == 1.);
-        CATCH_CHECK(ouputs[5] == 0.);
-        CATCH_CHECK(ouputs[6] == 1.);
-        CATCH_CHECK(ouputs[7] == 0.);
-        CATCH_CHECK(ouputs[8] == 1.);
-        CATCH_CHECK(ouputs[9] == 0.);
-        CATCH_CHECK(ouputs[10] == 1.);
-        CATCH_CHECK(ouputs[11] == 0.);
-        CATCH_CHECK(ouputs[12] == 1.);
-        CATCH_CHECK(ouputs[13] == 0.);
-        CATCH_CHECK(ouputs[14] == 1.);
+        CATCH_CHECK(ouputs[0] == hoa_float_t(1.));
+        CATCH_CHECK(ouputs[1] == hoa_float_t(0.));
+        CATCH_CHECK(ouputs[2] == hoa_float_t(1.));
+        CATCH_CHECK(ouputs[3] == hoa_float_t(0.));
+        CATCH_CHECK(ouputs[4] == hoa_float_t(1.));
+        CATCH_CHECK(ouputs[5] == hoa_float_t(0.));
+        CATCH_CHECK(ouputs[6] == hoa_float_t(1.));
+        CATCH_CHECK(ouputs[7] == hoa_float_t(0.));
+        CATCH_CHECK(ouputs[8] == hoa_float_t(1.));
+        CATCH_CHECK(ouputs[9] == hoa_float_t(0.));
+        CATCH_CHECK(ouputs[10] == hoa_float_t(1.));
+        CATCH_CHECK(ouputs[11] == hoa_float_t(0.));
+        CATCH_CHECK(ouputs[12] == hoa_float_t(1.));
+        CATCH_CHECK(ouputs[13] == hoa_float_t(0.));
+        CATCH_CHECK(ouputs[14] == hoa_float_t(1.));
     }
     
     CATCH_SECTION("Azimuth 0.25pi")

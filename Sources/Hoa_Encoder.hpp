@@ -13,7 +13,6 @@
 #define DEF_HOA_ENCODER_LIGHT
 
 #include "Hoa_Processor.hpp"
-#include <type_traits>
 
 namespace hoa
 {
@@ -73,13 +72,13 @@ namespace hoa
         //! @param order The order of decomposition.
         //! @todo add static assert for order < 1
         //! @todo use a std::vector instead of C vector
-        Encoder(const size_t order) : ProcessorHarmonics<D, T>(order)
+        Encoder(const size_t order) : ProcessorHarmonics<D, T>(order),
+        m_radius_coeffs(order+1),
+        m_azimuth_coeffs(order*2+1),
+        m_elevation_coeffs(((order + 1) * (order + 1)) / 2 + (order + 1)),
+        m_normalization_coeffs(ProcessorHarmonics<D, T>::getNumberOfHarmonics())
         {
-            static_assert(order > 0, "The order must be superior or equal to zero.");            
-            m_radius_coeffs         = new T[order+ 1];
-            m_azimuth_coeffs        = new T[order * 2 + 1];
-            m_elevation_coeffs      = new T[((order + 1) * (order + 1)) / 2 + (order + 1)];
-            m_normalization_coeffs  = new T[ProcessorHarmonics<D, T>::getNumberOfHarmonics()];
+            hoa_static_assert(order > 0, "The order must be superior or equal to zero.");
             setRadius(1.);
             setAzimuth(0.);
             setElevation(0.);
@@ -90,14 +89,7 @@ namespace hoa
         }
 
         //! The destructor.
-        ~Encoder()
-        {
-            delete [] m_radius_coeffs;
-            delete [] m_azimuth_coeffs;
-            delete [] m_elevation_coeffs;
-            delete [] m_normalization_coeffs;
-        }
-        
+        inline ~Encoder() hoa_noexcept {}
         
         //! @brief Returns the radius.
         inline T getRadius() const hoa_noexcept { return m_radius; }
@@ -112,14 +104,9 @@ namespace hoa
         //! @param radius The new radius.
         //! @param azimuth The new azimuth.
         //! @param elevation The new elevation.
-        inline void setCoordinates(T radius, T azimuth, T elevation) hoa_noexcept {
+        inline void setCoordinates(const T radius, const T azimuth, T elevation) hoa_noexcept {
             setRadius(radius);
-            while(elevation < -HOA_PI) {
-                elevation += static_cast<T>(HOA_2PI);
-            }
-            while(elevation >= HOA_PI) {
-                elevation -= static_cast<T>(HOA_2PI);
-            }
+            elevation = wrap_pi(elevation);
             if(elevation >= -HOA_PI2 && elevation <= HOA_PI2)
             {
                 setAzimuth(azimuth);
@@ -141,7 +128,7 @@ namespace hoa
             {
                 const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
                 const T gain = static_cast<T>(1) / m_radius;
-                T* coeff     = m_radius_coeffs;
+                T* coeff     = m_radius_coeffs.data();
                 (*coeff++) = gain;
                 for(size_t i = 1; i <= order; ++i) {
                     (*coeff++) = gain;
@@ -152,7 +139,7 @@ namespace hoa
                 const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
                 const T widening    = m_radius;
                 const T temp        = 1 - widening;
-                T* coeff            = m_radius_coeffs;
+                T* coeff            = m_radius_coeffs.data();
                 (*coeff++) = static_cast<T>(order) * temp + static_cast<T>(1);
                 for(size_t i = 1; i <= order; ++i) {
                     (*coeff++) = std::pow(widening, static_cast<T>(i)) * (temp * static_cast<T>(order - i) + static_cast<T>(1.));
@@ -165,7 +152,7 @@ namespace hoa
         //! @param azimuth The new azimuth.
         void setAzimuth(const T azimuth) hoa_noexcept {
             m_azimuth   = azimuth;
-            T* coeffs   = m_azimuth_coeffs;
+            T* coeffs   = m_azimuth_coeffs.data();
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
             T const ccos_x  = std::cos(azimuth);
             T const csin_x  = std::sin(azimuth);
@@ -211,7 +198,7 @@ namespace hoa
         //! @param elevation The new elevation.
         void setElevation(const T elevation) hoa_noexcept {
             m_elevation = elevation;
-            T* coeffs   = m_elevation_coeffs;
+            T* coeffs   = m_elevation_coeffs.data();
             const size_t order = ProcessorHarmonics<D, T>::getDecompositionOrder();
             const T sin_theta = std::sin(elevation);
             const T sqr_theta = -std::sqrt(static_cast<T>(1) - sin_theta * sin_theta);
@@ -255,8 +242,8 @@ namespace hoa
             if(D == Hoa2d)
             {
                 const size_t order      = ProcessorHarmonics<D, T>::getDecompositionOrder();
-                T const* radius_coeffs  = m_radius_coeffs;
-                T const* azimuth_coeffs = m_azimuth_coeffs;
+                T const* radius_coeffs  = m_radius_coeffs.data();
+                T const* azimuth_coeffs = m_azimuth_coeffs.data();
                 (*outputs++) = (*input) * (*radius_coeffs++) * (*azimuth_coeffs++);
                 for(size_t i = 1; i <= order; ++i)
                 {
@@ -268,10 +255,10 @@ namespace hoa
             else
             {
                 const size_t order          = ProcessorHarmonics<D, T>::getDecompositionOrder();
-                T const* radius_coeffs      = m_radius_coeffs;
-                T const* azimuth_coeffs     = m_azimuth_coeffs+order;
-                T const* elevation_coeffs   = m_elevation_coeffs;
-                T const* norm_coeffs        = m_normalization_coeffs;
+                T const* radius_coeffs      = m_radius_coeffs.data();
+                T const* azimuth_coeffs     = m_azimuth_coeffs.data()+order;
+                T const* elevation_coeffs   = m_elevation_coeffs.data();
+                T const* norm_coeffs        = m_normalization_coeffs.data();
                 (*outputs++) = (*input) * (*radius_coeffs++) * (*azimuth_coeffs--) * (*elevation_coeffs++) * (*norm_coeffs++);
                 for(size_t i = 1; i <= order; ++i)
                 {
@@ -301,10 +288,21 @@ namespace hoa
         T   m_radius;
         T   m_azimuth;
         T   m_elevation;
-        T*  m_radius_coeffs;
-        T*  m_azimuth_coeffs;
-        T*  m_elevation_coeffs;
-        T*  m_normalization_coeffs;
+        std::vector<T>  m_radius_coeffs;
+        std::vector<T>  m_azimuth_coeffs;
+        std::vector<T>  m_elevation_coeffs;
+        std::vector<T>  m_normalization_coeffs;
+        
+        static inline T wrap_pi(T value)
+        {
+            while(value < static_cast<T>(-HOA_PI)) {
+                value += static_cast<T>(HOA_2PI);
+            }
+            while(value >= static_cast<T>(HOA_PI)) {
+                value -= static_cast<T>(HOA_2PI);
+            }
+            return value;
+        }
     };
 }
 
