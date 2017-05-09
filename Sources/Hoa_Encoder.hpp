@@ -70,8 +70,6 @@ namespace hoa
 
         //! @brief The constructor.
         //! @param order The order of decomposition.
-        //! @todo add static assert for order < 1
-        //! @todo use a std::vector instead of C vector
         Encoder(const size_t order) : ProcessorHarmonics<D, T>(order),
         m_radius_coeffs(order+1),
         m_azimuth_coeffs(order*2+1),
