@@ -223,9 +223,7 @@ CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
     Encoder<Hoa3d, hoa_float_t> encoder(5);
     hoa_float_t                 input(1.);
     std::vector<hoa_float_t>    ouputs(36);
-    const hoa_float_t epsilon = std::numeric_limits<hoa_float_t>::epsilon() * static_cast<hoa_float_t>(10.);
     
-
     CATCH_SECTION("Azimuth 0 Elevation 0")
     {
         encoder.setAzimuth(hoa_float_t(0.));
@@ -274,162 +272,198 @@ CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
         CATCH_CHECK(hoa_compare(ouputs[34], 0.));
         CATCH_CHECK(hoa_compare(ouputs[35], 0.701561));
     }
-    /*
-    CATCH_SECTION("Azimuth 0.5pi Elevation 0")
-    {
-        encoder.setAzimuth(hoa_float_t(HOA_PI2));
-        encoder.setElevation(hoa_float_t(0.));
-        encoder.process(&input, ouputs.data());
-        
-        CATCH_CHECK(std::abs(ouputs[0] - 1.) < epsilon);
-        
-        CATCH_CHECK(std::abs(ouputs[1] - -1.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[2] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[3] - 0.) < epsilon);
-        
-        CATCH_CHECK(std::abs(ouputs[4] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[5] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[6] - -0.5) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[7] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[8] - -0.8660254037844386) < epsilon);
-        
-        CATCH_CHECK(std::abs(ouputs[9] - 0.7905694150420948) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[10] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[11] - 00.6123724356957945) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[12] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[13] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[14] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[15] - 0.) < epsilon);
-        
-        CATCH_CHECK(std::abs(ouputs[25] - -0.701560760020114) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[26] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[27] - -0.5229125165837972) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[28] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[29] - -0.4841229182759271) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[30] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[31] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[32] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[33] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[34] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[35] - 0.) < epsilon);
-    }
     
-    CATCH_SECTION("Azimuth 1pi Elevation 0")
+    CATCH_SECTION("Azimuth 0 Elevation 90")
     {
-        encoder.setAzimuth(hoa_float_t(HOA_PI));
-        encoder.setElevation(hoa_float_t(0.));
-        encoder.process(&input, ouputs.data());
-        
-        CATCH_CHECK(std::abs(ouputs[0] - 1.) < epsilon);
-        
-        CATCH_CHECK(std::abs(ouputs[1] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[2] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[3] - 1.) < epsilon);
-        
-        CATCH_CHECK(std::abs(ouputs[4] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[5] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[6] - -0.5) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[7] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[8] - 0.8660254037844386) < epsilon);
-        
-        CATCH_CHECK(std::abs(ouputs[9] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[10] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[11] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[12] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[13] - -0.6123724356957945) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[14] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[15] - 0.7905694150420948) < epsilon);
-        
-        CATCH_CHECK(std::abs(ouputs[25] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[26] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[27] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[28] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[29] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[30] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[31] - 0.4841229182759271) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[32] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[33] - -0.5229125165837972) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[34] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[35] - 0.701560760020114) < epsilon);
-    }
-    
-    CATCH_SECTION("Azimuth 0 pi Elevation pi/2")
-    {
-        encoder.setAzimuth(hoa_float_t(0));
+        encoder.setAzimuth(hoa_float_t(0.));
         encoder.setElevation(hoa_float_t(HOA_PI2));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(std::abs(ouputs[0] - 1.) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.));
         
-        CATCH_CHECK(std::abs(ouputs[1] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[2] - 1.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[3] - 0.) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[1], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[2], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[3], 0.));
         
-        CATCH_CHECK(std::abs(ouputs[4] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[5] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[6] - 1.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[7] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[8] - 0.) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[4], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[5], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[6], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[8], 0.));
         
-        CATCH_CHECK(std::abs(ouputs[9] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[10] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[11] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[12] - 1.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[13] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[14] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[15] - 0.) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[9], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[10], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[11], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[12], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[13], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[14], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[15], 0.));
         
-        CATCH_CHECK(std::abs(ouputs[25] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[26] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[27] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[28] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[29] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[30] - 1.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[31] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[32] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[33] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[34] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[35] - 0.) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[16], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[17], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[18], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[19], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[20], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[21], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[22], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[23], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[24], 0.));
+        
+        CATCH_CHECK(hoa_compare(ouputs[25], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[26], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[27], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[28], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[29], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[30], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[31], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[32], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[33], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[34], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[35], 0.));
     }
     
-    CATCH_SECTION("Azimuth 0 pi Elevation pi/4")
+    CATCH_SECTION("Azimuth 0 Elevation -19.5")
     {
-        encoder.setAzimuth(hoa_float_t(HOA_PI4));
-        encoder.setElevation(hoa_float_t(HOA_PI4));
+        encoder.setCoordinates(hoa_float_t(1.), hoa_float_t(0.), hoa_float_t(-19.5/180.*HOA_PI));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(std::abs(ouputs[0] - 1.) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.));
         
-        CATCH_CHECK(std::abs(ouputs[1] - -0.5) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[2] - 0.7071067811865475) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[3] - -0.5) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[1], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[2], -0.333807));
+        CATCH_CHECK(hoa_compare(ouputs[3], 0.942642));
         
-        CATCH_CHECK(std::abs(ouputs[4] - 0.4330127018922194) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[5] - -0.6123724356957945) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[6] - 0.2499999999999999) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[7] - -0.6123724356957946) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[8] - 0.) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[4], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[5], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[6], -0.33286));
+        CATCH_CHECK(hoa_compare(ouputs[7], -0.545007));
+        CATCH_CHECK(hoa_compare(ouputs[8], 0.769527));
         
-        CATCH_CHECK(std::abs(ouputs[9] - -0.1976423537605238) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[10] - 0.6846531968814576) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[11] - -0.4592793267718457) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[12] - -0.176776695296637) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[13] - -0.4592793267718458) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[14] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[15] - 0.1976423537605237) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[9], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[10], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[11], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[12], 0.407722));
+        CATCH_CHECK(hoa_compare(ouputs[13], -0.255643));
+        CATCH_CHECK(hoa_compare(ouputs[14], -0.574386));
+        CATCH_CHECK(hoa_compare(ouputs[15], 0.662186));
         
-        CATCH_CHECK(std::abs(ouputs[25] - 0.08769509500251425) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[26] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[27] - -0.4575484520108226) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[28] - 0.4528555233184198) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[29] - 0.1815460943534729) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[30] - -0.3756504775053533) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[31] - 0.1815460943534729) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[32] - 0.) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[33] - 0.4575484520108223) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[34] - -0.3921843874378481) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[35] - 0.08769509500251432) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[16], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[17], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[18], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[19], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[20], 0.011469));
+        CATCH_CHECK(hoa_compare(ouputs[21], 0.552251));
+        CATCH_CHECK(hoa_compare(ouputs[22], -0.109286));
+        CATCH_CHECK(hoa_compare(ouputs[23], -0.584822));
+        CATCH_CHECK(hoa_compare(ouputs[24], 0.583889));
+        
+        CATCH_CHECK(hoa_compare(ouputs[25], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[26], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[27], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[28], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[29], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[30], -0.333069));
+        CATCH_CHECK(hoa_compare(ouputs[31], -0.13656));
+        CATCH_CHECK(hoa_compare(ouputs[32], 0.505841));
+        CATCH_CHECK(hoa_compare(ouputs[33], 0.001245));
+        CATCH_CHECK(hoa_compare(ouputs[34], -0.584718));
+        CATCH_CHECK(hoa_compare(ouputs[35], 0.522153));
     }
-     */
+    
+    CATCH_SECTION("Azimuth 120 Elevation -19.5")
+    {
+        encoder.setCoordinates(hoa_float_t(1.), hoa_float_t(120./180.*HOA_PI), hoa_float_t(-19.5/180.*HOA_PI));
+        encoder.process(&input, ouputs.data());
+        
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.));
+        
+        CATCH_CHECK(hoa_compare(ouputs[1], 0.816351));
+        CATCH_CHECK(hoa_compare(ouputs[2], -0.333807));
+        CATCH_CHECK(hoa_compare(ouputs[3], -0.471321));
+        
+        CATCH_CHECK(hoa_compare(ouputs[4], -0.66643));
+        CATCH_CHECK(hoa_compare(ouputs[5], -0.47199));
+        CATCH_CHECK(hoa_compare(ouputs[6], -0.33286));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.272504));
+        CATCH_CHECK(hoa_compare(ouputs[8], -0.384763));
+        
+        CATCH_CHECK(hoa_compare(ouputs[9], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[10], 0.497433));
+        CATCH_CHECK(hoa_compare(ouputs[11], -0.221393));
+        CATCH_CHECK(hoa_compare(ouputs[12], 0.407722));
+        CATCH_CHECK(hoa_compare(ouputs[13], 0.127822));
+        CATCH_CHECK(hoa_compare(ouputs[14], 0.287193));
+        CATCH_CHECK(hoa_compare(ouputs[15], 0.662186));
+        
+        CATCH_CHECK(hoa_compare(ouputs[16], 0.505663));
+        CATCH_CHECK(hoa_compare(ouputs[17], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[18], 0.094644));
+        CATCH_CHECK(hoa_compare(ouputs[19], 0.478264));
+        CATCH_CHECK(hoa_compare(ouputs[20], 0.011469));
+        CATCH_CHECK(hoa_compare(ouputs[21], -0.276126));
+        CATCH_CHECK(hoa_compare(ouputs[22], 0.054643));
+        CATCH_CHECK(hoa_compare(ouputs[23], -0.584822));
+        CATCH_CHECK(hoa_compare(ouputs[24], -0.291945));
+        
+        CATCH_CHECK(hoa_compare(ouputs[25], -0.452198));
+        CATCH_CHECK(hoa_compare(ouputs[26], -0.506381));
+        CATCH_CHECK(hoa_compare(ouputs[27], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[28], -0.438071));
+        CATCH_CHECK(hoa_compare(ouputs[29], -0.118265));
+        CATCH_CHECK(hoa_compare(ouputs[30], -0.333069));
+        CATCH_CHECK(hoa_compare(ouputs[31], 0.06828));
+        CATCH_CHECK(hoa_compare(ouputs[32], -0.25292));
+        CATCH_CHECK(hoa_compare(ouputs[33], 0.001245));
+        CATCH_CHECK(hoa_compare(ouputs[34], 0.29236));
+        CATCH_CHECK(hoa_compare(ouputs[35], -0.261076));
+    }
+    
+    CATCH_SECTION("Azimuth 240 Elevation -19.5")
+    {
+        encoder.setCoordinates(hoa_float_t(1.), hoa_float_t(240./180.*HOA_PI), hoa_float_t(-19.5/180.*HOA_PI));
+        encoder.process(&input, ouputs.data());
+        
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.));
+        
+        CATCH_CHECK(hoa_compare(ouputs[1], -0.816352));
+        CATCH_CHECK(hoa_compare(ouputs[2], -0.333807));
+        CATCH_CHECK(hoa_compare(ouputs[3], -0.471321));
+        
+        CATCH_CHECK(hoa_compare(ouputs[4], 0.66643));
+        CATCH_CHECK(hoa_compare(ouputs[5], 0.47199));
+        CATCH_CHECK(hoa_compare(ouputs[6], -0.33286));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.272504));
+        CATCH_CHECK(hoa_compare(ouputs[8], -0.384763));
+        
+        CATCH_CHECK(hoa_compare(ouputs[9], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[10], -0.497433));
+        CATCH_CHECK(hoa_compare(ouputs[11], 0.221393));
+        CATCH_CHECK(hoa_compare(ouputs[12], 0.407722));
+        CATCH_CHECK(hoa_compare(ouputs[13], 0.127822));
+        CATCH_CHECK(hoa_compare(ouputs[14], 0.287193));
+        CATCH_CHECK(hoa_compare(ouputs[15], 0.662186));
+        
+        CATCH_CHECK(hoa_compare(ouputs[16], -0.505663));
+        CATCH_CHECK(hoa_compare(ouputs[17], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[18], -0.094644));
+        CATCH_CHECK(hoa_compare(ouputs[19], -0.478264));
+        CATCH_CHECK(hoa_compare(ouputs[20], 0.011469));
+        CATCH_CHECK(hoa_compare(ouputs[21], -0.276126));
+        CATCH_CHECK(hoa_compare(ouputs[22], 0.054643));
+        CATCH_CHECK(hoa_compare(ouputs[23], -0.584822));
+        CATCH_CHECK(hoa_compare(ouputs[24], -0.291945));
+        
+        CATCH_CHECK(hoa_compare(ouputs[25], 0.452198));
+        CATCH_CHECK(hoa_compare(ouputs[26], 0.506381));
+        CATCH_CHECK(hoa_compare(ouputs[27], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[28], 0.438071));
+        CATCH_CHECK(hoa_compare(ouputs[29], 0.118265));
+        CATCH_CHECK(hoa_compare(ouputs[30], -0.333069));
+        CATCH_CHECK(hoa_compare(ouputs[31], 0.06828));
+        CATCH_CHECK(hoa_compare(ouputs[32], -0.25292));
+        CATCH_CHECK(hoa_compare(ouputs[33], 0.001245));
+        CATCH_CHECK(hoa_compare(ouputs[34], 0.29236));
+        CATCH_CHECK(hoa_compare(ouputs[35], -0.261076));
+    }
 }
 
