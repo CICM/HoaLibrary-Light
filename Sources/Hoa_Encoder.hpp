@@ -1,10 +1,10 @@
 /*
-// Copyright (c) 2012-2016 CICM - Universite Paris 8 - Labex Arts H2H.
+// Copyright (c) 2012-2017 CICM - Universite Paris 8 - Labex Arts H2H.
 // Authors :
 // 2012: Pierre Guillot, Eliott Paris & Julien Colafrancesco.
 // 2012-2015: Pierre Guillot & Eliott Paris.
 // 2015: Pierre Guillot & Eliott Paris & Thomas Le Meur (Light version)
-// 2016: Pierre Guillot & Eliott Paris.
+// 2016-2017: Pierre Guillot.
 // For information on usage and redistribution, and for a DISCLAIMER OF ALL
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
@@ -107,14 +107,14 @@ namespace hoa
         inline void setCoordinates(const T radius, const T azimuth, T elevation) hoa_noexcept {
             setRadius(radius);
             elevation = wrap_pi(elevation);
-            if(elevation >= -HOA_PI2 && elevation <= HOA_PI2)
+            if(elevation >= static_cast<T>(-HOA_PI2) && elevation <= static_cast<T>(HOA_PI2))
             {
                 setAzimuth(azimuth);
                 setElevation(elevation);
             }
             else
             {
-                setAzimuth(azimuth + HOA_PI);
+                setAzimuth(azimuth + static_cast<T>(HOA_PI));
                 setElevation(elevation);
             }
         }
@@ -129,7 +129,7 @@ namespace hoa
                 const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
                 const T gain = static_cast<T>(1) / m_radius;
                 T* coeff     = m_radius_coeffs.data();
-                (*coeff++) = gain;
+                (*coeff++)   = gain;
                 for(size_t i = 1; i <= order; ++i) {
                     (*coeff++) = gain;
                 }
@@ -209,26 +209,30 @@ namespace hoa
             *(coeffs++) = 1;            // P(0, 0)(x) = 1
             *(coeffs++) = sqr_theta;    // P(1, 1)(x) = -(2*0+1)sqrt(1-x^2)P(0,0)(x) = -sqrt(1-x^2)
             *(coeffs++) = sin_theta;    // P(1, 0)(x) = x(2*0+1)P(0,0)(x) = x
-            for(size_t i = 2; i <= order; ++i)
+            if(order >= 2)
             {
-                const T ratio = 2 * static_cast<T>(i-1) + 1;
-                const T previous = *(coeffs-i);
-                // P(l+1,l+1)(x) = -(2l+1) sqrt(1-x^2) P(l,l)(x)
-                *(coeffs++) = ratio * sqr_theta * previous;
-                // P(l+1,l)(x)   = x(2l+1) P(l,l)(x)
-                *(coeffs++) = ratio * sin_theta * previous;
-                for(size_t j = i - 2; j > 0; --j)
+                for(size_t i = 2; i <= order; ++i)
                 {
+                    const T ratio = 2 * static_cast<T>(i-1) + 1;
+                    const T previous = *(coeffs-i);
+                    // P(l+1,l+1)(x) = -(2l+1) sqrt(1-x^2) P(l,l)(x)
+                    *(coeffs++) = ratio * sqr_theta * previous;
+                    // P(l+1,l)(x)   = x(2l+1) P(l,l)(x)
+                    *(coeffs++) = ratio * sin_theta * previous;
+                    for(size_t j = i - 2; j > 0; --j)
+                    {
+                        const T previous1 = *(coeffs-(i+1));
+                        const T previous2 = *(coeffs-(2*i+1));
+                        // P(l+1,m)(x)   = (x(2l+1)P(l,m)(x) - (l+m)P(l-1, m)(x)) / (l-m+1)
+                        *(coeffs++) = ((ratio * sin_theta * previous1) - static_cast<T>(i-1+j) * previous2) / static_cast<T>(i-j);
+                    }
                     const T previous1 = *(coeffs-(i+1));
                     const T previous2 = *(coeffs-(2*i+1));
-                    // P(l+1,m)(x)   = (x(2l+1)P(l,m)(x) - (l+m)P(l-1, m)(x)) / (l-m+1)
-                    *(coeffs++) = ((ratio * sin_theta * previous1) - static_cast<T>(i-1+j) * previous2) / static_cast<T>(i-j);
+                    // P(l+1,0)(x)   = (x(2l+1)P(l,0)(x) - (l)P(l-1, 0)(x)) / (l+1)
+                    *(coeffs++) = ((ratio * sin_theta * previous1) - static_cast<T>(i-1) * previous2) / static_cast<T>(i);
                 }
-                const T previous1 = *(coeffs-(i+1));
-                const T previous2 = *(coeffs-(2*i+1));
-                // P(l+1,0)(x)   = (x(2l+1)P(l,0)(x) - (l)P(l-1, 0)(x)) / (l+1)
-                *(coeffs++) = ((ratio * sin_theta * previous1) - static_cast<T>(i-1) * previous2) / static_cast<T>(i);
             }
+            
         }
     
         //! @brief The method performs the encoding of the harmonics signal.

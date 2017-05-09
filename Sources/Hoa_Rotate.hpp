@@ -1,10 +1,10 @@
 /*
- // Copyright (c) 2012-2016 CICM - Universite Paris 8 - Labex Arts H2H.
+ // Copyright (c) 2012-2017 CICM - Universite Paris 8 - Labex Arts H2H.
  // Authors :
  // 2012: Pierre Guillot, Eliott Paris & Julien Colafrancesco.
  // 2012-2015: Pierre Guillot & Eliott Paris.
  // 2015: Pierre Guillot & Eliott Paris & Thomas Le Meur (Light version)
- // 2016: Pierre Guillot & Eliott Paris.
+ // 2016-2017: Pierre Guillot.
  // For information on usage and redistribution, and for a DISCLAIMER OF ALL
  // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
  */
