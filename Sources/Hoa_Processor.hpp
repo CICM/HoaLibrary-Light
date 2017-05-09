@@ -43,8 +43,7 @@ namespace hoa
 
         //! @brief The harmonics constructor.
         //! @param order The order of decomposition, must be at least 1.
-        ProcessorHarmonics(const size_t order) hoa_noexcept :
-        m_order_of_decomposition(order)
+        ProcessorHarmonics(const size_t order) hoa_noexcept : m_order_of_decomposition(order)
         {
             for(size_t i = 0; i < Harmonic<D, T>::getNumberOfHarmonics(order); ++i)
             {
