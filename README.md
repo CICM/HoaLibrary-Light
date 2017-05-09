@@ -11,7 +11,7 @@ Sound space is one of the principal dimensions of the contemporary musical thoug
 - 2012: Pierre Guillot, Eliott Paris & Julien Colafrancesco
 - 2012-2015: Pierre Guillot & Eliott Paris
 - 2015: Pierre Guillot & Eliott Paris & Thomas Le Meur (Light version)
-- 2016: Pierre Guillot & Eliott Paris (Light version)
+- 2016-2017: Pierre Guillot (Light version)
 
 #### Implementations :
 
