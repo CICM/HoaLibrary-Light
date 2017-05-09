@@ -21,7 +21,7 @@ namespace hoa
     //! @details The class generates the signals associated to the harmonics \f$Y_{l,m}\f$
     //! according to a radius \f$\rho\f$, an azimuth \f$\theta\f$ and an elevation \f$\varphi\f$.\n
     //! The coefficients of the harmonics are defined by:\n
-    //! \f[Y_{l,m}(\theta, \varphi) = G_{l,m}(\rho) P_{l, \left|m\right|}(\cos{(\varphi)}) e^{+im\theta} k_{l, m} \f]
+    //! \f[Y_{l,m}(\theta, \varphi) = G_{l,m}(\rho) P_{l, \left|m\right|}(\sin{(\varphi)}) e^{+im\theta} k_{l, m} \f]
     //! with\n
     //! \f$G_{l,m}(\rho)\f$ the radius part of the equation,\n
     //! \f$e^{+im\theta}\f$ the azimuth part with \f$i\f$ the imaginary,\n
@@ -99,6 +99,8 @@ namespace hoa
         inline T getElevation()  const hoa_noexcept { return m_elevation; }
         
         //! @brief Sets the coordinates.
+        //! @details The method wraps the azimuth if the elevation is inferior to π/2 or
+        //! superior to π/2.
         //! @param radius The new radius.
         //! @param azimuth The new azimuth.
         //! @param elevation The new elevation.
