@@ -11,38 +11,41 @@
 #include <Hoa.hpp>
 using namespace hoa;
 typedef float hoa_float_t;
+template<typename A, typename B> bool hoa_compare(const A val1, const B val2)
+{
+    return std::abs(static_cast<hoa_float_t>(val1) - static_cast<hoa_float_t>(val2)) < (std::numeric_limits<hoa_float_t>::epsilon() * static_cast<hoa_float_t>(10.));
+}
+
 
 #define CATCH_CONFIG_PREFIX_ALL
 #include "catch.hpp"
 
-
 CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
 {
     Encoder<Hoa2d, hoa_float_t> encoder(7);
-    const hoa_float_t epsilon = std::numeric_limits<hoa_float_t>::epsilon() * hoa_float_t(10);
-    hoa_float_t              input(1.);
-    std::vector<hoa_float_t> ouputs(15);
+    hoa_float_t                 input(1.);
+    std::vector<hoa_float_t>    ouputs(15);
     
     CATCH_SECTION("Azimuth 0")
     {
         encoder.setAzimuth(hoa_float_t(0.));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(ouputs[0] == hoa_float_t(1.));
-        CATCH_CHECK(ouputs[1] == hoa_float_t(0.));
-        CATCH_CHECK(ouputs[2] == hoa_float_t(1.));
-        CATCH_CHECK(ouputs[3] == hoa_float_t(0.));
-        CATCH_CHECK(ouputs[4] == hoa_float_t(1.));
-        CATCH_CHECK(ouputs[5] == hoa_float_t(0.));
-        CATCH_CHECK(ouputs[6] == hoa_float_t(1.));
-        CATCH_CHECK(ouputs[7] == hoa_float_t(0.));
-        CATCH_CHECK(ouputs[8] == hoa_float_t(1.));
-        CATCH_CHECK(ouputs[9] == hoa_float_t(0.));
-        CATCH_CHECK(ouputs[10] == hoa_float_t(1.));
-        CATCH_CHECK(ouputs[11] == hoa_float_t(0.));
-        CATCH_CHECK(ouputs[12] == hoa_float_t(1.));
-        CATCH_CHECK(ouputs[13] == hoa_float_t(0.));
-        CATCH_CHECK(ouputs[14] == hoa_float_t(1.));
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[1], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[2], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[3], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[4], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[5], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[6], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[8], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[9], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[10], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[11], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[12], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[13], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[14], 1.));
     }
     
     CATCH_SECTION("Azimuth 0.25pi")
@@ -50,21 +53,21 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setAzimuth(hoa_float_t(0.25*HOA_PI));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(std::abs(ouputs[0]  - hoa_float_t(1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[1]  - hoa_float_t(0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[2]  - hoa_float_t(0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[3]  - hoa_float_t(1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[4]  - hoa_float_t(0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[5]  - hoa_float_t(0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[6]  - hoa_float_t(-0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[7]  - hoa_float_t(0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[8]  - hoa_float_t(-1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[9]  - hoa_float_t(-0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[10] - hoa_float_t(-0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[11] - hoa_float_t(-1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[12] - hoa_float_t(0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[13] - hoa_float_t(-0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[14] - hoa_float_t(0.7071067690849304)) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[1], 0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[2], 0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[3], 1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[4], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[5], 0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[6], -0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[8], -1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[9], -0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[10], -0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[11], -1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[12], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[13], -0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[14], 0.7071067690849304));
     }
     
     CATCH_SECTION("Azimuth 0.5pi")
@@ -72,21 +75,21 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setAzimuth(hoa_float_t(0.5*HOA_PI));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(std::abs(ouputs[0]  - hoa_float_t(1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[1]  - hoa_float_t(1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[2]  - hoa_float_t(0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[3]  - hoa_float_t(0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[4]  - hoa_float_t(-1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[5]  - hoa_float_t(-1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[6]  - hoa_float_t(-0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[7]  - hoa_float_t(0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[8]  - hoa_float_t(1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[9]  - hoa_float_t(1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[10] - hoa_float_t(-0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[11] - hoa_float_t(-0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[12] - hoa_float_t(-1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[13] - hoa_float_t(-1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[14] - hoa_float_t(0.0000000000000000)) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[1], 1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[2], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[3], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[4], -1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[5], -1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[6], -0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[8], 1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[9], 1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[10], -0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[11], -0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[12], -1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[13], -1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[14], 0.0000000000000000));
     }
     
     CATCH_SECTION("Azimuth 0.75pi")
@@ -94,21 +97,21 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setAzimuth(hoa_float_t(0.75*HOA_PI));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(std::abs(ouputs[0]  - hoa_float_t(1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[1]  - hoa_float_t(0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[2]  - hoa_float_t(-0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[3]  - hoa_float_t(-1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[4]  - hoa_float_t(0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[5]  - hoa_float_t(0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[6]  - hoa_float_t(0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[7]  - hoa_float_t(0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[8]  - hoa_float_t(-1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[9]  - hoa_float_t(-0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[10] - hoa_float_t(0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[11] - hoa_float_t(1.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[12] - hoa_float_t(0.0000000000000000)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[13] - hoa_float_t(-0.7071067690849304)) < epsilon);
-        CATCH_CHECK(std::abs(ouputs[14] - hoa_float_t(-0.7071067690849304)) < epsilon);
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[1], 0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[2], -0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[3], -1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[4], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[5], 0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[6], 0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[8], -1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[9], -0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[10], 0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[11], 1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[12], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[13], -0.7071067690849304));
+        CATCH_CHECK(hoa_compare(ouputs[14], -0.7071067690849304));
     }
     
     CATCH_SECTION("Radius 1")
@@ -117,21 +120,21 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setRadius(hoa_float_t(1.));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(ouputs[0] == 1.);
-        CATCH_CHECK(ouputs[1] == 0.);
-        CATCH_CHECK(ouputs[2] == 1.);
-        CATCH_CHECK(ouputs[3] == 0.);
-        CATCH_CHECK(ouputs[4] == 1.);
-        CATCH_CHECK(ouputs[5] == 0.);
-        CATCH_CHECK(ouputs[6] == 1.);
-        CATCH_CHECK(ouputs[7] == 0.);
-        CATCH_CHECK(ouputs[8] == 1.);
-        CATCH_CHECK(ouputs[9] == 0.);
-        CATCH_CHECK(ouputs[10] == 1.);
-        CATCH_CHECK(ouputs[11] == 0.);
-        CATCH_CHECK(ouputs[12] == 1.);
-        CATCH_CHECK(ouputs[13] == 0.);
-        CATCH_CHECK(ouputs[14] == 1.);
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[1], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[2], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[3], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[4], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[5], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[6], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[8], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[9], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[10], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[11], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[12], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[13], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[14], 1.));
     }
     
     CATCH_SECTION("Radius 0")
@@ -140,21 +143,21 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setRadius(hoa_float_t(0.));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(ouputs[0] == 8);
-        CATCH_CHECK(ouputs[1] == 0.);
-        CATCH_CHECK(ouputs[2] == 0.);
-        CATCH_CHECK(ouputs[3] == 0.);
-        CATCH_CHECK(ouputs[4] == 0);
-        CATCH_CHECK(ouputs[5] == 0.);
-        CATCH_CHECK(ouputs[6] == 0.);
-        CATCH_CHECK(ouputs[7] == 0.);
-        CATCH_CHECK(ouputs[8] == 0.);
-        CATCH_CHECK(ouputs[9] == 0.);
-        CATCH_CHECK(ouputs[10] == 0.);
-        CATCH_CHECK(ouputs[11] == 0.);
-        CATCH_CHECK(ouputs[12] == 0.);
-        CATCH_CHECK(ouputs[13] == 0.);
-        CATCH_CHECK(ouputs[14] == 0.);
+        CATCH_CHECK(hoa_compare(ouputs[0], 8));
+        CATCH_CHECK(hoa_compare(ouputs[1], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[2], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[3], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[4], 0));
+        CATCH_CHECK(hoa_compare(ouputs[5], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[6], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[8], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[9], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[10], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[11], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[12], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[13], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[14], 0.));
     }
     
     CATCH_SECTION("Radius 0.25")
@@ -167,7 +170,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
-        CATCH_CHECK(std::abs(sum_of_elems  - hoa_float_t(8.)) < epsilon);
+        CATCH_CHECK(hoa_compare(sum_of_elems, 8.));
     }
     
     CATCH_SECTION("Radius 0.5")
@@ -180,7 +183,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
-        CATCH_CHECK(std::abs(sum_of_elems  - hoa_float_t(8.)) < epsilon);
+        CATCH_CHECK(hoa_compare(sum_of_elems, 8.));
     }
     
     CATCH_SECTION("Radius 0.75")
@@ -193,7 +196,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
-        CATCH_CHECK(std::abs(sum_of_elems  - hoa_float_t(8.)) < epsilon);
+        CATCH_CHECK(hoa_compare(sum_of_elems, 8.));
     }
     
     CATCH_SECTION("Radius 2.")
@@ -206,15 +209,8 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
             sum_of_elems += *it;
         
-        CATCH_CHECK(std::abs(sum_of_elems  - hoa_float_t(4.)) < epsilon);
+        CATCH_CHECK(hoa_compare(sum_of_elems, 4.));
     }
-}
-
-
-
-template<typename A, typename B> bool hoa_compare(const A val1, const B val2)
-{
-    return std::abs(static_cast<hoa_float_t>(val1) - static_cast<hoa_float_t>(val2)) < (std::numeric_limits<hoa_float_t>::epsilon() * static_cast<hoa_float_t>(10.));
 }
 
 
