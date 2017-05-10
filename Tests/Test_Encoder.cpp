@@ -16,7 +16,6 @@ template<typename A, typename B> bool hoa_compare(const A val1, const B val2)
     return std::abs(static_cast<hoa_float_t>(val1) - static_cast<hoa_float_t>(val2)) < (std::numeric_limits<hoa_float_t>::epsilon() * static_cast<hoa_float_t>(10.));
 }
 
-
 #define CATCH_CONFIG_PREFIX_ALL
 #include "catch.hpp"
 
@@ -53,19 +52,19 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setAzimuth(hoa_float_t(0.25*HOA_PI));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(hoa_compare(ouputs[0], 1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.));
         CATCH_CHECK(hoa_compare(ouputs[1], 0.7071067690849304));
         CATCH_CHECK(hoa_compare(ouputs[2], 0.7071067690849304));
-        CATCH_CHECK(hoa_compare(ouputs[3], 1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[4], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[3], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[4], 0.));
         CATCH_CHECK(hoa_compare(ouputs[5], 0.7071067690849304));
         CATCH_CHECK(hoa_compare(ouputs[6], -0.7071067690849304));
-        CATCH_CHECK(hoa_compare(ouputs[7], 0.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[8], -1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[8], -1.));
         CATCH_CHECK(hoa_compare(ouputs[9], -0.7071067690849304));
         CATCH_CHECK(hoa_compare(ouputs[10], -0.7071067690849304));
-        CATCH_CHECK(hoa_compare(ouputs[11], -1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[12], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[11], -1.));
+        CATCH_CHECK(hoa_compare(ouputs[12], 0.));
         CATCH_CHECK(hoa_compare(ouputs[13], -0.7071067690849304));
         CATCH_CHECK(hoa_compare(ouputs[14], 0.7071067690849304));
     }
@@ -75,21 +74,21 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setAzimuth(hoa_float_t(0.5*HOA_PI));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(hoa_compare(ouputs[0], 1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[1], 1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[2], 0.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[3], 0.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[4], -1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[5], -1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[6], -0.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[7], 0.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[8], 1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[9], 1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[10], -0.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[11], -0.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[12], -1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[13], -1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[14], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[1], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[2], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[3], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[4], -1.));
+        CATCH_CHECK(hoa_compare(ouputs[5], -1.));
+        CATCH_CHECK(hoa_compare(ouputs[6], -0.));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[8], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[9], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[10], -0.));
+        CATCH_CHECK(hoa_compare(ouputs[11], -0.));
+        CATCH_CHECK(hoa_compare(ouputs[12], -1.));
+        CATCH_CHECK(hoa_compare(ouputs[13], -1.));
+        CATCH_CHECK(hoa_compare(ouputs[14], 0.));
     }
     
     CATCH_SECTION("Azimuth 0.75pi")
@@ -97,19 +96,19 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setAzimuth(hoa_float_t(0.75*HOA_PI));
         encoder.process(&input, ouputs.data());
         
-        CATCH_CHECK(hoa_compare(ouputs[0], 1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[0], 1.));
         CATCH_CHECK(hoa_compare(ouputs[1], 0.7071067690849304));
         CATCH_CHECK(hoa_compare(ouputs[2], -0.7071067690849304));
-        CATCH_CHECK(hoa_compare(ouputs[3], -1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[4], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[3], -1.));
+        CATCH_CHECK(hoa_compare(ouputs[4], 0.));
         CATCH_CHECK(hoa_compare(ouputs[5], 0.7071067690849304));
         CATCH_CHECK(hoa_compare(ouputs[6], 0.7071067690849304));
-        CATCH_CHECK(hoa_compare(ouputs[7], 0.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[8], -1.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[8], -1.));
         CATCH_CHECK(hoa_compare(ouputs[9], -0.7071067690849304));
         CATCH_CHECK(hoa_compare(ouputs[10], 0.7071067690849304));
-        CATCH_CHECK(hoa_compare(ouputs[11], 1.0000000000000000));
-        CATCH_CHECK(hoa_compare(ouputs[12], 0.0000000000000000));
+        CATCH_CHECK(hoa_compare(ouputs[11], 1.));
+        CATCH_CHECK(hoa_compare(ouputs[12], 0.));
         CATCH_CHECK(hoa_compare(ouputs[13], -0.7071067690849304));
         CATCH_CHECK(hoa_compare(ouputs[14], -0.7071067690849304));
     }
