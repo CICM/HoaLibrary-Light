@@ -43,16 +43,12 @@ namespace hoa
 
         //! @brief The harmonics constructor.
         //! @param order The order of decomposition, must be at least 1.
-        ProcessorHarmonics(const size_t order) hoa_noexcept : m_order_of_decomposition(order)
-        {
-            for(size_t i = 0; i < Harmonic<D, T>::getNumberOfHarmonics(order); ++i)
-            {
-                m_harmonics.push_back(Harmonic<D, T>(i));
-            }
-        }
+        ProcessorHarmonics(const size_t order) hoa_noexcept :
+        m_order_of_decomposition(order),
+        m_harmonics(createVector(order)) {}
 
         //! @brief The harmonics destructor.
-        virtual ~ProcessorHarmonics() hoa_noexcept { m_harmonics.clear(); }
+        virtual ~ProcessorHarmonics() hoa_noexcept {}
 
         //! @brief Returns the order of decomposition.
         inline size_t getDecompositionOrder() const hoa_noexcept { return m_order_of_decomposition; }
@@ -73,7 +69,7 @@ namespace hoa
         //! @brief Returns the index of an harmonic given the degree and the azimuthal order.
         //! @param degree The degree of the harmonic.
         //! @param order  The azimuthal order of the harmonic.
-        inline size_t getHarmonicIndex(const size_t degree, long order) const hoa_noexcept {
+        inline size_t getHarmonicIndex(const size_t degree, const long order) const hoa_noexcept {
             return Harmonic<D, T>::getIndex(degree, order); }
 
         //! @brief Returns the name of an harmonic.
@@ -93,8 +89,16 @@ namespace hoa
         
     private:
         
-        const size_t                  m_order_of_decomposition;
-        std::vector< Harmonic<D, T> > m_harmonics;
+        const size_t                        m_order_of_decomposition;
+        const std::vector< Harmonic<D, T> > m_harmonics;
+        
+        static inline std::vector< Harmonic<D, T> > createVector(const size_t order) {
+            std::vector< Harmonic<D, T> > harmonics;
+            for(size_t i = 0; i < Harmonic<D, T>::getNumberOfHarmonics(order); ++i) {
+                harmonics.push_back(Harmonic<D, T>(i));
+            }
+            return harmonics;
+        }
     };
 
     
