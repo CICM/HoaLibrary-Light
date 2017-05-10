@@ -201,17 +201,25 @@ namespace hoa
             T* coeffs   = m_elevation_coeffs.data();
             const size_t order = ProcessorHarmonics<D, T>::getDecompositionOrder();
             const T sin_theta = std::sin(elevation);
-            const T sqr_theta = -std::sqrt(static_cast<T>(1) - sin_theta * sin_theta);
+            const T pow_theta = static_cast<T>(1) - (sin_theta * sin_theta);
+            const T sqr_theta = -std::sqrt(pow_theta);
             
             // Organization [0, 0], [1, 1], [1, 0], [2, 2], [2, 1], [2, 0], [3, 3],
             // [3, 2], [3, 1], [3, 0], [4, 4], ...
-            
+            // P(l+1, l+1)(x) = -(2l+1)sqrt(1-x^2)P(l,l)(x)
+            // P(l+1,l)(x)    = x(2l+1)P(l,l)(x)
+            // P(l+1,m)(x)    = x(2l+1)P(l,m)(x) - (l+m)P(l-1,m)(x) / (l-m+1)
             *(coeffs++) = 1;            // P(0, 0)(x) = 1
             *(coeffs++) = sqr_theta;    // P(1, 1)(x) = -(2*0+1)sqrt(1-x^2)P(0,0)(x) = -sqrt(1-x^2)
             *(coeffs++) = sin_theta;    // P(1, 0)(x) = x(2*0+1)P(0,0)(x) = x
             if(order >= 2)
             {
-                for(size_t i = 2; i <= order; ++i)
+                const T sin_theta_3 = static_cast<T>(3) * sin_theta;
+                *(coeffs++) = static_cast<T>(3) * pow_theta;                                        // P(2, 2)(x) = -(2*1+1)sqrt(1-x^2)P(1,1)(x) = 3(1-x^2)
+                *(coeffs++) = sin_theta_3 * sqr_theta;                                              // P(2, 1)(x) = x(2*1+1)P(1,1)(x) = -3xsqrt(1-x^2)
+                *(coeffs++) = static_cast<T>(0.5) * (sin_theta * sin_theta_3 - static_cast<T>(1));  // P(2, 0)(x) = x(2*1+1)P(1,0)(x) - (1+0)P(0,0)(x) / (1-0+1) = (3x^2 - 1)/ 2
+                
+                for(size_t i = 3; i <= order; ++i)
                 {
                     const T ratio = 2 * static_cast<T>(i-1) + 1;
                     const T previous = *(coeffs-i);
@@ -251,7 +259,7 @@ namespace hoa
                 (*outputs++) = (*input) * (*radius_coeffs++) * (*azimuth_coeffs++);
                 for(size_t i = 1; i <= order; ++i)
                 {
-                    const T      factor = (*radius_coeffs++);
+                    const T factor = (*radius_coeffs++);
                     (*outputs++) = (*input) * factor * (*azimuth_coeffs++);
                     (*outputs++) = (*input) * factor * (*azimuth_coeffs++);
                 }
