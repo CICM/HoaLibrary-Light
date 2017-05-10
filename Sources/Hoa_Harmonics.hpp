@@ -12,7 +12,6 @@
 #ifndef DEF_HOA_HARMONICS_LIGHT
 #define DEF_HOA_HARMONICS_LIGHT
 
-#include "Hoa_Math.hpp"
 #include "Hoa_Signal.hpp"
 
 namespace hoa

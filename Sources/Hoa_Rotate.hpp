@@ -105,7 +105,7 @@ namespace hoa
          */
         inline T getYaw() const hoa_noexcept
         {
-            return Math<T>::wrap_twopi(m_yaw);
+            return wrap_twopi(m_yaw);
         }
         
         //! This method performs the rotation.
@@ -132,6 +132,18 @@ namespace hoa
                 (*outputs++) = sin_x * (*inputs) + cos_x * sig;
                 (*outputs++) = cos_x * (*inputs++) - sin_x * sig;
             }
+        }
+        
+    private:
+        static inline T wrap_twopi(T value)
+        {
+            while(value < static_cast<T>(0.)) {
+                value += static_cast<T>(HOA_2PI);
+            }
+            while(value >= static_cast<T>(HOA_2PI)) {
+                value -= static_cast<T>(HOA_2PI);
+            }
+            return value;
         }
     };
     

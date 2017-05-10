@@ -121,7 +121,7 @@ namespace hoa
              */
             inline void setZoom(const double zoom)
             {
-                m_zoom = Math<double>::clip(zoom, 1. / m_maximum_radius, 1.);
+                m_zoom = clip(zoom, 1. / m_maximum_radius, 1.);
             }
 
             //! Get the maximum radius of the sources and groups.
@@ -586,10 +586,10 @@ namespace hoa
          */
 		inline void setColor(const double red, const double green, const double blue, const double alpha)
 		{
-			m_color[0]	=  Math<double>::clip(red, 0., 1.);
-		    m_color[1]	=  Math<double>::clip(green, 0., 1.);
-		    m_color[2]	=  Math<double>::clip(blue, 0., 1.);
-		    m_color[3]	=  Math<double>::clip(alpha, 0., 1.);
+			m_color[0]	=  clip(red, 0., 1.);
+		    m_color[1]	=  clip(green, 0., 1.);
+		    m_color[2]	=  clip(blue, 0., 1.);
+		    m_color[3]	=  clip(alpha, 0., 1.);
         }
 
 		//! Set the description of the source.
@@ -1232,10 +1232,10 @@ namespace hoa
              */
             inline void setColor(const double red, const double green, const double blue, const double alpha)
             {
-                m_color[0]	=  Math<double>::clip(red, 0., 1.);
-                m_color[1]	=  Math<double>::clip(green, 0., 1.);
-                m_color[2]	=  Math<double>::clip(blue, 0., 1.);
-                m_color[3]	=  Math<double>::clip(alpha, 0., 1.);
+                m_color[0]	=  clip(red, 0., 1.);
+                m_color[1]	=  clip(green, 0., 1.);
+                m_color[2]	=  clip(blue, 0., 1.);
+                m_color[3]	=  clip(alpha, 0., 1.);
             }
 
             //! Set the description of the group.
@@ -1588,6 +1588,11 @@ namespace hoa
 		    {
                 it->second->notifyMute();
             }
+        }
+        
+        static inline T clip(const T& n, const T& lower, const T& upper)
+        {
+            return std::max(lower, std::min(n, upper));
         }
     };
 

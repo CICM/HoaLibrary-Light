@@ -12,7 +12,6 @@
 #ifndef DEF_HOA_TOOLS_LIGHT
 #define DEF_HOA_TOOLS_LIGHT
 
-#include "Hoa_Math.hpp"
 #include "Hoa_Signal.hpp"
 
 namespace hoa
@@ -211,8 +210,8 @@ namespace hoa
          */
         inline void setAzimuth(const size_t index, const T azim) hoa_noexcept
         {
-            m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azim);
-            m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
+            m_values_new[index + m_number_of_sources] = wrap_twopi(azim);
+            m_values_old[index + m_number_of_sources] = wrap_twopi(m_values_old[index + m_number_of_sources]);
 
             T distance;
             if(m_values_old[index + m_number_of_sources] > m_values_new[index + m_number_of_sources])
@@ -388,8 +387,8 @@ namespace hoa
          */
         inline void setAzimuth(const size_t index, const T azim) hoa_noexcept
         {
-            m_values_new[index + m_number_of_sources] = Math<T>::wrap_twopi(azim);
-            m_values_old[index + m_number_of_sources] = Math<T>::wrap_twopi(m_values_old[index + m_number_of_sources]);
+            m_values_new[index + m_number_of_sources] = wrap_twopi(azim);
+            m_values_old[index + m_number_of_sources] = wrap_twopi(m_values_old[index + m_number_of_sources]);
 
             T distance;
             if(m_values_old[index + m_number_of_sources] > m_values_new[index + m_number_of_sources])
@@ -422,8 +421,8 @@ namespace hoa
          */
         inline void setElevation(const size_t index, const T elev) hoa_noexcept
         {
-            m_values_new[index + m_number_of_sources * 2] = Math<T>::wrap_pi(elev);
-            m_values_old[index + m_number_of_sources * 2] = Math<T>::wrap_pi(m_values_old[index + m_number_of_sources * 2]);
+            m_values_new[index + m_number_of_sources * 2] = wrap_pi(elev);
+            m_values_old[index + m_number_of_sources * 2] = wrap_pi(m_values_old[index + m_number_of_sources * 2]);
 
             T distance;
             if(m_values_old[index + m_number_of_sources * 2] > m_values_new[index + m_number_of_sources * 2])
@@ -498,6 +497,18 @@ namespace hoa
                 m_counter    = 0;
             }
             Signal<T>::copy(m_number_of_sources * 3, m_values_old, vector);
+        }
+        
+    private:
+        static inline T wrap_twopi(T value)
+        {
+            while(value < static_cast<T>(0.)) {
+                value += static_cast<T>(HOA_2PI);
+            }
+            while(value >= static_cast<T>(HOA_2PI)) {
+                value -= static_cast<T>(HOA_2PI);
+            }
+            return value;
         }
     };
 }
