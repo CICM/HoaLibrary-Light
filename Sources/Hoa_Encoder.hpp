@@ -203,15 +203,15 @@ namespace hoa
             if(order <= 2) { return; }
             *(coeffs++) = static_cast<T>(-15) * _x_powm * _x_sqpm;
             *(coeffs++) = static_cast<T>(15) * _x_powm * _x;
-            *(coeffs++) = static_cast<T>(-7.5) * _x_pow * _x_sqpm + static_cast<T>(1.5) * _x_sqpm;
-            *(coeffs++) = static_cast<T>(2.5) * _x_pow * _x + static_cast<T>(-1.5) * _x;
+            *(coeffs++) = (static_cast<T>(-7.5) * _x_pow + static_cast<T>(1.5)) * _x_sqpm;
+            *(coeffs++) = (static_cast<T>(2.5) * _x_pow + static_cast<T>(-1.5)) * _x;
             
             if(order <= 3) { return; }
             *(coeffs++) = static_cast<T>(105) * _x_powm * _x_powm;
             *(coeffs++) = static_cast<T>(-105) * _x_powm * _x_sqpm * _x;
-            *(coeffs++) = static_cast<T>(52.5) * _x_pow * _x_powm - static_cast<T>(7.5) * _x_powm;
+            *(coeffs++) = (static_cast<T>(52.5) * _x_pow - static_cast<T>(7.5)) * _x_powm;
             *(coeffs++) = (static_cast<T>(-17.5) * _x_pow + static_cast<T>(7.5)) * _x_sqpm  * _x;
-            *(coeffs++) = static_cast<T>(4.375) * _x_pow * _x_pow - static_cast<T>(3.75) * _x_pow + static_cast<T>(0.375);
+            *(coeffs++) = (static_cast<T>(4.375) * _x_pow - static_cast<T>(3.75)) * _x_pow + static_cast<T>(0.375);
             
             if(order <= 4) { return; }
             *(coeffs++) = static_cast<T>(-945) * _x_powm * _x_powm * _x_sqpm;
