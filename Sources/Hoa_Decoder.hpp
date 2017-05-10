@@ -283,7 +283,7 @@ namespace hoa
 
         //! This method retrieves the mode of the decoder.
         /**	This method retrieves the mode of the decoder.
-         @retun The mode of the decoder.
+         @return The mode of the decoder.
          */
         inline virtual Mode getMode() const hoa_noexcept {return RegularMode;}
     };
@@ -318,9 +318,9 @@ namespace hoa
 
         //! This method retrieves the mode of the decoder.
         /**	This method retrieves the mode of the decoder.
-         @retun The mode of the decoder.
+         @return The mode of the decoder.
          */
-        inline typename Decoder<Hoa2d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa2d, T>::IrregularMode;};
+        inline typename Decoder<Hoa2d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa2d, T>::IrregularMode;}
 
         //! This method performs the decoding.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics and the outputs array contains the channels samples and the minimum size must be the number of channels.
@@ -345,7 +345,7 @@ namespace hoa
             if(Decoder<Hoa2d, T>::getNumberOfPlanewaves() == 1)
             {
                 const size_t nls = size_t(Decoder<Hoa2d, T>::getDecompositionOrder() + 1.);
-                const T factor = 1. / (T)(nls);
+                const T factor = static_cast<T>(1.) / static_cast<T>(nls);
                 for(size_t i = 0; i <nls; i++)
                 {
                     encoder.setAzimuth(T(i) * HOA_2PI / T(nls));
@@ -356,7 +356,7 @@ namespace hoa
             }
             else
             {
-                T smallest_distance = (T)HOA_2PI;
+                T smallest_distance = static_cast<T>(HOA_2PI);
                 std::vector<Planewave<Hoa2d, T> > channels;
                 for(size_t i = 0; i < Decoder<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
@@ -399,8 +399,8 @@ namespace hoa
                 {
                     smallest_distance = HOA_2PI / T(Decoder<Hoa2d, T>::getNumberOfHarmonics() + 1.);
                 }
-                const size_t nvirtual = (size_t)ceil(HOA_2PI / smallest_distance);
-                const T factor = 1. / (T)(nvirtual);
+                const size_t nvirtual = static_cast<size_t>(std::ceil(static_cast<T>(HOA_2PI) / smallest_distance));
+                const T factor = static_cast<T>(1) / static_cast<T>(nvirtual);
 
                 //post("number of virtual %i", nvirtual);
                 for(size_t i = 0; i < nvirtual; i++)
@@ -525,8 +525,8 @@ namespace hoa
         m_left(hoa_nullptr),
         m_right(hoa_nullptr)
         {
-            Decoder<Hoa2d, T>::setPlanewaveAzimuth(0, (T)(HOA_PI2*3.));
-            Decoder<Hoa2d, T>::setPlanewaveAzimuth(1, (T)(HOA_PI2));
+            Decoder<Hoa2d, T>::setPlanewaveAzimuth(0, static_cast<T>(HOA_PI2*3.));
+            Decoder<Hoa2d, T>::setPlanewaveAzimuth(1, static_cast<T>(HOA_PI2));
             setCropSize(0ul);
         }
 
@@ -534,7 +534,7 @@ namespace hoa
         /**	This method retrieves the mode of the decoder.
          @return The mode of the decoder.
          */
-        inline typename Decoder<Hoa2d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa2d, T>::BinauralMode;};
+        inline typename Decoder<Hoa2d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa2d, T>::BinauralMode;}
 
         //! The binaural decoder destructor.
         /**	The binaural decoder destructor free the memory.
@@ -666,7 +666,7 @@ namespace hoa
 
         //! This method retrieves the mode of the decoder.
         /**	This method retrieves the mode of the decoder.
-         @retun The mode of the decoder.
+         @return The mode of the decoder.
          */
         inline virtual Mode getMode() const hoa_noexcept { return RegularMode; }
 
@@ -717,14 +717,14 @@ namespace hoa
         m_left(hoa_nullptr),
         m_right(hoa_nullptr)
         {
-            Decoder<Hoa3d, T>::setPlanewaveAzimuth(0, (T)(HOA_PI2*3.));
-            Decoder<Hoa3d, T>::setPlanewaveAzimuth(1, (T)HOA_PI2);
+            Decoder<Hoa3d, T>::setPlanewaveAzimuth(0, static_cast<T>(HOA_PI2*3.));
+            Decoder<Hoa3d, T>::setPlanewaveAzimuth(1, static_cast<T>(HOA_PI2));
             setCropSize(0ul);
         }
 
         //! This method retrieves the mode of the decoder.
         /**	This method retrieves the mode of the decoder.
-         @retun The mode of the decoder.
+         @return The mode of the decoder.
          */
         inline typename Decoder<Hoa3d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa3d, T>::BinauralMode;}
 
