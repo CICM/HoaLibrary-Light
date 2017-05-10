@@ -82,7 +82,8 @@ CATCH_TEST_CASE("Decoder 3D", "[Decoder] [3D]")
             std::cout << harmonics[i] << "\n";
         }
         harmonics[3] *= 3.;
-        /*
+         
+         
         for(size_t i = 0; i < harmonics.size(); ++i) {
             harmonics[i] = hoa_float_t(0.);
         }
@@ -140,7 +141,9 @@ CATCH_TEST_CASE("Decoder 3D", "[Decoder] [3D]")
         encoder.setAzimuth(hoa_float_t(0.));
         encoder.setElevation(hoa_float_t(0.));
         encoder.process(&input, harmonics.data());
-        /*
+        
+         
+         
          for(size_t i = 0; i < harmonics.size(); ++i) {
          harmonics[i] = hoa_float_t(0.);
          }
@@ -155,7 +158,9 @@ CATCH_TEST_CASE("Decoder 3D", "[Decoder] [3D]")
         }
         std::cout << "ratio 1 : " << (outputs[0] / outputs[1]) << "\n";
         std::cout << "ratio 2 : " << (outputs[1] / outputs[2]) << "\n";
-        /*
+        
+         
+         
          CATCH_CHECK(std::abs(outputs[0]  - hoa_float_t(0.93750000000000000)) < epsilon);
          CATCH_CHECK(std::abs(outputs[1]  - hoa_float_t(0.06249989569187164)) < epsilon);
          CATCH_CHECK(std::abs(outputs[2]  - hoa_float_t(-0.06249989569187164)) < epsilon);

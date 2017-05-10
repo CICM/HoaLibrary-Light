@@ -99,7 +99,7 @@ namespace hoa
                 std::vector<Planewave<Hoa2d, T> > channels;
                 for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
-                    channels.push_back(Planewave<Hoa2d, T>(i, Math<T>::wrap_twopi(ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(i)), 0.));
+                    channels.push_back(Planewave<Hoa2d, T>(i, wrap_twopi(ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(i)), 0.));
                 }
                 std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::compare_azimuth);
                 {
@@ -109,7 +109,7 @@ namespace hoa
                     const T previous_portion= (HOA_2PI - previous_angle) + current_angle;
                     const T next_portion    = next_angle - current_angle;
                     m_channels_azimuth_width[channels[0].getIndex()] = (previous_portion + next_portion) * 0.5;
-                    m_channels_azimuth_mapped[channels[0].getIndex()]= Math<T>::wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[0].getIndex()] * 0.5);
+                    m_channels_azimuth_mapped[channels[0].getIndex()]= wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[0].getIndex()] * 0.5);
                 }
                 for(size_t i = 1; i < channels.size() - 1; i++)
                 {
@@ -119,7 +119,7 @@ namespace hoa
                     const T previous_portion= current_angle - previous_angle;
                     const T next_portion    = next_angle - current_angle;
                     m_channels_azimuth_width[channels[i].getIndex()] = (previous_portion + next_portion) * 0.5;
-                    m_channels_azimuth_mapped[channels[i].getIndex()]= Math<T>::wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[i].getIndex()] * 0.5);
+                    m_channels_azimuth_mapped[channels[i].getIndex()]= wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[i].getIndex()] * 0.5);
                 }
                 {
                     const size_t index = channels.size() - 1;
@@ -129,7 +129,7 @@ namespace hoa
                     const T previous_portion= current_angle - previous_angle;
                     const T next_portion    = (HOA_2PI - current_angle) + next_angle;
                     m_channels_azimuth_width[channels[index].getIndex()] = (previous_portion + next_portion) * 0.5;
-                    m_channels_azimuth_mapped[channels[index].getIndex()]= Math<T>::wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[index].getIndex()] * 0.5);
+                    m_channels_azimuth_mapped[channels[index].getIndex()]= wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[index].getIndex()] * 0.5);
                 }
                 channels.clear();
             }
@@ -236,6 +236,19 @@ namespace hoa
         void process(const T* input, T* outputs) hoa_noexcept hoa_override
         {
             process(input);
+        }
+        
+        
+    private:
+        static inline T wrap_twopi(T value)
+        {
+            while(value < static_cast<T>(0.)) {
+                value += static_cast<T>(HOA_2PI);
+            }
+            while(value >= static_cast<T>(HOA_2PI)) {
+                value -= static_cast<T>(HOA_2PI);
+            }
+            return value;
         }
     };
 

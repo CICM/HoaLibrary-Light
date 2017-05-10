@@ -346,7 +346,7 @@ namespace hoa
                 m_planewaves.push_back(Planewave<D, T>(i*2, static_cast<T>(i - 1.) / 5. * HOA_2PI, atan(0.5)));
                 m_planewaves.push_back(Planewave<D, T>(i*2+1, T(i - 1.) / 5. * HOA_2PI - HOA_PI / 5., -atan(0.5)));
             }
-            m_planewaves.push_back(Planewave<D, T>(12, 0., (T)-HOA_PI2));
+            m_planewaves.push_back(Planewave<D, T>(12, 0., static_cast<T>(-HOA_PI2)));
         }
         
         void generateDodecahedron() hoa_noexcept
@@ -376,7 +376,7 @@ namespace hoa
         {
             if(nplws % 2)
             {
-                m_planewaves.push_back(Planewave<D, T>(1, 0., (T)HOA_PI2));
+                m_planewaves.push_back(Planewave<D, T>(1, 0., static_cast<T>(HOA_PI2)));
             }
             const T     phi     = (sqrt(5.) - 1.) / 4.;
             const size_t limit   = (nplws - (nplws % 2)) / 2;
