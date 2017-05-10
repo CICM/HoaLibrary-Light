@@ -726,7 +726,7 @@ namespace hoa
         /**	This method retrieves the mode of the decoder.
          @retun The mode of the decoder.
          */
-        inline typename Decoder<Hoa3d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa3d, T>::BinauralMode;};
+        inline typename Decoder<Hoa3d, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<Hoa3d, T>::BinauralMode;}
 
         //! The binaural decoder destructor.
         /**	The binaural decoder destructor free the memory.
