@@ -3,7 +3,7 @@ var searchData=
   ['scope',['Scope',['../classhoa_1_1_scope.html',1,'hoa']]],
   ['scope',['Scope',['../classhoa_1_1_scope.html#a7dbb39d2cdd915012813a535b04d05bd',1,'hoa::Scope']]],
   ['setazimuth',['setAzimuth',['../classhoa_1_1_encoder.html#a6c1189fc1524eefbc1ec95b0e71f6611',1,'hoa::Encoder::setAzimuth()'],['../classhoa_1_1_multi_encoder.html#afcc520643806499a62715532d76e578b',1,'hoa::MultiEncoder::setAzimuth()'],['../classhoa_1_1_planewave.html#a6c1189fc1524eefbc1ec95b0e71f6611',1,'hoa::Planewave::setAzimuth()']]],
-  ['setcoordinates',['setCoordinates',['../classhoa_1_1_encoder.html#a4799b12aa280856ca4dc8edcb2f38454',1,'hoa::Encoder']]],
+  ['setcoordinates',['setCoordinates',['../classhoa_1_1_encoder.html#ab8e8dfd8b6a639b1967fb542c1d8cd63',1,'hoa::Encoder']]],
   ['setcropsize',['setCropSize',['../classhoa_1_1_decoder_binaural_3_01_hoa2d_00_01_t_01_4.html#a07f0035425c715c2eafcaaba56aad187',1,'hoa::DecoderBinaural&lt; Hoa2d, T &gt;::setCropSize()'],['../classhoa_1_1_decoder_binaural_3_01_hoa3d_00_01_t_01_4.html#a07f0035425c715c2eafcaaba56aad187',1,'hoa::DecoderBinaural&lt; Hoa3d, T &gt;::setCropSize()']]],
   ['setelevation',['setElevation',['../classhoa_1_1_encoder.html#ac8a9b9491274bd62edcda1302f1f4da2',1,'hoa::Encoder::setElevation()'],['../classhoa_1_1_multi_encoder.html#a6ddc4acaf9140c8a3bc72f102957fb31',1,'hoa::MultiEncoder::setElevation()'],['../classhoa_1_1_planewave.html#ac8a9b9491274bd62edcda1302f1f4da2',1,'hoa::Planewave::setElevation()']]],
   ['setfisheye',['setFisheye',['../classhoa_1_1_multi_encoder.html#a3c0e318a3434d61538bf81f4d70e4893',1,'hoa::MultiEncoder']]],

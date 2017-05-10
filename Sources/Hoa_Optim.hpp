@@ -19,20 +19,20 @@ namespace hoa
     //! @brief The class optimizes the ambisonic sound field for several restitution systems.
     //! @details The class should be used to optimize the ambisonic sound field. There are 3
     //! optimizations, basic (no optimization), max-re (energy vector optimization) and
-    //! in-phase (energy and velocity vector optimization).\n
+    //! in-phase (energy and velocity vector optimization).<br>
     //! The basic optimization has no effect, it should be used (or not) with a perfect
     //! ambisonic channels arrangement where all the channels are to equal distance on a
     //! circle or a sphere, and for a listener placed at the perfect center of the circle of
-    //! the sphere. The basic optimization generates a set of weights defined by:\n
-    //! \f[W^{basic}_{l,m} = 1\f]\n
+    //! the sphere. The basic optimization generates a set of weights defined by:<br>
+    //! \f[W^{basic}_{l,m} = 1\f]<br>
     //! The max-re should be used should be used for an auditory confined to the center of the
-    //! circle or the sphere. The max-re optimization generates a set of weights defined by:\n
-    //! \f[W^{max-re}_{l,m} = \cos{(l \times \frac{\pi}{2N + 2})}\f]\n
+    //! circle or the sphere. The max-re optimization generates a set of weights defined by:<br>
+    //! \f[W^{max-re}_{l,m} = \cos{(l \times \frac{\pi}{2N + 2})}\f]<br>
     //! The in-phase optimization should be used when the auditory covers the entire channels
     //! area and/or when the channels arrangement is not a perfect circle or a perfect sphere
     //! (when the channels are not to equal distance for example).The in-phase optimization
-    //! generates a set of weights defined by:\n
-    //! \f[W^{in-phase}_{l,m} = \frac{N!^2}{(N + l)!(N -l)!}\f]\n
+    //! generates a set of weights defined by:<br>
+    //! \f[W^{in-phase}_{l,m} = \frac{N!^2}{(N + l)!(N -l)!}\f]<br>
     //! with \f$N\f$ the order of decomposition, \f$l\f$ the degree and \f$m\f$ the
     //! azimuthal order.
     //! Note that the optimizations decrease the precision of the sound field restitution thus

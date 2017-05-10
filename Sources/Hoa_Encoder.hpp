@@ -19,21 +19,21 @@ namespace hoa
 
     //! @brief The class encodes a signal into the harmonics domain depending on coodinates.
     //! @details The class generates the signals associated to the harmonics \f$Y_{l,m}\f$
-    //! according to a radius \f$\rho\f$, an azimuth \f$\theta\f$ and an elevation \f$\varphi\f$.\n
-    //! The coefficients of the harmonics are defined by:\n
+    //! according to a radius \f$\rho\f$, an azimuth \f$\theta\f$ and an elevation \f$\varphi\f$.<br>
+    //! The coefficients of the harmonics are defined by:<br>
     //! \f[Y_{l,m}(\theta, \varphi) = G_{l,m}(\rho) P_{l, \left|m\right|}(\sin{(\varphi)}) e^{+im\theta} k_{l, m} \f]
-    //! with\n
-    //! \f$G_{l,m}(\rho)\f$ the radius part of the equation,\n
-    //! \f$e^{+im\theta}\f$ the azimuth part with \f$i\f$ the imaginary,\n
+    //! with<br>
+    //! \f$G_{l,m}(\rho)\f$ the radius part of the equation,<br>
+    //! \f$e^{+im\theta}\f$ the azimuth part with \f$i\f$ the imaginary,<br>
     //! \f$P_{l, \left|m\right|}(\cos{(\varphi)})\f$ the elevation part of the equation with
-    //! \f$P_{l, \left|m\right|}(x)\f$ the associated Legendre polynomials,\n
-    //! \f$k_{l, m}\f$ the normalization and\n
+    //! \f$P_{l, \left|m\right|}(x)\f$ the associated Legendre polynomials,<br>
+    //! \f$k_{l, m}\f$ the normalization and<br>
     //! \f$N\f$ the order of decomposition, \f$l\f$ the degree, \f$m\f$ the azimuthal order,
-    //! \f$\rho\f$ the radius, \f$\theta\f$ the azimuth and \f$\varphi\f$ the elevation in radian.\n\n
+    //! \f$\rho\f$ the radius, \f$\theta\f$ the azimuth and \f$\varphi\f$ the elevation in radian.<br><br>
     //! The radius \f$\rho\f$ is included between \f$0\f$ and \f$+\infty\f$. \f$0\f$ is the
     //! center of the soundfield, \f$1\f$ is the radius of the ambisonics circle or sphere,
     //! beyond this limit the gains \f$G\f$ of the harmonics decrease globally and before the
-    //! gains \f$G\f$ decrease independently:\n
+    //! gains \f$G\f$ decrease independently:<br>
     //! if \f$\rho\ge1\f$
     //! \f[G_{l,m}(\rho) = \frac{1}{\rho}\f]
     //! else
@@ -42,7 +42,7 @@ namespace hoa
     //! direction of rotation is counterclockwise. The \f$0\f$ radian is \f$\frac{\pi}{2}\f$
     //! phase shifted relative to a mathematical representation of a circle, then the \f$0\f$
     //! radian is at the "front" of the soundfield. The azimuth part in the imaginary form of
-    //! the equation \f$e^{+im\theta}\f$ can be expressed with the real form :\n
+    //! the equation \f$e^{+im\theta}\f$ can be expressed with the real form :<br>
     //! if \f$m\geq0\f$
     //! \f[e^{+im\theta} = \cos{(\left|m\right|\theta)}\f]
     //! else
@@ -53,17 +53,16 @@ namespace hoa
     //! is at the bottom and \f$\pi\f$ is behind. Note that if the angle of elevation is
     //! between \f$\frac{\pi}{2}\f$ and \f$\frac{3\pi}{2}\f$, the azimuth is reversed. The
     //! elevation part \f$P_{l, \left|m\right|}(x)\f$ of the formula can be expressed with
-    //! the recursives formulas:\n
+    //! the recursives formulas:<br>
     //! \f[P_{l+1,l+1}(x) = -(2l+1)\sqrt{(1-x^2)}P_{(l,l)}(x) \f]
     //! \f[P_{l+1,l}(x) = x(2l+1)P_{(l,l)}(x) \f]
     //! \f[P_{l+1,m}(x) = \frac{x(2l+1)P_{(l,m)}(x) - (l+m)P_{(l-1,m)}(x)}{l-m+1} \f]
     //! and with \f[P_{0, 0}(x) = 1\f]
-    //! The normalization part \f$k_{l, m}\f$ is equivalent to :\n
+    //! The normalization part \f$k_{l, m}\f$ is equivalent to :<br>
     //! if \f$m = 0\f$ then
     //! \f[k_{l, m} = 1\f]
     //! else
     //! \f[k_{l, m} = \sqrt{\frac{(l - \left|m\right|)!}{(l + \left|m\right|)!}}\sqrt{2} \f]
-    //! @todo Check the azimuth offset
     template <Dimension D, typename T> class Encoder : public ProcessorHarmonics<D, T>
     {
     public:
@@ -76,7 +75,7 @@ namespace hoa
         m_elevation_coeffs(((order + 1) * (order + 1)) / 2 + (order + 1)),
         m_normalization_coeffs(ProcessorHarmonics<D, T>::getNumberOfHarmonics())
         {
-            hoa_static_assert(order > 0, "The order must be superior or equal to zero.");
+            hoa_static_assert(order > 0, "The order must be superior or equal to one.");
             setRadius(1.);
             setAzimuth(0.);
             setElevation(0.);

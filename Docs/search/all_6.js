@@ -7,7 +7,7 @@ var searchData=
   ['getdegree',['getDegree',['../classhoa_1_1_harmonic.html#a7882aa5416d50d12481a1c0b1e01c48f',1,'hoa::Harmonic::getDegree() const hoa_noexcept'],['../classhoa_1_1_harmonic.html#a97f027d1b64d4bf99f7bfe9c6db63cd8',1,'hoa::Harmonic::getDegree(const size_t index) hoa_noexcept']]],
   ['getelevation',['getElevation',['../classhoa_1_1_encoder.html#a26d6764022c53f40298ad38303f7f00b',1,'hoa::Encoder::getElevation()'],['../classhoa_1_1_multi_encoder.html#a09318443a4d99e8a9b42c3b172a9278b',1,'hoa::MultiEncoder::getElevation()'],['../classhoa_1_1_planewave.html#a26d6764022c53f40298ad38303f7f00b',1,'hoa::Planewave::getElevation()']]],
   ['getharmonicdegree',['getHarmonicDegree',['../classhoa_1_1_processor_harmonics.html#a1a4ac723612a8fd301322c7f649db738',1,'hoa::ProcessorHarmonics']]],
-  ['getharmonicindex',['getHarmonicIndex',['../classhoa_1_1_processor_harmonics.html#a672cf7f1f84b45ab962d8e6b9869c336',1,'hoa::ProcessorHarmonics']]],
+  ['getharmonicindex',['getHarmonicIndex',['../classhoa_1_1_processor_harmonics.html#a2c5d31e082cfa79c253bb6c3c969fa0b',1,'hoa::ProcessorHarmonics']]],
   ['getharmonicname',['getHarmonicName',['../classhoa_1_1_exchanger.html#a5b9d0eda301900048344fae472a47c70',1,'hoa::Exchanger::getHarmonicName()'],['../classhoa_1_1_processor_harmonics.html#a847895cc614362e651d755ce1150e51d',1,'hoa::ProcessorHarmonics::getHarmonicName()']]],
   ['getharmonicnormalization',['getHarmonicNormalization',['../classhoa_1_1_processor_harmonics.html#a23f022db7c23e001a36d172279b63376',1,'hoa::ProcessorHarmonics']]],
   ['getharmonicorder',['getHarmonicOrder',['../classhoa_1_1_processor_harmonics.html#a04933264f971ac86125ead92b4cf1177',1,'hoa::ProcessorHarmonics']]],

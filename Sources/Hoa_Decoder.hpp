@@ -68,7 +68,7 @@ namespace hoa
     //! the harmonic coefficients of a unitary signal \f$\frac{1}{N+1}\f$ in the direction of
     //! the plane wave, \f$N\f$ the order of decomposition, \f$l\f$ the degree, \f$m\f$ the
     //! azimuthal order, \f$\theta\f$ the azimuth and \f$\varphi\f$ the elevation in radian of
-    //! the plane wave.\n
+    //! the plane wave.<br>
     //! The plane waves must be equally spaced on a circle or a sphere and the number of plane
     //! waves must be at least the number of harmonics.
     template <Dimension D, typename T> class DecoderRegular : public Decoder<D, T>

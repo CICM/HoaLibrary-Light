@@ -160,9 +160,9 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cl
 <tr class="memitem:a04933264f971ac86125ead92b4cf1177 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a04933264f971ac86125ead92b4cf1177">getHarmonicOrder</a> (const size_t index) const hoa_noexcept</td></tr>
 <tr class="memdesc:a04933264f971ac86125ead92b4cf1177 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the azimuthal order of an harmonic.  <a href="#a04933264f971ac86125ead92b4cf1177">More...</a><br /></td></tr>
 <tr class="separator:a04933264f971ac86125ead92b4cf1177 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a672cf7f1f84b45ab962d8e6b9869c336 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a672cf7f1f84b45ab962d8e6b9869c336">getHarmonicIndex</a> (const size_t degree, long order) const hoa_noexcept</td></tr>
-<tr class="memdesc:a672cf7f1f84b45ab962d8e6b9869c336 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of an harmonic given the degree and the azimuthal order.  <a href="#a672cf7f1f84b45ab962d8e6b9869c336">More...</a><br /></td></tr>
-<tr class="separator:a672cf7f1f84b45ab962d8e6b9869c336 inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c5d31e082cfa79c253bb6c3c969fa0b inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a2c5d31e082cfa79c253bb6c3c969fa0b">getHarmonicIndex</a> (const size_t degree, const long order) const hoa_noexcept</td></tr>
+<tr class="memdesc:a2c5d31e082cfa79c253bb6c3c969fa0b inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the index of an harmonic given the degree and the azimuthal order.  <a href="#a2c5d31e082cfa79c253bb6c3c969fa0b">More...</a><br /></td></tr>
+<tr class="separator:a2c5d31e082cfa79c253bb6c3c969fa0b inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a847895cc614362e651d755ce1150e51d inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_processor_harmonics.html#a847895cc614362e651d755ce1150e51d">getHarmonicName</a> (const size_t index) const hoa_noexcept</td></tr>
 <tr class="memdesc:a847895cc614362e651d755ce1150e51d inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the name of an harmonic.  <a href="#a847895cc614362e651d755ce1150e51d">More...</a><br /></td></tr>
 <tr class="separator:a847895cc614362e651d755ce1150e51d inherit pub_methods_classhoa_1_1_processor_harmonics"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -187,22 +187,22 @@ class hoa::Optim&lt; D, T &gt;</h3>
 
 <p>The class optimizes the ambisonic sound field for several restitution systems. </p>
 <p>The class should be used to optimize the ambisonic sound field. There are 3 optimizations, basic (no optimization), max-re (energy vector optimization) and in-phase (energy and velocity vector optimization).<br />
-The basic optimization has no effect, it should be used (or not) with a perfect ambisonic channels arrangement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle of the sphere. The basic optimization generates a set of weights defined by:<br />
+ The basic optimization has no effect, it should be used (or not) with a perfect ambisonic channels arrangement where all the channels are to equal distance on a circle or a sphere, and for a listener placed at the perfect center of the circle of the sphere. The basic optimization generates a set of weights defined by:<br />
  </p><p class="formulaDsp">
 \[W^{basic}_{l,m} = 1\]
 </p>
 <p><br />
-The max-re should be used should be used for an auditory confined to the center of the circle or the sphere. The max-re optimization generates a set of weights defined by:<br />
+ The max-re should be used should be used for an auditory confined to the center of the circle or the sphere. The max-re optimization generates a set of weights defined by:<br />
  </p><p class="formulaDsp">
 \[W^{max-re}_{l,m} = \cos{(l \times \frac{\pi}{2N + 2})}\]
 </p>
 <p><br />
-The in-phase optimization should be used when the auditory covers the entire channels area and/or when the channels arrangement is not a perfect circle or a perfect sphere (when the channels are not to equal distance for example).The in-phase optimization generates a set of weights defined by:<br />
+ The in-phase optimization should be used when the auditory covers the entire channels area and/or when the channels arrangement is not a perfect circle or a perfect sphere (when the channels are not to equal distance for example).The in-phase optimization generates a set of weights defined by:<br />
  </p><p class="formulaDsp">
 \[W^{in-phase}_{l,m} = \frac{N!^2}{(N + l)!(N -l)!}\]
 </p>
 <p><br />
-with \(N\) the order of decomposition, \(l\) the degree and \(m\) the azimuthal order. Note that the optimizations decrease the precision of the sound field restitution thus it can be compared to particular cases of the fractional orders. </p>
+ with \(N\) the order of decomposition, \(l\) the degree and \(m\) the azimuthal order. Note that the optimizations decrease the precision of the sound field restitution thus it can be compared to particular cases of the fractional orders. </p>
 
 <p>Definition at line <a class="el" href="_hoa___optim_8hpp_source.html#l00040">40</a> of file <a class="el" href="_hoa___optim_8hpp_source.html">Hoa_Optim.hpp</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
@@ -352,7 +352,7 @@ with \(N\) the order of decomposition, \(l\) the degree and \(m\) the azimuthal 
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue May 9 2017 17:09:52 for HOA Library by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 10 2017 16:24:42 for HOA Library by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>
