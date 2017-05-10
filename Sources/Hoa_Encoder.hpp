@@ -200,44 +200,64 @@ namespace hoa
             m_elevation = elevation;
             T* coeffs   = m_elevation_coeffs.data();
             const size_t order = ProcessorHarmonics<D, T>::getDecompositionOrder();
-            const T sin_theta = std::sin(elevation);
-            const T pow_theta = static_cast<T>(1) - (sin_theta * sin_theta);
-            const T sqr_theta = -std::sqrt(pow_theta);
+            const T sin_theta = std::sin(elevation);                            // x
+            const T pow_theta = static_cast<T>(1) - (sin_theta * sin_theta);    // 1 - x^2
+            const T sqr_theta = -std::sqrt(pow_theta);                          // -sqrt(1 - x^2)
             
             // Organization [0, 0], [1, 1], [1, 0], [2, 2], [2, 1], [2, 0], [3, 3],
             // [3, 2], [3, 1], [3, 0], [4, 4], ...
             // P(l+1, l+1)(x) = -(2l+1)sqrt(1-x^2)P(l,l)(x)
             // P(l+1,l)(x)    = x(2l+1)P(l,l)(x)
             // P(l+1,m)(x)    = x(2l+1)P(l,m)(x) - (l+m)P(l-1,m)(x) / (l-m+1)
-            *(coeffs++) = 1;            // P(0, 0)(x) = 1
-            *(coeffs++) = sqr_theta;    // P(1, 1)(x) = -(2*0+1)sqrt(1-x^2)P(0,0)(x) = -sqrt(1-x^2)
-            *(coeffs++) = sin_theta;    // P(1, 0)(x) = x(2*0+1)P(0,0)(x) = x
+            
+            // P(0, 0)(x) = 1
+            *(coeffs++) = 1;
+            // P(1, 1)(x) = -(2*0+1)sqrt(1-x^2)P(0,0)(x) = -sqrt(1-x^2)
+            *(coeffs++) = sqr_theta;
+            // P(1, 0)(x) = x(2*0+1)P(0,0)(x) = x
+            *(coeffs++) = sin_theta;
             if(order >= 2)
             {
                 const T sin_theta_3 = static_cast<T>(3) * sin_theta;
-                *(coeffs++) = static_cast<T>(3) * pow_theta;                                        // P(2, 2)(x) = -(2*1+1)sqrt(1-x^2)P(1,1)(x) = 3(1-x^2)
-                *(coeffs++) = sin_theta_3 * sqr_theta;                                              // P(2, 1)(x) = x(2*1+1)P(1,1)(x) = -3xsqrt(1-x^2)
-                *(coeffs++) = static_cast<T>(0.5) * (sin_theta * sin_theta_3 - static_cast<T>(1));  // P(2, 0)(x) = x(2*1+1)P(1,0)(x) - (1+0)P(0,0)(x) / (1-0+1) = (3x^2 - 1)/ 2
-                
-                for(size_t i = 3; i <= order; ++i)
+                // P(2, 2)(x) = -(2*1+1)sqrt(1-x^2)P(1,1)(x) = 3(1-x^2)
+                *(coeffs++) = static_cast<T>(3) * pow_theta;
+                // P(2, 1)(x) = x(2*1+1)P(1,1)(x) = -3xsqrt(1-x^2)
+                *(coeffs++) = sin_theta_3 * sqr_theta;
+                // P(2, 0)(x) = x(2*1+1)P(1,0)(x) - (1+0)P(0,0)(x) / (1-0+1) = (3x^2 - 1)/ 2
+                *(coeffs++) = static_cast<T>(0.5) * (sin_theta * sin_theta_3 - static_cast<T>(1));
+                if(order >= 3)
                 {
-                    const T ratio = 2 * static_cast<T>(i-1) + 1;
-                    const T previous = *(coeffs-i);
-                    // P(l+1,l+1)(x) = -(2l+1) sqrt(1-x^2) P(l,l)(x)
-                    *(coeffs++) = ratio * sqr_theta * previous;
-                    // P(l+1,l)(x)   = x(2l+1) P(l,l)(x)
-                    *(coeffs++) = ratio * sin_theta * previous;
-                    for(size_t j = i - 2; j > 0; --j)
+                    const T rsin_pow = sin_theta * sin_theta;
+                    const T pow_15 = pow_theta * static_cast<T>(15);
+                    // P(3, 3)(x) = -(2*2+1)sqrt(1-x^2)P(2,2)(x) = -15sqrt(1-x^2)(1-x^2)
+                    *(coeffs++) = pow_15 * sqr_theta;
+                    // P(3, 2)(x) = x(2*2+1)P(l,l)(x) = 15x(1-x^2)
+                    *(coeffs++) = pow_15 * sin_theta;
+                    // P(3, 1)(x) = x(2*2+1)P(2,1)(x) - (2+1)P(1,1)(x) / (2-1+1) = 1.5(5x^2-1)sqrt(1-x^2)
+                    *(coeffs++) = (static_cast<T>(7.5) * rsin_pow - static_cast<T>(1.5)) * sqr_theta;
+                    // P(3, 0)(x) = x(2*2+1)P(2,0)(x) - (2+0)P(1,0)(x) / (2-0+1) = (5x^3 - 3x)/ 2
+                    *(coeffs++) = (static_cast<T>(5) * rsin_pow * sin_theta - sin_theta_3) * static_cast<T>(0.5);
+                    
+                    for(size_t i = 4; i <= order; ++i)
                     {
+                        const T ratio = 2 * static_cast<T>(i-1) + 1;
+                        const T previous = *(coeffs-i);
+                        // P(l+1,l+1)(x) = -(2l+1) sqrt(1-x^2) P(l,l)(x)
+                        *(coeffs++) = ratio * sqr_theta * previous;
+                        // P(l+1,l)(x)   = x(2l+1) P(l,l)(x)
+                        *(coeffs++) = ratio * sin_theta * previous;
+                        for(size_t j = i - 2; j > 0; --j)
+                        {
+                            const T previous1 = *(coeffs-(i+1));
+                            const T previous2 = *(coeffs-(2*i+1));
+                            // P(l+1,m)(x)   = (x(2l+1)P(l,m)(x) - (l+m)P(l-1, m)(x)) / (l-m+1)
+                            *(coeffs++) = ((ratio * sin_theta * previous1) - static_cast<T>(i-1+j) * previous2) / static_cast<T>(i-j);
+                        }
                         const T previous1 = *(coeffs-(i+1));
                         const T previous2 = *(coeffs-(2*i+1));
-                        // P(l+1,m)(x)   = (x(2l+1)P(l,m)(x) - (l+m)P(l-1, m)(x)) / (l-m+1)
-                        *(coeffs++) = ((ratio * sin_theta * previous1) - static_cast<T>(i-1+j) * previous2) / static_cast<T>(i-j);
+                        // P(l+1,0)(x)   = (x(2l+1)P(l,0)(x) - (l)P(l-1, 0)(x)) / (l+1)
+                        *(coeffs++) = ((ratio * sin_theta * previous1) - static_cast<T>(i-1) * previous2) / static_cast<T>(i);
                     }
-                    const T previous1 = *(coeffs-(i+1));
-                    const T previous2 = *(coeffs-(2*i+1));
-                    // P(l+1,0)(x)   = (x(2l+1)P(l,0)(x) - (l)P(l-1, 0)(x)) / (l+1)
-                    *(coeffs++) = ((ratio * sin_theta * previous1) - static_cast<T>(i-1) * previous2) / static_cast<T>(i);
                 }
             }
             
