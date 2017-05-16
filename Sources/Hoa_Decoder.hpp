@@ -78,16 +78,14 @@ namespace hoa
         //! @brief The constructor.
         //! @param order The order
         //! @param nplws The number of channels.
-        DecoderRegular(size_t order, size_t nplws) : Decoder<D, T>(order, nplws)
+        DecoderRegular(size_t order, size_t nplws) : Decoder<D, T>(order, nplws),
+        m_matrix(Decoder<D, T>::getNumberOfPlanewaves() * Decoder<D, T>::getNumberOfHarmonics())
         {
-            m_matrix = new T[Decoder<D, T>::getNumberOfPlanewaves() * Decoder<D, T>::getNumberOfHarmonics()];
             prepare();
         }
 
         //! @brief The destructor.
-        ~DecoderRegular() {
-            delete [] m_matrix;
-        }
+        inline ~DecoderRegular() hoa_noexcept {}
 
         //! @brief The method performs the decoding of the harmonics signal.
         //! @details The input pointer must be the harmonics signal to decoder and the outputs
@@ -99,7 +97,7 @@ namespace hoa
         {
             const size_t nharm = Decoder<D, T>::getNumberOfHarmonics();
             const size_t nplws = Decoder<D, T>::getNumberOfPlanewaves();
-            const T* matrix = m_matrix;
+            const T* matrix = m_matrix.data();
             for(size_t i = 0ul; i < nplws; i++)
             {
                 T result = 0;
@@ -132,7 +130,7 @@ namespace hoa
             {
                 encoder.setAzimuth(Decoder<D, T>::getPlanewaveAzimuth(i));
                 encoder.setElevation(Decoder<D, T>::getPlanewaveElevation(i));
-                encoder.process(&factor, m_matrix + i * nharm);
+                encoder.process(&factor, m_matrix.data() + i * nharm);
                 if(D == Hoa2d)
                 {
                      m_matrix[i * nharm] *= T(0.5);
@@ -152,7 +150,7 @@ namespace hoa
         inline typename Decoder<D, T>::Mode getMode() const hoa_noexcept hoa_override {return Decoder<D, T>::RegularMode;}
         
     private:
-        T*  m_matrix;
+        std::vector<T> m_matrix;
     };
 
     //! The irregular decoder class decodes a sound field in the harmonics domain through the planewaves domain for a irregular circle or sphere (2d only).
