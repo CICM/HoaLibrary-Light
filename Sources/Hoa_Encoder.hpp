@@ -71,11 +71,10 @@ namespace hoa
         //! @param order The order of decomposition.
         Encoder(const size_t order) : ProcessorHarmonics<D, T>(order),
         m_radius_coeffs(order+1),
-        m_azimuth_coeffs(order*2+1),
-        m_elevation_coeffs(((order + 1) * (order + 1)) / 2 + (order + 1)),
+        m_azimuth_coeffs(order*2+1+2),
+        m_elevation_coeffs(((order + 1) * (order + 1)) / 2 + (order + 1)+3),
         m_normalization_coeffs(ProcessorHarmonics<D, T>::getNumberOfHarmonics())
         {
-            hoa_static_assert(order > 0, "The order must be superior or equal to one.");
             setRadius(1.);
             setAzimuth(0.);
             setElevation(0.);
@@ -223,7 +222,7 @@ namespace hoa
             
             for(size_t i = 6; i <= order; ++i)
             {
-                const T ratio = 2 * static_cast<T>(i-1) + 1;
+                const T ratio = static_cast<T>(2 * (i-1) + 1);
                 const T previous = *(coeffs-i);
                 // P(l+1,l+1)(x) = -(2l+1) sqrt(1-x^2) P(l,l)(x)
                 *(coeffs++) = ratio * -_x_sqpm * previous;
@@ -282,14 +281,11 @@ namespace hoa
                     elevation_coeffs = elevation_coeffs+(i+1);
                     for(size_t j = i; j; --j)
                     {
-                        //(*outputs++) = (*el_coeffs2++);
                         (*outputs++) = (*input) * factor * (*az_coeffs2++) * (*el_coeffs2++) * (*norm_coeffs++);
                     }
-                    //(*outputs++) = (*el_coeffs2--);
                     (*outputs++) = (*input) * factor * (*az_coeffs2++) * (*el_coeffs2--) * (*norm_coeffs++);
                     for(size_t j = i; j; --j)
                     {
-                        //(*outputs++) = (*el_coeffs2--);
                         (*outputs++) = (*input) * factor * (*az_coeffs2++) * (*el_coeffs2--) * (*norm_coeffs++);
                     }
                 }
