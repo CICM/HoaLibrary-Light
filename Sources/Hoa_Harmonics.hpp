@@ -47,7 +47,7 @@ namespace hoa
         //! @brief Returns the name of the harmonic.
         std::string getName() const hoa_noexcept {
             std::ostringstream ostr;
-            ostr <<  "Harmonic " << m_degree << " " << m_order;
+            ostr <<  "Harmonic (" << m_index << ") : "<< m_degree << " " << m_order;
             return ostr.str();
         }
 
