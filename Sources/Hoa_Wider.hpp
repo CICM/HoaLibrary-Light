@@ -24,7 +24,7 @@ namespace hoa
     //! logarithmic way, increasing the precision of the sound field that becomes more and
     //! more directional until all the harmonics appeared. The weight of the harmonics are
     //! defined by:
-    //! \f[W_{l,m}(x) = x^l((1-x)(N-l)+1)\f]\n
+    //! \f[W_{l,m}(x) = x^l((1-x)(N-l)+1)\f]<br>
     //! with \f$N\f$ the order of decomposition, \f$l\f$ the degree, \f$m\f$ the
     //! azimuthal order and \f$x\f$ the factor of widening.
     template <Dimension D, typename T> class Wider : public ProcessorHarmonics<D, T>
@@ -33,24 +33,22 @@ namespace hoa
 
         //! @brief The constructor.
         //! @param order The order of decomposition.
-        Wider(size_t order) : ProcessorHarmonics<D, T>(order)
+        Wider(const size_t order) : ProcessorHarmonics<D, T>(order),
+        m_coeffs(order + 1)
         {
-            m_coeffs = new T[order + 1];
             setWidening(1.);
         }
 
         //! @brief The destructor.
-        ~Wider() {
-            delete [] m_coeffs;
-        }
+        inline ~Wider() {}
 
         //! @brief This method set factor of widening.
         //! @param value The factor of widening.
-        inline void setWidening(T value) hoa_noexcept {
+        inline void setWidening(const T value) hoa_noexcept {
             m_widening = std::max(std::min(value, T(1)), T(0));
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
             const T      temp   = T(1) - m_widening;
-            T* coeff            = m_coeffs;
+            T* coeff            = m_coeffs.data();
             
             (*coeff++) = (T(order) * temp + T(1.));
             for(size_t i = 1; i <= order; ++i)
@@ -59,7 +57,7 @@ namespace hoa
             }
         }
 
-        //! @brief returns the the widening value.
+        //! @brief Returns the the widening value.
 		inline T getWidening() const hoa_noexcept { return m_widening; }
 
         //! @brief The method performs the widening on the harmonics signal.
@@ -71,7 +69,7 @@ namespace hoa
 		void process(const T* inputs, T* outputs) hoa_noexcept hoa_final
         {
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
-            T* coeff     = m_coeffs;
+            T* coeff     = m_coeffs.data();
             (*outputs++) = (*inputs++) * (*coeff++);
             for(size_t i = 1; i <= order; ++i)
             {
@@ -86,7 +84,7 @@ namespace hoa
         
     private:
         T   m_widening;
-        T*  m_coeffs;
+        std::vector<T> m_coeffs;
     };
 }
 
