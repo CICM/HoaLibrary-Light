@@ -6,6 +6,7 @@
 
 #include <cfloat>
 #include <cmath>
+#include <limits>
 
 #include <Hoa.hpp>
 using namespace hoa;
