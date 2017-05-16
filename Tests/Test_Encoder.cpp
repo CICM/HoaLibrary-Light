@@ -5,6 +5,7 @@
 */
 
 #include <limits>
+#include <numeric>
 #include <cmath>
 #include <iostream>
 
@@ -165,11 +166,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setRadius(hoa_float_t(0.));
         encoder.process(&input, ouputs.data());
         
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
-            sum_of_elems += *it;
-        
-        CATCH_CHECK(hoa_compare(sum_of_elems, 8.));
+        CATCH_CHECK(hoa_compare(std::accumulate(ouputs.begin(), ouputs.end(), hoa_float_t(0)), 8.));
     }
     
     CATCH_SECTION("Radius 0.5")
@@ -178,11 +175,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setRadius(hoa_float_t(0.5));
         encoder.process(&input, ouputs.data());
         
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
-            sum_of_elems += *it;
-        
-        CATCH_CHECK(hoa_compare(sum_of_elems, 8.));
+        CATCH_CHECK(hoa_compare(std::accumulate(ouputs.begin(), ouputs.end(), hoa_float_t(0)), 8.));
     }
     
     CATCH_SECTION("Radius 0.75")
@@ -191,11 +184,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setRadius(hoa_float_t(0.75));
         encoder.process(&input, ouputs.data());
         
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
-            sum_of_elems += *it;
-        
-        CATCH_CHECK(hoa_compare(sum_of_elems, 8.));
+        CATCH_CHECK(hoa_compare(std::accumulate(ouputs.begin(), ouputs.end(), hoa_float_t(0)), 8.));
     }
     
     CATCH_SECTION("Radius 2.")
@@ -204,11 +193,7 @@ CATCH_TEST_CASE("Encoder 2D", "[Encoder] [2D]")
         encoder.setRadius(hoa_float_t(2.));
         encoder.process(&input, ouputs.data());
         
-        hoa_float_t sum_of_elems = 0.;
-        for(std::vector<hoa_float_t>::iterator it = ouputs.begin(); it != ouputs.end(); ++it)
-            sum_of_elems += *it;
-        
-        CATCH_CHECK(hoa_compare(sum_of_elems, 4.));
+        CATCH_CHECK(hoa_compare(std::accumulate(ouputs.begin(), ouputs.end(), hoa_float_t(0)), 4.));
     }
 }
 
@@ -459,6 +444,54 @@ CATCH_TEST_CASE("Encoder 3D", "[Encoder] [3D]")
         CATCH_CHECK(hoa_compare(ouputs[33], 0.001245));
         CATCH_CHECK(hoa_compare(ouputs[34], 0.29236));
         CATCH_CHECK(hoa_compare(ouputs[35], -0.261076));
+    }
+    
+    CATCH_SECTION("Radius 0")
+    {
+        encoder.setCoordinates(hoa_float_t(0.), hoa_float_t(0.), hoa_float_t(0.));
+        encoder.process(&input, ouputs.data());
+        
+        CATCH_CHECK(hoa_compare(ouputs[0], 6.));
+        
+        CATCH_CHECK(hoa_compare(ouputs[1], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[2], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[3], 0.));
+        
+        CATCH_CHECK(hoa_compare(ouputs[4], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[5], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[6], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[7], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[8], 0.));
+        
+        CATCH_CHECK(hoa_compare(ouputs[9], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[10], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[11], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[12], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[13], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[14], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[15], 0.));
+        
+        CATCH_CHECK(hoa_compare(ouputs[16], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[17], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[18], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[19], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[20], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[21], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[22], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[23], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[24], 0.));
+        
+        CATCH_CHECK(hoa_compare(ouputs[25], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[26], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[27], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[28], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[29], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[30], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[31], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[32], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[33], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[34], 0.));
+        CATCH_CHECK(hoa_compare(ouputs[35], 0.));
     }
 }
 
