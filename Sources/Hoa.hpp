@@ -1,5 +1,10 @@
 /*
-// Copyright (c) 2012-2015 Pierre Guillot, Eliott Paris & Thomas Le Meur CICM, Universite Paris 8.
+// Copyright (c) 2012-2017 CICM - Universite Paris 8 - Labex Arts H2H.
+// Authors :
+// 2012: Pierre Guillot, Eliott Paris & Julien Colafrancesco.
+// 2012-2015: Pierre Guillot & Eliott Paris.
+// 2015: Pierre Guillot & Eliott Paris & Thomas Le Meur (Light version)
+// 2016-2017: Pierre Guillot.
 // For information on usage and redistribution, and for a DISCLAIMER OF ALL
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
@@ -7,21 +12,18 @@
 #ifndef DEF_HOA_LIBRARY_LIGHT
 #define DEF_HOA_LIBRARY_LIGHT
 
-#include "Harmonics.hpp"
-#include "Planewaves.hpp"
-#include "Encoder.hpp"
-#include "Optim.hpp"
-#include "Rotate.hpp"
-#include "Decoder.hpp"
-#include "Vector.hpp"
-#include "Meter.hpp"
-#include "Projector.hpp"
-#include "Recomposer.hpp"
-#include "Scope.hpp"
-#include "Wider.hpp"
-#include "Source.hpp"
-#include "Exchanger.hpp"
-#include "Tools.hpp"
+#include "Hoa_Harmonics.hpp"
+#include "Hoa_Planewaves.hpp"
+#include "Hoa_Encoder.hpp"
+#include "Hoa_MultiEncoder.hpp"
+#include "Hoa_Optim.hpp"
+#include "Hoa_Rotate.hpp"
+#include "Hoa_Decoder.hpp"
+#include "Hoa_Vector.hpp"
+
+
+#include "Hoa_Wider.hpp"
+#include "Hoa_Exchanger.hpp"
 
 #endif
 

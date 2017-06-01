@@ -1,48 +1,40 @@
 cmake_minimum_required(VERSION 2.8)
 
 project(Hoa)
-option(COVERALLS "Build with coveralls" OFF)
-
-set(HOASOURCES
-  ${PROJECT_SOURCE_DIR}/Sources/Decoder.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/HrirIrc1002C3D.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Rotate.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Defs.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Math.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Scope.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Encoder.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Meter.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Signal.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Exchanger.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Optim.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Source.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Harmonics.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Planewaves.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Tools.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Hoa.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Processor.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Vector.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Hrir.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Projector.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Voronoi.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/HrirIrc1002C2D.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Recomposer.hpp
-  ${PROJECT_SOURCE_DIR}/Sources/Wider.hpp)
-
-source_group(Hoa FILES ${HOASOURCES})
-include_directories(${PROJECT_SOURCE_DIR}/Test)
-include_directories(${PROJECT_SOURCE_DIR}/Sources)
 
 set(CMAKE_MACOSX_RPATH On)
 set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
+set(CMAKE_SUPPRESS_REGENERATION true)
+enable_testing()
+option(GCOV_SUPPORT "Build for gcov" Off)
 
-if(${COVERALLS})
-    message(STATUS "Build with coveralls")
-    ENABLE_TESTING()
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+if(UNIX)
+  if(APPLE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
+  endif()
+  if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUCC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
+  else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Weverything -Wno-c++98-compat -Wno-weak-vtables -Wno-padded -Wno-float-equal -Wno-double-promotion -Wno-disabled-macro-expansion")
+  endif()
+elseif(MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
 endif()
 
-add_executable(hoatest ${HOASOURCES} ${PROJECT_SOURCE_DIR}/Test/Test.cpp)
-set_target_properties(hoatest PROPERTIES OUTPUT_NAME test)
-set_target_properties(hoatest PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
+file(GLOB HOASOURCES ${PROJECT_SOURCE_DIR}/Sources/*.hpp)
+source_group(Hoa FILES ${HOASOURCES})
+include_directories(${PROJECT_SOURCE_DIR}/Sources)
+
+file(GLOB TESTSOURCES ${PROJECT_SOURCE_DIR}/Tests/*.cpp)
+source_group(Tests FILES ${TESTSOURCES})
+include_directories(${PROJECT_SOURCE_DIR}/Tests)
+
+add_executable(hoatest ${HOASOURCES} ${TESTSOURCES})
+add_test(hoatestall hoatest)
+
+if(${GCOV_SUPPORT} STREQUAL "On")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-arcs -ftest-coverage")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+    set(CMAKE_EXE_LINKER_FLAGS="-fprofile-arcs -ftest-coverage")
+    target_link_libraries(hoatest gcov)
+endif()

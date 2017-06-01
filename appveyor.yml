@@ -1,0 +1,20 @@
+os: Visual Studio 2015
+
+environment:
+   matrix:
+     - msvc: "Visual Studio 14 2015"
+     - msvc: "Visual Studio 14 2015 Win64"
+
+build_script:
+    - mkdir build
+    - cd build
+    - cmake .. -G"%msvc%" -DCMAKE_BUILD_TYPE=Debug
+    - cmake --build .
+
+test_script:
+    - cd %APPVEYOR_BUILD_FOLDER%\build\Debug
+    - hoatest.exe
+
+notifications:
+  - provider: Email
+    on_build_status_changed: false
