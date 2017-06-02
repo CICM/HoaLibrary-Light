@@ -15,6 +15,6 @@ var searchData=
   ['setplanewavesrotation',['setPlanewavesRotation',['../classhoa_1_1_processor_planewaves.html#ae8db000417d9499a04bc40527a30814f',1,'hoa::ProcessorPlanewaves']]],
   ['setradius',['setRadius',['../classhoa_1_1_encoder.html#adc0fa33a8b88a92bb586247468b17398',1,'hoa::Encoder::setRadius()'],['../classhoa_1_1_multi_encoder.html#a559770d35748b42e00f7e59ca1dd876c',1,'hoa::MultiEncoder::setRadius()']]],
   ['setviewrotation',['setViewRotation',['../classhoa_1_1_scope.html#a0d0b92ce56a808a6a3bc6592e098c3b6',1,'hoa::Scope']]],
-  ['setwidening',['setWidening',['../classhoa_1_1_multi_encoder.html#a28467515784bbdbbefddc03a792a80fa',1,'hoa::MultiEncoder::setWidening()'],['../classhoa_1_1_wider.html#a2d6e46ebff718f0a165f69dfde89064e',1,'hoa::Wider::setWidening()']]],
+  ['setwidening',['setWidening',['../classhoa_1_1_multi_encoder.html#a28467515784bbdbbefddc03a792a80fa',1,'hoa::MultiEncoder::setWidening()'],['../classhoa_1_1_wider.html#a9d1f93db99bdc8f7adecf88702a64870',1,'hoa::Wider::setWidening()']]],
   ['setyaw',['setYaw',['../classhoa_1_1_rotate.html#a02182755f1ddfdb0e5ae97b8f12d904e',1,'hoa::Rotate']]]
 ];

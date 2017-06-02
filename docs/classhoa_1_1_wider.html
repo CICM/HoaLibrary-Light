@@ -117,19 +117,19 @@ Inheritance diagram for Wider&lt; D, T &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a46105ffbac51a64c2d1a551a1345bc88"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_wider.html#a46105ffbac51a64c2d1a551a1345bc88">Wider</a> (size_t order)</td></tr>
-<tr class="memdesc:a46105ffbac51a64c2d1a551a1345bc88"><td class="mdescLeft">&#160;</td><td class="mdescRight">The constructor.  <a href="#a46105ffbac51a64c2d1a551a1345bc88">More...</a><br /></td></tr>
-<tr class="separator:a46105ffbac51a64c2d1a551a1345bc88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19ebcc955bd610d6fa1daea18ffa0ce5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_wider.html#a19ebcc955bd610d6fa1daea18ffa0ce5">Wider</a> (const size_t order)</td></tr>
+<tr class="memdesc:a19ebcc955bd610d6fa1daea18ffa0ce5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The constructor.  <a href="#a19ebcc955bd610d6fa1daea18ffa0ce5">More...</a><br /></td></tr>
+<tr class="separator:a19ebcc955bd610d6fa1daea18ffa0ce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88230a46e6a19834db610033c99c40f2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88230a46e6a19834db610033c99c40f2"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_wider.html#a88230a46e6a19834db610033c99c40f2">~Wider</a> ()</td></tr>
 <tr class="memdesc:a88230a46e6a19834db610033c99c40f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">The destructor. <br /></td></tr>
 <tr class="separator:a88230a46e6a19834db610033c99c40f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d6e46ebff718f0a165f69dfde89064e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_wider.html#a2d6e46ebff718f0a165f69dfde89064e">setWidening</a> (T value) hoa_noexcept</td></tr>
-<tr class="memdesc:a2d6e46ebff718f0a165f69dfde89064e"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method set factor of widening.  <a href="#a2d6e46ebff718f0a165f69dfde89064e">More...</a><br /></td></tr>
-<tr class="separator:a2d6e46ebff718f0a165f69dfde89064e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d1f93db99bdc8f7adecf88702a64870"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_wider.html#a9d1f93db99bdc8f7adecf88702a64870">setWidening</a> (const T value) hoa_noexcept</td></tr>
+<tr class="memdesc:a9d1f93db99bdc8f7adecf88702a64870"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method set factor of widening.  <a href="#a9d1f93db99bdc8f7adecf88702a64870">More...</a><br /></td></tr>
+<tr class="separator:a9d1f93db99bdc8f7adecf88702a64870"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaee76c23a5f365fea321e8a0a62bd1d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaee76c23a5f365fea321e8a0a62bd1d8"></a>
 T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_wider.html#aaee76c23a5f365fea321e8a0a62bd1d8">getWidening</a> () const hoa_noexcept</td></tr>
-<tr class="memdesc:aaee76c23a5f365fea321e8a0a62bd1d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns the the widening value. <br /></td></tr>
+<tr class="memdesc:aaee76c23a5f365fea321e8a0a62bd1d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the the widening value. <br /></td></tr>
 <tr class="separator:aaee76c23a5f365fea321e8a0a62bd1d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8db6cd9de03f1b17e86080ff74a46025"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhoa_1_1_wider.html#a8db6cd9de03f1b17e86080ff74a46025">process</a> (const T *inputs, T *outputs) hoa_noexcept hoa_final</td></tr>
 <tr class="memdesc:a8db6cd9de03f1b17e86080ff74a46025"><td class="mdescLeft">&#160;</td><td class="mdescRight">The method performs the widening on the harmonics signal.  <a href="#a8db6cd9de03f1b17e86080ff74a46025">More...</a><br /></td></tr>
@@ -183,11 +183,11 @@ class hoa::Wider&lt; D, T &gt;</h3>
 \[W_{l,m}(x) = x^l((1-x)(N-l)+1)\]
 </p>
 <p><br />
-with \(N\) the order of decomposition, \(l\) the degree, \(m\) the azimuthal order and \(x\) the factor of widening. </p>
+ with \(N\) the order of decomposition, \(l\) the degree, \(m\) the azimuthal order and \(x\) the factor of widening. </p>
 
 <p>Definition at line <a class="el" href="_hoa___wider_8hpp_source.html#l00030">30</a> of file <a class="el" href="_hoa___wider_8hpp_source.html">Hoa_Wider.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a46105ffbac51a64c2d1a551a1345bc88"></a>
+<a class="anchor" id="a19ebcc955bd610d6fa1daea18ffa0ce5"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -197,7 +197,7 @@ with \(N\) the order of decomposition, \(l\) the degree, \(m\) the azimuthal ord
         <tr>
           <td class="memname"><a class="el" href="classhoa_1_1_wider.html">Wider</a> </td>
           <td>(</td>
-          <td class="paramtype">size_t&#160;</td>
+          <td class="paramtype">const size_t&#160;</td>
           <td class="paramname"><em>order</em></td><td>)</td>
           <td></td>
         </tr>
@@ -222,7 +222,7 @@ with \(N\) the order of decomposition, \(l\) the degree, \(m\) the azimuthal ord
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a2d6e46ebff718f0a165f69dfde89064e"></a>
+<a class="anchor" id="a9d1f93db99bdc8f7adecf88702a64870"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -232,7 +232,7 @@ with \(N\) the order of decomposition, \(l\) the degree, \(m\) the azimuthal ord
         <tr>
           <td class="memname">void setWidening </td>
           <td>(</td>
-          <td class="paramtype">T&#160;</td>
+          <td class="paramtype">const T&#160;</td>
           <td class="paramname"><em>value</em></td><td>)</td>
           <td></td>
         </tr>
@@ -252,7 +252,7 @@ with \(N\) the order of decomposition, \(l\) the degree, \(m\) the azimuthal ord
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="_hoa___wider_8hpp_source.html#l00049">49</a> of file <a class="el" href="_hoa___wider_8hpp_source.html">Hoa_Wider.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___wider_8hpp_source.html#l00047">47</a> of file <a class="el" href="_hoa___wider_8hpp_source.html">Hoa_Wider.hpp</a>.</p>
 
 </div>
 </div>
@@ -299,14 +299,14 @@ with \(N\) the order of decomposition, \(l\) the degree, \(m\) the azimuthal ord
 
 <p>Reimplemented from <a class="el" href="classhoa_1_1_processor.html#a1465e992478a626e2f1310b533902edd">Processor&lt; D, T &gt;</a>.</p>
 
-<p>Definition at line <a class="el" href="_hoa___wider_8hpp_source.html#l00071">71</a> of file <a class="el" href="_hoa___wider_8hpp_source.html">Hoa_Wider.hpp</a>.</p>
+<p>Definition at line <a class="el" href="_hoa___wider_8hpp_source.html#l00069">69</a> of file <a class="el" href="_hoa___wider_8hpp_source.html">Hoa_Wider.hpp</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed May 10 2017 16:24:42 for HOA Library by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 2 2017 09:34:18 for HOA Library by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.11
 </small></address>

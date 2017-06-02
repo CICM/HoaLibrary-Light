@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['wider',['Wider',['../classhoa_1_1_wider.html#a46105ffbac51a64c2d1a551a1345bc88',1,'hoa::Wider']]]
+  ['wider',['Wider',['../classhoa_1_1_wider.html#a19ebcc955bd610d6fa1daea18ffa0ce5',1,'hoa::Wider']]]
 ];
