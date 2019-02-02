@@ -86,6 +86,7 @@ namespace hoa
         friend class ProcessorPlanewaves<D, T>;
         
         static inline T xyz2azimuth(const T x, const T y, const T z = 0.) {
+            hoa_unused(z);
             return (x == T(0) && y == T(0)) ? T(0) : wrap_twopi(atan2(y, x) - HOA_PI2); }
         
         static inline T xyz2elevation(const T x, const T y, const T z = 0.) {
@@ -98,6 +99,7 @@ namespace hoa
             return std::sin(a + T(HOA_PI2)) * std::cos(e); }
         
         static inline T ae2height(const T a, const T e) {
+            hoa_unused(a);
             return std::sin(e); }
         
         static inline T wrap_pi(T const value) {

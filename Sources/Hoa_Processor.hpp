@@ -29,7 +29,10 @@ namespace hoa
         //! @brief The pure virtual method performs that performs the digital signal processing.
         //! @param inputs  The inputs array.
         //! @param outputs The outputs array.
-        virtual void process(const T* inputs, T* outputs) hoa_noexcept {
+        virtual void process(const T* inputs, T* outputs) hoa_noexcept
+        {
+            hoa_unused(inputs);
+            hoa_unused(outputs);
             assert(0 && "Nothing should never it this");
         }
     };

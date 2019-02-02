@@ -120,6 +120,8 @@ namespace hoa
         //! @brief Prepare the decoder for processing.
         void prepare(const size_t vectorsize = 64) hoa_override
         {
+            hoa_unused(vectorsize);
+            
             const size_t order = Decoder<D, T>::getDecompositionOrder();
             const size_t nharm = Decoder<D, T>::getNumberOfHarmonics();
             const size_t nplws = Decoder<D, T>::getNumberOfPlanewaves();
@@ -336,6 +338,8 @@ namespace hoa
          */
         void prepare(const size_t vectorsize = 64)  hoa_override
         {
+            hoa_unused(vectorsize);
+            
             Encoder<Hoa2d, T> encoder(Decoder<Hoa2d, T>::getDecompositionOrder());
             Signal<T>::clear(Decoder<Hoa2d, T>::getNumberOfPlanewaves() * Decoder<Hoa2d, T>::getNumberOfHarmonics(), m_matrix);
             T* vector_harmonics = Signal<T>::alloc(Decoder<Hoa2d, T>::getNumberOfHarmonics());
@@ -614,7 +618,11 @@ namespace hoa
             processChannel(m_input, Hrir<Hoa2d, T>::getRightMatrix(), m_right, outputs[1]);
         }
 
-        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override {}
+        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
+        {
+            hoa_unused(inputs);
+            hoa_unused(outputs);
+        }
     };
 
 
@@ -811,7 +819,11 @@ namespace hoa
             processChannel(m_input, Hrir<Hoa3d, T>::getRightMatrix(), m_right, outputs[1]);
         }
 
-        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override {}
+        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
+        {
+            hoa_unused(inputs);
+            hoa_unused(outputs);
+        }
 
     };
 
