@@ -42,6 +42,8 @@
 #define HOA_CPP11_NOSUPPORT 1
 #endif
 
+#define hoa_unused(expr) (void)(expr)
+
 #ifdef HOA_CPP11_NOSUPPORT
 #define hoa_noexcept
 #define hoa_nullptr NULL
@@ -56,7 +58,6 @@
 #define hoa_nullptr nullptr
 #define hoa_constexpr constexpr
 #define hoa_override override
-#define hoa_unused(expr) (void)(expr)
 #define hoa_final final
 #define hoa_delete_f = delete
 #define hoa_static_assert static_assert(a, b)
