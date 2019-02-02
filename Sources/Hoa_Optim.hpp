@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_OPTIM_LIGHT
-#define DEF_HOA_OPTIM_LIGHT
+#pragma once
 
 #include "Hoa_Processor.hpp"
 
@@ -138,5 +137,3 @@ namespace hoa
         T*   m_weights;
     };
 }
-
-#endif

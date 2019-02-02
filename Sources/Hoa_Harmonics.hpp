@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_HARMONICS_LIGHT
-#define DEF_HOA_HARMONICS_LIGHT
+#pragma once
 
 #include "Hoa_Signal.hpp"
 
@@ -130,7 +129,3 @@ namespace hoa
         }
     };    
 }
-
-#endif
-
-

@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_PLANEWAVES_LIGHT
-#define DEF_HOA_PLANEWAVES_LIGHT
+#pragma once
 
 #include "Hoa_Signal.hpp"
 
@@ -151,7 +150,3 @@ namespace hoa
         T       m_elevation;
     };
 }
-
-#endif
-
-

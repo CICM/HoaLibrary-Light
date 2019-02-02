@@ -9,8 +9,7 @@
  // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
  */
 
-#ifndef DEF_HOA_ROTATE_LIGHT
-#define DEF_HOA_ROTATE_LIGHT
+#pragma once
 
 #include "Hoa_Processor.hpp"
 
@@ -149,8 +148,3 @@ namespace hoa
     
 #endif
 }
-
-#endif
-
-
-

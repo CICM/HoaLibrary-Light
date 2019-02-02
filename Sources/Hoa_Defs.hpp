@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_DEFS_LIGHT
-#define DEF_HOA_DEFS_LIGHT
+#pragma once
 
 #ifdef __APPLE__
 #include <Accelerate/Accelerate.h>
@@ -83,7 +82,3 @@ namespace hoa
         Hoa3d = 1  /*!<  The 3d dimension. */
     };
 }
-
-#endif
-
-

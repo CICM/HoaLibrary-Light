@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_MULTIENCODER_LIGHT
-#define DEF_HOA_MULTIENCODER_LIGHT
+#pragma once
 
 #include "Hoa_Encoder.hpp"
 
@@ -190,5 +189,3 @@ namespace hoa
         std::vector<EncoderWrap> m_encoders;
     };
 }
-
-#endif

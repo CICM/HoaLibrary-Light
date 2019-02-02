@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_DECODER_LIGHT
-#define DEF_HOA_DECODER_LIGHT
+#pragma once
 
 #include "Hoa_Encoder.hpp"
 #include "Hoa_Hrir.hpp"
@@ -828,5 +827,3 @@ namespace hoa
     };
 
 }
-
-#endif

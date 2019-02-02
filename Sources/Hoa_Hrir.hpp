@@ -10,8 +10,7 @@
  // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
  */
 
-#ifndef DEF_HOA_HRIR_LIGHT
-#define DEF_HOA_HRIR_LIGHT
+#pragma once
 
 #include "Hoa_HrirIrc1002C2D.hpp"
 #include "Hoa_HrirIrc1002C3D.hpp"
@@ -267,5 +266,3 @@ namespace hoa
     };
 
 }
-
-#endif

@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_SOURCE_LIGHT
-#define DEF_HOA_SOURCE_LIGHT
+#pragma once
 
 #include "Hoa_Math.hpp"
 
@@ -1597,6 +1596,3 @@ namespace hoa
     };
 
 }
-
-//! @endcond
-#endif

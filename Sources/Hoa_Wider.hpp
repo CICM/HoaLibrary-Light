@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_WIDER_LIGHT
-#define DEF_HOA_WIDER_LIGHT
+#pragma once
 
 #include "Hoa_Processor.hpp"
 
@@ -87,5 +86,3 @@ namespace hoa
         std::vector<T> m_coeffs;
     };
 }
-
-#endif

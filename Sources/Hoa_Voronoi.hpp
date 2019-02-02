@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_VORONOI_LIGHT
-#define DEF_HOA_VORONOI_LIGHT
+#pragma once
 
 #include "Hoa_Defs.hpp"
 #include "Hoa_Math.hpp"
@@ -457,10 +456,3 @@ namespace hoa
     };
 
 }
-            
-//! @endcond
-
-#endif
-
-
-
