@@ -26,7 +26,7 @@ namespace hoa
         //! Get the impulse response of the HRTFs
         /** The impulse response may be 2d/3d with simple /double precision.
          */
-        virtual const float* getImpulse() hoa_noexcept = 0;
+        virtual const float* getImpulse() noexcept = 0;
     };
 
     template<> class Hrir <Hoa2d, float>
@@ -37,7 +37,7 @@ namespace hoa
         /** Gets the order of decomposition used to compute the matrices.
          @return The order of decomposition.
          */
-        static size_t getOrderOfDecomposition() hoa_noexcept
+        static size_t getOrderOfDecomposition() noexcept
         {
             return 5ul;
         }
@@ -46,7 +46,7 @@ namespace hoa
         /** Gets the number rows of the matrices (or the size of the responses used to compute the matrices).
          @return The number rows of the matrices.
          */
-        static size_t getNumberOfRows() hoa_noexcept
+        static size_t getNumberOfRows() noexcept
         {
             return 512ul;
         }
@@ -55,7 +55,7 @@ namespace hoa
         /** Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
          @return The number columns of the matrices.
          */
-        static size_t getNumberOfColumns() hoa_noexcept
+        static size_t getNumberOfColumns() noexcept
         {
             return 11ul;
         }
@@ -64,7 +64,7 @@ namespace hoa
         /** Gets the size of the matrices (rows * columns).
          @return The nsize of the matrices.
          */
-        static size_t getMatricesSize() hoa_noexcept
+        static size_t getMatricesSize() noexcept
         {
             return 5632ul;
         }
@@ -73,7 +73,7 @@ namespace hoa
         /** Get the HRIR matrix for the left ear.
          @return The HRIR matrix for the left ear.
          */
-        static const float* getLeftMatrix() hoa_noexcept
+        static const float* getLeftMatrix() noexcept
         {
             return Irc1002C_float_2d_left;
         }
@@ -82,7 +82,7 @@ namespace hoa
         /** Get the HRIR matrix for the right ear.
          @return The HRIR matrix for the right ear.
          */
-        static const float* getRightMatrix() hoa_noexcept
+        static const float* getRightMatrix() noexcept
         {
             return Irc1002C_float_2d_right;
         }
@@ -96,7 +96,7 @@ namespace hoa
         /** Gets the order of decomposition used to compute the matrices.
          @return The order of decomposition.
          */
-        static size_t getOrderOfDecomposition() hoa_noexcept
+        static size_t getOrderOfDecomposition() noexcept
         {
             return 5ul;
         }
@@ -105,7 +105,7 @@ namespace hoa
         /** Gets the number rows of the matrices (or the size of the responses used to compute the matrices).
          @return The number rows of the matrices.
          */
-        static size_t getNumberOfRows() hoa_noexcept
+        static size_t getNumberOfRows() noexcept
         {
             return 512ul;
         }
@@ -114,7 +114,7 @@ namespace hoa
         /** Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
          @return The number columns of the matrices.
          */
-        static size_t getNumberOfColumns() hoa_noexcept
+        static size_t getNumberOfColumns() noexcept
         {
             return 11ul;
         }
@@ -123,7 +123,7 @@ namespace hoa
         /** Gets the size of the matrices (rows * columns).
          @return The nsize of the matrices.
          */
-        static size_t getMatricesSize() hoa_noexcept
+        static size_t getMatricesSize() noexcept
         {
             return 5632ul;
         }
@@ -132,7 +132,7 @@ namespace hoa
         /** Get the HRIR matrix for the left ear.
          @return The HRIR matrix for the left ear.
          */
-        static const double* getLeftMatrix() hoa_noexcept
+        static const double* getLeftMatrix() noexcept
         {
             return Irc1002C_double_2d_left;
         }
@@ -141,7 +141,7 @@ namespace hoa
         /** Get the HRIR matrix for the right ear.
          @return The HRIR matrix for the right ear.
          */
-        static const double* getRightMatrix() hoa_noexcept
+        static const double* getRightMatrix() noexcept
         {
             return Irc1002C_double_2d_right;
         }
@@ -155,7 +155,7 @@ namespace hoa
         /** Gets the order of decomposition used to compute the matrices.
          @return The order of decomposition.
          */
-        static size_t getOrderOfDecomposition() hoa_noexcept
+        static size_t getOrderOfDecomposition() noexcept
         {
             return 3ul;
         }
@@ -164,7 +164,7 @@ namespace hoa
         /** Gets the number rows of the matrices (or the size of the responses used to compute the matrices).
          @return The number rows of the matrices.
          */
-        static size_t getNumberOfRows() hoa_noexcept
+        static size_t getNumberOfRows() noexcept
         {
             return 512ul;
         }
@@ -173,7 +173,7 @@ namespace hoa
         /** Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
          @return The number columns of the matrices.
          */
-        static size_t getNumberOfColumns() hoa_noexcept
+        static size_t getNumberOfColumns() noexcept
         {
             return 16ul;
         }
@@ -182,7 +182,7 @@ namespace hoa
         /** Gets the size of the matrices (rows * columns).
          @return The nsize of the matrices.
          */
-        static size_t getMatricesSize() hoa_noexcept
+        static size_t getMatricesSize() noexcept
         {
             return 8192ul;
         }
@@ -191,7 +191,7 @@ namespace hoa
         /** Get the HRIR matrix for the left ear.
          @return The HRIR matrix for the left ear.
          */
-        static const float* getLeftMatrix() hoa_noexcept
+        static const float* getLeftMatrix() noexcept
         {
             return Irc1002C_float_3d_left;
         }
@@ -200,7 +200,7 @@ namespace hoa
         /** Get the HRIR matrix for the right ear.
          @return The HRIR matrix for the right ear.
          */
-        static const float* getRightMatrix() hoa_noexcept
+        static const float* getRightMatrix() noexcept
         {
             return Irc1002C_float_3d_right;
         }
@@ -214,7 +214,7 @@ namespace hoa
         /** Gets the order of decomposition used to compute the matrices.
          @return The order of decomposition.
          */
-        static size_t getOrderOfDecomposition() hoa_noexcept
+        static size_t getOrderOfDecomposition() noexcept
         {
             return 3ul;
         }
@@ -223,7 +223,7 @@ namespace hoa
         /** Gets the number rows of the matrices (or the size of the responses used to compute the matrices).
          @return The number rows of the matrices.
          */
-        static size_t getNumberOfRows() hoa_noexcept
+        static size_t getNumberOfRows() noexcept
         {
             return 512ul;
         }
@@ -232,7 +232,7 @@ namespace hoa
         /** Gets the number columns of the matrices (or the number of harmonics used to compute the matrices).
          @return The number columns of the matrices.
          */
-        static size_t getNumberOfColumns() hoa_noexcept
+        static size_t getNumberOfColumns() noexcept
         {
             return 16ul;
         }
@@ -241,7 +241,7 @@ namespace hoa
         /** Gets the size of the matrices (rows * columns).
          @return The nsize of the matrices.
          */
-        static size_t getMatricesSize() hoa_noexcept
+        static size_t getMatricesSize() noexcept
         {
             return 8192ul;
         }
@@ -250,7 +250,7 @@ namespace hoa
         /** Get the HRIR matrix for the left ear.
          @return The HRIR matrix for the left ear.
          */
-        static const double* getLeftMatrix() hoa_noexcept
+        static const double* getLeftMatrix() noexcept
         {
             return Irc1002C_double_3d_left;
         }
@@ -259,7 +259,7 @@ namespace hoa
         /** Get the HRIR matrix for the right ear.
          @return The HRIR matrix for the right ear.
          */
-        static const double* getRightMatrix() hoa_noexcept
+        static const double* getRightMatrix() noexcept
         {
             return Irc1002C_double_3d_right;
         }

@@ -51,43 +51,43 @@ namespace hoa
         /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
          @param     order	The order.
          */
-        Exchanger(const size_t order) hoa_noexcept;
+        Exchanger(const size_t order) noexcept;
 
         //! The exchanger destructor.
         /**	The exchanger destructor free the memory.
          */
-		virtual ~Exchanger() hoa_noexcept = 0;
+		virtual ~Exchanger() noexcept = 0;
 
         //! This method performs the numbering and the normalization.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        virtual void process(T const* inputs, T* outputs) hoa_noexcept;
+        virtual void process(T const* inputs, T* outputs) noexcept;
 
         //! Sets the numbering conversion.
         /**	This method sets the numbering conversion.
          @param mode The numbering convertion.
          */
-        virtual void setNumbering(const Numbering mode) hoa_noexcept;
+        virtual void setNumbering(const Numbering mode) noexcept;
 
         //! Gets the numbering conversion.
         /**	This method gets the numbering conversion.
          @return The numbering convertion.
          */
-        virtual Numbering getNumbering() const hoa_noexcept;
+        virtual Numbering getNumbering() const noexcept;
         
         //! Sets the normalization conversion.
         /**	This method sets the normalization conversion.
          @param mode The normalization convertion.
          */
-        virtual void setNormalization(const Normalization mode) hoa_noexcept;
+        virtual void setNormalization(const Normalization mode) noexcept;
         
         //! Gets the normalization conversion.
         /**	This method gets the normalization conversion.
          @return The normalization convertion.
          */
-        virtual Normalization getNormalization() const hoa_noexcept;
+        virtual Normalization getNormalization() const noexcept;
 
         //! Retrieves the harmonic order of an input depending on the current numbering configuration.
         /**
@@ -96,7 +96,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        virtual long getInputHarmonicOrder(const size_t index) const hoa_noexcept;
+        virtual long getInputHarmonicOrder(const size_t index) const noexcept;
 
         //! Retrieves the harmonic order of an output depending on the current numbering configuration.
         /**
@@ -105,7 +105,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        virtual long getOutputHarmonicOrder(const size_t index) const hoa_noexcept;
+        virtual long getOutputHarmonicOrder(const size_t index) const noexcept;
 
         //! Retrieves the name of an harmonic depending on the current numbering configuration.
         /** This methods returns the name that contains the degree and the order of the harmonic for ACN and SID or the letter code of the harmonic for Furse-Malham.
@@ -115,7 +115,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        virtual std::string getHarmonicName(const size_t index, const bool isInput) const hoa_noexcept;
+        virtual std::string getHarmonicName(const size_t index, const bool isInput) const noexcept;
     };
 
 //! @cond
@@ -154,7 +154,7 @@ namespace hoa
         /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
          @param     order	The order.
          */
-        inline Exchanger(const size_t order) hoa_noexcept : ProcessorHarmonics<Hoa2d, T>(order),
+        inline Exchanger(const size_t order) noexcept : ProcessorHarmonics<Hoa2d, T>(order),
         m_numbering(ACN),
         m_normalization(SN2D)
         {
@@ -164,7 +164,7 @@ namespace hoa
         //! The exchanger destructor.
         /**	The exchanger destructor free the memory.
          */
-        inline ~Exchanger() hoa_noexcept
+        inline ~Exchanger() noexcept
         {
             ;
         }
@@ -172,7 +172,7 @@ namespace hoa
         //! Sets the numbering and the normalization conversion from B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to from Furse-Malham numebring and from MaxN normalization.
          */
-        inline void setFromBFormat() hoa_noexcept
+        inline void setFromBFormat() noexcept
         {
             m_numbering = fromFurseMalham;
             m_normalization = fromMaxN;
@@ -181,7 +181,7 @@ namespace hoa
         //! Sets the numbering and the normalization conversion to B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to to Furse-Malham numebring and to MaxN normalization.
          */
-        inline void setToBFormat() hoa_noexcept
+        inline void setToBFormat() noexcept
         {
             m_numbering = toFurseMalham;
             m_normalization = toMaxN;
@@ -191,7 +191,7 @@ namespace hoa
         /**	This method sets the numbering conversion.
          @param mode The numbering convertion.
          */
-        inline void setNumbering(const Numbering mode) hoa_noexcept
+        inline void setNumbering(const Numbering mode) noexcept
         {
             m_numbering = mode;
         }
@@ -200,7 +200,7 @@ namespace hoa
         /**	This method gets the numbering conversion.
          @return The numbering convertion.
          */
-        inline Numbering getNumbering() const hoa_noexcept
+        inline Numbering getNumbering() const noexcept
         {
             return m_numbering;
         }
@@ -209,7 +209,7 @@ namespace hoa
         /**	This method sets the normalization conversion.
          @param mode The normalization convertion.
          */
-        inline void setNormalization(const Normalization mode) hoa_noexcept
+        inline void setNormalization(const Normalization mode) noexcept
         {
             m_normalization = mode;
         }
@@ -218,7 +218,7 @@ namespace hoa
         /**	This method gets the normalization conversion.
          @return The normalization convertion.
          */
-        inline Normalization getNormalization() const hoa_noexcept
+        inline Normalization getNormalization() const noexcept
         {
             return m_normalization;
         }
@@ -229,7 +229,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void process(T const* inputs, T* outputs) hoa_noexcept
+        void process(T const* inputs, T* outputs) noexcept
         {
             T const* ins = inputs;
             if(m_numbering == fromFurseMalham)
@@ -272,7 +272,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void numberFromFurseMalham(T const* inputs, T* outputs) hoa_noexcept
+        void numberFromFurseMalham(T const* inputs, T* outputs) noexcept
         {
             T temp = inputs[1];
             *(outputs++) = inputs[0]; // W -> 0
@@ -297,7 +297,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void numberFromSID(T const* inputs, T* outputs) hoa_noexcept
+        void numberFromSID(T const* inputs, T* outputs) noexcept
         {
             T temp = inputs[1];
             *(outputs++) = inputs[0]; // 0 -> 0
@@ -316,7 +316,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void numberToFurseMalham(T const* inputs, T* outputs) hoa_noexcept
+        void numberToFurseMalham(T const* inputs, T* outputs) noexcept
         {
             T temp = inputs[1];
             *(outputs++) = inputs[0]; // 0 -> W
@@ -341,7 +341,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void numberToSID(T const* inputs, T* outputs) hoa_noexcept
+        void numberToSID(T const* inputs, T* outputs) noexcept
         {
             T temp = inputs[1];
             *(outputs++) = inputs[0]; // 0 -> 0
@@ -362,7 +362,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        long getInputHarmonicOrder(const size_t index) const hoa_noexcept
+        long getInputHarmonicOrder(const size_t index) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID) || (ProcessorHarmonics<Hoa2d, T>::getHarmonicDegree(index) > 3);
@@ -376,7 +376,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        long getOutputHarmonicOrder(const size_t index) const hoa_noexcept
+        long getOutputHarmonicOrder(const size_t index) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID) || (ProcessorHarmonics<Hoa2d, T>::getHarmonicDegree(index) > 3);
@@ -392,7 +392,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        std::string getHarmonicName(const size_t index, const bool isInput) const hoa_noexcept
+        std::string getHarmonicName(const size_t index, const bool isInput) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);
@@ -471,7 +471,7 @@ namespace hoa
         /**	The exchanger constructor allocates and initialize the member values to renumber and normalize the harmonics channels. The order must be at least 1 and should be 3 at maximum.
          @param     order	The order.
          */
-        inline Exchanger(const size_t order) hoa_noexcept : ProcessorHarmonics<Hoa3d, T>(order),
+        inline Exchanger(const size_t order) noexcept : ProcessorHarmonics<Hoa3d, T>(order),
         m_numbering(ACN),
         m_normalization(SN3D)
         {
@@ -481,7 +481,7 @@ namespace hoa
         //! The exchanger destructor.
         /**	The exchanger destructor free the memory.
          */
-        inline ~Exchanger() hoa_noexcept
+        inline ~Exchanger() noexcept
         {
             Signal<T>::free(m_harmonics);
         }
@@ -489,7 +489,7 @@ namespace hoa
         //! Sets the numbering and the normalization conversion from B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to from Furse-Malham numebring and from MaxN normalization.
          */
-        inline void setFromBFormat() hoa_noexcept
+        inline void setFromBFormat() noexcept
         {
             m_numbering = fromFurseMalham;
             m_normalization = fromMaxN;
@@ -498,7 +498,7 @@ namespace hoa
         //! Sets the numbering and the normalization conversion to B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to to Furse-Malham numebring and to MaxN normalization.
          */
-        inline void setToBFormat() hoa_noexcept
+        inline void setToBFormat() noexcept
         {
             m_numbering = toFurseMalham;
             m_normalization = toMaxN;
@@ -507,7 +507,7 @@ namespace hoa
         //! Sets the numbering and the normalization conversion from B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to from Furse-Malham numebring and from MaxN normalization.
          */
-        inline void setFromDaniel() hoa_noexcept
+        inline void setFromDaniel() noexcept
         {
             m_numbering = fromSID;
             m_normalization = fromN3D;
@@ -516,7 +516,7 @@ namespace hoa
         //! Sets the numbering and the normalization conversion to B-Format.
         /**	This method the numbering and the normalization conversion from B-Format. Similar to to Furse-Malham numebring and to MaxN normalization.
          */
-        inline void setToDaniel() hoa_noexcept
+        inline void setToDaniel() noexcept
         {
             m_numbering = toSID;
             m_normalization = toN3D;
@@ -526,7 +526,7 @@ namespace hoa
         /**	This method sets the numbering conversion.
          @param mode The numbering convertion.
          */
-        inline void setNumbering(const Numbering mode) hoa_noexcept
+        inline void setNumbering(const Numbering mode) noexcept
         {
             m_numbering = mode;
         }
@@ -535,7 +535,7 @@ namespace hoa
         /**	This method gets the numbering conversion.
          @return The numbering convertion.
          */
-        inline Numbering getNumbering() const hoa_noexcept
+        inline Numbering getNumbering() const noexcept
         {
             return m_numbering;
         }
@@ -544,7 +544,7 @@ namespace hoa
         /**	This method sets the normalization conversion.
          @param mode The normalization convertion.
          */
-        inline void setNormalization(const Normalization mode) hoa_noexcept
+        inline void setNormalization(const Normalization mode) noexcept
         {
             m_normalization = mode;
         }
@@ -553,7 +553,7 @@ namespace hoa
         /**	This method gets the normalization conversion.
          @return The normalization convertion.
          */
-        inline Normalization getNormalization() const hoa_noexcept
+        inline Normalization getNormalization() const noexcept
         {
             return m_normalization;
         }
@@ -563,7 +563,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void process(T const* inputs, T* outputs) hoa_noexcept
+        void process(T const* inputs, T* outputs) noexcept
         {
             T const* ins = inputs;
             if(m_numbering == fromFurseMalham)
@@ -612,7 +612,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void numberFromFurseMalham(T const* inputs, T* outputs) hoa_noexcept
+        void numberFromFurseMalham(T const* inputs, T* outputs) noexcept
         {
             T temp = inputs[1];
             outputs[0] = inputs[0]; // W(0) -> 0
@@ -655,7 +655,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void numberToFurseMalham(T const* inputs, T* outputs) hoa_noexcept
+        void numberToFurseMalham(T const* inputs, T* outputs) noexcept
         {
             T temp  = inputs[1];
             T temp2 = inputs[2];
@@ -696,7 +696,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void numberFromSID(T const* inputs, T* outputs) hoa_noexcept
+        void numberFromSID(T const* inputs, T* outputs) noexcept
         {
             *(outputs++) = *(inputs++);
             for(size_t i = 1ul; i <= ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder(); i++)
@@ -723,7 +723,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void numberToSID(T const* inputs, T* outputs) hoa_noexcept
+        void numberToSID(T const* inputs, T* outputs) noexcept
         {
             *(outputs++) = *(inputs++);
             for(size_t i = 1ul; i <= ProcessorHarmonics<Hoa3d, T>::getDecompositionOrder(); i++)
@@ -749,7 +749,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void normalizeFromMaxN(T const* inputs, T* outputs) hoa_noexcept
+        void normalizeFromMaxN(T const* inputs, T* outputs) noexcept
         {
             outputs[0] = inputs[0] * T(sqrt(2.));
             outputs[1] = inputs[1] * T(sqrt(3.));
@@ -781,7 +781,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void normalizeToMaxN(T const* inputs, T* outputs) hoa_noexcept
+        void normalizeToMaxN(T const* inputs, T* outputs) noexcept
         {
             outputs[0] = inputs[0] / T(sqrt(2.));
             outputs[1] = inputs[1] / T(sqrt(3.));
@@ -813,7 +813,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void normalizeFromN3D(T const* inputs, T* outputs) hoa_noexcept
+        void normalizeFromN3D(T const* inputs, T* outputs) noexcept
         {
             T norm = T(sqrt(3.));
             *(outputs++) = *(inputs++);
@@ -835,7 +835,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        void normalizeToN3D(T const* inputs, T* outputs) hoa_noexcept
+        void normalizeToN3D(T const* inputs, T* outputs) noexcept
         {
             T norm = T(1. / sqrt(3.));
             *(outputs++) = *(inputs++);
@@ -859,7 +859,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        long getInputHarmonicOrder(const size_t index) const hoa_noexcept
+        long getInputHarmonicOrder(const size_t index) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (numb == toFurseMalham) || (numb == toSID);
@@ -885,7 +885,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        long getOutputHarmonicOrder(const size_t index) const hoa_noexcept
+        long getOutputHarmonicOrder(const size_t index) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (numb == fromFurseMalham) || (numb == fromSID);
@@ -913,7 +913,7 @@ namespace hoa
          @see       getHarmonicDegree()
          @see       getHarmonicOrder()
          */
-        std::string getHarmonicName(const size_t index, const bool isInput) const hoa_noexcept
+        std::string getHarmonicName(const size_t index, const bool isInput) const noexcept
         {
             const Numbering numb = getNumbering();
             const bool acn = (numb == ACN) || (isInput && numb == toFurseMalham) || (isInput && numb == toSID) || (!isInput && numb == fromFurseMalham) || (!isInput && numb == fromSID);

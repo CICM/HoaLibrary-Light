@@ -51,19 +51,19 @@ namespace hoa
 
         //! @brief The constructor.
         //! @param order The order of decomposition.
-        Optim(size_t order) hoa_noexcept : ProcessorHarmonics<D, T>(order),
+        Optim(size_t order) noexcept : ProcessorHarmonics<D, T>(order),
         m_weights(Signal<T>::alloc(ProcessorHarmonics<D, T>::getNumberOfHarmonics()))
         { setMode(InPhase); }
 
         //! @brief The destructor.
-		~Optim() hoa_noexcept { Signal<T>::free(m_weights); }
+		~Optim() noexcept { Signal<T>::free(m_weights); }
         
         //! @brief Returns the current optimization mode.
-        inline Mode getMode() const hoa_noexcept { return m_mode; }
+        inline Mode getMode() const noexcept { return m_mode; }
         
         //! @brief Set the optimization mode.
         //! @param mode The mode of optimization.
-        void setMode(Mode mode) hoa_noexcept
+        void setMode(Mode mode) noexcept
         {
             const size_t size   = ProcessorHarmonics<D, T>::getNumberOfHarmonics();
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
@@ -100,7 +100,7 @@ namespace hoa
         //! samples thus the minimum size of the array must be the number of harmonics.
         //! @param inputs  The inputs array.
         //! @param outputs The outputs array.
-        void process(T const* inputs, T* outputs) hoa_noexcept hoa_final
+        void process(T const* inputs, T* outputs) noexcept final
         {
             const size_t size = ProcessorHarmonics<D, T>::getNumberOfHarmonics();
             const T* weights = m_weights;

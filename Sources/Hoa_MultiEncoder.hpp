@@ -49,21 +49,21 @@ namespace hoa
         //! @brief Sets the radius of a source.
         //! @param     index	The index of the source.
         //! @param     radius	The radius.
-        inline void setRadius(size_t index, T radius) hoa_noexcept {
+        inline void setRadius(size_t index, T radius) noexcept {
             m_encoders[index].setRadius(radius);
         }
         
         //! @brief Sets the widening factor of a source (wrapper for radius).
         //! @param     index	The index of the source.
         //! @param     widening	The widening value.
-        inline void setWidening(size_t index, T widening) hoa_noexcept {
+        inline void setWidening(size_t index, T widening) noexcept {
             m_encoders[index].setRadius((widening > T(1.)) ? T(1.) : widening);
         }
 
         //! @brief Sets the azimuth of a source.
         //! @param     index	The index of the source.
         //! @param     azimuth	The azimuth.
-        inline void setAzimuth(size_t index, T azimuth) hoa_noexcept {
+        inline void setAzimuth(size_t index, T azimuth) noexcept {
             m_encoders[index].setAzimuth(azimuth);
         }
 
@@ -85,7 +85,7 @@ namespace hoa
         //! @details The fishEye value is between \f$0\f$ and \f$1\f$. At \f$0\f$, the sound
         //! field all the sources are equally dispatched around the equator and at \f$1\f$,
         //! the the sources are are concentrer in front of the audience.
-        inline void setFisheye(T fisheye) hoa_noexcept
+        inline void setFisheye(T fisheye) noexcept
         {
             const size_t nsources = getNumberOfSources();
             const T factor = 1. - ((fisheye > T(1.)) ? T(1.) : ((fisheye < T(0.)) ? T(0.) : fisheye));
@@ -132,7 +132,7 @@ namespace hoa
         //! the array must be the number of sources and the number of harmonics.
         //! @param input   The inputs array.
         //! @param outputs The outputs array.
-        inline void process(const T* input, T* outputs) hoa_noexcept hoa_override
+        inline void process(const T* input, T* outputs) noexcept override
         {
             const size_t nencoders  = m_encoders.size();
             const size_t nharmos    = ProcessorHarmonics<D, T>::getNumberOfHarmonics();
@@ -153,7 +153,7 @@ namespace hoa
         }
     private:
         
-        static inline void sigadd(const size_t size, const T* in, T* out) hoa_noexcept
+        static inline void sigadd(const size_t size, const T* in, T* out) noexcept
         {
             for(size_t i = size>>3; i; --i, in += 8, out += 8)
             {
@@ -170,18 +170,18 @@ namespace hoa
             Encoder<D, T>*  encoder;
             bool            muted;
             
-            EncoderWrap() : encoder(hoa_nullptr), muted(false) {}
+            EncoderWrap() : encoder(nullptr), muted(false) {}
             ~EncoderWrap() { }
             
-            inline void setRadius(T radius) hoa_noexcept { encoder->setRadius(radius); }
-            inline void setAzimuth(T azimuth) hoa_noexcept { encoder->setAzimuth(azimuth); }
-            inline void setElevation(T elevation) hoa_noexcept { encoder->setElevation(elevation); }
-            inline void setMute(bool m) hoa_noexcept { muted = m; }
+            inline void setRadius(T radius) noexcept { encoder->setRadius(radius); }
+            inline void setAzimuth(T azimuth) noexcept { encoder->setAzimuth(azimuth); }
+            inline void setElevation(T elevation) noexcept { encoder->setElevation(elevation); }
+            inline void setMute(bool m) noexcept { muted = m; }
             inline T getRadius() const { return encoder->getRadius(); }
             inline T getAzimuth() const { return encoder->getAzimuth(); }
             inline T getElevation() const { return encoder->getElevation(); }
             inline bool getMute() const { return muted; }
-            inline void process(const T* input, T* outputs) hoa_noexcept {
+            inline void process(const T* input, T* outputs) noexcept {
                 if(!muted) { encoder->process(input, outputs); }
             }
         };

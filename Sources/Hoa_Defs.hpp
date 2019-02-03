@@ -30,30 +30,8 @@
 #define NOMINMAX
 #endif
 
-#if (__cplusplus <= 199711L)
-#define HOA_CPP11_NOSUPPORT 1
-#endif
-
-#define hoa_unused(expr) (void)(expr)
-
-#ifdef HOA_CPP11_NOSUPPORT
-#define hoa_noexcept
-#define hoa_nullptr NULL
-#define hoa_constexpr
-#define hoa_override
-#define hoa_final
-#define hoa_delete_f
-#define hoa_static_assert(a, b) assert(a && b)
-#else
 #include <type_traits>
-#define hoa_noexcept noexcept
-#define hoa_nullptr nullptr
-#define hoa_constexpr constexpr
-#define hoa_override override
-#define hoa_final final
-#define hoa_delete_f = delete
-#define hoa_static_assert static_assert(a, b)
-#endif
+#define hoa_unused(expr) (void)(expr)
 
 #define HOA_PI  3.14159265358979323846264338327950288
 #define HOA_2PI 6.283185307179586476925286766559005

@@ -84,22 +84,22 @@ namespace hoa
         }
 
         //! The destructor.
-        inline ~Encoder() hoa_noexcept {}
+        inline ~Encoder() noexcept {}
         
         //! @brief Returns the radius.
-        inline T getRadius() const hoa_noexcept { return m_radius; }
+        inline T getRadius() const noexcept { return m_radius; }
         
         //! @brief Returns the azimuth.
-        inline T getAzimuth() const hoa_noexcept { return m_azimuth; }
+        inline T getAzimuth() const noexcept { return m_azimuth; }
         
         //! @brief Returns the elevation.
-        inline T getElevation()  const hoa_noexcept { return m_elevation; }
+        inline T getElevation()  const noexcept { return m_elevation; }
         
         //! @brief Sets the coordinates.
         //! @param radius The new radius.
         //! @param azimuth The new azimuth.
         //! @param elevation The new elevation.
-        inline void setCoordinates(const T radius, const T azimuth, const T elevation) hoa_noexcept {
+        inline void setCoordinates(const T radius, const T azimuth, const T elevation) noexcept {
             setRadius(radius);
             setAzimuth(azimuth);
             setElevation(elevation);
@@ -107,7 +107,7 @@ namespace hoa
         
         //! @brief Sets the radius.
         //! @param radius The new radius.
-        void setRadius(const T radius) hoa_noexcept {
+        void setRadius(const T radius) noexcept {
             m_radius = std::max(radius, static_cast<T>(0));
             if(m_radius >= 1)
             {
@@ -129,7 +129,7 @@ namespace hoa
         
         //! @brief Sets the azimuth.
         //! @param azimuth The new azimuth.
-        void setAzimuth(const T azimuth) hoa_noexcept {
+        void setAzimuth(const T azimuth) noexcept {
             m_azimuth   = wrap_twopi(azimuth);
             T* coeffs   = m_azimuth_coeffs.data();
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
@@ -175,7 +175,7 @@ namespace hoa
         
         //! @brief Sets the elevation.
         //! @param elevation The new elevation.
-        void setElevation(const T elevation) hoa_noexcept {
+        void setElevation(const T elevation) noexcept {
             m_elevation = wrap_pi(elevation);
             const size_t order = ProcessorHarmonics<D, T>::getDecompositionOrder();
             const T _x      = std::sin(elevation);
@@ -248,7 +248,7 @@ namespace hoa
         //! be the number of harmonics.
         //! @param input   The input pointer.
         //! @param outputs The outputs array.
-        void process(const T* input, T* outputs) hoa_noexcept hoa_override
+        void process(const T* input, T* outputs) noexcept override
         {
             if(D == Hoa2d)
             {

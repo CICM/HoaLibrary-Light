@@ -41,7 +41,7 @@ namespace hoa
             //! The point constructor.
             /**	The point constructor allocates and initialize the base classes.
              */
-            Point() hoa_noexcept :
+            Point() noexcept :
             x(0), y(0.), z(0.)
             {
 
@@ -50,7 +50,7 @@ namespace hoa
             //! The destructor.
             /** The destructor free the memory.
              */
-            ~Point() hoa_noexcept
+            ~Point() noexcept
             {
                 neightbours.clear();
                 bounds.clear();
@@ -63,7 +63,7 @@ namespace hoa
             @param z     The z value.
             @param index The index of the channel.
              */
-            Point(double _x, double _y, double _z) hoa_noexcept :
+            Point(double _x, double _y, double _z) noexcept :
             x(_x), y(_y), z(_z)
             {
                 ;
@@ -73,7 +73,7 @@ namespace hoa
             /**	The point constructor allocates and initialize the base classes.
             @param other Copy the values of another point into this one.
              */
-            Point(Point const& other) hoa_noexcept :
+            Point(Point const& other) noexcept :
             x(other.x), y(other.y), z(other.z)
             {
                 ;
@@ -84,7 +84,7 @@ namespace hoa
             @param other    The other point.
             @return The distance between this point and another.
              */
-            double length(Point const& other) const hoa_noexcept
+            double length(Point const& other) const noexcept
             {
                 return sqrt((other.x - x) * (other.x - x) + (other.y - y) * (other.y - y) + (other.z - z) * (other.z - z));
             }
@@ -93,7 +93,7 @@ namespace hoa
             /** Get the distance between this point and the center of the sphere.
             @return The distance between this point and the center of the sphere.
              */
-            double length() const hoa_noexcept
+            double length() const noexcept
             {
                 return sqrt((x + x) * (x + x) + (y + y) * (y + y) + (z + z) * (z + z));
             }
@@ -102,54 +102,54 @@ namespace hoa
             /** Get the square of the distance between this point and the center of the sphere.
             @return The square of the distance between this point and the center of the sphere.
              */
-            double lenght2() const hoa_noexcept
+            double lenght2() const noexcept
             {
                 const double l = length();
                 return l * l;
             }
 
-            Point operator-(Point const& other) const hoa_noexcept
+            Point operator-(Point const& other) const noexcept
             {
                 return Point(x - other.x, y - other.y, z - other.z);
             }
 
-            Point operator+(Point const& other) const hoa_noexcept
+            Point operator+(Point const& other) const noexcept
             {
                 return Point(x + other.x, y + other.y, z + other.z);
             }
 
-            Point operator*(Point const& other) const hoa_noexcept
+            Point operator*(Point const& other) const noexcept
             {
                 return Point(x * other.x, y * other.y, z * other.z);
             }
 
-            Point operator*(double val) const hoa_noexcept
+            Point operator*(double val) const noexcept
             {
                 return Point(x * val, y * val, z * val);
             }
 
-            Point& operator*=(double val) hoa_noexcept
+            Point& operator*=(double val) noexcept
             {
                 x *= val; y *= val; z *= val;
                 return *this;
             }
 
-            Point operator/(double val) const hoa_noexcept
+            Point operator/(double val) const noexcept
             {
                 return Point(x / val, y / val, z / val);
             }
 
-            bool operator==(Point const& other) const hoa_noexcept
+            bool operator==(Point const& other) const noexcept
             {
                 return fabs(other.x - x) < HOA_EPSILON && fabs(other.y - y) < HOA_EPSILON && fabs(other.z - z) < HOA_EPSILON;
             }
 
-            bool operator!=(Point const& other) const hoa_noexcept
+            bool operator!=(Point const& other) const noexcept
             {
                 return fabs(other.x - x) > HOA_EPSILON && fabs(other.y - y) > HOA_EPSILON && fabs(other.z - z) > HOA_EPSILON;
             }
 
-            Point cross(Point const& other) const hoa_noexcept
+            Point cross(Point const& other) const noexcept
             {
                 return Point(other.y * z - other.z * y, other.z * x - other.x * z, other.x * y - other.y * x);
             }
@@ -159,7 +159,7 @@ namespace hoa
             @param  other   The other point.
             @return The dot product of the point and another.
              */
-            double dot(Point const& other) const hoa_noexcept
+            double dot(Point const& other) const noexcept
             {
                 return x * other.x + y * other.y + z * other.z;
             }
@@ -168,17 +168,17 @@ namespace hoa
             /** Get the dot product of the point and the center of the sphere.
             @return The dot product of the point and the center of the sphere.
              */
-            double dot() const hoa_noexcept
+            double dot() const noexcept
             {
                 return x * x + y * y + z * z;
             }
 
-            static Point fromPolar(const double r, const double a, const double t) hoa_noexcept
+            static Point fromPolar(const double r, const double a, const double t) noexcept
             {
                 return Point(r * cos(a + HOA_PI2) * cos(t), r * sin(a + HOA_PI2) * cos(t), r * sin(t));
             }
 
-            void normalize() hoa_noexcept
+            void normalize() noexcept
             {
                 const double l = length();
                 if(l != 0.)
@@ -192,26 +192,26 @@ namespace hoa
                 }
             }
 
-            Point normalized() const hoa_noexcept
+            Point normalized() const noexcept
             {
                 Point t = *this;
                 t.normalize();
                 return t;
             }
 
-            double radius()  const hoa_noexcept
+            double radius()  const noexcept
             {
                 return sqrt(x*x + y*y + z*z);
             }
 
-            double azimuth() const hoa_noexcept
+            double azimuth() const noexcept
             {
                 if (x == 0 && y == 0)
                     return 0;
                 return atan2(y, x) - HOA_PI2;
             }
 
-            double elevation()  const hoa_noexcept
+            double elevation()  const noexcept
             {
                 if(z == 0)
                     return 0;
@@ -234,7 +234,7 @@ namespace hoa
                 }
             }
 
-            void rotateZ(const double _z) hoa_noexcept
+            void rotateZ(const double _z) noexcept
             {
                 const double cosAngle = cos(_z);
                 const double sinAngle = sin(_z);
@@ -243,7 +243,7 @@ namespace hoa
                 x = rx;
             }
 
-            void rotateY(const double _y) hoa_noexcept
+            void rotateY(const double _y) noexcept
             {
                 const double cosAngle = cos(_y);
                 const double sinAngle = sin(_y);
@@ -252,7 +252,7 @@ namespace hoa
                 x = rx;
             }
 
-            void rotateX(const double _x) hoa_noexcept
+            void rotateX(const double _x) noexcept
             {
                 const double cosAngle = cos(_x);
                 const double sinAngle = sin(_x);
@@ -309,12 +309,12 @@ namespace hoa
                 }
             }
 
-            static bool compareAzimuth(Point const& p1, Point const& p2) hoa_noexcept
+            static bool compareAzimuth(Point const& p1, Point const& p2) noexcept
             {
                 return p1.azimuth() < p2.azimuth();
             }
 
-            static bool compareElevation(Point const& p1, Point const& p2) hoa_noexcept
+            static bool compareElevation(Point const& p1, Point const& p2) noexcept
             {
                 return p1.elevation() < p2.elevation();
             }
@@ -329,7 +329,7 @@ namespace hoa
             Point   p;
             double  r;
 
-            Triangle(Point const& _a, Point const& _b, Point const& _c) hoa_noexcept :
+            Triangle(Point const& _a, Point const& _b, Point const& _c) noexcept :
             a(_a), b(_b), c(_c), r(0.)
             {
                 const Point ac = (c - a);
@@ -348,7 +348,7 @@ namespace hoa
             }
         };
 
-        static bool onBottom(Point const& p1) hoa_noexcept
+        static bool onBottom(Point const& p1) noexcept
         {
             return p1.z < 0.;
         }
@@ -356,12 +356,12 @@ namespace hoa
         std::vector<Point>       m_points;
     public:
 
-        Voronoi() hoa_noexcept
+        Voronoi() noexcept
         {
             ;
         }
 
-        ~Voronoi() hoa_noexcept
+        ~Voronoi() noexcept
         {
             clear();
         }
@@ -376,32 +376,32 @@ namespace hoa
             m_points.clear();
         }
 
-        std::vector<Point> const& getPoints() const hoa_noexcept
+        std::vector<Point> const& getPoints() const noexcept
         {
             return m_points;
         }
 
-        std::vector<Point>& getPoints() hoa_noexcept
+        std::vector<Point>& getPoints() noexcept
         {
             return m_points;
         }
 
-        std::vector<Point> const& getBounds(const size_t i) const hoa_noexcept
+        std::vector<Point> const& getBounds(const size_t i) const noexcept
         {
             return m_points[i].bounds;
         }
 
-        std::vector<Point>& getBounds(const size_t i) hoa_noexcept
+        std::vector<Point>& getBounds(const size_t i) noexcept
         {
             return m_points[i].bounds;
         }
 
-        std::vector<Point> const& getNeightbours(const size_t i) const hoa_noexcept
+        std::vector<Point> const& getNeightbours(const size_t i) const noexcept
         {
             return m_points[i].neightbours;
         }
 
-        std::vector<Point>& getNeightbours(const size_t i) hoa_noexcept
+        std::vector<Point>& getNeightbours(const size_t i) noexcept
         {
             return m_points[i].neightbours;
         }

@@ -25,17 +25,17 @@ namespace hoa
         /**	The vector constructor allocates and initialize the member values to computes vectors. The number of channels must be at least 1.
          @param     numberOfChannels	The number of channels.
          */
-        Vector(const size_t numberOfChannels) hoa_noexcept;
+        Vector(const size_t numberOfChannels) noexcept;
 
         //! The vector destructor.
         /**	The vector destructor free the memory.
          */
-        virtual ~Vector() hoa_noexcept = 0;
+        virtual ~Vector() noexcept = 0;
 
         //! This method pre-computes the necessary values to process.
         /**	You should use this method before calling the process methods and after changing the azimuth, the elevation or the offset of the channels.
          */
-        virtual void computeRendering() hoa_noexcept = 0;
+        virtual void computeRendering() noexcept = 0;
 
         //! This method computes the energy and velocity vectors.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array contains the channels samples and the minimum size must be the number of channels. The outputs array contains the vectors cartesian coordinates and the minimum size must be 4 for 2d and 6 for 3d. The coordinates arrangement in the outputs array is velocity abscissa, velocity ordinate, (velocity height), energy abscissa and energy ordinate (and energy height).
@@ -43,21 +43,21 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        virtual void process(const T* inputs, T* outputs) hoa_noexcept = 0;
+        virtual void process(const T* inputs, T* outputs) noexcept = 0;
 
         //! This method computes the velocity vector.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and contains the channels samples and the minimum size must be the number of channels. The outputs array contains the vectors cartesian coordinates and the minimum size must be 2 for 2d and 3 for 3d. The coordinates arrangement in the outputs array is velocity abscissa and velocity ordinate (and velocity height).
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        virtual void processVelocity(const T* inputs, T* outputs) hoa_noexcept = 0;
+        virtual void processVelocity(const T* inputs, T* outputs) noexcept = 0;
 
         //! This method computes the energy vector.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and contains the channels samples and the minimum size must be the number of harmonics. The outputs array contains the vectors cartesian coordinates and the minimum size must be 2 for 2d and 3 for 3d. The coordinates arrangement in the outputs array is energy abscissa and energy ordinate (and energy height).
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        virtual void processEnergy(const T* inputs, T* outputs) hoa_noexcept = 0;
+        virtual void processEnergy(const T* inputs, T* outputs) noexcept = 0;
     };
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -74,7 +74,7 @@ namespace hoa
         /**	The vector constructor allocates and initialize the member values to computes vectors. The number of channels must be at least 1.
          @param     numberOfChannels	The number of channels.
          */
-        Vector(const size_t numberOfChannels) hoa_noexcept : ProcessorPlanewaves<Hoa2d, T>(numberOfChannels)
+        Vector(const size_t numberOfChannels) noexcept : ProcessorPlanewaves<Hoa2d, T>(numberOfChannels)
         {
             m_channels_square   = Signal<T>::alloc(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves());
             m_channels_abscissa = Signal<T>::alloc(ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves());
@@ -84,7 +84,7 @@ namespace hoa
         //! The vector destructor.
         /**	The vector destructor free the memory.
          */
-        ~Vector() hoa_noexcept
+        ~Vector() noexcept
         {
             Signal<T>::free(m_channels_square);
             Signal<T>::free(m_channels_abscissa);
@@ -94,7 +94,7 @@ namespace hoa
         //! This method pre-computes the necessary values to process.
         /**	You should use this method before calling the process methods and after changing the azimuth, the elevation or the offset of the channels.
          */
-        inline void computeRendering() hoa_noexcept
+        inline void computeRendering() noexcept
         {
             for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
@@ -108,7 +108,7 @@ namespace hoa
             @param     inputs   The inputs array.
             @param     outputs  The outputs array.
          */
-        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             processVelocity(inputs, outputs);
             processEnergy(inputs, outputs+2);
@@ -119,7 +119,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void processVelocity(const T* inputs, T* outputs) hoa_noexcept
+        inline void processVelocity(const T* inputs, T* outputs) noexcept
         {
             T veclocitySum = inputs[0];
             for(size_t i = 1; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
@@ -143,7 +143,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void processEnergy(const T* inputs, T* outputs) hoa_noexcept
+        inline void processEnergy(const T* inputs, T* outputs) noexcept
         {
             (*m_channels_square) = (*inputs) * (*inputs);
             for(size_t i = 1; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
@@ -178,7 +178,7 @@ namespace hoa
         /**	The vector constructor allocates and initialize the member values to computes vectors. The number of channels must be at least 1.
          @param     numberOfChannels	The number of channels.
          */
-        Vector(const size_t numberOfChannels) hoa_noexcept : ProcessorPlanewaves<Hoa3d, T>(numberOfChannels)
+        Vector(const size_t numberOfChannels) noexcept : ProcessorPlanewaves<Hoa3d, T>(numberOfChannels)
         {
             m_channels_square   = Signal<T>::alloc(ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves());
             m_channels_abscissa = Signal<T>::alloc(ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves());
@@ -189,7 +189,7 @@ namespace hoa
         //! The vector destructor.
         /**	The vector destructor free the memory.
          */
-        ~Vector() hoa_noexcept
+        ~Vector() noexcept
         {
             Signal<T>::free(m_channels_square);
             Signal<T>::free(m_channels_abscissa);
@@ -200,7 +200,7 @@ namespace hoa
         //! This method pre-computes the necessary values to process.
         /**	You should use this method before calling the process methods and after changing the azimuth, the elevation or the offset of the channels.
          */
-        inline void computeRendering() hoa_noexcept
+        inline void computeRendering() noexcept
         {
             for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
@@ -215,7 +215,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             processVelocity(inputs, outputs);
             processEnergy(inputs, outputs+3);
@@ -226,7 +226,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void processVelocity(const T* inputs, T* outputs) hoa_noexcept
+        inline void processVelocity(const T* inputs, T* outputs) noexcept
         {
             T veclocitySum = inputs[0];
             for(size_t i = 1; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
@@ -253,7 +253,7 @@ namespace hoa
          @param     inputs   The inputs array.
          @param     outputs  The outputs array.
          */
-        inline void processEnergy(const T* inputs, T* outputs) hoa_noexcept
+        inline void processEnergy(const T* inputs, T* outputs) noexcept
         {
             (*m_channels_square) = (*inputs) * (*inputs);
             for(size_t i = 1; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)

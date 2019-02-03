@@ -26,24 +26,24 @@ namespace hoa
         /**	The rotate constructor allocates and initialize the member values. The order must be at least 1.
          @param     order	The order.
          */
-        Rotate(const size_t order) hoa_noexcept;
+        Rotate(const size_t order) noexcept;
         
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
          */
-        virtual ~Rotate() hoa_noexcept = 0;
+        virtual ~Rotate() noexcept = 0;
         
         //! This method sets the angle of the rotation around the z axis, the yaw value.
         /** The yaw is equivalent to a rotation around the z axis, the yaw value \f$\theta\f$ is in radian and should be between \f$0\f$ and \f$2\pi\f$.
          @param     yaw The yaw value.
          */
-        virtual void setYaw(const T yaw) hoa_noexcept;
+        virtual void setYaw(const T yaw) noexcept;
         
         //! Get the angle of the rotation around the z axis, the yaw value.
         /** The method returns the angle of the rotation around the z axis, the yaw value \f$\theta\f$, in radian between \f$0\f$ and \f$2\pi\f$.
          @return     The yaw value.
          */
-        virtual T getYaw() const hoa_noexcept;
+        virtual T getYaw() const noexcept;
         
         //! This method performs the rotation.
         /**	You should use this method for in-place or not-in-place processing and sample by sample. The inputs array and outputs array contains the spherical harmonics samples and the minimum size must be the number of harmonics.
@@ -57,7 +57,7 @@ namespace hoa
          @param     inputs   The input array.
          @param     outputs  The output array.
          */
-        virtual void process(const T* inputs, T* outputs) hoa_noexcept;
+        virtual void process(const T* inputs, T* outputs) noexcept;
     };
     
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -74,7 +74,7 @@ namespace hoa
         /**	The rotate constructor allocates and initialize the member values to computes spherical harmonics rotation depending on a order of decomposition. The order must be at least 1.
          @param     order	The order.
          */
-        Rotate(const size_t order) hoa_noexcept : ProcessorHarmonics<Hoa2d, T>(order)
+        Rotate(const size_t order) noexcept : ProcessorHarmonics<Hoa2d, T>(order)
         {
             ;
         }
@@ -82,7 +82,7 @@ namespace hoa
         //! The Rotate destructor.
         /**	The Rotate destructor free the memory.
          */
-        ~Rotate() hoa_noexcept
+        ~Rotate() noexcept
         {
             ;
         }
@@ -91,7 +91,7 @@ namespace hoa
         /** The yaw is equivalent to a rotation around the z axis, the value is in radian and should be between 0 and 2π.
          @param     yaw The yaw value.
          */
-        inline void setYaw(const T yaw) hoa_noexcept
+        inline void setYaw(const T yaw) noexcept
         {
             m_yaw     =	yaw;
             m_cosx    = std::cos(m_yaw);
@@ -102,7 +102,7 @@ namespace hoa
         /** The method returns the angle of the rotation around the z axis, the yaw value, in radian between 0 and 2π.
          @return     The yaw value.
          */
-        inline T getYaw() const hoa_noexcept
+        inline T getYaw() const noexcept
         {
             return wrap_twopi(m_yaw);
         }
@@ -112,7 +112,7 @@ namespace hoa
          @param     inputs   The input array.
          @param     outputs  The output array.
          */
-        inline void process(const T* inputs, T* outputs) hoa_noexcept hoa_override
+        inline void process(const T* inputs, T* outputs) noexcept override
         {
             T cos_x = m_cosx;
             T sin_x = m_sinx;

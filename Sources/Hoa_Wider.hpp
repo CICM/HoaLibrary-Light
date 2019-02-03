@@ -43,7 +43,7 @@ namespace hoa
 
         //! @brief This method set factor of widening.
         //! @param value The factor of widening.
-        inline void setWidening(const T value) hoa_noexcept {
+        inline void setWidening(const T value) noexcept {
             m_widening = std::max(std::min(value, T(1)), T(0));
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
             const T      temp   = T(1) - m_widening;
@@ -57,7 +57,7 @@ namespace hoa
         }
 
         //! @brief Returns the the widening value.
-		inline T getWidening() const hoa_noexcept { return m_widening; }
+		inline T getWidening() const noexcept { return m_widening; }
 
         //! @brief The method performs the widening on the harmonics signal.
         //! @details The method can be used for in-place or not-in-place processing and sample
@@ -65,7 +65,7 @@ namespace hoa
         //! samples thus the minimum size of the array must be the number of harmonics.
         //! @param inputs  The inputs array.
         //! @param outputs The outputs array.
-		void process(const T* inputs, T* outputs) hoa_noexcept hoa_final
+		void process(const T* inputs, T* outputs) noexcept final
         {
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
             T* coeff     = m_coeffs.data();

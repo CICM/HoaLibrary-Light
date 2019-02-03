@@ -29,7 +29,7 @@ namespace hoa
         //! @param index       The index must be at least 1.
         //! @param azimuth     The azimuth \f$\theta\f$.
         //! @param elevation   The elevation \f$\varphi\f$.
-        Planewave(size_t index, T azimuth, T elevation) hoa_noexcept :
+        Planewave(size_t index, T azimuth, T elevation) noexcept :
         m_index(index), m_azimuth(wrap_twopi(azimuth)), m_elevation(wrap_pi(elevation)) {}
 
         //! @brief The plane wave cartesian constructor.
@@ -37,40 +37,40 @@ namespace hoa
         //! @param abscissa    The abscissa \f$x\f$.
         //! @param ordinate    The ordinate \f$y\f$.
         //! @param height      The height \f$z\f$.
-        Planewave(size_t index, T abscissa, T ordinate, T height) hoa_noexcept :
+        Planewave(size_t index, T abscissa, T ordinate, T height) noexcept :
         m_index(index), m_azimuth(xyz2azimuth(abscissa, ordinate, height)), m_elevation(xyz2elevation(abscissa, ordinate, height)) {}
 
         //! @brief The plane wave destructor.
-		virtual ~Planewave() hoa_noexcept {}
+		virtual ~Planewave() noexcept {}
 
         //! Returns the index of the plane wave.
-        inline size_t getIndex() const hoa_noexcept { return m_index; }
+        inline size_t getIndex() const noexcept { return m_index; }
 
         //! @brief Returns the azimuth of the planewave.
-        inline T getAzimuth() const hoa_noexcept { return m_azimuth; }
+        inline T getAzimuth() const noexcept { return m_azimuth; }
         
         //! @brief Returns the elevation of the planewave.
-        inline T getElevation() const hoa_noexcept { return m_elevation; }
+        inline T getElevation() const noexcept { return m_elevation; }
         
         //! @brief Returns the abscissa of the plane wave.
-        inline T getAbscissa() const hoa_noexcept { return ae2abscissa(m_azimuth, m_elevation); }
+        inline T getAbscissa() const noexcept { return ae2abscissa(m_azimuth, m_elevation); }
         
         //! @brief Returns the ordinate of the plane wave.
-        inline T getOrdinate() const hoa_noexcept { return ae2ordinate(m_azimuth, m_elevation); }
+        inline T getOrdinate() const noexcept { return ae2ordinate(m_azimuth, m_elevation); }
 
         //! @brief Returns the height of the plane wave.
-        inline T getHeight() const hoa_noexcept { return ae2height(m_azimuth, m_elevation); }
+        inline T getHeight() const noexcept { return ae2height(m_azimuth, m_elevation); }
 
         //! @brief Sets the azimuth of the plane wave.
         //! @param azimuth The azimuth \f$\theta\f$.
-        inline void setAzimuth(const T azimuth) hoa_noexcept { m_azimuth = wrap_twopi(azimuth); }
+        inline void setAzimuth(const T azimuth) noexcept { m_azimuth = wrap_twopi(azimuth); }
 
         //! @brief Set the elevation of the plane wave.
         //! @param elevation The elevation \f$\varphi\f$.
-        inline void setElevation(const T elevation) hoa_noexcept { m_elevation = wrap_pi(elevation); }
+        inline void setElevation(const T elevation) noexcept { m_elevation = wrap_pi(elevation); }
 
         //! @brief Returns the name of the plane wave.
-        virtual std::string getName() const hoa_noexcept {
+        virtual std::string getName() const noexcept {
             std::ostringstream ostr;
             ostr <<  "Planewave " << getIndex() << " " << (m_azimuth / HOA_2PI * 360.) << "°";
             if(D == Hoa3d) {
@@ -79,7 +79,7 @@ namespace hoa
         }
         
         //! @brief Compares the azimuth of two plane waves.
-        static bool compare_azimuth(Planewave const& i, Planewave const& j) hoa_noexcept { return i.m_azimuth < j.m_azimuth; }
+        static bool compare_azimuth(Planewave const& i, Planewave const& j) noexcept { return i.m_azimuth < j.m_azimuth; }
         
     private:
         friend class ProcessorPlanewaves<D, T>;
@@ -117,7 +117,7 @@ namespace hoa
             return value;
         }
         
-        static inline void rotate(Planewave const& p, const T xr, const T yr, const T zr, T& xo, T& yo, T& zo) hoa_noexcept
+        static inline void rotate(Planewave const& p, const T xr, const T yr, const T zr, T& xo, T& yo, T& zo) noexcept
         {
             const T xi = p.getAbscissa();
             const T yi = p.getOrdinate();
