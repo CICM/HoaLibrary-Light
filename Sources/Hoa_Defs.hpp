@@ -30,13 +30,6 @@
 #define NOMINMAX
 #endif
 
-#ifdef MAX_DEBUG
-#include <ext.h>
-#include <ext_obex.h>
-#include <z_dsp.h>
-#include <ext_common.h>
-#endif
-
 #if (__cplusplus <= 199711L)
 #define HOA_CPP11_NOSUPPORT 1
 #endif
