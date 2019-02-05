@@ -31,6 +31,8 @@ matrix:
 
     - os: linux
       compiler: gcc
+      env:
+        - Libs and Tests
 
     - os: linux
       compiler: clang

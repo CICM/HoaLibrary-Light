@@ -158,9 +158,8 @@ namespace hoa
 
             if(sum)
             {
-                using Signal<T>::dot;
-                const auto abscissa = dot(planewaves, inputs, m_channels_abscissa);
-                const auto ordinate = dot(planewaves, inputs, m_channels_ordinate);
+                const auto abscissa = Signal<T>::dot(planewaves, inputs, m_channels_abscissa);
+                const auto ordinate = Signal<T>::dot(planewaves, inputs, m_channels_ordinate);
                 
                 outputs[0] = abscissa / sum;
                 outputs[1] = ordinate / sum;
@@ -194,9 +193,8 @@ namespace hoa
 
             if(sum)
             {
-                using Signal<T>::dot;
-                const auto abscissa = dot(planewaves, m_channels_square, m_channels_abscissa);
-                const auto ordinate = dot(planewaves, m_channels_square, m_channels_ordinate);
+                const auto abscissa = Signal<T>::dot(planewaves, m_channels_square, m_channels_abscissa);
+                const auto ordinate = Signal<T>::dot(planewaves, m_channels_square, m_channels_ordinate);
                 
                 outputs[0] = abscissa / sum;
                 outputs[1] = ordinate / sum;
@@ -230,11 +228,10 @@ namespace hoa
         : ProcessorPlanewaves<Hoa3d, T>(channels)
         {
             const auto size = ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves();
-            using Signal<T>::alloc;
-            m_channels_square   = alloc(size);
-            m_channels_abscissa = alloc(size);
-            m_channels_ordinate = alloc(size);
-            m_channels_height   = alloc(size);
+            m_channels_square   = Signal<T>::alloc(size);
+            m_channels_abscissa = Signal<T>::alloc(size);
+            m_channels_ordinate = Signal<T>::alloc(size);
+            m_channels_height   = Signal<T>::alloc(size);
         }
 
         //! @brief Destructor.
@@ -294,10 +291,9 @@ namespace hoa
             
             if(sum)
             {
-                using Signal<T>::dot;
-                const auto abscissa = dot(planewaves, inputs, m_channels_abscissa);
-                const auto ordinate = dot(planewaves, inputs, m_channels_ordinate);
-                const auto height   = dot(planewaves, inputs, m_channels_height);
+                const auto abscissa = Signal<T>::dot(planewaves, inputs, m_channels_abscissa);
+                const auto ordinate = Signal<T>::dot(planewaves, inputs, m_channels_ordinate);
+                const auto height   = Signal<T>::dot(planewaves, inputs, m_channels_height);
                 
                 outputs[0] = abscissa / sum;
                 outputs[1] = ordinate / sum;
@@ -332,10 +328,9 @@ namespace hoa
             
             if(sum)
             {
-                using Signal<T>::dot;
-                const T abscissa  = dot(planewaves, m_channels_square, m_channels_abscissa);
-                const T ordinate  = dot(planewaves, m_channels_square, m_channels_ordinate);
-                const T height    = dot(planewaves, m_channels_square, m_channels_height);
+                const T abscissa  = Signal<T>::dot(planewaves, m_channels_square, m_channels_abscissa);
+                const T ordinate  = Signal<T>::dot(planewaves, m_channels_square, m_channels_ordinate);
+                const T height    = Signal<T>::dot(planewaves, m_channels_square, m_channels_height);
                 
                 outputs[0] = abscissa / sum;
                 outputs[1] = ordinate / sum;
