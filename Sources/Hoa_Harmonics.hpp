@@ -28,7 +28,7 @@ namespace hoa
     public:
 
         //! @brief The harmonic constructor.
-        //! @param index    The index must be at least 1.
+        //! @param index The index must be at least 1.
         inline Harmonic(const size_t index) noexcept
         : m_index(index)
         , m_degree(getDegree(index))
@@ -48,17 +48,24 @@ namespace hoa
         inline long getOrder() const noexcept { return m_order; }
         
         //! @brief Returns the name of the harmonic.
-        std::string getName() const noexcept {
+        std::string getName() const
+        {
             std::ostringstream ostr;
             ostr <<  "Harmonic (" << m_index << ") : "<< m_degree << " " << m_order;
             return ostr.str();
         }
 
         //! @brief Returns the normalization of the harmonic.
-        inline T getNormalization() const noexcept { return getNormalization(m_degree, m_order); }
+        inline T getNormalization() const noexcept
+        {
+            return getNormalization(m_degree, m_order);
+        }
 
         //! @brief Returns the semi-normalization of the harmonic.
-        inline T getSemiNormalization() const noexcept { return getSemiNormalization(m_degree, m_order); }
+        inline T getSemiNormalization() const noexcept
+        {
+            return getSemiNormalization(m_degree, m_order);
+        }
 
         //! @brief Returns the index of an harmonic for a specific degree and azimuthal order.
         //! @details The computation is \f$i=2|m|-(m<0)\f$ in 2D and \f$i=(l(l+1))+m\f$ in 3D.
@@ -66,31 +73,39 @@ namespace hoa
         //! harmonic.
         //! @param degree  The degree of the harmonic.
         //! @param order   The order of the harmonic.
-        static inline long getIndex(const size_t degree, const long order) noexcept {
-            return (D == Hoa2d) ? (std::abs(order) *  2 - long(order < 0)) : (size_t(long(degree * (degree + 1)) + order)); }
+        static inline long getIndex(const size_t degree, const long order) noexcept
+        {
+            return (D == Hoa2d) ? (std::abs(order) *  2 - long(order < 0)) : (size_t(long(degree * (degree + 1)) + order));
+        }
         
         //! @brief Returns the degree of an harmonic for an index.
         //! @details The computation is \f$l=\frac{i+i\bmod{2}}{2}\f$ in 2D and \f$l=\sqrt{i}\f$ in 3D.
         //! with \f$l\f$ the degree and \f$i\f$ the index of the harmonic.
         //! @param index  The index of the harmonic.
-        static inline size_t getDegree(const size_t index) noexcept {
-            return (D == Hoa2d) ? ((index + index % 2) / size_t(2)) : size_t(sqrt(double(index))); }
+        static inline size_t getDegree(const size_t index) noexcept
+        {
+            return (D == Hoa2d) ? ((index + index % 2) / size_t(2)) : size_t(sqrt(double(index)));
+        }
 
         //! @brief Returns the azimuthal order of an harmonic for an index.
         //! @details The computation is \f$m=l(1-2(i\bmod{2}))\f$ in 2D and \f$m=i-(l(l+1))\f$ in 3D.
         //! with \f$l\f$ the degree, \f$m\f$ the azimuthal order and \f$i\f$ the index of the
         //! harmonic.
         //! @param index  The index of the harmonic.
-        static inline long getOrder(const size_t index) noexcept {
+        static inline long getOrder(const size_t index) noexcept
+        {
             const long l = long(getDegree(index));
-            return (D == Hoa2d) ? (l * (1l - static_cast<long>(index % 2) * 2l)) : (static_cast<long>(index) - (l * (l + 1))); }
+            return (D == Hoa2d) ? (l * (1l - static_cast<long>(index % 2) * 2l)) : (static_cast<long>(index) - (l * (l + 1)));
+        }
 
         //! @brief Returns the number of harmonics for an order of decomposition.
         //! @details The computation is \f$2N+1\f$ in 2D and \f$(N+1)^{2}\f$ in 3D.
         //! with \f$N\f$ the order of decomposition.
         //! @param order   The order of decomposition.
-        static inline size_t getNumberOfHarmonics(const size_t order) noexcept {
-            return (D == Hoa2d) ? (order * 2 + 1) : (order + 1) * (order + 1); }
+        static inline size_t getNumberOfHarmonics(const size_t order) noexcept
+        {
+            return (D == Hoa2d) ? (order * 2 + 1) : (order + 1) * (order + 1);
+        }
         
         //! @brief Returns the number of harmonics for a degree.
         //! @details The computation is \f$(degree\neq0)+1\f$ in 2D and \f$2l+1\f$ in 3D.
@@ -143,8 +158,8 @@ namespace hoa
         
     private:
         
-        size_t m_index;
-        size_t m_degree;
-        long   m_order;
+        size_t m_index = 0ul;
+        size_t m_degree = 0ul;
+        long   m_order = 0ul;
     };    
 }
