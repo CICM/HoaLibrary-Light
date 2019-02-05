@@ -35,7 +35,7 @@ namespace hoa
         static constexpr T pi_over_four() { return pi() * 0.25; }
         
         //! @brief Wraps the value between 0 and π
-        static constexpr T wrap_pi(T value)
+        static T wrap_pi(T value)
         {
             while(value < -pi()) { value += two_pi(); }
             while(value >= pi()) { value -= two_pi(); }
@@ -43,7 +43,7 @@ namespace hoa
         }
         
         //! @brief Wraps the value between 0 and 2π
-        static constexpr T wrap_two_pi(T value)
+        static T wrap_two_pi(T value)
         {
             while(value < 0.) { value += two_pi(); }
             while(value >= two_pi()) { value -= two_pi(); }
