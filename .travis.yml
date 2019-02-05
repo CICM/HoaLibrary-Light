@@ -6,7 +6,7 @@ notifications:
   email: false
 
 git:
-  submodules: true
+  submodules: false
   depth: 3
 
 matrix:
@@ -15,16 +15,17 @@ matrix:
       compiler: gcc
       addons:
         apt:
-          packages: ['python-pip', 'python-yaml']
+          sources: ['ubuntu-toolchain-r-test']
+          packages: [g++-4.9, 'python-pip', 'python-yaml']
       install:
         - pip install --user cpp-coveralls
+        - export CXX=g++-4.9 # make sure CXX is correctly set
       script:
           - mkdir build && cd build
           - cmake -DGCOV_SUPPORT=On ..
           - cmake --build .
           - cd ../
           - ./build/hoatest
-
       after_success:
         - coveralls -e build/CMakeFiles/feature_tests.cxx -e build/CMakeFiles/feature_tests.c -e build/CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.cpp -e build/CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.c -e build/CMakeFiles/3.2.2/CompilerIdCXX/CMakeCXXCompilerId.cpp -e build/CMakeFiles/3.2.2/CompilerIdC/CMakeCCompilerId.c -e Tests --gcov-options '\-lp'
       env:
@@ -32,6 +33,12 @@ matrix:
 
     - os: linux
       compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: [g++-4.9]
+      install:
+        - export CXX=g++-4.9 # make sure CXX is correctly set
       script:
         - mkdir build && cd build
         - cmake ..
