@@ -45,8 +45,7 @@
 namespace hoa
 {
     //! The dimension of class.
-    /** Most of the classes are specialized for 2d or 3d.
-     */
+    //! Most of the classes are specialized for 2d or 3d.
     enum Dimension
     {
         Hoa2d = 0, /*!<  The 2d dimension. */

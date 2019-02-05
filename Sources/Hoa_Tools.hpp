@@ -15,63 +15,44 @@
 
 namespace hoa
 {
-    template <typename T> class Line
+    // ================================================================================ //
+    // LINE //
+    // ================================================================================ //
+    
+    template <typename T>
+    class Line
     {
-    private:
-        T       m_value_old;
-        T       m_value_new;
-        T       m_value_step;
-        size_t   m_counter;
-        size_t   m_ramp;
-
     public:
-        //! The line constructor.
-        /**	The line constructor allocates and initialize the base classes.
-         */
-        Line() noexcept
-        {
-            ;
-        }
+        
+        //! @brief Constructor.
+        Line() = default;
 
-        //! The destructor.
-        /** The destructor free the memory.
-         */
-        ~Line()
-        {
-            ;
-        }
+        //! @brief The Destructor.
+        ~Line() = default;
 
-        //! Get the ramp value.
-        /** Get the ramp value.
-        @return The ramp value.
-         */
+        //! @brief Get the ramp value.
+        //! @return The ramp value.
         inline size_t getRamp() const noexcept
         {
             return m_ramp;
         }
 
-        //! Get the current value.
-        /** Get the current value.
-        @return The current value.
-         */
+        //! @brief Get the current value.
+        //! @return The current value.
         inline T getValue() const noexcept
         {
             return m_value_new;
         }
 
-        //! Set the ramp value.
-        /** Set the ramp value.
-        @param ramp    The new value of the ramp.
-         */
+        //! @brief Set the ramp value.
+        //! @param ramp The new value of the ramp.
         inline void setRamp(const size_t ramp) noexcept
         {
             m_ramp = std::max(ramp, (size_t)1);
         }
 
-        //! Set, linearly, the current value.
-        /** Set, linearly, the current value.
-        @param value    The new value of the current value.
-         */
+        //! @brief Set, linearly, the current value.
+        //! @param value The new value of the current value.
         inline void setValue(const T value) noexcept
         {
             m_value_new = value;
@@ -79,10 +60,8 @@ namespace hoa
             m_counter = 0;
         }
 
-        //! Set, directly, the current value.
-        /** Set, directly, the current value.
-        @param value    The new value of the current value.
-         */
+        //! @brief Set, directly, the current value.
+        //! @param value The new value of the current value.
         inline void setValueDirect(const T value) noexcept
         {
             m_value_old = m_value_new = value;
@@ -90,10 +69,8 @@ namespace hoa
             m_counter = 0;
         }
 
-        //! This method performs the count of the virtual points of the line.
-        /** This method performs the count of the virtual points of the line.
-        @return The old value of the counter.
-         */
+        //! @brief This method performs the count of the virtual points of the line.
+        //! @return The old value of the counter.
         inline T process() noexcept
         {
             m_value_old += m_value_step;
@@ -105,37 +82,44 @@ namespace hoa
             }
             return m_value_old;
         }
-    };
-
-    template <Dimension D, typename T> class PolarLines;
-
-    template <typename T> class PolarLines<Hoa2d, T>
-    {
-
+        
     private:
-        const size_t m_number_of_sources;
-        T*      m_values_old;
-        T*      m_values_new;
-        T*      m_values_step;
-        size_t   m_counter;
-        size_t   m_ramp;
+        
+        T m_value_old = 0.;
+        T m_value_new = 0.;
+        T m_value_step = 0.;
+        size_t m_counter = 0ul;
+        size_t m_ramp = 0ul;
+    };
+    
+    // ================================================================================ //
+    // POLAR LINE //
+    // ================================================================================ //
 
+    template <Dimension D, typename T>
+    class PolarLines;
+    
+    // ================================================================================ //
+    // POLAR LINE 2D //
+    // ================================================================================ //
+
+    template <typename T>
+    class PolarLines<Hoa2d, T>
+    {
     public:
-        //! The line constructor.
-        /**	The line constructor allocates and initialize the base classes.
-        @param numberOfSources  The number of sources.
-         */
-        PolarLines(size_t numberOfSources) noexcept :
-        m_number_of_sources(numberOfSources)
+        
+        //! @brief Constructor.
+        //! @param sources The number of sources.
+        PolarLines(size_t sources)
+        : m_number_of_sources(sources)
         {
-            m_values_old    = Signal<T>::alloc(m_number_of_sources * 2);
-            m_values_new    = Signal<T>::alloc(m_number_of_sources * 2);
-            m_values_step   = Signal<T>::alloc(m_number_of_sources * 2);
+            const auto size = m_number_of_sources * 2;
+            m_values_old = Signal<T>::alloc(size);
+            m_values_new = Signal<T>::alloc(size);
+            m_values_step = Signal<T>::alloc(size);
         }
 
-        //! The destructor.
-        /** The destructor free the memory.
-         */
+        //! @brief Destructor.
         ~PolarLines()
         {
             Signal<T>::free(m_values_old);
@@ -143,126 +127,109 @@ namespace hoa
             Signal<T>::free(m_values_step);
         }
 
-        //! Get the number of sources.
-        /** Get the number of sources.
-        @return The number of sources.
-         */
+        //! @brief Get the number of sources.
+        //! @return The number of sources.
         inline size_t getNumberOfSources() const noexcept
         {
             return m_number_of_sources;
         }
 
-        //! Get the ramp value.
-        /** Get the ramp value.
-        @return The ramp value.
-         */
+        //! @brief Get the ramp value.
+        //! @return The ramp value.
         inline size_t getRamp() const noexcept
         {
             return m_ramp;
         }
 
-        //! Get the radius of a source.
-        /** Get the radius of a source.
-        @param index    The index of the source.
-        @return The radius of a source.
-         */
-        inline T getRadius(const size_t index) const noexcept
+        //! @brief Get the radius of a source.
+        //! @param index    The index of the source.
+        //! @return The radius of a source.
+        inline T getRadius(const size_t index) const
         {
             return m_values_new[index];
         }
 
-        //! Get the azimuth of a source.
-        /** Get the azimuth of a source.
-        @param index    The index of the source.
-        @return The azimuth of a source.
-         */
-        inline T getAzimuth(const size_t index) const noexcept
+        //! @brief Get the azimuth of a source.
+        //! @param index The index of the source.
+        //! @return The azimuth of a source.
+        inline T getAzimuth(const size_t index) const
         {
-            return m_values_new[m_number_of_sources +index];
+            return m_values_new[m_number_of_sources + index];
         }
 
-        //! Set the ramp value.
-        /** Set the ramp value.
-        @param ramp    The new value of the ramp.
-         */
+        //! @brief Set the ramp value.
+        //! @param ramp The new value of the ramp.
         inline void setRamp(const size_t ramp) noexcept
         {
             m_ramp = std::max(ramp, (size_t)1);
         }
 
-        //! Set, linearly, the radius of a source.
-        /** Set, linearly, the radius of a source.
-        @param index    The index of the source.
-        @param radi    The new value of the radius.
-         */
-        inline void setRadius(const size_t index, const T radi) noexcept
+        //! @brief Set, linearly, the radius of a source.
+        //! @param index The index of the source.
+        //! @param radius The new value of the radius.
+        inline void setRadius(const size_t index, const T radius) noexcept
         {
-            m_values_new[index]  = radi;
+            m_values_new[index]  = radius;
             m_values_step[index] = (m_values_new[index] - m_values_old[index]) / (T)m_ramp;
             m_counter = 0;
         }
 
-        //! Set, linearly, the azimuth of a source.
-        /** Set, linearly, the azimuth of a source.
-        @param index    The index of the source.
-        @param azim     The new value of the azimuth.
-         */
-        inline void setAzimuth(const size_t index, const T azim) noexcept
+        //! @brief Set, linearly, the azimuth of a source.
+        //! @param index The index of the source.
+        //! @param azimuth The new value of the azimuth.
+        inline void setAzimuth(const size_t index, const T azimuth) noexcept
         {
-            m_values_new[index + m_number_of_sources] = wrap_twopi(azim);
-            m_values_old[index + m_number_of_sources] = wrap_twopi(m_values_old[index + m_number_of_sources]);
+            const auto idx = index + m_number_of_sources;
+            m_values_new[idx] = wrap_twopi(azimuth);
+            m_values_old[idx] = wrap_twopi(m_values_old[idx]);
 
             T distance;
-            if(m_values_old[index + m_number_of_sources] > m_values_new[index + m_number_of_sources])
-                distance = (m_values_old[index + m_number_of_sources] - m_values_new[index + m_number_of_sources]);
+            if(m_values_old[idx] > m_values_new[idx])
+                distance = (m_values_old[idx] - m_values_new[idx]);
             else
-                distance = (m_values_new[index + m_number_of_sources] - m_values_old[index + m_number_of_sources]);
+                distance = (m_values_new[idx] - m_values_old[idx]);
 
             if(distance <= HOA_PI)
             {
-                m_values_step[index + m_number_of_sources] = (m_values_new[index + m_number_of_sources] - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
+                m_values_step[idx] = (m_values_new[idx] - m_values_old[idx]) / (T)m_ramp;
             }
             else
             {
-                if(m_values_new[index + m_number_of_sources] > m_values_old[index + m_number_of_sources])
+                if(m_values_new[idx] > m_values_old[idx])
                 {
-                    m_values_step[index + m_number_of_sources] = ((m_values_new[index + m_number_of_sources] - HOA_2PI) - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
+                    m_values_step[idx] = ((m_values_new[idx] - HOA_2PI) - m_values_old[idx]) / (T)m_ramp;
                 }
                 else
                 {
-                    m_values_step[index + m_number_of_sources] = ((m_values_new[index + m_number_of_sources] + HOA_2PI) - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
+                    m_values_step[idx] = ((m_values_new[idx] + HOA_2PI) - m_values_old[idx]) / (T)m_ramp;
                 }
             }
+            
             m_counter = 0;
         }
 
-        //! Set, directly, the radius of a source.
-        /** Set, directly, the radius of a source.
-        @param index    The index of the source.
-        @param radi     The new value of the radius.
-         */
-        inline void setRadiusDirect(const size_t index, const T radi) noexcept
+        //! @brief Set, directly, the radius of a source.
+        //! @param index The index of the source.
+        //! @param radius The new value of the radius.
+        inline void setRadiusDirect(const size_t index, const T radius) noexcept
         {
-            m_values_old[index] = m_values_new[index] = radi;
+            m_values_old[index] = m_values_new[index] = radius;
             m_values_step[index] = 0.;
             m_counter = 0;
         }
 
-        //! Set, directly, the azimuth of a source.
-        /** Set, directly, the azimuth of a source.
-        @param index    The index of the source.
-        @param azim     The new value of the azimuth.
-         */
-        inline void setAzimuthDirect(size_t index, const T azim) noexcept
+        //! @brief Set, directly, the azimuth of a source.
+        //! @param index The index of the source.
+        //! @param azimuth The new value of the azimuth.
+        inline void setAzimuthDirect(size_t index, const T azimuth) noexcept
         {
-            m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azim;
-            m_values_step[index + m_number_of_sources] = 0.;
+            const auto idx = index + m_number_of_sources;
+            m_values_old[idx] = m_values_new[idx] = azimuth;
+            m_values_step[idx] = 0.;
             m_counter = 0;
         }
 
-        //! This method performs the count of the virtual points of the line.
-        /** This method performs the count of the virtual points of the line.
-         */
+        //! @brief This method performs the count of the virtual points of the line.
         void process(T* vector) noexcept
         {
             Signal<T>::add(m_number_of_sources * 2, m_values_step, m_values_old);
@@ -274,35 +241,38 @@ namespace hoa
             }
             Signal<T>::copy(m_number_of_sources * 2, m_values_old, vector);
         }
-    };
-
-    template <typename T> class PolarLines<Hoa3d, T>
-    {
-
+         
     private:
-        const size_t m_number_of_sources;
-        T*      m_values_old;
-        T*      m_values_new;
-        T*      m_values_step;
-        size_t   m_counter;
-        size_t   m_ramp;
+        
+         const size_t m_number_of_sources;
+         T* m_values_old = nullptr;
+         T* m_values_new = nullptr;
+         T* m_values_step = nullptr;
+         size_t m_counter = 0ul;
+         size_t m_ramp = 0ul;
+    };
+    
+    // ================================================================================ //
+    // POLAR LINE 3D //
+    // ================================================================================ //
 
+    template <typename T>
+    class PolarLines<Hoa3d, T>
+    {
     public:
-        //! The line constructor.
-        /**	The line constructor allocates and initialize the base classes.
-        @param numberOfSources  The number of sources.
-         */
-        PolarLines(size_t numberOfSources) noexcept :
-        m_number_of_sources(numberOfSources)
+        
+        //! @brief Constructor.
+        //! @param sources The number of sources.
+        PolarLines(size_t sources)
+        : m_number_of_sources(sources)
         {
-            m_values_old    = Signal<T>::alloc(m_number_of_sources * 3);
-            m_values_new    = Signal<T>::alloc(m_number_of_sources * 3);
-            m_values_step   = Signal<T>::alloc(m_number_of_sources * 3);
+            const auto size = m_number_of_sources * 3;
+            m_values_old    = Signal<T>::alloc(size);
+            m_values_new    = Signal<T>::alloc(size);
+            m_values_step   = Signal<T>::alloc(size);
         }
 
-        //! The destructor.
-        /** The destructor free the memory.
-         */
+        //! @brief Destructor.
         ~PolarLines()
         {
             Signal<T>::free(m_values_old);
@@ -310,182 +280,165 @@ namespace hoa
             Signal<T>::free(m_values_step);
         }
 
-        //! Get the number of sources.
-        /** Get the number of sources.
-        @return The number of sources.
-         */
+        //! @brief Get the number of sources.
+        //! @return The number of sources.
         inline size_t getNumberOfSources() const noexcept
         {
             return m_number_of_sources;
         }
 
-        //! Get the ramp value.
-        /** Get the ramp value.
-        @return The ramp value.
-         */
+        //! @brief Get the ramp value.
+        //! @return The ramp value.
         inline size_t getRamp() const noexcept
         {
             return m_ramp;
         }
 
-        //! Get the radius of a source.
-        /** Get the radius of a source.
-        @param index    The index of the source.
-        @return The radius of a source.
-         */
-        inline T getRadius(const size_t index) const noexcept
+        //! @brief Get the radius of a source.
+        //! @param index The index of the source.
+        //! @return The radius of a source.
+        inline T getRadius(const size_t index) const
         {
             return m_values_new[index];
         }
 
-        //! Get the azimuth of a source.
-        /** Get the azimuth of a source.
-        @param index    The index of the source.
-        @return The azimuth of a source.
-         */
-        inline T getAzimuth(const size_t index) const noexcept
+        //! @brief Get the azimuth of a source.
+        //! @param index The index of the source.
+        //! @return The azimuth of a source.
+        inline T getAzimuth(const size_t index) const
         {
             return m_values_new[m_number_of_sources + index];
         }
 
-        //! Get the elevation of a source.
-        /** Get the elevation of a source.
-        @param index    The index of the source.
-        @return The elevation of a source.
-         */
-        inline T getElevation(const size_t index) const noexcept
+        //! @brief Get the elevation of a source.
+        //! @param index The index of the source.
+        //! @return The elevation of a source.
+        inline T getElevation(const size_t index) const
         {
             return m_values_new[m_number_of_sources * 2 + index];
         }
 
-        //! Set the ramp value.
-        /** Set the ramp value.
-        @param ramp    The new value of the ramp.
-         */
+        //! @brief Set the ramp value.
+        //! @param ramp The new value of the ramp.
         inline void setRamp(const size_t ramp) noexcept
         {
             m_ramp = std::max(ramp, (size_t)1);
         }
 
-        //! Set, linearly, the radius of a source.
-        /** Set, linearly, the radius of a source.
-        @param index    The index of the source.
-        @param radi     The new value of the radius.
-         */
-        inline void setRadius(const size_t index, const T radi) noexcept
+        //! @brief Set, linearly, the radius of a source.
+        //! @param index The index of the source.
+        //! @param radius The new value of the radius.
+        inline void setRadius(const size_t index, const T radius)
         {
-            m_values_new[index]  = radi;
+            m_values_new[index]  = radius;
             m_values_step[index] = (m_values_new[index] - m_values_old[index]) / (T)m_ramp;
             m_counter = 0;
         }
 
-        //! Set, linearly, the azimuth of a source.
-        /** Set, linearly, the azimuth of a source.
-        @param index    The index of the source.
-        @param azim     The new value of the azimuth.
-         */
-        inline void setAzimuth(const size_t index, const T azim) noexcept
+        //! @brief Set, linearly, the azimuth of a source.
+        //! @param index The index of the source.
+        //! @param azimuth The new value of the azimuth.
+        inline void setAzimuth(const size_t index, const T azimuth)
         {
-            m_values_new[index + m_number_of_sources] = wrap_twopi(azim);
-            m_values_old[index + m_number_of_sources] = wrap_twopi(m_values_old[index + m_number_of_sources]);
+            const auto idx = index + m_number_of_sources;
+            m_values_new[idx] = wrap_twopi(azimuth);
+            m_values_old[idx] = wrap_twopi(m_values_old[idx]);
 
             T distance;
-            if(m_values_old[index + m_number_of_sources] > m_values_new[index + m_number_of_sources])
-                distance = (m_values_old[index + m_number_of_sources] - m_values_new[index + m_number_of_sources]);
+            if(m_values_old[idx] > m_values_new[idx])
+            {
+                distance = (m_values_old[idx] - m_values_new[idx]);
+            }
+            else
+            {
+                distance = (m_values_new[idx] - m_values_old[idx]);
+            }
+            
+            if(distance <= HOA_PI)
+            {
+                m_values_step[idx] = (m_values_new[idx] - m_values_old[idx]) / (T)m_ramp;
+            }
+            else
+            {
+                if(m_values_new[idx] > m_values_old[idx])
+                {
+                    m_values_step[idx] = ((m_values_new[idx] - HOA_2PI) - m_values_old[idx]) / (T)m_ramp;
+                }
                 else
-                    distance = (m_values_new[index + m_number_of_sources] - m_values_old[index + m_number_of_sources]);
-
-                    if(distance <= HOA_PI)
-                    {
-                        m_values_step[index + m_number_of_sources] = (m_values_new[index + m_number_of_sources] - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
-                    }
-                    else
-                    {
-                        if(m_values_new[index + m_number_of_sources] > m_values_old[index + m_number_of_sources])
-                        {
-                            m_values_step[index + m_number_of_sources] = ((m_values_new[index + m_number_of_sources] - HOA_2PI) - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
-                        }
-                        else
-                        {
-                            m_values_step[index + m_number_of_sources] = ((m_values_new[index + m_number_of_sources] + HOA_2PI) - m_values_old[index + m_number_of_sources]) / (T)m_ramp;
-                        }
-                    }
+                {
+                    m_values_step[idx] = ((m_values_new[idx] + HOA_2PI) - m_values_old[idx]) / (T)m_ramp;
+                }
+            }
+            
             m_counter = 0;
         }
 
-        //! Set, linearly, the elevation of a source.
-        /** Set, linearly, the elevation of a source.
-        @param index    The index of the source.
-        @param elev     The new value of the elevation.
-         */
-        inline void setElevation(const size_t index, const T elev) noexcept
+        //! @brief Set, linearly, the elevation of a source.
+        //! @param index The index of the source.
+        //! @param elevation The new value of the elevation.
+        inline void setElevation(const size_t index, const T elevation)
         {
-            m_values_new[index + m_number_of_sources * 2] = wrap_pi(elev);
-            m_values_old[index + m_number_of_sources * 2] = wrap_pi(m_values_old[index + m_number_of_sources * 2]);
+            const auto idx = index + m_number_of_sources * 2;
+            m_values_new[idx] = wrap_pi(elevation);
+            m_values_old[idx] = wrap_pi(m_values_old[idx]);
 
             T distance;
-            if(m_values_old[index + m_number_of_sources * 2] > m_values_new[index + m_number_of_sources * 2])
-                distance = (m_values_old[index + m_number_of_sources * 2] - m_values_new[index + m_number_of_sources * 2]);
+            if(m_values_old[idx] > m_values_new[idx])
+                distance = (m_values_old[idx] - m_values_new[idx]);
             else
-                distance = (m_values_new[index + m_number_of_sources * 2] - m_values_old[index + m_number_of_sources * 2]);
+                distance = (m_values_new[idx] - m_values_old[idx]);
 
             if(distance <= HOA_PI)
             {
-                m_values_step[index + m_number_of_sources * 2] = (m_values_new[index + m_number_of_sources * 2] - m_values_old[index + m_number_of_sources * 2]) / (T)m_ramp;
+                m_values_step[idx] = (m_values_new[idx] - m_values_old[idx]) / (T)m_ramp;
             }
             else
             {
-                if(m_values_new[index + m_number_of_sources * 2] > m_values_old[index + m_number_of_sources * 2])
+                if(m_values_new[idx] > m_values_old[idx])
                 {
-                    m_values_step[index + m_number_of_sources * 2] = ((m_values_new[index + m_number_of_sources * 2] - HOA_2PI) - m_values_old[index + m_number_of_sources * 2]) / (T)m_ramp;
+                    m_values_step[idx] = ((m_values_new[idx] - HOA_2PI) - m_values_old[idx]) / (T)m_ramp;
                 }
                 else
                 {
-                    m_values_step[index + m_number_of_sources * 2] = ((m_values_new[index + m_number_of_sources * 2] + HOA_2PI) - m_values_old[index + m_number_of_sources * 2]) / (T)m_ramp;
+                    m_values_step[idx] = ((m_values_new[idx] + HOA_2PI) - m_values_old[idx]) / (T)m_ramp;
                 }
             }
             m_counter = 0;
         }
 
-        //! Set, directly, the radius of a source.
-        /** Set, directly, the radius of a source.
-        @param index    The index of the source.
-        @param radi    The new value of the radius.
-         */
-        inline void setRadiusDirect(const size_t index, const T radi) noexcept
+        //! @brief Set, directly, the radius of a source.
+        //! @param index The index of the source.
+        //! @param radius The new value of the radius.
+        inline void setRadiusDirect(const size_t index, const T radius) noexcept
         {
-            m_values_old[index] = m_values_new[index] = radi;
+            m_values_old[index] = m_values_new[index] = radius;
             m_values_step[index] = 0.;
             m_counter = 0;
         }
 
-        //! Set, directly, the azimuth of a source.
-        /** Set, directly, the azimuth of a source.
-        @param index    The index of the source.
-        @param azim     The new value of the azimuth.
-         */
-        inline void setAzimuthDirect(const size_t index, const T azim) noexcept
+        //! @brief Set, directly, the azimuth of a source.
+        //! @param index    The index of the source.
+        //! @param azimuth     The new value of the azimuth.
+        inline void setAzimuthDirect(const size_t index, const T azimuth) noexcept
         {
-            m_values_old[index + m_number_of_sources] = m_values_new[index + m_number_of_sources] = azim;
-            m_values_step[index + m_number_of_sources] = 0.;
+            const size_t idx = index + m_number_of_sources;
+            m_values_old[idx] = m_values_new[idx] = azimuth;
+            m_values_step[idx] = 0.;
             m_counter = 0;
         }
 
-        //! Set, directly, the elevation of a source.
-        /** Set, directly, the elevation of a source.
-        @param index    The index of the source.
-        @param elev     The new value of the elevation.
-         */
-        inline void setElevationDirect(const size_t index, const T elev) noexcept
+        //! @brief Set, directly, the elevation of a source.
+        //! @param index The index of the source.
+        //! @param elevation The new value of the elevation.
+        inline void setElevationDirect(const size_t index, const T elevation) noexcept
         {
-            m_values_old[index + m_number_of_sources * 2] = m_values_new[index + m_number_of_sources * 2] = elev;
-            m_values_step[index + m_number_of_sources * 2] = 0.;
+            const size_t idx = index + m_number_of_sources * 2;
+            m_values_old[idx] = m_values_new[idx] = elevation;
+            m_values_step[idx] = 0.;
             m_counter = 0;
         }
 
-        //! This method performs the count of the virtual points of the line.
-        /** This method performs the count of the virtual points of the line.
-         */
+        //! @brief This method performs the count of the virtual points of the line.
         void process(T* vector) noexcept
         {
             Signal<T>::add(m_number_of_sources * 3, m_values_step, m_values_old);
@@ -499,6 +452,7 @@ namespace hoa
         }
         
     private:
+        
         static inline T wrap_twopi(T value)
         {
             while(value < static_cast<T>(0.)) {
@@ -509,5 +463,14 @@ namespace hoa
             }
             return value;
         }
+        
+    private:
+        
+        const size_t m_number_of_sources;
+        T* m_values_old = nullptr;
+        T* m_values_new = nullptr;
+        T* m_values_step = nullptr;
+        size_t m_counter = 0ul;
+        size_t m_ramp = 0ul;
     };
 }

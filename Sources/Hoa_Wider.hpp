@@ -15,6 +15,10 @@
 
 namespace hoa
 {
+    // ================================================================================ //
+    // WIDER //
+    // ================================================================================ //
+    
     //! @brief The class widens the propagation of the sounds in a sound field.
     //! @details The class simulates fractional orders of decomposition to reduce the
     //! precision of the sound field. When the factor of widening is \f$0\f$ sound field, only
@@ -26,25 +30,29 @@ namespace hoa
     //! \f[W_{l,m}(x) = x^l((1-x)(N-l)+1)\f]<br>
     //! with \f$N\f$ the order of decomposition, \f$l\f$ the degree, \f$m\f$ the
     //! azimuthal order and \f$x\f$ the factor of widening.
-    template <Dimension D, typename T> class Wider : public ProcessorHarmonics<D, T>
+    template <Dimension D, typename T>
+    class Wider
+    : public ProcessorHarmonics<D, T>
     {
     public:
-
-        //! @brief The constructor.
+        
+        //! @brief Constructor.
         //! @param order The order of decomposition.
-        Wider(const size_t order) : ProcessorHarmonics<D, T>(order),
-        m_coeffs(order + 1)
+        Wider(const size_t order)
+        : ProcessorHarmonics<D, T>(order)
+        , m_coeffs(order + 1)
         {
             setWidening(1.);
         }
 
-        //! @brief The destructor.
-        inline ~Wider() {}
+        //! @brief Destructor.
+        ~Wider() = default;
 
         //! @brief This method set factor of widening.
         //! @param value The factor of widening.
-        inline void setWidening(const T value) noexcept {
-            m_widening = std::max(std::min(value, T(1)), T(0));
+        inline void setWidening(const T value) noexcept
+        {
+            m_widening = std::max(std::min(value, T(1.)), T(0.));
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
             const T      temp   = T(1) - m_widening;
             T* coeff            = m_coeffs.data();
@@ -82,7 +90,8 @@ namespace hoa
         }
         
     private:
-        T   m_widening;
-        std::vector<T> m_coeffs;
+        
+        T m_widening = 0.;
+        std::vector<T> m_coeffs {};
     };
 }

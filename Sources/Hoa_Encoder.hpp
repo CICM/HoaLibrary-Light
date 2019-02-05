@@ -15,7 +15,10 @@
 
 namespace hoa
 {
-
+    // ================================================================================ //
+    // ENCODER //
+    // ================================================================================ //
+    
     //! @brief The class encodes a signal into the harmonics domain depending on coodinates.
     //! @details The class generates the signals associated to the harmonics \f$Y_{l,m}\f$
     //! according to a radius \f$\rho\f$, an azimuth \f$\theta\f$ and an elevation \f$\varphi\f$.<br>
@@ -62,29 +65,33 @@ namespace hoa
     //! \f[k_{l, m} = 1\f]
     //! else
     //! \f[k_{l, m} = \sqrt{\frac{(l - \left|m\right|)!}{(l + \left|m\right|)!}}\sqrt{2} \f]
-    template <Dimension D, typename T> class Encoder : public ProcessorHarmonics<D, T>
+    template <Dimension D, typename T>
+    class Encoder
+    : public ProcessorHarmonics<D, T>
     {
     public:
 
-        //! @brief The constructor.
+        //! @brief Constructor.
         //! @param order The order of decomposition.
-        Encoder(const size_t order) : ProcessorHarmonics<D, T>(order),
-        m_radius_coeffs(order+1),
-        m_azimuth_coeffs(order*2+1+2),
-        m_elevation_coeffs(((order + 1) * (order + 1)) / 2 + (order + 1)+3),
-        m_normalization_coeffs(ProcessorHarmonics<D, T>::getNumberOfHarmonics())
+        Encoder(const size_t order)
+        : ProcessorHarmonics<D, T>(order)
+        , m_radius_coeffs(order+1)
+        , m_azimuth_coeffs(order*2+1+2)
+        , m_elevation_coeffs(((order + 1) * (order + 1)) / 2 + (order + 1)+3)
+        , m_normalization_coeffs(ProcessorHarmonics<D, T>::getNumberOfHarmonics())
         {
             setRadius(1.);
             setAzimuth(0.);
             setElevation(0.);
+            
             for(size_t i = 0; i < ProcessorHarmonics<D, T>::getNumberOfHarmonics(); ++i)
             {
                 m_normalization_coeffs[i] = ProcessorHarmonics<D, T>::getHarmonicSemiNormalization(i) * std::pow(static_cast<T>(-1), static_cast<T>(ProcessorHarmonics<D, T>::getHarmonicOrder(i)));
             }
         }
 
-        //! The destructor.
-        inline ~Encoder() noexcept {}
+        //! Destructor.
+        ~Encoder() = default;
         
         //! @brief Returns the radius.
         inline T getRadius() const noexcept { return m_radius; }
@@ -99,7 +106,8 @@ namespace hoa
         //! @param radius The new radius.
         //! @param azimuth The new azimuth.
         //! @param elevation The new elevation.
-        inline void setCoordinates(const T radius, const T azimuth, const T elevation) noexcept {
+        inline void setCoordinates(const T radius, const T azimuth, const T elevation) noexcept
+        {
             setRadius(radius);
             setAzimuth(azimuth);
             setElevation(elevation);
@@ -107,7 +115,8 @@ namespace hoa
         
         //! @brief Sets the radius.
         //! @param radius The new radius.
-        void setRadius(const T radius) noexcept {
+        void setRadius(const T radius) noexcept
+        {
             m_radius = std::max(radius, static_cast<T>(0));
             if(m_radius >= 1)
             {
@@ -117,11 +126,13 @@ namespace hoa
             {
                 const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
                 const T widening    = m_radius;
-                const T temp        = 1 - widening;
+                const T temp        = 1. - widening;
                 T* coeff            = m_radius_coeffs.data();
                 (*coeff++) = static_cast<T>(order) * temp + static_cast<T>(1);
-                for(size_t i = 1; i <= order; ++i) {
-                    (*coeff++) = std::pow(widening, static_cast<T>(i)) * (temp * static_cast<T>(order - i) + static_cast<T>(1.));
+                for(size_t i = 1; i <= order; ++i)
+                {
+                    (*coeff++) = (std::pow(widening, static_cast<T>(i))
+                                  * (temp * static_cast<T>(order - i) + static_cast<T>(1.)));
                 }
             }
             
@@ -129,7 +140,8 @@ namespace hoa
         
         //! @brief Sets the azimuth.
         //! @param azimuth The new azimuth.
-        void setAzimuth(const T azimuth) noexcept {
+        void setAzimuth(const T azimuth) noexcept
+        {
             m_azimuth   = wrap_twopi(azimuth);
             T* coeffs   = m_azimuth_coeffs.data();
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
@@ -175,7 +187,8 @@ namespace hoa
         
         //! @brief Sets the elevation.
         //! @param elevation The new elevation.
-        void setElevation(const T elevation) noexcept {
+        void setElevation(const T elevation) noexcept
+        {
             m_elevation = wrap_pi(elevation);
             const size_t order = ProcessorHarmonics<D, T>::getDecompositionOrder();
             const T _x      = std::sin(elevation);
@@ -302,14 +315,6 @@ namespace hoa
         
     private:
 
-        T   m_radius;
-        T   m_azimuth;
-        T   m_elevation;
-        std::vector<T>  m_radius_coeffs;
-        std::vector<T>  m_azimuth_coeffs;
-        std::vector<T>  m_elevation_coeffs;
-        std::vector<T>  m_normalization_coeffs;
-        
         static inline T wrap_pi(T value)
         {
             while(value < static_cast<T>(-HOA_PI)) {
@@ -331,5 +336,15 @@ namespace hoa
             }
             return value;
         }
+        
+    private:
+        
+        T m_radius = 0.;
+        T m_azimuth = 0.;
+        T m_elevation = 0.;
+        std::vector<T> m_radius_coeffs {};
+        std::vector<T> m_azimuth_coeffs {};
+        std::vector<T> m_elevation_coeffs {};
+        std::vector<T> m_normalization_coeffs {};
     };
 }

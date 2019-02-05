@@ -15,13 +15,19 @@
 
 namespace hoa
 {
-    template <Dimension D, typename T> class ProcessorPlanewaves;
+    // ================================================================================ //
+    // PLANEWAVE //
+    // ================================================================================ //
+    
+    template <Dimension D, typename T>
+    class ProcessorPlanewaves;
     
     //! @brief The class owns basic plane waves informations.
     //! @details The class allows to retrieves several informations about the plane waves: the
     //! the polar coordinates, azimuth and the elevation and cartesian coodinates,  abscissa,
     //! the ordinate and the height.
-    template<Dimension D, typename T> class Planewave
+    template<Dimension D, typename T>
+    class Planewave
     {
     public:
 
@@ -29,21 +35,27 @@ namespace hoa
         //! @param index       The index must be at least 1.
         //! @param azimuth     The azimuth \f$\theta\f$.
         //! @param elevation   The elevation \f$\varphi\f$.
-        Planewave(size_t index, T azimuth, T elevation) noexcept :
-        m_index(index), m_azimuth(wrap_twopi(azimuth)), m_elevation(wrap_pi(elevation)) {}
+        Planewave(size_t index, T azimuth, T elevation) noexcept
+        : m_index(index)
+        , m_azimuth(wrap_twopi(azimuth))
+        , m_elevation(wrap_pi(elevation))
+        {}
 
         //! @brief The plane wave cartesian constructor.
         //! @param index       The index must be at least 1.
         //! @param abscissa    The abscissa \f$x\f$.
         //! @param ordinate    The ordinate \f$y\f$.
         //! @param height      The height \f$z\f$.
-        Planewave(size_t index, T abscissa, T ordinate, T height) noexcept :
-        m_index(index), m_azimuth(xyz2azimuth(abscissa, ordinate, height)), m_elevation(xyz2elevation(abscissa, ordinate, height)) {}
+        Planewave(size_t index, T abscissa, T ordinate, T height) noexcept
+        : Planewave(index,
+                    xyz2azimuth(abscissa, ordinate, height),
+                    xyz2elevation(abscissa, ordinate, height))
+        {}
 
-        //! @brief The plane wave destructor.
+        //! @brief Destructor.
 		virtual ~Planewave() noexcept {}
 
-        //! Returns the index of the plane wave.
+        //! @brief Returns the index of the plane wave.
         inline size_t getIndex() const noexcept { return m_index; }
 
         //! @brief Returns the azimuth of the planewave.
@@ -70,38 +82,57 @@ namespace hoa
         inline void setElevation(const T elevation) noexcept { m_elevation = wrap_pi(elevation); }
 
         //! @brief Returns the name of the plane wave.
-        virtual std::string getName() const noexcept {
+        virtual std::string getName() const noexcept
+        {
             std::ostringstream ostr;
             ostr <<  "Planewave " << getIndex() << " " << (m_azimuth / HOA_2PI * 360.) << "°";
-            if(D == Hoa3d) {
-                ostr << " " << (m_elevation / HOA_2PI * 360.) << "°"; }
+            if(D == Hoa3d)
+            {
+                ostr << " " << (m_elevation / HOA_2PI * 360.) << "°";
+            }
+            
             return ostr.str();
         }
         
         //! @brief Compares the azimuth of two plane waves.
-        static bool compare_azimuth(Planewave const& i, Planewave const& j) noexcept { return i.m_azimuth < j.m_azimuth; }
+        static bool compare_azimuth(Planewave const& i, Planewave const& j) noexcept
+        {
+            return i.m_azimuth < j.m_azimuth;
+        }
         
     private:
+        
         friend class ProcessorPlanewaves<D, T>;
         
-        static inline T xyz2azimuth(const T x, const T y, const T z = 0.) {
+        static inline T xyz2azimuth(const T x, const T y, const T z = 0.)
+        {
             hoa_unused(z);
-            return (x == T(0) && y == T(0)) ? T(0) : wrap_twopi(atan2(y, x) - HOA_PI2); }
+            return (x == T(0) && y == T(0)) ? T(0) : wrap_twopi(atan2(y, x) - HOA_PI2);
+        }
         
-        static inline T xyz2elevation(const T x, const T y, const T z = 0.) {
-            return (z == T(0)) ? T(0) : wrap_pi(asin(z / sqrt(x*x + y*y + z*z))); }
+        static inline T xyz2elevation(const T x, const T y, const T z = 0.)
+        {
+            return (z == T(0)) ? T(0) : wrap_pi(asin(z / sqrt(x*x + y*y + z*z)));
+        }
         
-        static inline T ae2abscissa(const T a, const T e) {
-            return std::cos(a + T(HOA_PI2)) * std::cos(e); }
+        static inline T ae2abscissa(const T a, const T e)
+        {
+            return std::cos(a + T(HOA_PI2)) * std::cos(e);
+        }
         
-        static inline T ae2ordinate(const T a, const T e) {
-            return std::sin(a + T(HOA_PI2)) * std::cos(e); }
+        static inline T ae2ordinate(const T a, const T e)
+        {
+            return std::sin(a + T(HOA_PI2)) * std::cos(e);
+        }
         
-        static inline T ae2height(const T a, const T e) {
+        static inline T ae2height(const T a, const T e)
+        {
             hoa_unused(a);
-            return std::sin(e); }
+            return std::sin(e);
+        }
         
-        static inline T wrap_pi(T const value) {
+        static inline T wrap_pi(T const value)
+        {
             if(value < T(-HOA_PI))
                 return value + T(HOA_2PI);
             else if(value >= T(HOA_PI))
@@ -109,7 +140,8 @@ namespace hoa
             return value;
         }
         
-        static inline T wrap_twopi(T const value) {
+        static inline T wrap_twopi(T const value)
+        {
             if(value < 0.)
                 return value + T(HOA_2PI);
             else if(value >= T(HOA_2PI))
@@ -144,9 +176,10 @@ namespace hoa
             // zz
         }
         
+    private:
         
-        size_t  m_index;
-        T       m_azimuth;
-        T       m_elevation;
+        size_t  m_index = 0ul;
+        T       m_azimuth = 0.;
+        T       m_elevation = 0.;
     };
 }

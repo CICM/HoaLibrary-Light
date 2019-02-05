@@ -15,21 +15,25 @@
 
 namespace hoa
 {
+    // ================================================================================ //
+    // HARMONIC //
+    // ================================================================================ //
+    
     //! @brief The class owns basic harmonics informations.
     //! @details The class allows to retrieves several informations about the harmonics: the
     //! numbering (ACN), the normalization (SN3D/N3D), the degree, the aziumthal order, etc.
-    template<Dimension D, typename T> class Harmonic
+    template<Dimension D, typename T>
+    class Harmonic
     {
-    private:
-        size_t m_index;
-        size_t m_degree;
-        long   m_order;
     public:
 
         //! @brief The harmonic constructor.
         //! @param index    The index must be at least 1.
-        inline Harmonic(const size_t index) noexcept :
-        m_index(index), m_degree(getDegree(index)), m_order(getOrder(index)) {}
+        inline Harmonic(const size_t index) noexcept
+        : m_index(index)
+        , m_degree(getDegree(index))
+        , m_order(getOrder(index))
+        {}
 
         //! @brief The harmonic destructor.
         inline ~Harmonic() noexcept {}
@@ -92,8 +96,10 @@ namespace hoa
         //! @details The computation is \f$(degree\neq0)+1\f$ in 2D and \f$2l+1\f$ in 3D.
         //! with \f$l\f$ the degree.
         //! @param degree  The degree.
-        static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) noexcept {
-            return (D == Hoa2d) ? ((degree != 0) + 1) : (degree * 2 + 1); }
+        static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) noexcept
+        {
+            return (D == Hoa2d) ? ((degree != 0) + 1) : (degree * 2 + 1);
+        }
 
         //! @brief Returns the normalization N3D or N2D of an harmonic.
         //! @details The semi-normalization \f$k^{n2d}_{l, m}\f$ and \f$k^{n3d}_{l, m}\f$
@@ -103,20 +109,27 @@ namespace hoa
         //! with\f$l\f$ the degree, \f$m\f$ the azimuthal order,
         //! @param degree  The degree of the harmonic.
         //! @param order   The order of the harmonic.
-        static inline T getNormalization(const size_t degree, const long order) noexcept {
-            return (D == Hoa2d) ? 1. : (getSemiNormalization(degree, order) * T(sqrt(T(2.) * T(degree) + T(1.)))); }
+        static inline T getNormalization(const size_t degree, const long order) noexcept
+        {
+            return (D == Hoa2d) ? 1. : (getSemiNormalization(degree, order) * T(sqrt(T(2.) * T(degree) + T(1.))));
+        }
 
         //! @brief Returns the semi-normalization of an harmonic.
         //! @param degree  The degree of the harmonic.
         //! @param order   The order of the harmonic.
-        static T getSemiNormalization(const size_t degree, const long order) noexcept {
-            if(D == Hoa2d) {
-                return 1.; }
+        static T getSemiNormalization(const size_t degree, const long order) noexcept
+        {
+            if(D == Hoa2d)
+                return 1.;
+            
             const long double fac1 = hfactorial(long(degree) - long(std::abs(order)));
             const long double fac2 = hfactorial(long(degree) + long(std::abs(order)));
-            return std::sqrt(static_cast<T>(bool(order == 0) ? 1. : 2.) * static_cast<T>(fac1 / fac2)); }
+            
+            return std::sqrt(static_cast<T>(bool(order == 0) ? 1. : 2.) * static_cast<T>(fac1 / fac2));
+        }
         
     private:
+        
         static inline long double hfactorial(long n)
         {
             long double result = n;
@@ -127,5 +140,11 @@ namespace hoa
             
             return result;
         }
+        
+    private:
+        
+        size_t m_index;
+        size_t m_degree;
+        long   m_order;
     };    
 }

@@ -11,10 +11,10 @@
 
 #pragma once
 
-// Order of Decompistion : 5
-// Number of Harmonics   : 11
-// Size of the Responses : 512
-// Size of the matrics   : 5632
+// Order of Decomposition : 5
+// Number of Harmonics    : 11
+// Size of the Responses  : 512
+// Size of the matrices   : 5632
 
 namespace hoa
 {

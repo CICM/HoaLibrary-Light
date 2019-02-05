@@ -17,13 +17,18 @@
 
 namespace hoa
 {
+    // ================================================================================ //
+    // PROCESSOR //
+    // ================================================================================ //
+    
     //! @brief The processor.
     //! @details The processor the performs digital signal processing.
-    template <Dimension D, typename T> class Processor
+    template <Dimension D, typename T>
+    class Processor
     {
     public:
-        //! @brief The destructor.
-        virtual ~Processor() noexcept {}
+        //! @brief Destructor.
+        virtual ~Processor() = default;
         
         //! @brief The pure virtual method performs that performs the digital signal processing.
         //! @param inputs  The inputs array.
@@ -32,14 +37,20 @@ namespace hoa
         {
             hoa_unused(inputs);
             hoa_unused(outputs);
-            assert(0 && "Nothing should never it this");
+            
+            assert(0 && "This method must be overriden");
         }
     };
-
+    
+    // ================================================================================ //
+    // PROCESSOR HARMONICS //
+    // ================================================================================ //
     
     //! @brief The harmonic processor.
     //! @details The harmonic processor owns a set of harmonics depending on the order of decomposition.
-    template <Dimension D, typename T> class ProcessorHarmonics : virtual public Processor<D, T>
+    template <Dimension D, typename T>
+    class ProcessorHarmonics
+    : virtual public Processor<D, T>
     {
     public:
 
@@ -50,7 +61,7 @@ namespace hoa
         m_harmonics(createVector(order)) {}
 
         //! @brief The harmonics destructor.
-        virtual ~ProcessorHarmonics() noexcept {}
+        virtual ~ProcessorHarmonics() = default;
 
         //! @brief Returns the order of decomposition.
         inline size_t getDecompositionOrder() const noexcept { return m_order_of_decomposition; }
@@ -102,59 +113,34 @@ namespace hoa
             return harmonics;
         }
     };
-
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    // ================================================================================ //
+    // PROCESSOR PLANEWAVES //
+    // ================================================================================ //
 
     //! @brief The planewaves processor.
     //! @details The planewaves processor owns a set of planewaves.
-    template <Dimension D, typename T> class ProcessorPlanewaves : virtual public Processor<D, T>
+    template <Dimension D, typename T>
+    class ProcessorPlanewaves
+    : virtual public Processor<D, T>
     {
     public:
+        
         //! @brief The planewaves constructor.
         //! @param nplws The number of planewaves.
-        ProcessorPlanewaves(const size_t nplws) noexcept :
-        m_rotation_z(0.), m_rotation_y(0.), m_rotation_x(0.)
+        ProcessorPlanewaves(const size_t nplws)
         {
             if(D == Hoa2d) {
                 generateCicle(nplws);
             }
             else
             {
-                if(nplws == 4) {
-                    generateTetrahedron();
-                }
-                else if(nplws == 6) {
-                    generateOctahedron();
-                }
-                else if(nplws == 8) {
-                    generateHexahedron();
-                }
-                else if(nplws == 12) {
-                    generateIcosahedron();
-                }
-                else if(nplws == 20) {
-                    generateDodecahedron();
-                }
-                else {
-                    generatePolyhedron(nplws);
-                }
+                if(nplws == 4)          { generateTetrahedron(); }
+                else if(nplws == 6)     { generateOctahedron(); }
+                else if(nplws == 8)     { generateHexahedron(); }
+                else if(nplws == 12)    { generateIcosahedron(); }
+                else if(nplws == 20)    { generateDodecahedron(); }
+                else                    { generatePolyhedron(nplws); }
             }
         }
 
@@ -289,14 +275,13 @@ namespace hoa
         //! @brief Retruns the name for a planewave.
         //! @details The a name for a planewave is in a std::string format that will be
         //! "Planewave index azimuth (in degrees)".
-        //!  @param     index	The index of a planewave.
-        inline std::string getPlanewaveName(const size_t index) const noexcept {
-            return m_planewaves[index].getName(); }
+        //!  @param index The index of a planewave.
+        inline std::string getPlanewaveName(const size_t index) const noexcept
+        {
+            return m_planewaves[index].getName();
+        }
+        
     private:
-        std::vector<Planewave<D, T> >   m_planewaves;
-        T                               m_rotation_z;
-        T                               m_rotation_y;
-        T                               m_rotation_x;
 
         void generateCicle(size_t nplws) noexcept
         {
@@ -395,5 +380,12 @@ namespace hoa
                 }
             }
         }
+        
+    private:
+        
+        std::vector<Planewave<D, T>> m_planewaves {};
+        T m_rotation_z = 0.;
+        T m_rotation_y = 0.;
+        T m_rotation_x = 0.;
     };
 }

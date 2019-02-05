@@ -15,6 +15,10 @@
 
 namespace hoa
 {
+    // ================================================================================ //
+    // OPTIM //
+    // ================================================================================ //
+    
     //! @brief The class optimizes the ambisonic sound field for several restitution systems.
     //! @details The class should be used to optimize the ambisonic sound field. There are 3
     //! optimizations, basic (no optimization), max-re (energy vector optimization) and
@@ -36,7 +40,9 @@ namespace hoa
     //! azimuthal order.
     //! Note that the optimizations decrease the precision of the sound field restitution thus
     //! it can be compared to particular cases of the fractional orders.
-    template <Dimension D, typename T> class Optim : public ProcessorHarmonics<D, T>
+    template <Dimension D, typename T>
+    class Optim
+    : public ProcessorHarmonics<D, T>
     {
     public:
         
@@ -51,11 +57,14 @@ namespace hoa
 
         //! @brief The constructor.
         //! @param order The order of decomposition.
-        Optim(size_t order) noexcept : ProcessorHarmonics<D, T>(order),
-        m_weights(Signal<T>::alloc(ProcessorHarmonics<D, T>::getNumberOfHarmonics()))
-        { setMode(InPhase); }
+        Optim(size_t order) noexcept
+        : ProcessorHarmonics<D, T>(order)
+        , m_weights(Signal<T>::alloc(ProcessorHarmonics<D, T>::getNumberOfHarmonics()))
+        {
+            setMode(InPhase);
+        }
 
-        //! @brief The destructor.
+        //! @brief Destructor.
 		~Optim() noexcept { Signal<T>::free(m_weights); }
         
         //! @brief Returns the current optimization mode.
@@ -120,6 +129,7 @@ namespace hoa
                 outputs[0] = inputs[0] * weights[0];
             }
         }
+        
     protected:
         
         static inline long double ofactorial(long n)
