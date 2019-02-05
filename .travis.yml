@@ -15,11 +15,9 @@ matrix:
       compiler: gcc
       addons:
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: [g++-4.9, 'python-pip', 'python-yaml']
+          packages: ['python-pip', 'python-yaml']
       install:
         - pip install --user cpp-coveralls
-        - export CXX=g++-4.9 # make sure CXX is correctly set
       script:
           - mkdir build && cd build
           - cmake -DGCOV_SUPPORT=On ..
@@ -33,50 +31,21 @@ matrix:
 
     - os: linux
       compiler: gcc
-      addons:
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: [g++-4.9]
-      install:
-        - export CXX=g++-4.9 # make sure CXX is correctly set
-      script:
-        - mkdir build && cd build
-        - cmake ..
-        - cmake --build .
-        - cd ../
-        - ./build/hoatest
-      env:
-        - Libs and Tests
 
     - os: linux
       compiler: clang
-      script:
-        - mkdir build && cd build
-        - cmake ..
-        - cmake --build .
-        - cd ../
-        - ./build/hoatest
-      env:
-        - Libs and Tests
 
     - os: osx
       compiler: gcc
-      script:
-        - mkdir build && cd build
-        - cmake ..
-        - cmake --build .
-        - cd ../
-        - ./build/hoatest
-      env:
-        - Libs and Tests
 
     - os: osx
       compiler: clang
-      script:
-        - mkdir build && cd build
-        - cmake ..
-        - cmake --build .
-        - cd ../
-        - ./build/hoatest
-      env:
-        - Libs and Tests
+
+    script:
+      - mkdir build && cd build
+      - cmake ..
+      - cmake --build .
+      - cd ../
+      - ./build/hoatest
+    env:
+      - Libs and Tests
