@@ -56,9 +56,10 @@ namespace hoa
 
         //! @brief The harmonics constructor.
         //! @param order The order of decomposition, must be at least 1.
-        ProcessorHarmonics(const size_t order) noexcept :
-        m_order_of_decomposition(order),
-        m_harmonics(createVector(order)) {}
+        ProcessorHarmonics(const size_t order) noexcept
+        : m_order_of_decomposition(order)
+        , m_harmonics(createVector(order))
+        {}
 
         //! @brief The harmonics destructor.
         virtual ~ProcessorHarmonics() = default;
@@ -71,47 +72,63 @@ namespace hoa
 
         //! @brief Returns the degree of an harmonic.
         //! @param index The index of an harmonic.
-        inline size_t getHarmonicDegree(const size_t index) const noexcept {
-            return m_harmonics[index].getDegree(); }
+        inline size_t getHarmonicDegree(const size_t index) const
+        {
+            return m_harmonics[index].getDegree();
+        }
 
         //! @brief Returns the azimuthal order of an harmonic.
         //! @param index The index of an harmonic.
-        inline long getHarmonicOrder(const size_t index) const noexcept {
-            return m_harmonics[index].getOrder(); }
+        inline long getHarmonicOrder(const size_t index) const
+        {
+            return m_harmonics[index].getOrder();
+        }
 
         //! @brief Returns the index of an harmonic given the degree and the azimuthal order.
         //! @param degree The degree of the harmonic.
         //! @param order  The azimuthal order of the harmonic.
-        inline size_t getHarmonicIndex(const size_t degree, const long order) const noexcept {
-            return Harmonic<D, T>::getIndex(degree, order); }
+        inline size_t getHarmonicIndex(const size_t degree, const long order) const
+        {
+            return Harmonic<D, T>::getIndex(degree, order);
+        }
 
         //! @brief Returns the name of an harmonic.
         //! @param index The index of an harmonic.
-        inline std::string getHarmonicName(const size_t index) const noexcept {
-            return m_harmonics[index].getName(); }
+        inline std::string getHarmonicName(const size_t index) const
+        {
+            return m_harmonics[index].getName();
+        }
         
         //! @brief Returns the normalization of an harmonic.
         //! @param index The index of an harmonic.
-        inline T getHarmonicNormalization(const size_t index) const noexcept {
-            return m_harmonics[index].getNormalization(); }
+        inline T getHarmonicNormalization(const size_t index) const
+        {
+            return m_harmonics[index].getNormalization();
+        }
         
         //! @brief Returns the semi-normalization of an harmonic.
         //! @param index The index of an harmonic.
-        inline T getHarmonicSemiNormalization(const size_t index) const noexcept {
-            return m_harmonics[index].getSemiNormalization(); }
+        inline T getHarmonicSemiNormalization(const size_t index) const
+        {
+            return m_harmonics[index].getSemiNormalization();
+        }
         
     private:
         
-        const size_t                        m_order_of_decomposition;
-        const std::vector< Harmonic<D, T> > m_harmonics;
-        
-        static inline std::vector< Harmonic<D, T> > createVector(const size_t order) {
-            std::vector< Harmonic<D, T> > harmonics;
-            for(size_t i = 0; i < Harmonic<D, T>::getNumberOfHarmonics(order); ++i) {
+        static inline std::vector< Harmonic<D, T> > createVector(const size_t order)
+        {
+            std::vector<Harmonic<D, T>> harmonics {};
+            for(size_t i = 0; i < Harmonic<D, T>::getNumberOfHarmonics(order); ++i)
+            {
                 harmonics.push_back(Harmonic<D, T>(i));
             }
             return harmonics;
         }
+        
+    private:
+        
+        const size_t m_order_of_decomposition = 0ul;
+        const std::vector< Harmonic<D, T> > m_harmonics;
     };
     
     // ================================================================================ //
@@ -130,17 +147,21 @@ namespace hoa
         //! @param nplws The number of planewaves.
         ProcessorPlanewaves(const size_t nplws)
         {
-            if(D == Hoa2d) {
+            if(D == Hoa2d)
+            {
                 generateCicle(nplws);
             }
             else
             {
-                if(nplws == 4)          { generateTetrahedron(); }
-                else if(nplws == 6)     { generateOctahedron(); }
-                else if(nplws == 8)     { generateHexahedron(); }
-                else if(nplws == 12)    { generateIcosahedron(); }
-                else if(nplws == 20)    { generateDodecahedron(); }
-                else                    { generatePolyhedron(nplws); }
+                switch(nplws)
+                {
+                    case 4  : { generateTetrahedron(); break; }
+                    case 6  : { generateOctahedron(); break; }
+                    case 8  : { generateHexahedron(); break; }
+                    case 12 : { generateIcosahedron(); break; }
+                    case 20 : { generateDodecahedron(); break; }
+                    default : { generatePolyhedron(nplws); break; }
+                }
             }
         }
 
@@ -171,16 +192,20 @@ namespace hoa
         inline T getPlanewavesRotationZ() const noexcept { return m_rotation_z; }
 
         //! @brief Returns the index of a planewave.
-        inline size_t getPlanewaveIndex(const size_t index) noexcept {
-            return m_planewaves[index].getIndex(); }
+        inline size_t getPlanewaveIndex(const size_t index)
+        {
+            return m_planewaves[index].getIndex();
+        }
 
         //! @brief Sets the azimuth of a planewave in radian.
         //! @details The azimuth of the planewaves is in radian, 0 radian is at the front of
         //! the soundfield and π is at the back of the sound field.
         //! @param index   The index of the planewave.
         //! @param azimuth The azimuth of the planewave.
-        inline void setPlanewaveAzimuth(const size_t index, const T azimuth) noexcept {
-            m_planewaves[index].setAzimuth(azimuth); }
+        inline void setPlanewaveAzimuth(const size_t index, const T azimuth)
+        {
+            m_planewaves[index].setAzimuth(azimuth);
+        }
         
         //! @brief Sets the azimuth of a planewave in radian.
         //! @details The elevation of the planewaves is in radian, 0 radian is at the equator
@@ -188,15 +213,17 @@ namespace hoa
         //! bottom of the sound field.
         //! @param index   The index of the planewave.
         //! @param elevation The elevation of the planewave.
-        inline void setPlanewaveElevation(const size_t index, const T elevation) noexcept {
-            m_planewaves[index].setElevation(elevation); }
+        inline void setPlanewaveElevation(const size_t index, const T elevation)
+        {
+            m_planewaves[index].setElevation(elevation);
+        }
 
         //! @brief Returns the azimuth of a planewave.
         //! @details The azimuth of the planewaves is in radian, 0 radian is at the front of
         //! the soundfield and π is at the back of the sound field.
         //! @param index    The index of the planewave.
         //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
-        inline T getPlanewaveAzimuth(const size_t index, const bool rotation = true) const noexcept
+        inline T getPlanewaveAzimuth(const size_t index, const bool rotation = true) const
         {
             if(rotation)
             {
@@ -204,6 +231,7 @@ namespace hoa
                 Planewave<D, T>::rotate(m_planewaves[index], m_rotation_x, m_rotation_y, m_rotation_z, x, y, z);
                 return Planewave<D, T>::xyz2azimuth(x, y, z);
             }
+            
             return m_planewaves[index].getAzimuth();
         }
 
@@ -213,7 +241,7 @@ namespace hoa
         //! bottom of the sound field.
         //! @param index    The index of the planewave.
         //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
-        inline T getPlanewaveElevation(const size_t index, const bool rotation = true) const noexcept
+        inline T getPlanewaveElevation(const size_t index, const bool rotation = true) const
         {
             if(rotation)
             {
@@ -221,6 +249,7 @@ namespace hoa
                 Planewave<D, T>::rotate(m_planewaves[index], m_rotation_x, m_rotation_y, m_rotation_z, x, y, z);
                 return Planewave<D, T>::xyz2elevation(x, y, z);
             }
+            
             return m_planewaves[index].getElevation();
         }
 
@@ -229,7 +258,7 @@ namespace hoa
         //! the center of the soundfield and 1 is the right of the soundfield.
         //! @param index    The index of the planewave.
         //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
-        inline T getPlanewaveAbscissa(const size_t index, const bool rotation = true) const noexcept
+        inline T getPlanewaveAbscissa(const size_t index, const bool rotation = true) const
         {
             if(rotation)
             {
@@ -237,6 +266,7 @@ namespace hoa
                 Planewave<D, T>::rotate(m_planewaves[index], m_rotation_x, m_rotation_y, m_rotation_z, x, y, z);
                 return x;
             }
+            
             return m_planewaves[index].getAbscissa();
         }
 
@@ -245,7 +275,7 @@ namespace hoa
         //! the center of the soundfield and 1 is the front of the soundfield.
         //! @param index    The index of the planewave.
         //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
-        inline T getPlanewaveOrdinate(const size_t index, const bool rotation = true) const noexcept
+        inline T getPlanewaveOrdinate(const size_t index, const bool rotation = true) const
         {
             if(rotation)
             {
@@ -253,6 +283,7 @@ namespace hoa
                 Planewave<D, T>::rotate(m_planewaves[index], m_rotation_x, m_rotation_y, m_rotation_z, x, y, z);
                 return y;
             }
+            
             return m_planewaves[index].getOrdinate();
         }
 
@@ -261,7 +292,7 @@ namespace hoa
         //! the center of the soundfield and 1 is the front of the soundfield.
         //! @param index    The index of the planewave.
         //! @param rotation false if you don't want to consider the rotation, otherwise true (default).
-        inline T getPlanewaveHeight(const size_t index, const bool rotation = true) const noexcept
+        inline T getPlanewaveHeight(const size_t index, const bool rotation = true) const
         {
             if(rotation)
             {
@@ -269,13 +300,14 @@ namespace hoa
                 Planewave<D, T>::rotate(m_planewaves[index], m_rotation_x, m_rotation_y, m_rotation_z, x, y, z);
                 return z;
             }
+            
             return m_planewaves[index].getHeight();
         }
         
         //! @brief Retruns the name for a planewave.
         //! @details The a name for a planewave is in a std::string format that will be
         //! "Planewave index azimuth (in degrees)".
-        //!  @param index The index of a planewave.
+        //! @param index The index of a planewave.
         inline std::string getPlanewaveName(const size_t index) const noexcept
         {
             return m_planewaves[index].getName();
