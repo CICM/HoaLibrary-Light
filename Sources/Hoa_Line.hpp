@@ -180,8 +180,8 @@ namespace hoa
         inline void setAzimuth(const size_t index, const T azimuth) noexcept
         {
             const auto idx = index + m_number_of_sources;
-            m_values_new[idx] = wrap_twopi(azimuth);
-            m_values_old[idx] = wrap_twopi(m_values_old[idx]);
+            m_values_new[idx] = math<T>::wrap_two_pi(azimuth);
+            m_values_old[idx] = math<T>::wrap_two_pi(m_values_old[idx]);
 
             T distance;
             if(m_values_old[idx] > m_values_new[idx])
@@ -341,8 +341,8 @@ namespace hoa
         inline void setAzimuth(const size_t index, const T azimuth)
         {
             const auto idx = index + m_number_of_sources;
-            m_values_new[idx] = wrap_twopi(azimuth);
-            m_values_old[idx] = wrap_twopi(m_values_old[idx]);
+            m_values_new[idx] = math<T>::wrap_two_pi(azimuth);
+            m_values_old[idx] = math<T>::wrap_two_pi(m_values_old[idx]);
 
             T distance;
             if(m_values_old[idx] > m_values_new[idx])
@@ -449,19 +449,6 @@ namespace hoa
                 m_counter    = 0;
             }
             Signal<T>::copy(m_number_of_sources * 3, m_values_old, vector);
-        }
-        
-    private:
-        
-        static inline T wrap_twopi(T value)
-        {
-            while(value < static_cast<T>(0.)) {
-                value += static_cast<T>(HOA_2PI);
-            }
-            while(value >= static_cast<T>(HOA_2PI)) {
-                value -= static_cast<T>(HOA_2PI);
-            }
-            return value;
         }
         
     private:

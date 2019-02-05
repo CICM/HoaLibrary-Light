@@ -177,9 +177,9 @@ namespace hoa
         //! @param z_axe The angle of rotation around the z axis in radian.
         void setPlanewavesRotation(const T x_axe, const T y_axe, const T z_axe) noexcept
         {
-            m_rotation_x = Planewave<D, T>::wrap_twopi(x_axe);
-            m_rotation_y = Planewave<D, T>::wrap_twopi(y_axe);
-            m_rotation_z = Planewave<D, T>::wrap_twopi(z_axe);
+            m_rotation_x = math<T>::wrap_two_pi(x_axe);
+            m_rotation_y = math<T>::wrap_two_pi(y_axe);
+            m_rotation_z = math<T>::wrap_two_pi(z_axe);
         }
 
         //! @brief Returns the angle of rotation around the x axis in radian of the planewaves.

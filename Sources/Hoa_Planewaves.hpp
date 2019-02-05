@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Hoa_Signal.hpp"
+#include "Hoa_Math.hpp"
 
 namespace hoa
 {
@@ -37,8 +38,8 @@ namespace hoa
         //! @param elevation   The elevation \f$\varphi\f$.
         Planewave(size_t index, T azimuth, T elevation) noexcept
         : m_index(index)
-        , m_azimuth(wrap_twopi(azimuth))
-        , m_elevation(wrap_pi(elevation))
+        , m_azimuth(math<T>::wrap_two_pi(azimuth))
+        , m_elevation(math<T>::wrap_pi(elevation))
         {}
 
         //! @brief The plane wave cartesian constructor.
@@ -75,11 +76,11 @@ namespace hoa
 
         //! @brief Sets the azimuth of the plane wave.
         //! @param azimuth The azimuth \f$\theta\f$.
-        inline void setAzimuth(const T azimuth) noexcept { m_azimuth = wrap_twopi(azimuth); }
+        inline void setAzimuth(const T azimuth) noexcept { m_azimuth = math<T>::wrap_two_pi(azimuth); }
 
         //! @brief Set the elevation of the plane wave.
         //! @param elevation The elevation \f$\varphi\f$.
-        inline void setElevation(const T elevation) noexcept { m_elevation = wrap_pi(elevation); }
+        inline void setElevation(const T elevation) noexcept { m_elevation = math<T>::wrap_pi(elevation); }
 
         //! @brief Returns the name of the plane wave.
         virtual std::string getName() const noexcept
@@ -107,12 +108,12 @@ namespace hoa
         static inline T xyz2azimuth(const T x, const T y, const T z = 0.)
         {
             hoa_unused(z);
-            return (x == T(0) && y == T(0)) ? T(0) : wrap_twopi(atan2(y, x) - HOA_PI2);
+            return (x == T(0) && y == T(0)) ? T(0) : math<T>::wrap_two_pi(atan2(y, x) - HOA_PI2);
         }
         
         static inline T xyz2elevation(const T x, const T y, const T z = 0.)
         {
-            return (z == T(0)) ? T(0) : wrap_pi(asin(z / sqrt(x*x + y*y + z*z)));
+            return (z == T(0)) ? T(0) : math<T>::wrap_pi(asin(z / sqrt(x*x + y*y + z*z)));
         }
         
         static inline T ae2abscissa(const T a, const T e)
@@ -129,24 +130,6 @@ namespace hoa
         {
             hoa_unused(a);
             return std::sin(e);
-        }
-        
-        static inline T wrap_pi(T const value)
-        {
-            if(value < T(-HOA_PI))
-                return value + T(HOA_2PI);
-            else if(value >= T(HOA_PI))
-                return value - T(HOA_2PI);
-            return value;
-        }
-        
-        static inline T wrap_twopi(T const value)
-        {
-            if(value < 0.)
-                return value + T(HOA_2PI);
-            else if(value >= T(HOA_2PI))
-                return value - T(HOA_2PI);
-            return value;
         }
         
         static inline void rotate(Planewave const& p, const T xr, const T yr, const T zr, T& xo, T& yo, T& zo) noexcept

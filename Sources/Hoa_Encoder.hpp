@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Hoa_Processor.hpp"
+#include "Hoa_Math.hpp"
 
 namespace hoa
 {
@@ -142,7 +143,7 @@ namespace hoa
         //! @param azimuth The new azimuth.
         void setAzimuth(const T azimuth) noexcept
         {
-            m_azimuth   = wrap_twopi(azimuth);
+            m_azimuth   = math<T>::wrap_two_pi(azimuth);
             T* coeffs   = m_azimuth_coeffs.data();
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
             T const ccos_x  = std::cos(azimuth);
@@ -189,7 +190,7 @@ namespace hoa
         //! @param elevation The new elevation.
         void setElevation(const T elevation) noexcept
         {
-            m_elevation = wrap_pi(elevation);
+            m_elevation = math<T>::wrap_pi(elevation);
             const size_t order = ProcessorHarmonics<D, T>::getDecompositionOrder();
             const T _x      = std::sin(elevation);
             const T _x_pow  = _x * _x;                    // x^2
@@ -311,30 +312,6 @@ namespace hoa
                 }
             }
             
-        }
-        
-    private:
-
-        static inline T wrap_pi(T value)
-        {
-            while(value < static_cast<T>(-HOA_PI)) {
-                value += static_cast<T>(HOA_2PI);
-            }
-            while(value >= static_cast<T>(HOA_PI)) {
-                value -= static_cast<T>(HOA_2PI);
-            }
-            return value;
-        }
-        
-        static inline T wrap_twopi(T value)
-        {
-            while(value < static_cast<T>(0.)) {
-                value += static_cast<T>(HOA_2PI);
-            }
-            while(value >= static_cast<T>(HOA_2PI)) {
-                value -= static_cast<T>(HOA_2PI);
-            }
-            return value;
         }
         
     private:
