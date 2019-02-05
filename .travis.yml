@@ -34,18 +34,22 @@ matrix:
 
     - os: linux
       compiler: clang
+      env:
+        - Libs and Tests
 
     - os: osx
       compiler: gcc
+      env:
+        - Libs and Tests
 
     - os: osx
       compiler: clang
+      env:
+        - Libs and Tests
 
-    script:
-      - mkdir build && cd build
-      - cmake ..
-      - cmake --build .
-      - cd ../
-      - ./build/hoatest
-    env:
-      - Libs and Tests
+script:
+  - mkdir build && cd build
+  - cmake ..
+  - cmake --build .
+  - cd ../
+  - ./build/hoatest
