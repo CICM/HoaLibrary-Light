@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_METER_LIGHT
-#define DEF_HOA_METER_LIGHT
+#pragma once
 
 #include "Hoa_Planewaves.hpp"
 #include "Hoa_Voronoi.hpp"
@@ -38,7 +37,7 @@ namespace hoa
         /**	The meter constructor allocates and initialize the base classes.
          @param     numberOfPlanewaves      The number of channels.
          */
-        Meter(size_t numberOfPlanewaves) hoa_noexcept :
+        Meter(size_t numberOfPlanewaves) noexcept :
         ProcessorPlanewaves<Hoa2d, T>(numberOfPlanewaves)
         {
             m_ramp                      = 0;
@@ -69,7 +68,7 @@ namespace hoa
         /** Set the vector size.
         @param vectorSize    The new vector size.
          */
-        inline void setVectorSize(size_t vectorSize) hoa_noexcept
+        inline void setVectorSize(size_t vectorSize) noexcept
         {
             m_vector_size   = vectorSize;
             m_ramp          = 0;
@@ -79,7 +78,7 @@ namespace hoa
         /** Get the vector size.
         @return The vector size.
          */
-        inline size_t getVectorSize() const hoa_noexcept
+        inline size_t getVectorSize() const noexcept
         {
             return m_vector_size;
         }
@@ -99,7 +98,7 @@ namespace hoa
                 std::vector<Planewave<Hoa2d, T> > channels;
                 for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
                 {
-                    channels.push_back(Planewave<Hoa2d, T>(i, wrap_twopi(ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(i)), 0.));
+                    channels.push_back(Planewave<Hoa2d, T>(i, math<T>::wrap_two_pi(ProcessorPlanewaves<Hoa2d, T>::getPlanewaveAzimuth(i)), 0.));
                 }
                 std::sort(channels.begin(), channels.end(), Planewave<Hoa2d, T>::compare_azimuth);
                 {
@@ -109,7 +108,7 @@ namespace hoa
                     const T previous_portion= (HOA_2PI - previous_angle) + current_angle;
                     const T next_portion    = next_angle - current_angle;
                     m_channels_azimuth_width[channels[0].getIndex()] = (previous_portion + next_portion) * 0.5;
-                    m_channels_azimuth_mapped[channels[0].getIndex()]= wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[0].getIndex()] * 0.5);
+                    m_channels_azimuth_mapped[channels[0].getIndex()]= math<T>::wrap_two_pi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[0].getIndex()] * 0.5);
                 }
                 for(size_t i = 1; i < channels.size() - 1; i++)
                 {
@@ -119,7 +118,7 @@ namespace hoa
                     const T previous_portion= current_angle - previous_angle;
                     const T next_portion    = next_angle - current_angle;
                     m_channels_azimuth_width[channels[i].getIndex()] = (previous_portion + next_portion) * 0.5;
-                    m_channels_azimuth_mapped[channels[i].getIndex()]= wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[i].getIndex()] * 0.5);
+                    m_channels_azimuth_mapped[channels[i].getIndex()]= math<T>::wrap_two_pi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[i].getIndex()] * 0.5);
                 }
                 {
                     const size_t index = channels.size() - 1;
@@ -129,7 +128,7 @@ namespace hoa
                     const T previous_portion= current_angle - previous_angle;
                     const T next_portion    = (HOA_2PI - current_angle) + next_angle;
                     m_channels_azimuth_width[channels[index].getIndex()] = (previous_portion + next_portion) * 0.5;
-                    m_channels_azimuth_mapped[channels[index].getIndex()]= wrap_twopi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[index].getIndex()] * 0.5);
+                    m_channels_azimuth_mapped[channels[index].getIndex()]= math<T>::wrap_two_pi((current_angle - previous_portion * 0.5) + m_channels_azimuth_width[channels[index].getIndex()] * 0.5);
                 }
                 channels.clear();
             }
@@ -140,7 +139,7 @@ namespace hoa
         @param index    The index of the channel.
         @return The channel mapped azimuth.
          */
-        inline T getPlanewaveAzimuthMapped(const size_t index) const hoa_noexcept
+        inline T getPlanewaveAzimuthMapped(const size_t index) const noexcept
         {
             return m_channels_azimuth_mapped[index];
         }
@@ -150,7 +149,7 @@ namespace hoa
         @param index    The index of the channel.
         @return The channel width.
          */
-        inline T getPlanewaveWidth(const size_t index) const hoa_noexcept
+        inline T getPlanewaveWidth(const size_t index) const noexcept
         {
             return m_channels_azimuth_width[index];
         }
@@ -160,7 +159,7 @@ namespace hoa
         @param index    The index of the channel.
         @return The channel energy.
          */
-        inline T getPlanewaveEnergy(const size_t index) const hoa_noexcept
+        inline T getPlanewaveEnergy(const size_t index) const noexcept
         {
             if(m_channels_peaks[index] > 0.)
             {
@@ -177,7 +176,7 @@ namespace hoa
         @param index    The index of the channel. Return true if the channel meter have to be drawn.
         @return The channel overLed state.
          */
-        inline bool getPlanewaveOverLed(const size_t index) const hoa_noexcept
+        inline bool getPlanewaveOverLed(const size_t index) const noexcept
         {
             return m_over_leds[index];
         }
@@ -186,7 +185,7 @@ namespace hoa
         /** This method update the overLed state of the channels.
         @param value    A no-NULL value to activate the overLed state of a channel
          */
-        inline void tick(const size_t time) hoa_noexcept
+        inline void tick(const size_t time) noexcept
         {
             for(size_t i = 0; i < ProcessorPlanewaves<Hoa2d, T>::getNumberOfPlanewaves(); i++)
             {
@@ -205,7 +204,7 @@ namespace hoa
         /** This method update the signal value for every channel to perform the meter calculation.
         @param input  The input samples.
          */
-        inline void process(const T* inputs) hoa_noexcept
+        inline void process(const T* inputs) noexcept
         {
             if(m_ramp++ == m_vector_size)
             {
@@ -233,22 +232,10 @@ namespace hoa
         @param input  The input samples.
         @param output The output samples.
          */
-        void process(const T* input, T* outputs) hoa_noexcept hoa_override
+        void process(const T* input, T* outputs) noexcept override
         {
+            hoa_unused(outputs);
             process(input);
-        }
-        
-        
-    private:
-        static inline T wrap_twopi(T value)
-        {
-            while(value < static_cast<T>(0.)) {
-                value += static_cast<T>(HOA_2PI);
-            }
-            while(value >= static_cast<T>(HOA_2PI)) {
-                value -= static_cast<T>(HOA_2PI);
-            }
-            return value;
         }
     };
 
@@ -272,7 +259,7 @@ namespace hoa
         /**	The meter constructor allocates and initialize the base classes.
          @param     numberOfPlanewaves      The number of channels.
          */
-        Meter(const size_t numberOfPlanewaves) hoa_noexcept : ProcessorPlanewaves<Hoa3d, T>(numberOfPlanewaves)
+        Meter(const size_t numberOfPlanewaves) noexcept : ProcessorPlanewaves<Hoa3d, T>(numberOfPlanewaves)
         {
             m_ramp                      = 0;
             m_vector_size               = 0;
@@ -307,7 +294,7 @@ namespace hoa
         /** Set the vector size.
         @param vectorSize    The new vector size.
          */
-        inline void setVectorSize(const size_t vectorSize) hoa_noexcept
+        inline void setVectorSize(const size_t vectorSize) noexcept
         {
             m_vector_size   = vectorSize;
             m_ramp          = 0;
@@ -317,7 +304,7 @@ namespace hoa
         /** Get the vector size.
         @return The vector size.
          */
-        inline size_t getVectorSize() const hoa_noexcept
+        inline size_t getVectorSize() const noexcept
         {
             return m_vector_size;
         }
@@ -327,7 +314,7 @@ namespace hoa
         @param index    The index of the channel
         @return The channel energy.
          */
-        inline T getPlanewaveEnergy(const size_t index) const hoa_noexcept
+        inline T getPlanewaveEnergy(const size_t index) const noexcept
         {
             if(m_channels_peaks[index] > 0.)
             {
@@ -344,7 +331,7 @@ namespace hoa
         @param index    The index of the channel. Return true if the channel meter have to be drawn.
         @return The channel overLed state.
          */
-        inline bool getPlanewaveOverLed(const size_t index) const hoa_noexcept
+        inline bool getPlanewaveOverLed(const size_t index) const noexcept
         {
             return m_over_leds[index];
         }
@@ -353,7 +340,7 @@ namespace hoa
         /** This method update the overLed state of the channels.
         @param value    A no-NULL value to activate the overLed state of a channel
          */
-        inline void tick(const size_t time) hoa_noexcept
+        inline void tick(const size_t time) noexcept
         {
             for(size_t i = 0; i < ProcessorPlanewaves<Hoa3d, T>::getNumberOfPlanewaves(); i++)
             {
@@ -372,7 +359,7 @@ namespace hoa
         /** This method update the signal value for every channel to perform the meter calculation.
         @param input  The input samples.
          */
-        inline void process(const T* inputs) hoa_noexcept
+        inline void process(const T* inputs) noexcept
         {
             if(m_ramp++ == m_vector_size)
             {
@@ -400,8 +387,9 @@ namespace hoa
         @param input  The input samples.
         @param output The output samples.
          */
-        void process(const T* input, T* outputs) hoa_noexcept hoa_override
+        void process(const T* input, T* outputs) noexcept override
         {
+            hoa_unused(outputs);
             process(input);
         }
 
@@ -451,7 +439,7 @@ namespace hoa
         @param top  The meter view wanted (top or bottom).
         @return The path.
          */
-        inline Path const& getPlanewavePath(const size_t index, const bool top) const hoa_noexcept
+        inline Path const& getPlanewavePath(const size_t index, const bool top) const noexcept
         {
             if(top)
             {
@@ -465,8 +453,3 @@ namespace hoa
     };
 #endif
 }
-
-#endif
-
-
-

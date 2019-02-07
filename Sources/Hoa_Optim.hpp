@@ -9,13 +9,16 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_OPTIM_LIGHT
-#define DEF_HOA_OPTIM_LIGHT
+#pragma once
 
 #include "Hoa_Processor.hpp"
 
 namespace hoa
 {
+    // ================================================================================ //
+    // OPTIM //
+    // ================================================================================ //
+    
     //! @brief The class optimizes the ambisonic sound field for several restitution systems.
     //! @details The class should be used to optimize the ambisonic sound field. There are 3
     //! optimizations, basic (no optimization), max-re (energy vector optimization) and
@@ -37,7 +40,9 @@ namespace hoa
     //! azimuthal order.
     //! Note that the optimizations decrease the precision of the sound field restitution thus
     //! it can be compared to particular cases of the fractional orders.
-    template <Dimension D, typename T> class Optim : public ProcessorHarmonics<D, T>
+    template <Dimension D, typename T>
+    class Optim
+    : public ProcessorHarmonics<D, T>
     {
     public:
         
@@ -52,19 +57,22 @@ namespace hoa
 
         //! @brief The constructor.
         //! @param order The order of decomposition.
-        Optim(size_t order) hoa_noexcept : ProcessorHarmonics<D, T>(order),
-        m_weights(Signal<T>::alloc(ProcessorHarmonics<D, T>::getNumberOfHarmonics()))
-        { setMode(InPhase); }
+        Optim(size_t order) noexcept
+        : ProcessorHarmonics<D, T>(order)
+        , m_weights(Signal<T>::alloc(ProcessorHarmonics<D, T>::getNumberOfHarmonics()))
+        {
+            setMode(InPhase);
+        }
 
-        //! @brief The destructor.
-		~Optim() hoa_noexcept { Signal<T>::free(m_weights); }
+        //! @brief Destructor.
+		~Optim() noexcept { Signal<T>::free(m_weights); }
         
         //! @brief Returns the current optimization mode.
-        inline Mode getMode() const hoa_noexcept { return m_mode; }
+        inline Mode getMode() const noexcept { return m_mode; }
         
         //! @brief Set the optimization mode.
         //! @param mode The mode of optimization.
-        void setMode(Mode mode) hoa_noexcept
+        void setMode(Mode mode) noexcept
         {
             const size_t size   = ProcessorHarmonics<D, T>::getNumberOfHarmonics();
             const size_t order  = ProcessorHarmonics<D, T>::getDecompositionOrder();
@@ -101,7 +109,7 @@ namespace hoa
         //! samples thus the minimum size of the array must be the number of harmonics.
         //! @param inputs  The inputs array.
         //! @param outputs The outputs array.
-        void process(T const* inputs, T* outputs) hoa_noexcept hoa_final
+        void process(T const* inputs, T* outputs) noexcept final
         {
             const size_t size = ProcessorHarmonics<D, T>::getNumberOfHarmonics();
             const T* weights = m_weights;
@@ -121,6 +129,7 @@ namespace hoa
                 outputs[0] = inputs[0] * weights[0];
             }
         }
+        
     protected:
         
         static inline long double ofactorial(long n)
@@ -138,5 +147,3 @@ namespace hoa
         T*   m_weights;
     };
 }
-
-#endif

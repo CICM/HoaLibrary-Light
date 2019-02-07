@@ -1,4 +1,4 @@
-language: c
+language: cpp
 dist: trusty
 sudo: required
 
@@ -6,7 +6,7 @@ notifications:
   email: false
 
 git:
-  submodules: true
+  submodules: false
   depth: 3
 
 matrix:
@@ -24,7 +24,6 @@ matrix:
           - cmake --build .
           - cd ../
           - ./build/hoatest
-
       after_success:
         - coveralls -e build/CMakeFiles/feature_tests.cxx -e build/CMakeFiles/feature_tests.c -e build/CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.cpp -e build/CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.c -e build/CMakeFiles/3.2.2/CompilerIdCXX/CMakeCXXCompilerId.cpp -e build/CMakeFiles/3.2.2/CompilerIdC/CMakeCCompilerId.c -e Tests --gcov-options '\-lp'
       env:
@@ -32,44 +31,27 @@ matrix:
 
     - os: linux
       compiler: gcc
-      script:
-        - mkdir build && cd build
-        - cmake ..
-        - cmake --build .
-        - cd ../
-        - ./build/hoatest
       env:
         - Libs and Tests
 
     - os: linux
       compiler: clang
-      script:
-        - mkdir build && cd build
-        - cmake ..
-        - cmake --build .
-        - cd ../
-        - ./build/hoatest
       env:
         - Libs and Tests
 
     - os: osx
       compiler: gcc
-      script:
-        - mkdir build && cd build
-        - cmake ..
-        - cmake --build .
-        - cd ../
-        - ./build/hoatest
       env:
         - Libs and Tests
 
     - os: osx
       compiler: clang
-      script:
-        - mkdir build && cd build
-        - cmake ..
-        - cmake --build .
-        - cd ../
-        - ./build/hoatest
       env:
         - Libs and Tests
+
+script:
+  - mkdir build && cd build
+  - cmake ..
+  - cmake --build .
+  - cd ../
+  - ./build/hoatest
