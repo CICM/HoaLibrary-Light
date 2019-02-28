@@ -9,8 +9,7 @@
 // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
 */
 
-#ifndef DEF_HOA_SOURCE_LIGHT
-#define DEF_HOA_SOURCE_LIGHT
+#pragma once
 
 #include "Hoa_Math.hpp"
 
@@ -81,7 +80,7 @@ namespace hoa
             //! The source manager destructor.
             /** The source manager destructor free the memory.
              */
-            ~Manager() hoa_noexcept
+            ~Manager() noexcept
             {
                 clear();
             }
@@ -128,7 +127,7 @@ namespace hoa
             /** Get the maximum radius of the sources and groups.
              @return		The maximum radius.
              */
-            inline const double getMaximumRadius() const hoa_noexcept
+            inline const double getMaximumRadius() const noexcept
             {
                 return m_maximum_radius;
             }
@@ -137,7 +136,7 @@ namespace hoa
             /** Get the zoom factor value.
              @return		The zoom factor value.
              */
-            inline const double getZoom() const hoa_noexcept
+            inline const double getZoom() const noexcept
             {
                 return m_zoom;
             }
@@ -150,7 +149,7 @@ namespace hoa
              @param     elevation   The elevation of the new source.
              @return	            The created source.
              */
-            inline Source* newSource (const size_t index, const double radius = 0., const double azimuth = 0., const double elevation = 0.) hoa_noexcept
+            inline Source* newSource (const size_t index, const double radius = 0., const double azimuth = 0., const double elevation = 0.) noexcept
             {
                 source_iterator it = m_sources.find(index);
                 if(it == m_sources.end())
@@ -166,7 +165,7 @@ namespace hoa
             /** Remove a Source from the map container of the manager.
              @param     index   The index of the source.
              */
-            inline void removeSource (const size_t index) hoa_noexcept
+            inline void removeSource (const size_t index) noexcept
             {
                 source_iterator it = m_sources.find(index);
                 if(it != m_sources.end())
@@ -182,7 +181,7 @@ namespace hoa
             /** Get the Sources map size of the manager.
              @return     The sources map size.
              */
-            inline size_t getNumberOfSources() const hoa_noexcept
+            inline size_t getNumberOfSources() const noexcept
             {
                 return m_sources.size();
             }
@@ -191,7 +190,7 @@ namespace hoa
             /** Check if the Sources map of the manager is empty.
              @return    The state of the source map content.
              */
-            inline bool isSourcesEmpty() const hoa_noexcept
+            inline bool isSourcesEmpty() const noexcept
             {
                 return m_sources.empty();
             }
@@ -200,7 +199,7 @@ namespace hoa
             /** Get the Groups map size of the manager.
              @return     The groups map size.
              */
-            inline size_t getNumberOfGroups() const hoa_noexcept
+            inline size_t getNumberOfGroups() const noexcept
             {
                 return m_groups.size();
             }
@@ -209,7 +208,7 @@ namespace hoa
             /** Check if the Groups map is empty.
              @return    The state of the groups map content.
              */
-            inline bool isGroupsEmpty() const hoa_noexcept
+            inline bool isGroupsEmpty() const noexcept
             {
                 return m_groups.empty();
             }
@@ -228,7 +227,7 @@ namespace hoa
              @param     group       The group to add.
              @return True if success, otherwise false.
              */
-            inline bool addGroup (Group* group) hoa_noexcept
+            inline bool addGroup (Group* group) noexcept
             {
                 if (group && m_groups.find(group->m_index) == m_groups.end())
                 {
@@ -253,7 +252,7 @@ namespace hoa
             /** Remove a Group from the map container of the manager.
              @param     index   The index of the group.
              */
-            inline void removeGroup (const size_t index) hoa_noexcept
+            inline void removeGroup (const size_t index) noexcept
             {
                 group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
@@ -277,7 +276,7 @@ namespace hoa
             /** Remove a Group from the map container of the manager with its sources.
              @param     index   The index of the group.
              */
-            void removeGroupWithSources (const size_t index) hoa_noexcept
+            void removeGroupWithSources (const size_t index) noexcept
             {
                 group_iterator it = m_groups.find(index);
                 if(it != m_groups.end())
@@ -319,7 +318,7 @@ namespace hoa
             /** Get the first const iterator of the Sources map of the manager.
              @return        The first const iterator of the sources map.
              */
-            inline const_source_iterator getFirstSource() const hoa_noexcept
+            inline const_source_iterator getFirstSource() const noexcept
             {
                 return m_sources.begin();
             }
@@ -328,7 +327,7 @@ namespace hoa
             /** Get the first iterator of the Sources map of the manager.
              @return        The const iterator of the sources map.
              */
-            inline source_iterator getFirstSource() hoa_noexcept
+            inline source_iterator getFirstSource() noexcept
             {
                 return m_sources.begin();
             }
@@ -337,7 +336,7 @@ namespace hoa
             /** Get the last const iterator of the Sources map of the manager.
              @return        The last const iterator of the sources map.
              */
-            inline const_source_iterator getLastSource() const hoa_noexcept
+            inline const_source_iterator getLastSource() const noexcept
             {
                 return m_sources.end();
             }
@@ -346,7 +345,7 @@ namespace hoa
             /** Get the last iterator of the Sources map of the manager.
              @return        The last iterator of the sources map.
              */
-            inline source_iterator getLastSource() hoa_noexcept
+            inline source_iterator getLastSource() noexcept
             {
                 return m_sources.end();
             }
@@ -354,7 +353,7 @@ namespace hoa
             //! Remove the groups which have less than 2 sources from the manager.
             /** Remove the groups which have less than 2 sources from the map container of the manager.
              */
-            inline void cleanEmptyGroup() hoa_noexcept
+            inline void cleanEmptyGroup() noexcept
             {
                 group_iterator it = m_groups.begin();
                 while (it != m_groups.end())
@@ -377,7 +376,7 @@ namespace hoa
             //! Remove the group which have exactly the same sources from the manager.
             /** Remove the group which have exactly the same sources from the map container of the manager.
              */
-            inline void cleanDuplicatedGroup() hoa_noexcept
+            inline void cleanDuplicatedGroup() noexcept
             {
                 for(group_iterator it = m_groups.begin() ; it != m_groups.end(); ++it)
                 {
@@ -419,7 +418,7 @@ namespace hoa
             /** Get the first const iterator of the Groups map of the manager.
              @return        The first const iterator of the groups map.
              */
-            inline const_group_iterator getFirstGroup() const hoa_noexcept
+            inline const_group_iterator getFirstGroup() const noexcept
             {
                 return m_groups.begin();
             }
@@ -428,7 +427,7 @@ namespace hoa
             /** Get the first iterator of the Groups map of the manager.
              @return        The first iterator of the groups map.
              */
-            inline group_iterator getFirstGroup() hoa_noexcept
+            inline group_iterator getFirstGroup() noexcept
             {
                 return m_groups.begin();
             }
@@ -437,7 +436,7 @@ namespace hoa
             /** Get the last const iterator of the Groups map of the manager.
              @return        The last const iterator of the groups map.
              */
-            inline const_group_iterator getLastGroup() const hoa_noexcept
+            inline const_group_iterator getLastGroup() const noexcept
             {
                 return m_groups.end();
             }
@@ -446,7 +445,7 @@ namespace hoa
             /** Get the last iterator of the Groups map of the manager.
              @return        The last iterator of the groups map.
              */
-            inline group_iterator getLastGroup() hoa_noexcept
+            inline group_iterator getLastGroup() noexcept
             {
                 return m_groups.end();
             }
@@ -616,7 +615,7 @@ namespace hoa
 		/** Get the maximum radius of the source.
 			@return		The maximum radius of the source.
          */
-        inline const double getMaximumRadius() const hoa_noexcept
+        inline const double getMaximumRadius() const noexcept
         {
             return m_maximum_radius;
         }
@@ -625,7 +624,7 @@ namespace hoa
 		/** Get the index of the source.
 			@return		The index of the source.
          */
-        inline const size_t getIndex() const hoa_noexcept
+        inline const size_t getIndex() const noexcept
         {
             return m_index;
         }
@@ -635,7 +634,7 @@ namespace hoa
 			@return		The radius of the source.
 			@see setRadius, setCoordinatesPolar
          */
-		inline const double	getRadius()	const hoa_noexcept
+		inline const double	getRadius()	const noexcept
 		{
 			return m_radius;
 		}
@@ -645,7 +644,7 @@ namespace hoa
 			@return		The azimuth of the source.
 			@see setAzimuth, setCoordinatesPolar
          */
-		inline const double	getAzimuth() const hoa_noexcept
+		inline const double	getAzimuth() const noexcept
 		{
 			return m_azimuth;
 		}
@@ -655,7 +654,7 @@ namespace hoa
             @return		The elevation of the source.
             @see setElevation, setCoordinatesPolar
          */
-		inline const double	getElevation() const hoa_noexcept
+		inline const double	getElevation() const noexcept
 		{
 			return m_elevation;
 		}
@@ -695,7 +694,7 @@ namespace hoa
 			@return		The rgba color of the source as an array of 4 double.
 			@see setColor
          */
-		inline const double* getColor() const hoa_noexcept
+		inline const double* getColor() const noexcept
 		{
 			return m_color;
 		}
@@ -705,7 +704,7 @@ namespace hoa
 			@return		The description of the source.
 			@see setDescription
          */
-		inline const std::string	getDescription() const hoa_noexcept
+		inline const std::string	getDescription() const noexcept
 		{
 			return m_description;
 		}
@@ -715,7 +714,7 @@ namespace hoa
 			@return		The mute state of the source.
 			@see setMute
          */
-		inline const bool getMute() const hoa_noexcept
+		inline const bool getMute() const noexcept
 		{
 			return m_mute;
 		}
@@ -724,7 +723,7 @@ namespace hoa
         /** Get the size of the Groups map of the source.
          @return    The group map size
          */
-        inline size_t getNumberOfGroups() const hoa_noexcept
+        inline size_t getNumberOfGroups() const noexcept
         {
             return m_groups.size();
         }
@@ -733,7 +732,7 @@ namespace hoa
         /** Check if the Groups map of the source is empty.
          @return    The state of the groups map content.
          */
-        inline bool isGroupsEmpty() const hoa_noexcept
+        inline bool isGroupsEmpty() const noexcept
         {
             return m_groups.empty();
         }
@@ -742,7 +741,7 @@ namespace hoa
         /** Get the Groups map of the source.
          @return    A reference of the groups map.
          */
-        inline std::map<size_t, Group*>& getGroups() hoa_noexcept
+        inline std::map<size_t, Group*>& getGroups() noexcept
         {
             return m_groups;
         }
@@ -804,7 +803,7 @@ namespace hoa
             //! Compute the group position for each moving of its sources.
             /** Compute the group position for each moving of its sources.
              */
-            inline void notifyCoordinates() hoa_noexcept
+            inline void notifyCoordinates() noexcept
             {
                 computeCentroid();
             }
@@ -812,7 +811,7 @@ namespace hoa
             //! Check the group mute state for each change of mute state of its sources.
             /** Check the group mute state for each change of mute state of its sources.
              */
-            inline void notifyMute() hoa_noexcept
+            inline void notifyMute() noexcept
             {
                 size_t numberOfMutedSources = 0;
                 for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
@@ -1048,7 +1047,7 @@ namespace hoa
             //! The group destructor.
             /**	The group destructor free the memory.
              */
-            ~Group() hoa_noexcept
+            ~Group() noexcept
             {
                 for (source_iterator it = m_sources.begin() ; it != m_sources.end() ; it ++)
                 {
@@ -1062,7 +1061,7 @@ namespace hoa
              @param     source  The source to add.
              @return            The state of the addition of the source.
              */
-            inline bool addSource(Source* source) hoa_noexcept
+            inline bool addSource(Source* source) noexcept
             {
                 if(source)
                 {
@@ -1083,7 +1082,7 @@ namespace hoa
             /** Remove a Source from the map container of the group.
              @param     index   The index of the source.
              */
-            inline void removeSource(const size_t index) hoa_noexcept
+            inline void removeSource(const size_t index) noexcept
             {
                 m_sources.erase(index);
                 computeCentroid();
@@ -1317,7 +1316,7 @@ namespace hoa
             /** Get the manager of the Group.
                 @return     A pointer on the manager of the group.
              */
-            inline const Manager* getManager() const hoa_noexcept
+            inline const Manager* getManager() const noexcept
             {
                 return m_manager;
             }
@@ -1326,7 +1325,7 @@ namespace hoa
             /** Get the maximum radius of the Group.
              @return    The maximum radius of the group.
              */
-            inline const double getMaximumRadius() const hoa_noexcept
+            inline const double getMaximumRadius() const noexcept
             {
                 return m_maximum_radius;
             }
@@ -1335,7 +1334,7 @@ namespace hoa
             /** Get the index of the Group.
              @return    The index of the group.
              */
-            inline const size_t getIndex() const hoa_noexcept
+            inline const size_t getIndex() const noexcept
             {
                 return m_index;
             }
@@ -1345,7 +1344,7 @@ namespace hoa
              @return		The radius of the group.
              @see setRadius, setCoordinatesPolar
              */
-            inline const double	getRadius()	const hoa_noexcept
+            inline const double	getRadius()	const noexcept
             {
                 return Math<double>::radius(m_centroid_x, m_centroid_y, m_centroid_z);
             }
@@ -1355,7 +1354,7 @@ namespace hoa
              @return		The azimuth of the group.
              @see setAzimuth, setCoordinatesPolar
              */
-            inline const double	getAzimuth() const hoa_noexcept
+            inline const double	getAzimuth() const noexcept
             {
                 return Math<double>::azimuth(m_centroid_x, m_centroid_y, m_centroid_z);
             }
@@ -1365,7 +1364,7 @@ namespace hoa
              @return		The elevation of the group.
              @see setAzimuth, setCoordinatesPolar
              */
-            inline const double	getElevation() const hoa_noexcept
+            inline const double	getElevation() const noexcept
             {
                 return Math<double>::elevation(m_centroid_x, m_centroid_y, m_centroid_z);
             }
@@ -1375,7 +1374,7 @@ namespace hoa
              @return		The abscissa of the group.
              @see setAbscissa, setCoordinatesCartesian
              */
-            inline const double	getAbscissa() const hoa_noexcept
+            inline const double	getAbscissa() const noexcept
             {
                 return m_centroid_x;
             }
@@ -1385,7 +1384,7 @@ namespace hoa
              @return		The ordinate of the group.
              @see setOrdinate, setCoordinatesCartesian
              */
-            inline const double	getOrdinate() const hoa_noexcept
+            inline const double	getOrdinate() const noexcept
             {
                 return m_centroid_y;
             }
@@ -1395,7 +1394,7 @@ namespace hoa
              @return		The height of the group.
              @see setOrdinate, setCoordinatesCartesian
              */
-            inline const double	getHeight() const hoa_noexcept
+            inline const double	getHeight() const noexcept
             {
                 return m_centroid_z;
             }
@@ -1405,7 +1404,7 @@ namespace hoa
              @return		The rgba color of the group as an array of 4 double numbers.
              @see setColor
              */
-            inline const double*	getColor()	const hoa_noexcept
+            inline const double*	getColor()	const noexcept
             {
                 return m_color;
             }
@@ -1415,7 +1414,7 @@ namespace hoa
              @return		The description of the group.
              @see setDescription
              */
-            inline const std::string	getDescription() const hoa_noexcept
+            inline const std::string	getDescription() const noexcept
             {
                 return m_description;
             }
@@ -1425,7 +1424,7 @@ namespace hoa
              @return		The mute state of the group.
              @see setMute
              */
-            inline const bool getMute()	const hoa_noexcept
+            inline const bool getMute()	const noexcept
             {
                 return m_mute;
             }
@@ -1434,7 +1433,7 @@ namespace hoa
             /** Get the general mute state of sources of the group.
              @return        The sub general mute state of sources of the group.
              */
-            inline const bool getSubMute()	const hoa_noexcept
+            inline const bool getSubMute()	const noexcept
             {
                 return m_subMute;
             }
@@ -1443,7 +1442,7 @@ namespace hoa
             /** Get the size of the Sources map of the group.
              @return    The sources map size.
              */
-            inline size_t getNumberOfSources() const hoa_noexcept
+            inline size_t getNumberOfSources() const noexcept
             {
                 return m_sources.size();
             }
@@ -1452,7 +1451,7 @@ namespace hoa
             /** Check if the Sources map of the group is empty.
              @return    The state of the sources map content.
              */
-            inline bool isSourcesEmpty() const hoa_noexcept
+            inline bool isSourcesEmpty() const noexcept
             {
                 return m_sources.empty();
             }
@@ -1461,7 +1460,7 @@ namespace hoa
             /** Get the Sources map of the group.
              @return    A reference of the sources map.
              */
-            inline std::map<size_t, Source*>& getSources() hoa_noexcept
+            inline std::map<size_t, Source*>& getSources() noexcept
             {
                 return m_sources;
             }
@@ -1534,7 +1533,7 @@ namespace hoa
       	//! The source destructor.
         /**	The source destructor free the memory.
          */
-		~Source() hoa_noexcept
+		~Source() noexcept
 		{
         	for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
 		    {
@@ -1548,7 +1547,7 @@ namespace hoa
 		 @param     group   The group to add.
 		 @return            The state of the addition of the group.
 		 */
-        inline bool addGroup(Group* group) hoa_noexcept
+        inline bool addGroup(Group* group) noexcept
         {
             group_iterator it = m_groups.find(group->getIndex());
             if(it == m_groups.end() && group)
@@ -1563,7 +1562,7 @@ namespace hoa
         /** Remove a group from the map container of the source.
          @param     index   The index of the group.
          */
-        inline void removeGroup(const size_t index) hoa_noexcept
+        inline void removeGroup(const size_t index) noexcept
         {
             m_groups.erase(index);
         }
@@ -1571,7 +1570,7 @@ namespace hoa
         //! Call the groups of the source for each moving to compute their new position.
         /** Call the groups of the source for each moving to compute their new position.
          */
-        inline void notifyCoordinates() hoa_noexcept
+        inline void notifyCoordinates() noexcept
         {
             for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
 		    {
@@ -1582,7 +1581,7 @@ namespace hoa
         //! Call the groups of the source for each change of its mute state to check their mute state.
         /** Call the groups of the source for each change of its mute state to check their mute state.
          */
-        inline void notifyMute() hoa_noexcept
+        inline void notifyMute() noexcept
         {
             for (group_iterator it = m_groups.begin() ; it != m_groups.end() ; it ++)
 		    {
@@ -1597,6 +1596,3 @@ namespace hoa
     };
 
 }
-
-//! @endcond
-#endif

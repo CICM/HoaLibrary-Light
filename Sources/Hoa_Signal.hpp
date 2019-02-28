@@ -1,81 +1,81 @@
 /*
-// Copyright (c) 2012-2017 CICM - Universite Paris 8 - Labex Arts H2H.
-// Authors :
-// 2012: Pierre Guillot, Eliott Paris & Julien Colafrancesco.
-// 2012-2015: Pierre Guillot & Eliott Paris.
-// 2015: Pierre Guillot & Eliott Paris & Thomas Le Meur (Light version)
-// 2016-2017: Pierre Guillot.
-// For information on usage and redistribution, and for a DISCLAIMER OF ALL
-// WARRANTIES, see the file, "LICENSE.txt," in this distribution.
-*/
+ // Copyright (c) 2012-2017 CICM - Universite Paris 8 - Labex Arts H2H.
+ // Authors :
+ // 2012: Pierre Guillot, Eliott Paris & Julien Colafrancesco.
+ // 2012-2015: Pierre Guillot & Eliott Paris.
+ // 2015: Pierre Guillot & Eliott Paris & Thomas Le Meur (Light version)
+ // 2016-2017: Pierre Guillot.
+ // For information on usage and redistribution, and for a DISCLAIMER OF ALL
+ // WARRANTIES, see the file, "LICENSE.txt," in this distribution.
+ */
 
-#ifndef DEF_HOA_SIGNAL_LIGHT
-#define DEF_HOA_SIGNAL_LIGHT
+#pragma once
 
 #include "Hoa_Defs.hpp"
 
 namespace hoa
 {
-    //! The signal class perform all the signal operations with matrix and vector.
-    /** The signal class has to be used for every hoa signal operation.
-     */
-    template<typename T> class Signal
+    // ================================================================================ //
+    // SIGNAL //
+    // ================================================================================ //
+    
+    //! @brief The signal class perform all the signal operations with matrix and vector.
+    //! @details The signal class has to be used for every hoa signal operation.
+    template<typename T>
+    class Signal
     {
     public:
-
-        //! Allocates a vector.
-        /** Allocates a vector.
-         @param size  The size of the vector.
-         @return A pointer to a vector.
-         */
-        static inline T* alloc(const size_t size) hoa_noexcept
+        
+        //! @brief Allocates a vector.
+        //! @param size The size of the vector.
+        //! @return A pointer to a vector.
+        static inline T* alloc(const size_t size) noexcept
         {
-#ifdef __APPLE__
+            #ifdef __APPLE__
             T* vec = static_cast<T*>(malloc(size * sizeof(T)));
             if(vec) {clear(size, vec);}
             return vec;
-#elif _WINDOWS
+            
+            #elif _WINDOWS
             T* vec = (T *)_aligned_malloc(size * sizeof(T), (size_t)pow(float(2), int(sizeof(T))));
             if(vec) {clear(size, vec);}
             return vec;
-#else
+            
+            #else
             T* vec = (T *)memalign((size_t)pow(2, sizeof(T)), size * sizeof(T));
             if(vec) {clear(size, vec);}
             return vec;
-#endif
+            #endif
         }
-
-        //! Frees a vector.
-        /** Frees a vector.
-         @param vec A pointer to a vector.
-         @return A pointer to a vector.
-         */
-        static inline T* free(T* vec) hoa_noexcept
+        
+        //! @brief Frees a vector.
+        //! @param vec A pointer to a vector.
+        //! @return A pointer to a vector.
+        static inline T* free(T* vec) noexcept
         {
-#ifdef __APPLE__
+            #ifdef __APPLE__
             if(vec) {std::free(vec);}
-            return hoa_nullptr;
-#elif _WINDOWS
+            return nullptr;
+            
+            #elif _WINDOWS
             if(vec) {_aligned_free(vec);}
-            return hoa_nullptr;
-#else
+            return nullptr;
+            
+            #else
             if(vec) {std::free(vec);}
-            return hoa_nullptr;
-#endif
+            return nullptr;
+            #endif
         }
-
-
-
-
-        //! Multiplies a matrix by a vector.
-        /** Multiplies a matrix by a vector.
-        @param colsize  The size of the input vector and the number of columns.
-        @param rowsize  The size of the output vector and the number of rows.
-        @param in      The input vector.
-        @param in2      The input matrix.
-        @param output      The output vector.
-         */
-        static inline void mul(const size_t colsize, const size_t rowsize, const T* in, const T* in2, T* output) hoa_noexcept
+        
+        //! @brief Multiplies a matrix by a vector.
+        //! @param colsize  The size of the input vector and the number of columns.
+        //! @param rowsize  The size of the output vector and the number of rows.
+        //! @param in      The input vector.
+        //! @param in2      The input matrix.
+        //! @param output      The output vector.
+        static inline void mul(const size_t colsize,
+                               const size_t rowsize,
+                               const T* in, const T* in2, T* output) noexcept
         {
             for(size_t i = 0ul; i < rowsize; i++)
             {
@@ -83,8 +83,10 @@ namespace hoa
                 const T* in1 = in;
                 for(size_t j = colsize>>3; j; --j, in1 += 8, in2 += 8)
                 {
-                    result += in1[0] * in2[0]; result += in1[1] * in2[1]; result += in1[2] * in2[2]; result += in1[3] * in2[3];
-                    result += in1[4] * in2[4]; result += in1[5] * in2[5]; result += in1[6] * in2[6]; result += in1[7] * in2[7];
+                    result += in1[0] * in2[0]; result += in1[1] * in2[1];
+                    result += in1[2] * in2[2]; result += in1[3] * in2[3];
+                    result += in1[4] * in2[4]; result += in1[5] * in2[5];
+                    result += in1[6] * in2[6]; result += in1[7] * in2[7];
                 }
                 for(size_t j = colsize&7; j; --j, in1++, in2++)
                 {
@@ -93,17 +95,16 @@ namespace hoa
                 output[i] = result;
             }
         }
-
-        //! Multiplies a matrix by a matrix.
-        /** Multiplies a matrix by a matrix.
-        @param m        The number of rows in the first matrix and the number of columns in the second matrix.
-        @param n        The number of rows in the second matrix and the number of column in the output matrix.
-        @param l        The number of columns in the first matrix and the number of rows in the output matrix.
-        @param in1      The first matrix.
-        @param in2      The second matrix.
-        @param output   The output matrix.
-         */
-        static inline void mul(const size_t m, const size_t n, const size_t l, const T* in1, const T* in2, T* output) hoa_noexcept
+        
+        //! @brief Multiplies a matrix by a matrix.
+        //! @param m        The number of rows in the first matrix and the number of columns in the second matrix.
+        //! @param n        The number of rows in the second matrix and the number of column in the output matrix.
+        //! @param l        The number of columns in the first matrix and the number of rows in the output matrix.
+        //! @param in1      The first matrix.
+        //! @param in2      The second matrix.
+        //! @param output   The output matrix.
+        static inline void mul(const size_t m, const size_t n, const size_t l,
+                               const T* in1, const T* in2, T* output) noexcept
         {
             size_t i, j, k;
             memset(output, 0, m * n * sizeof(T));
@@ -128,14 +129,12 @@ namespace hoa
                 }
             }
         }
-
-        //! Gets the maximum of the absolute values of a vector.
-        /** Gets the maximum of the absolute values of a vector.
-        @param   vectorsize   The size of the vector.
-        @param   vector       The vector.
-        @return  The maximum of the absolute values of the vector
-         */
-        static inline T max(const size_t vectorsize, const T* vector) hoa_noexcept
+        
+        //! @brief Gets the maximum of the absolute values of a vector.
+        //! @param   vectorsize   The size of the vector.
+        //! @param   vector       The vector.
+        //! @return  The maximum of the absolute values of the vector
+        static inline T max(const size_t vectorsize, const T* vector) noexcept
         {
             T max = fabs(vector[0]);
             for(size_t i = 1ul; i < vectorsize; i++)
@@ -148,14 +147,12 @@ namespace hoa
             }
             return max;
         }
-
-        //! Computes the sum of each element of a vector.
-        /** Computes the sum of each element of a vector.
-        @param   size   The size of the vector.
-        @param   vector The vector.
-        @return  The sum of each element of the vector
-         */
-        static inline T sum(const size_t size, const T* vector) hoa_noexcept
+        
+        //! @brief Computes the sum of each element of a vector.
+        //! @param   size   The size of the vector.
+        //! @param   vector The vector.
+        //! @return  The sum of each element of the vector
+        static inline T sum(const size_t size, const T* vector) noexcept
         {
             T sum = 0;
             for(size_t i = 0ul; i < size; i++)
@@ -164,51 +161,43 @@ namespace hoa
             }
             return sum;
         }
-
-        //! Multiplies each element of a vector by a factor.
-        /** Multiplies each element of a vector by a factor.
-        @param   size   The size of the vector.
-        @param   factor The factor of the scale.
-        @param   vector The vector.
-         */
-        static inline void scale(const size_t size, const T factor, T* vector) hoa_noexcept
+        
+        //! @brief Multiplies each element of a vector by a factor.
+        //! @param   size   The size of the vector.
+        //! @param   factor The factor of the scale.
+        //! @param   vector The vector.
+        static inline void scale(const size_t size, const T factor, T* vector) noexcept
         {
             for(size_t i = 0ul; i < size; i++)
             {
                 vector[i] *= factor;
             }
         }
-
-        //! Clears a vector.
-        /** Clears a vector.
-        @param   size   The size of the vector.
-        @param   vector The vector.
-         */
-        static inline void clear(const size_t size, T* vector) hoa_noexcept
+        
+        //! @brief Clears a vector.
+        //! @param   size   The size of the vector.
+        //! @param   vector The vector.
+        static inline void clear(const size_t size, T* vector) noexcept
         {
             memset(vector, 0, size * sizeof(T));
         }
-
-        //! Copies a vector into an other.
-        /** Copies a vector into an other.
-        @param   size   The size of the vectors.
-        @param   source The source vector.
-        @param   dest   The destination vector.
-         */
-        static inline void copy(const size_t size, const T* source, T* dest) hoa_noexcept
+        
+        //! @brief Copies a vector into an other.
+        //! @param   size   The size of the vectors.
+        //! @param   source The source vector.
+        //! @param   dest   The destination vector.
+        static inline void copy(const size_t size, const T* source, T* dest) noexcept
         {
             memcpy(dest, source, size * sizeof(T));
         }
-
-        //! Copies a vector into an other.
-        /** Copies a vector into an other.
-         @param   size   The size of the vectors.
-         @param   source The source vector.
-         @param   incs   The increment of the source vector.
-         @param   dest   The destination vector.
-         @param   incd   The increment of the destination vector.
-         */
-        static inline void copy(const size_t size, const T* source, const size_t incs, T* dest, const size_t incd) hoa_noexcept
+        
+        //! @brief Copies a vector into an other.
+        //! @param   size   The size of the vectors.
+        //! @param   source The source vector.
+        //! @param   incs   The increment of the source vector.
+        //! @param   dest   The destination vector.
+        //! @param   incd   The increment of the destination vector.
+        static inline void copy(const size_t size, const T* source, const size_t incs, T* dest, const size_t incd) noexcept
         {
             size_t is = 0ul;
             size_t id = 0ul;
@@ -219,14 +208,12 @@ namespace hoa
                 id += incd;
             }
         }
-
-        //! Adds a vector to an other.
-        /** Adds a vector to an other value by value.
-        @param   size   The size of the vectors.
-        @param   in The source vector.
-        @param   out   The destination vector.
-         */
-        static inline void add(const size_t size, const T* in, T* out) hoa_noexcept
+        
+        //! @brief Adds a vector to an other value by value.
+        //! @param   size The size of the vectors.
+        //! @param   in The source vector.
+        //! @param   out The destination vector.
+        static inline void add(const size_t size, const T* in, T* out) noexcept
         {
             for(size_t i = size>>3; i; --i, in += 8, out += 8)
             {
@@ -238,16 +225,15 @@ namespace hoa
                 out[0] += in[0];
             }
         }
-
-        //! Adds a vector to an other.
-        /** Adds a vector to an other.
-         @param   size   The size of the vectors.
-         @param   source The source vector.
-         @param   incs   The increment of the source vector.
-         @param   dest   The destination vector.
-         @param   incd   The increment of the destination vector.
-         */
-        static inline void add(const size_t size, const T* source, const size_t incs, T* dest, const size_t incd) hoa_noexcept
+        
+        //! @brief Adds a vector to an other.
+        //! @details Adds a vector to an other.
+        //! @param   size   The size of the vectors.
+        //! @param   source The source vector.
+        //! @param   incs   The increment of the source vector.
+        //! @param   dest   The destination vector.
+        //! @param   incd   The increment of the destination vector.
+        static inline void add(const size_t size, const T* source, const size_t incs, T* dest, const size_t incd) noexcept
         {
             size_t is = 0ul;
             size_t id = 0ul;
@@ -258,29 +244,31 @@ namespace hoa
                 id += incd;
             }
         }
-
-        //! Computes the dot product of two vectors.
-        /** Computes the dot product of two vectors.
-        @param   size   The size of the vectors.
-        @param   in1    The first vector.
-        @param   in2    The second vector.
-        @return The dot product of the two vectors.
-         */
-        static inline T dot(const size_t size, const T* in1, const T* in2) hoa_noexcept
+        
+        //! @brief Computes the dot product of two vectors.
+        //! @details Computes the dot product of two vectors.
+        //! @param   size   The size of the vectors.
+        //! @param   in1    The first vector.
+        //! @param   in2    The second vector.
+        //! @return The dot product of the two vectors.
+        static inline T dot(const size_t size, const T* in1, const T* in2) noexcept
         {
             T result = 0;
             for(size_t i = size>>3; i; --i, in1 += 8, in2 += 8)
             {
-                result += in1[0] * in2[0]; result += in1[1] * in2[1]; result += in1[2] * in2[2]; result += in1[3] * in2[3];
-                result += in1[4] * in2[4]; result += in1[5] * in2[5]; result += in1[6] * in2[6]; result += in1[7] * in2[7];
+                result += in1[0] * in2[0]; result += in1[1] * in2[1];
+                result += in1[2] * in2[2]; result += in1[3] * in2[3];
+                result += in1[4] * in2[4]; result += in1[5] * in2[5];
+                result += in1[6] * in2[6]; result += in1[7] * in2[7];
             }
+            
             for(size_t i = size&7; i; --i, in1++, in2++)
             {
                 result += in1[0] * in2[0];
             }
+            
             return result;
         }
     };
 }
 
-#endif
