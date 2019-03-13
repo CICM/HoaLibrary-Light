@@ -522,6 +522,8 @@ namespace hoa
     {
     public:
         
+        using hrir_t = hrir_2d_t;
+        
         //! @brief Constructor.
         //! @param order The order
         DecoderBinaural(const size_t order)
@@ -567,10 +569,10 @@ namespace hoa
         {
             clear();
             m_vector_size  = vectorsize;
-            m_input  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size);
-            m_result = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() * m_vector_size);
-            m_left   = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
-            m_right  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
+            m_input  = Signal<T>::alloc(hrir_t::getNumberOfColumns() * m_vector_size);
+            m_result = Signal<T>::alloc(hrir_t::getNumberOfRows() * m_vector_size);
+            m_left   = Signal<T>::alloc(hrir_t::getNumberOfRows() + m_vector_size);
+            m_right  = Signal<T>::alloc(hrir_t::getNumberOfRows() + m_vector_size);
         }
         
     public:
@@ -584,8 +586,8 @@ namespace hoa
                 Signal<T>::copy(m_vector_size, inputs[i], input);
                 input += m_vector_size;
             }
-            processChannel(m_input, Hrir<Hoa2d, T>::getLeftMatrix(), m_left, outputs[0]);
-            processChannel(m_input, Hrir<Hoa2d, T>::getRightMatrix(), m_right, outputs[1]);
+            processChannel(m_input, hrir_t::getLeftMatrix<T>(), m_left, outputs[0]);
+            processChannel(m_input, hrir_t::getRightMatrix<T>(), m_right, outputs[1]);
         }
         
         inline void process(const T* inputs, T* outputs) noexcept override
@@ -598,7 +600,7 @@ namespace hoa
         
         inline void processChannel(const T* harmonics, const T* response, T* vector, T* output) noexcept
         {
-            const size_t l = Hrir<Hoa2d, T>::getNumberOfColumns();   // Harmonics size aka 11
+            const size_t l = hrir_t::getNumberOfColumns();   // Harmonics size aka 11
             const size_t m = m_crop_size;      // Impulses size
             const size_t n = m_vector_size;    // Vector size
             Signal<T>::mul(m, n, l, response, harmonics, m_result);
@@ -686,7 +688,7 @@ namespace hoa
     {
     public:
         
-        using hrir_t = Hrir<Hoa3d, T>;
+        using hrir_t = hrir_3d_t;
         
         //! @brief Constructor.
         //! @param order The order
@@ -751,8 +753,8 @@ namespace hoa
                 input += m_vector_size;
             }
             
-            processChannel(m_input, hrir_t::getLeftMatrix(), m_left, outputs[0]);
-            processChannel(m_input, hrir_t::getRightMatrix(), m_right, outputs[1]);
+            processChannel(m_input, hrir_t::getLeftMatrix<T>(), m_left, outputs[0]);
+            processChannel(m_input, hrir_t::getRightMatrix<T>(), m_right, outputs[1]);
         }
         
         inline void process(const T* inputs, T* outputs) noexcept override
