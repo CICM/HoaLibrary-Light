@@ -11,6 +11,8 @@
 
 #include "Hoa_Hrir_Listen_1002C_2D.hpp"
 #include "Hoa_Hrir_Listen_1002C_3D.hpp"
+#include "Hoa_Hrir_Sadie_D2_2D.hpp"
+#include "Hoa_Hrir_Sadie_D2_3D.hpp"
 
 namespace hoa
 {
@@ -95,6 +97,6 @@ namespace hoa
         };
     };
     
-    using hrir_2d_t = Hrir<Hoa2d, hrir::Listen_1002C_2D>;
-    using hrir_3d_t = Hrir<Hoa3d, hrir::Listen_1002C_3D>;
+    using hrir_2d_t = Hrir<Hoa2d, hrir::Sadie_D2_2D>;
+    using hrir_3d_t = Hrir<Hoa3d, hrir::Sadie_D2_3D>;
 }
