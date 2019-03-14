@@ -19,6 +19,7 @@ namespace hoa { namespace hrir
 {
     struct Listen_1002C_2D
     {
+        static const Dimension dimension = Dimension::Hoa2d;
         static const size_t order = 5;
         static const size_t number_of_harmonics = 11;
         static const size_t responses_size = 512;

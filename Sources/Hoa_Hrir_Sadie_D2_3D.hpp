@@ -19,6 +19,7 @@ namespace hoa { namespace hrir
 {
     struct Sadie_D2_3D
     {
+        static const Dimension dimension = Dimension::Hoa3d;
         static const size_t order = 3;
         static const size_t number_of_harmonics = 16;
         static const size_t responses_size = 256;
