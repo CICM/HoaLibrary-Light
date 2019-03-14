@@ -183,33 +183,7 @@ namespace hoa
     //! when the number of loudspeakers is less than the number of harmonics plus one
     //! or when the loudspeakers are not equally distributed on the circle or the sphere.
     template <Dimension D, typename T>
-    class DecoderIrregular
-    : public Decoder<D, T>
-    {
-    public:
-        
-        //! @brief Constructor.
-        //! @param order    The order
-        //! @param channels The number of planewaves channels.
-        DecoderIrregular(const size_t order, const size_t channels) noexcept;
-        
-        //! @brief Destructor.
-        virtual ~DecoderIrregular() = 0;
-        
-        //! @brief This method performs the decoding.
-        //! @details You should use this method for in-place or not-in-place processing and sample by sample.
-        //! The inputs array contains the spherical harmonics samples.
-        //! The outputs array contains the channels samples.
-        //! @param inputs  The input array that contains the samples of the harmonics.
-        //! @param outputs The output array that contains samples destinated to the channels.
-        virtual void process(const T* inputs, T* outputs) noexcept override;
-        
-        //! This method computes the decoding matrix.
-        //! You should use this method after changing the position of the loudspeakers.
-        //! @param vectorsize The vector size for binaural decoding.
-        virtual void prepare(const size_t vectorsize = 64) override;
-        
-    };
+    class DecoderIrregular {};
     
     // ================================================================================ //
     // DECODER BINAURAL //
@@ -217,35 +191,9 @@ namespace hoa
     
     //! @brief The binaural decoder decodes a sound field in the harmonics domain for headphones.
     //! @details It decodes the sound field through the planewaves domain
-    //! and convolves the results with HRTF from the IRCAM database.
+    //! and convolves the results with HRIRs.
     template <Dimension D, typename T>
-    class DecoderBinaural
-    : public Decoder<Hoa2d, T>
-    {
-    public:
-        
-        //! @brief Constructor.
-        //! @param order The order
-        DecoderBinaural(const size_t order);
-        
-        //! @brief Destructor.
-        virtual ~DecoderBinaural() = 0;
-        
-        //! @brief This method computes the decoding matrix.
-        //! @details You should use this method after changing the position of the loudspeakers.
-        //! @param vectorsize The vector size for binaural decoding.
-        virtual void prepare(const size_t vectorsize = 64) override;
-        
-        //! @brief Performs the binaural decoding and convolution.
-        virtual  void processBlock() noexcept;
-        
-        //! @brief This method performs the binaural decoding.
-        //! @details You should use this method for not-in-place processing
-        //! and performs the binaural decoding sample by sample.
-        //! @param inputs  The input samples (spherical harmonics).
-        //! @param outputs The outputs array contains the headphones samples.
-        virtual void process(const T* inputs, T* outputs) noexcept override;
-    };
+    class DecoderBinaural {};
     
     // ================================================================================ //
     // DECODER 2D //
