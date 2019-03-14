@@ -96,7 +96,4 @@ namespace hoa
             static double const* right() { return hrir_t::get_double_right(); }
         };
     };
-    
-    using hrir_2d_t = Hrir<Hoa2d, hrir::Sadie_D2_2D>;
-    using hrir_3d_t = Hrir<Hoa3d, hrir::Sadie_D2_3D>;
 }
