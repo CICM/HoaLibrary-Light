@@ -183,33 +183,7 @@ namespace hoa
     //! when the number of loudspeakers is less than the number of harmonics plus one
     //! or when the loudspeakers are not equally distributed on the circle or the sphere.
     template <Dimension D, typename T>
-    class DecoderIrregular
-    : public Decoder<D, T>
-    {
-    public:
-        
-        //! @brief Constructor.
-        //! @param order    The order
-        //! @param channels The number of planewaves channels.
-        DecoderIrregular(const size_t order, const size_t channels) noexcept;
-        
-        //! @brief Destructor.
-        virtual ~DecoderIrregular() = 0;
-        
-        //! @brief This method performs the decoding.
-        //! @details You should use this method for in-place or not-in-place processing and sample by sample.
-        //! The inputs array contains the spherical harmonics samples.
-        //! The outputs array contains the channels samples.
-        //! @param inputs  The input array that contains the samples of the harmonics.
-        //! @param outputs The output array that contains samples destinated to the channels.
-        virtual void process(const T* inputs, T* outputs) noexcept override;
-        
-        //! This method computes the decoding matrix.
-        //! You should use this method after changing the position of the loudspeakers.
-        //! @param vectorsize The vector size for binaural decoding.
-        virtual void prepare(const size_t vectorsize = 64) override;
-        
-    };
+    class DecoderIrregular {};
     
     // ================================================================================ //
     // DECODER BINAURAL //
@@ -217,35 +191,9 @@ namespace hoa
     
     //! @brief The binaural decoder decodes a sound field in the harmonics domain for headphones.
     //! @details It decodes the sound field through the planewaves domain
-    //! and convolves the results with HRTF from the IRCAM database.
-    template <Dimension D, typename T>
-    class DecoderBinaural
-    : public Decoder<Hoa2d, T>
-    {
-    public:
-        
-        //! @brief Constructor.
-        //! @param order The order
-        DecoderBinaural(const size_t order);
-        
-        //! @brief Destructor.
-        virtual ~DecoderBinaural() = 0;
-        
-        //! @brief This method computes the decoding matrix.
-        //! @details You should use this method after changing the position of the loudspeakers.
-        //! @param vectorsize The vector size for binaural decoding.
-        virtual void prepare(const size_t vectorsize = 64) override;
-        
-        //! @brief Performs the binaural decoding and convolution.
-        virtual  void processBlock() noexcept;
-        
-        //! @brief This method performs the binaural decoding.
-        //! @details You should use this method for not-in-place processing
-        //! and performs the binaural decoding sample by sample.
-        //! @param inputs  The input samples (spherical harmonics).
-        //! @param outputs The outputs array contains the headphones samples.
-        virtual void process(const T* inputs, T* outputs) noexcept override;
-    };
+    //! and convolves the results with HRIRs.
+    template <Dimension D, typename T, typename HrirType>
+    class DecoderBinaural {};
     
     // ================================================================================ //
     // DECODER 2D //
@@ -516,11 +464,15 @@ namespace hoa
     
     //! @brief The ambisonic binaural decoder.
     //! @details The binaural decoder should be used to decode an ambisonic sound field for headphones.
-    template <typename T>
-    class DecoderBinaural<Hoa2d, T>
+    template <typename T, typename HrirType>
+    class DecoderBinaural<Hoa2d, T, HrirType>
     : public Decoder<Hoa2d, T>
     {
     public:
+        
+        static_assert(HrirType::dimension == Hoa2d, "not a valid 2D response");
+        
+        using hrir_t = Hrir<Hoa2d, HrirType>;
         
         //! @brief Constructor.
         //! @param order The order
@@ -563,14 +515,14 @@ namespace hoa
         
         //! @brief This method computes the decoding matrix.
         //! @param vectorsize The vector size for binaural decoding.
-        void prepare(const size_t vectorsize = 64)  override
+        void prepare(const size_t vectorsize = 64) override
         {
             clear();
             m_vector_size  = vectorsize;
-            m_input  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfColumns() * m_vector_size);
-            m_result = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() * m_vector_size);
-            m_left   = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
-            m_right  = Signal<T>::alloc(Hrir<Hoa2d, T>::getNumberOfRows() + m_vector_size);
+            m_input  = Signal<T>::alloc(hrir_t::getNumberOfColumns() * m_vector_size);
+            m_result = Signal<T>::alloc(hrir_t::getNumberOfRows() * m_vector_size);
+            m_left   = Signal<T>::alloc(hrir_t::getNumberOfRows() + m_vector_size);
+            m_right  = Signal<T>::alloc(hrir_t::getNumberOfRows() + m_vector_size);
         }
         
     public:
@@ -584,8 +536,8 @@ namespace hoa
                 Signal<T>::copy(m_vector_size, inputs[i], input);
                 input += m_vector_size;
             }
-            processChannel(m_input, Hrir<Hoa2d, T>::getLeftMatrix(), m_left, outputs[0]);
-            processChannel(m_input, Hrir<Hoa2d, T>::getRightMatrix(), m_right, outputs[1]);
+            processChannel(m_input, hrir_t::template getLeftMatrix<T>(), m_left, outputs[0]);
+            processChannel(m_input, hrir_t::template getRightMatrix<T>(), m_right, outputs[1]);
         }
         
         inline void process(const T* inputs, T* outputs) noexcept override
@@ -598,7 +550,7 @@ namespace hoa
         
         inline void processChannel(const T* harmonics, const T* response, T* vector, T* output) noexcept
         {
-            const size_t l = Hrir<Hoa2d, T>::getNumberOfColumns();   // Harmonics size aka 11
+            const size_t l = hrir_t::getNumberOfColumns();   // Harmonics size aka 11
             const size_t m = m_crop_size;      // Impulses size
             const size_t n = m_vector_size;    // Vector size
             Signal<T>::mul(m, n, l, response, harmonics, m_result);
@@ -680,13 +632,15 @@ namespace hoa
     
     //! @brief The ambisonic binaural decoder.
     //! @details The binaural decoder should be used to decode an ambisonic sound field for headphones.
-    template <typename T>
-    class DecoderBinaural<Hoa3d, T>
+    template <typename T, typename HrirType>
+    class DecoderBinaural<Hoa3d, T, HrirType>
     : public Decoder<Hoa3d, T>
     {
     public:
         
-        using hrir_t = Hrir<Hoa3d, T>;
+        static_assert(HrirType::dimension == Hoa3d, "not a valid 3D response");
+        
+        using hrir_t = Hrir<Hoa3d, HrirType>;
         
         //! @brief Constructor.
         //! @param order The order
@@ -751,8 +705,8 @@ namespace hoa
                 input += m_vector_size;
             }
             
-            processChannel(m_input, hrir_t::getLeftMatrix(), m_left, outputs[0]);
-            processChannel(m_input, hrir_t::getRightMatrix(), m_right, outputs[1]);
+            processChannel(m_input, hrir_t::template getLeftMatrix<T>(), m_left, outputs[0]);
+            processChannel(m_input, hrir_t::template getRightMatrix<T>(), m_right, outputs[1]);
         }
         
         inline void process(const T* inputs, T* outputs) noexcept override
@@ -798,4 +752,11 @@ namespace hoa
         
     };
     
+    // syntactic sugar
+    
+    template<typename T>
+    using decoder_binaural_2d_t = DecoderBinaural<Hoa2d, T, hrir::Sadie_D2_2D>;
+    
+    template<typename T>
+    using decoder_binaural_3d_t = DecoderBinaural<Hoa3d, T, hrir::Sadie_D2_3D>;
 }
