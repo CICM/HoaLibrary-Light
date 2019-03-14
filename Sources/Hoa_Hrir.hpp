@@ -32,7 +32,7 @@ namespace hoa
         
         //! @brief Gets the order of decomposition used to compute the matrices.
         //! @return The order of decomposition.
-        static size_t getOrderOfDecomposition() noexcept
+        static constexpr size_t getOrderOfDecomposition() noexcept
         {
             return hrir_t::order;
         }
@@ -40,7 +40,7 @@ namespace hoa
         //! @brief Gets the number rows of the matrices.
         //! @details Or the size of the responses used to compute the matrices.
         //! @return The number rows of the matrices.
-        static size_t getNumberOfRows() noexcept
+        static constexpr size_t getNumberOfRows() noexcept
         {
             return hrir_t::responses_size;
         }
@@ -48,14 +48,14 @@ namespace hoa
         //! @brief Gets the number columns of the matrices.
         //! @details Or the number of harmonics used to compute the matrices.
         //! @return The number columns of the matrices.
-        static size_t getNumberOfColumns() noexcept
+        static constexpr size_t getNumberOfColumns() noexcept
         {
             return hrir_t::number_of_harmonics;
         }
         
         //! @brief Gets the size of the matrices (rows * columns).
         //! @return The nsize of the matrices.
-        static size_t getMatricesSize() noexcept
+        static constexpr size_t getMatricesSize() noexcept
         {
             return hrir_t::matrices_size;
         }

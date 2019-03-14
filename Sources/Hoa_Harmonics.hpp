@@ -51,7 +51,7 @@ namespace hoa
         std::string getName() const
         {
             std::ostringstream ostr;
-            ostr <<  "Harmonic (" << m_index << ") : "<< m_degree << " " << m_order;
+            ostr <<  "Harmonic (" << m_index << ") : " << m_degree << " " << m_order;
             return ostr.str();
         }
 
@@ -102,7 +102,7 @@ namespace hoa
         //! @details The computation is \f$2N+1\f$ in 2D and \f$(N+1)^{2}\f$ in 3D.
         //! with \f$N\f$ the order of decomposition.
         //! @param order   The order of decomposition.
-        static inline size_t getNumberOfHarmonics(const size_t order) noexcept
+        static inline constexpr size_t getNumberOfHarmonics(const size_t order) noexcept
         {
             return (D == Hoa2d) ? (order * 2 + 1) : (order + 1) * (order + 1);
         }
@@ -111,7 +111,7 @@ namespace hoa
         //! @details The computation is \f$(degree\neq0)+1\f$ in 2D and \f$2l+1\f$ in 3D.
         //! with \f$l\f$ the degree.
         //! @param degree  The degree.
-        static inline size_t getNumberOfHarmonicsInDegree(const size_t degree) noexcept
+        static inline constexpr size_t getNumberOfHarmonicsInDegree(const size_t degree) noexcept
         {
             return (D == Hoa2d) ? ((degree != 0) + 1) : (degree * 2 + 1);
         }
