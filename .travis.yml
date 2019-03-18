@@ -3,7 +3,7 @@ dist: trusty
 sudo: required
 
 git:
-  submodules: false
+  submodules: true
   depth: 3
 
 matrix:
