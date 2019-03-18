@@ -2,9 +2,6 @@ language: cpp
 dist: trusty
 sudo: required
 
-notifications:
-  email: false
-
 git:
   submodules: false
   depth: 3
@@ -55,3 +52,6 @@ script:
   - cmake --build .
   - cd ../
   - ./build/hoatest
+
+notifications:
+  email: true
