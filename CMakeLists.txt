@@ -23,6 +23,7 @@ option(GCOV_SUPPORT "Build for gcov" OFF)
 
 set(HOALIBRARY_TARGET_NAME ${PROJECT_NAME})
 set(HOALIBRARY_INCLUDE_BUILD_DIR "${PROJECT_SOURCE_DIR}/Sources/")
+set(HOALIBRARY_THIRD_PARTY_DIR "${PROJECT_SOURCE_DIR}/ThirdParty")
 
 #--------------------------------------
 # Compiler settings
@@ -56,6 +57,16 @@ add_library(
   ${PROJECT_NAME}::${HOALIBRARY_TARGET_NAME}
   ALIAS ${HOALIBRARY_TARGET_NAME}
 )
+
+#--------------------------------------
+
+# Eigen
+set(EIGEN3_DIR "${HOALIBRARY_THIRD_PARTY_DIR}/Eigen/" CACHE PATH "Path to Eigen3 library")
+set(EIGEN3_INCLUDE_DIR ${EIGEN3_DIR})
+
+target_include_directories(${HOALIBRARY_TARGET_NAME} INTERFACE ${EIGEN3_INCLUDE_DIR})
+
+#--------------------------------------
 
 target_include_directories(
   ${HOALIBRARY_TARGET_NAME}
