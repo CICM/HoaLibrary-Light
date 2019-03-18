@@ -14,6 +14,8 @@
 #include "Hoa_Encoder.hpp"
 #include "Hoa_Hrir.hpp"
 
+#include <Eigen/Dense>
+
 namespace hoa
 {
     // ================================================================================ //
@@ -642,8 +644,10 @@ namespace hoa
         
         using hrir_t = Hrir<Hoa3d, HrirType>;
         
+    public:
+        
         //! @brief Constructor.
-        //! @param order The order
+        //! @param order The order.
         DecoderBinaural(const size_t order)
         : Decoder<Hoa3d, T>(order, 2)
         {
@@ -653,21 +657,17 @@ namespace hoa
         
         //! @brief This method retrieves the mode of the decoder.
         //! @return The mode of the decoder.
-        inline typename Decoder<Hoa3d, T>::Mode getMode() const noexcept override
+        typename Decoder<Hoa3d, T>::Mode getMode() const noexcept override
         {
             return Decoder<Hoa3d, T>::BinauralMode;
         }
         
-        //! @brief The binaural decoder destructor.
-        //! @details The binaural decoder destructor free the memory.
-        ~DecoderBinaural()
-        {
-            clear();
-        }
+        //! @brief Destructor.
+        ~DecoderBinaural() = default;
         
         //! @brief This method sets the crop size of the responses.
         //! @param size The crop size.
-        inline void setCropSize(const size_t size) noexcept
+        void setCropSize(const size_t size) noexcept
         {
             const auto num_rows = hrir_t::getNumberOfRows();
             m_crop_size = (size == 0ul || size > num_rows) ? num_rows : size;
@@ -675,7 +675,7 @@ namespace hoa
         
         //! @brief This method gets the crop size of the responses.
         //! @return The crop size.
-        inline size_t getCropSize() const noexcept
+        size_t getCropSize() const noexcept
         {
             const auto num_rows = hrir_t::getNumberOfRows();
             return (m_crop_size == num_rows) ? 0ul : m_crop_size;
@@ -685,12 +685,19 @@ namespace hoa
         //! @param vectorsize The vector size for binaural decoding.
         void prepare(const size_t vectorsize = 64) override
         {
-            clear();
             m_vector_size = vectorsize;
-            m_input  = Signal<T>::alloc(hrir_t::getNumberOfColumns() * m_vector_size);
-            m_result = Signal<T>::alloc(hrir_t::getNumberOfRows() * m_vector_size);
-            m_left   = Signal<T>::alloc(hrir_t::getNumberOfRows() + m_vector_size);
-            m_right  = Signal<T>::alloc(hrir_t::getNumberOfRows() + m_vector_size);
+            
+            const auto response_size = hrir_t::getNumberOfRows();
+            const auto number_of_harmonics = hrir_t::getNumberOfColumns();
+            
+            // the setZero method resize and set matrice and vector coefficients to 0.
+            
+            m_input.setZero(number_of_harmonics, m_vector_size);
+            m_result.setZero(response_size, m_vector_size);
+            
+            const auto side_vecsize = response_size + m_vector_size;
+            m_left.setZero(side_vecsize);
+            m_right.setZero(side_vecsize);
         }
         
     public:
@@ -698,15 +705,16 @@ namespace hoa
         //! @brief This method performs the binaural decoding and the convolution.
         inline void processBlock(const T** inputs, T** outputs) noexcept
         {
-            T* input = m_input;
-            for(size_t i = 0; i < hrir_t::getNumberOfColumns() && i < Decoder<Hoa3d, T>::getNumberOfHarmonics(); i++)
+            const auto ins = std::min(Decoder<Hoa3d, T>::getNumberOfHarmonics(),
+                                      hrir_t::getNumberOfColumns());
+            
+            for(auto i = 0; i < ins; ++i)
             {
-                Signal<T>::copy(m_vector_size, inputs[i], input);
-                input += m_vector_size;
+                m_input.row(i).noalias() = vector_t::Map(inputs[i], m_vector_size);
             }
             
-            processChannel(m_input, hrir_t::template getLeftMatrix<T>(), m_left, outputs[0]);
-            processChannel(m_input, hrir_t::template getRightMatrix<T>(), m_right, outputs[1]);
+            processChannel(m_input, m_left_matrix, m_left, outputs[0]);
+            processChannel(m_input, m_right_matrix, m_right, outputs[1]);
         }
         
         inline void process(const T* inputs, T* outputs) noexcept override
@@ -717,39 +725,50 @@ namespace hoa
         
     private:
         
-        inline void processChannel(const T* harmonics, const T* response, T* vector, T* output) noexcept
+        using vector_t = Eigen::RowVectorX<T>;
+        using matrix_t = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+        using hrir_matrix_t = Eigen::Map<const Eigen::Matrix<T, hrir_t::getNumberOfRows(), hrir_t::getNumberOfColumns(), Eigen::RowMajor>>;
+        
+        void processChannel(matrix_t const& harmonics_matrix,
+                            hrir_matrix_t const& response_matrix,
+                            vector_t& buffer,
+                            T* output)
         {
-            const size_t l = hrir_t::getNumberOfColumns();   // Harmonics size aka 11
-            const size_t m = m_crop_size;      // Impulses size
-            const size_t n = m_vector_size;    // Vector size
-            Signal<T>::mul(m, n, l, response, harmonics, m_result);
-            for(size_t i = 0; i < n; i ++)
+            const size_t m = m_crop_size;    // crop <= response size
+            const size_t n = m_vector_size;
+
+            m_result.topRows(m).noalias() = response_matrix.topRows(m) * harmonics_matrix;
+            
+            for(size_t i = 0; i < n; ++i)
             {
-                Signal<T>::add(m, m_result + i, n, vector + i, 1ul);
+                buffer.segment(i, m).noalias() += m_result.col(i).head(m);
             }
             
-            Signal<T>::copy(m_vector_size, vector, output);
-            Signal<T>::copy(m, vector + m_vector_size, vector);
-            Signal<T>::clear(m_vector_size, vector + m);
-        }
-        
-        void clear()
-        {
-            m_input  = Signal<T>::free(m_input);
-            m_result = Signal<T>::free(m_result);
-            m_left   = Signal<T>::free(m_left);
-            m_right  = Signal<T>::free(m_right);
+            vector_t::Map(output, n) = buffer.head(n);
+            buffer.head(m) = buffer.segment(n, m);
+            buffer.segment(m, n).setZero();
         }
         
     private:
         
         size_t  m_vector_size = 0ul;
         size_t  m_crop_size = hrir_t::getNumberOfRows();
-        T*      m_input = nullptr;
-        T*      m_result = nullptr;
-        T*      m_left = nullptr;
-        T*      m_right = nullptr;
+        matrix_t m_input = {};
+        matrix_t m_result = {};
+        vector_t m_left = {};
+        vector_t m_right = {};
         
+        const hrir_matrix_t m_left_matrix = {
+            hrir_t::template getLeftMatrix<T>(),
+            hrir_t::getNumberOfRows(),
+            hrir_t::getNumberOfColumns()
+        };
+        
+        const hrir_matrix_t m_right_matrix = {
+            hrir_t::template getRightMatrix<T>(),
+            hrir_t::getNumberOfRows(),
+            hrir_t::getNumberOfColumns()
+        };
     };
     
     // syntactic sugar
