@@ -729,8 +729,8 @@ namespace hoa
         
     private:
         
-        using vector_t = Eigen::RowVectorX<T>;
-        using matrix_t = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>;
+        using vector_t = Eigen::VectorX<T>;
+        using matrix_t = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
         using hrir_matrix_t = Eigen::Map<const Eigen::Matrix<T, hrir_t::getNumberOfRows(), hrir_t::getNumberOfColumns(), Eigen::RowMajor>>;
         
         void processChannel(matrix_t const& harmonics_matrix,
