@@ -667,22 +667,6 @@ namespace hoa
         //! @brief Destructor.
         ~DecoderBinaural() = default;
         
-        //! @brief This method sets the crop size of the responses.
-        //! @param size The crop size.
-        void setCropSize(const size_t size) noexcept
-        {
-            const auto num_rows = hrir_t::getNumberOfRows();
-            m_crop_size = (size == 0ul || size > num_rows) ? num_rows : size;
-        }
-        
-        //! @brief This method gets the crop size of the responses.
-        //! @return The crop size.
-        size_t getCropSize() const noexcept
-        {
-            const auto num_rows = hrir_t::getNumberOfRows();
-            return (m_crop_size == num_rows) ? 0ul : m_crop_size;
-        }
-        
         //! @brief This method computes the decoding matrix.
         //! @param vectorsize The vector size for binaural decoding.
         void prepare(const size_t vectorsize = 64) override
@@ -701,6 +685,9 @@ namespace hoa
             m_left.setZero(side_vecsize);
             m_right.setZero(side_vecsize);
         }
+        
+        [[deprecated]] void setCropSize(const size_t size) noexcept {}
+        [[deprecated]] size_t getCropSize() const noexcept {}
         
     public:
         
@@ -756,7 +743,6 @@ namespace hoa
     private:
         
         size_t  m_vector_size = 0ul;
-        size_t  m_crop_size = hrir_t::getNumberOfRows();
         matrix_t m_input = {};
         matrix_t m_result = {};
         vector_t m_left = {};
