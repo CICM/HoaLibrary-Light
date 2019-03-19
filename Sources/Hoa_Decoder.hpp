@@ -738,19 +738,19 @@ namespace hoa
                             vector_t& buffer,
                             T* output)
         {
-            const size_t m = m_crop_size;    // crop <= response size
+            constexpr auto rsize = hrir_t::getNumberOfRows();
             const size_t n = m_vector_size;
 
-            m_result.topRows(m).noalias() = response_matrix.topRows(m) * harmonics_matrix;
+            m_result.noalias() = response_matrix * harmonics_matrix;
             
             for(size_t i = 0; i < n; ++i)
             {
-                buffer.segment(i, m).noalias() += m_result.col(i).head(m);
+                buffer.template segment<rsize>(i).noalias() += m_result.col(i);
             }
             
             vector_t::Map(output, n) = buffer.head(n);
-            buffer.head(m) = buffer.segment(n, m);
-            buffer.segment(m, n).setZero();
+            buffer.head(rsize) = buffer.template segment<rsize>(n);
+            buffer.segment(rsize, n).setZero();
         }
         
     private:
