@@ -546,6 +546,8 @@ namespace hoa
         {
             hoa_unused(inputs);
             hoa_unused(outputs);
+            
+            assert(true && "use the processBlock method instead");
         }
         
     private:
@@ -721,6 +723,8 @@ namespace hoa
         {
             hoa_unused(inputs);
             hoa_unused(outputs);
+            
+            assert(true && "use the processBlock method instead");
         }
         
     private:
