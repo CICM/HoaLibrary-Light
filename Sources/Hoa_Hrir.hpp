@@ -57,7 +57,7 @@ namespace hoa
         //! @return The nsize of the matrices.
         static constexpr size_t getMatricesSize() noexcept
         {
-            return hrir_t::matrices_size;
+            return getNumberOfRows() * getNumberOfColumns();
         }
         
         //! @brief Get the HRIR matrix for the left ear.

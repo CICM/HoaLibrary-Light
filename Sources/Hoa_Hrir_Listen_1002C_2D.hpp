@@ -23,7 +23,6 @@ namespace hoa { namespace hrir
         static const size_t order = 5;
         static const size_t number_of_harmonics = 11;
         static const size_t responses_size = 512;
-        static const size_t matrices_size = 5632;
 
         static float const* get_float_left()
         {
