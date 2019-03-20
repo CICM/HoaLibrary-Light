@@ -716,7 +716,7 @@ namespace hoa
         void processBlock(Eigen::Ref<input_matrix_t> const& inputs,
                           Eigen::Ref<output_matrix_t> outputs)
         {
-            assert(inputs.cols() == m_vectorsize);
+            assert(inputs.cols() == m_vector_size);
             
             processChannel(inputs, m_left_matrix, m_left, outputs.row(0));
             processChannel(inputs, m_right_matrix, m_right, outputs.row(1));
