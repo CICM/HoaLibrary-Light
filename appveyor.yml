@@ -5,6 +5,10 @@ environment:
      - msvc: "Visual Studio 14 2015"
      - msvc: "Visual Studio 14 2015 Win64"
 
+install:
+  - git submodule update --init --recursive
+  - cmake --version
+
 build_script:
     - mkdir build
     - cd build

@@ -1,12 +1,9 @@
 language: cpp
-dist: trusty
+dist: xenial
 sudo: required
 
-notifications:
-  email: false
-
 git:
-  submodules: false
+  submodules: true
   depth: 3
 
 matrix:
@@ -55,3 +52,6 @@ script:
   - cmake --build .
   - cd ../
   - ./build/hoatest
+
+notifications:
+  email: true
