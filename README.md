@@ -19,6 +19,8 @@ Requires git and [CMake](https://cmake.org/).
 # clone repository
 $ git clone https://github.com/CICM/HoaLibrary-Light.git
 $ cd HoaLibrary-Light
+# init submodules
+$ git submodule update --init --recursive
 # generate project
 $ mkdir build && cd build
 $ cmake ..
@@ -28,17 +30,24 @@ $ cmake --build . --config Release
 
 ## Authors :
 
-- 2012: Pierre Guillot, Eliott Paris & Julien Colafrancesco
-- 2012-2015: Pierre Guillot & Eliott Paris
-- 2015: Pierre Guillot & Eliott Paris & Thomas Le Meur (Light version)
-- 2016-2017: Pierre Guillot (Light version)
+2012-2019: Pierre Guillot, Eliott Paris and [others](https://github.com/CICM/HoaLibrary-Light/graphs/contributors).
 
 ## Implementations :
 
-[Pure Data](https://github.com/CICM/HoaLibrary-PD "PD")<br/>
-[Max](https://github.com/CICM/HoaLibrary-Max "Max")<br/>
-[Ofx](https://github.com/CICM/ofxHoa "Open Framework")<br/>
-[Faust](https://github.com/CICM/HoaLibrary-Faust "Faust")
+- [HoaLibrary-Max](https://github.com/CICM/HoaLibrary-Max "Max") - HoaLibrary for Max.
+- [HoaLibrary-Pd](https://github.com/CICM/HoaLibrary-PD "PD") - HoaLibrary for Pure Data.
+- [HoaLibrary-Unity](https://github.com/CICM/HoaLibrary-Unity "Unity") - HoaLibrary for Unity.
+- [HoaLibrary-Faust](https://github.com/CICM/HoaLibrary-Faust "Faust") - HoaLibrary for Faust.
+- [OfxHoa](https://github.com/CICM/ofxHoa "Open Framework") - HoaLibrary for openFrameworks.
+- [Cinder-Hoa](https://github.com/saynono/Cinder-Hoa) - HoaLibrary for Cinder.
+
+> Warning: these implementations may not be up to date with this repo.
+
+## ThirdParty
+
+This repo is using the following third parties:
+
+- [Eigen](http://eigen.tuxfamily.org)
 
 #### License :
 
