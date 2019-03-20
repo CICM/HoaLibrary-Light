@@ -646,6 +646,9 @@ namespace hoa
         
         using hrir_t = Hrir<Hoa3d, HrirType>;
         
+        using input_matrix_t = Eigen::Matrix<T, hrir_t::getNumberOfColumns(), Eigen::Dynamic>;
+        using output_matrix_t = Eigen::Matrix2X<T>;
+        
     public:
         
         //! @brief Constructor.
@@ -653,8 +656,8 @@ namespace hoa
         DecoderBinaural(const size_t order)
         : Decoder<Hoa3d, T>(order, 2)
         {
-            Decoder<Hoa3d, T>::setPlanewaveAzimuth(0, static_cast<T>(HOA_PI2*3.));
-            Decoder<Hoa3d, T>::setPlanewaveAzimuth(1, static_cast<T>(HOA_PI2));
+            Decoder<Hoa3d, T>::setPlanewaveAzimuth(0, math<T>::pi_over_two() * 3.);
+            Decoder<Hoa3d, T>::setPlanewaveAzimuth(1, math<T>::pi_over_two());
         }
         
         //! @brief This method retrieves the mode of the decoder.
@@ -673,8 +676,8 @@ namespace hoa
         {
             m_vector_size = vectorsize;
             
-            const auto response_size = hrir_t::getNumberOfRows();
-            const auto number_of_harmonics = hrir_t::getNumberOfColumns();
+            constexpr auto response_size = hrir_t::getNumberOfRows();
+            constexpr auto number_of_harmonics = hrir_t::getNumberOfColumns();
             
             // the setZero method resize and set matrice and vector coefficients to 0.
             
@@ -702,8 +705,21 @@ namespace hoa
                 m_input.row(i).noalias() = vector_t::Map(inputs[i], m_vector_size);
             }
             
-            processChannel(m_input, m_left_matrix, m_left, outputs[0]);
-            processChannel(m_input, m_right_matrix, m_right, outputs[1]);
+            processChannel(m_input, m_left_matrix, m_left,
+                           vector_t::Map(outputs[0], m_vector_size));
+            
+            processChannel(m_input, m_right_matrix, m_right,
+                           vector_t::Map(outputs[1], m_vector_size));
+        }
+        
+        //! @brief This method performs the binaural decoding and the convolution.
+        void processBlock(Eigen::Ref<input_matrix_t> const& inputs,
+                          Eigen::Ref<output_matrix_t> outputs)
+        {
+            assert(inputs.cols() == m_vectorsize);
+            
+            processChannel(inputs, m_left_matrix, m_left, outputs.row(0));
+            processChannel(inputs, m_right_matrix, m_right, outputs.row(1));
         }
         
         inline void process(const T* inputs, T* outputs) noexcept override
@@ -719,15 +735,16 @@ namespace hoa
         using vector_t = Eigen::VectorX<T>;
         using matrix_t = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
         using hrir_matrix_t = Eigen::Map<const Eigen::Matrix<T, hrir_t::getNumberOfRows(), hrir_t::getNumberOfColumns(), Eigen::RowMajor>>;
+        using output_channel_ref_t = Eigen::Ref<vector_t, 0, Eigen::InnerStride<>>;
         
         void processChannel(matrix_t const& harmonics_matrix,
                             hrir_matrix_t const& response_matrix,
                             vector_t& buffer,
-                            T* output)
+                            output_channel_ref_t output)
         {
             constexpr auto rsize = hrir_t::getNumberOfRows();
             const size_t n = m_vector_size;
-
+            
             m_result.noalias() = response_matrix * harmonics_matrix;
             
             for(size_t i = 0; i < n; ++i)
@@ -735,7 +752,7 @@ namespace hoa
                 buffer.template segment<rsize>(i).noalias() += m_result.col(i);
             }
             
-            vector_t::Map(output, n) = buffer.head(n);
+            output = buffer.head(n);
             buffer.head(rsize) = buffer.template segment<rsize>(n);
             buffer.segment(rsize, n).setZero();
         }
