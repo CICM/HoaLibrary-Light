@@ -503,7 +503,7 @@ namespace hoa
         //! @param size The crop size.
         inline void setCropSize(const size_t size) noexcept
         {
-            const auto num_rows = Hrir<Hoa2d, T>::getNumberOfRows();
+            const auto num_rows = hrir_t::getNumberOfRows();
             m_crop_size = (size == 0ul || size > num_rows) ? num_rows : size;
         }
         
@@ -511,7 +511,7 @@ namespace hoa
         //! @return The crop size.
         inline size_t getCropSize() const noexcept
         {
-            const auto num_rows = Hrir<Hoa2d, T>::getNumberOfRows();
+            const auto num_rows = hrir_t::getNumberOfRows();
             return (m_crop_size == num_rows) ? 0ul : m_crop_size;
         }
         
@@ -533,7 +533,7 @@ namespace hoa
         inline void processBlock(const T** inputs, T** outputs) noexcept
         {
             T* input = m_input;
-            for(size_t i = 0; i < Hrir<Hoa2d, T>::getNumberOfColumns() && i < Decoder<Hoa2d, T>::getNumberOfHarmonics(); i++)
+            for(size_t i = 0; i < hrir_t::getNumberOfColumns() && i < Decoder<Hoa2d, T>::getNumberOfHarmonics(); i++)
             {
                 Signal<T>::copy(m_vector_size, inputs[i], input);
                 input += m_vector_size;
