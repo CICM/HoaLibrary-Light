@@ -26,14 +26,14 @@ CATCH_TEST_CASE("Decoder 2D", "[Decoder] [2D]")
     hoa_float_t              input(1.);
     std::vector<hoa_float_t> harmonics(15);
     std::vector<hoa_float_t> outputs(16);
-    
+
     CATCH_SECTION("Regular")
     {
         DecoderRegular<Hoa2d, hoa_float_t> decoder(7, 16);
         encoder.setAzimuth(hoa_float_t(0.));
         encoder.process(&input, harmonics.data());
         decoder.process(harmonics.data(), outputs.data());
-        
+
         CATCH_CHECK(hoa_compare(outputs[0], 0.5));
         CATCH_CHECK(hoa_compare(outputs[1], 0.03333324939012527));
         CATCH_CHECK(hoa_compare(outputs[2], -0.03333324939012527));
@@ -51,6 +51,22 @@ CATCH_TEST_CASE("Decoder 2D", "[Decoder] [2D]")
         CATCH_CHECK(hoa_compare(outputs[14], -0.03333324939012527));
         CATCH_CHECK(hoa_compare(outputs[15], 0.03333324939012527));
     }
+
+    CATCH_SECTION("Binaural: Sadie_D2_2D")
+    {
+        // just compile check at this moment
+        DecoderBinaural<Hoa2d, hoa_float_t, hrir::Sadie_D2_2D> decoder(7);
+        encoder.process(&input, harmonics.data());
+        decoder.process(harmonics.data(), outputs.data());
+    }
+
+    CATCH_SECTION("Binaural: Listen_1002C_2D")
+    {
+        // just compile check at this moment
+        DecoderBinaural<Hoa2d, hoa_float_t, hrir::Listen_1002C_2D> decoder(7);
+        encoder.process(&input, harmonics.data());
+        decoder.process(harmonics.data(), outputs.data());
+    }
 }
 
 CATCH_TEST_CASE("Decoder 3D", "[Decoder] [3D]")
@@ -60,7 +76,7 @@ CATCH_TEST_CASE("Decoder 3D", "[Decoder] [3D]")
     hoa_float_t              input(1.);
     std::vector<hoa_float_t> harmonics(20);
     std::vector<hoa_float_t> outputs(20);
-    
+
     CATCH_SECTION("Regular")
     {
         std::cout.precision(16);
@@ -76,7 +92,7 @@ CATCH_TEST_CASE("Decoder 3D", "[Decoder] [3D]")
         decoder.setPlanewaveElevation(4, 0.);
         decoder.prepare();
          *
-        
+
         encoder.setAzimuth(hoa_float_t(0.));
         encoder.setElevation(hoa_float_t(0.));
         encoder.process(&input, harmonics.data());
@@ -85,16 +101,16 @@ CATCH_TEST_CASE("Decoder 3D", "[Decoder] [3D]")
             std::cout << harmonics[i] << "\n";
         }
         harmonics[3] *= 3.;
-         
-         
+
+
         for(size_t i = 0; i < harmonics.size(); ++i) {
             harmonics[i] = hoa_float_t(0.);
         }
         harmonics[0] = 1.;
-        
+
         decoder.process(harmonics.data(), outputs.data());
-        
-        
+
+
         for(size_t i = 0; i < outputs.size() && i < decoder.getNumberOfPlanewaves(); ++i)
         {
             std::cout << decoder.getPlanewaveName(i) << ": " << outputs[i] << "\n";
@@ -124,7 +140,7 @@ CATCH_TEST_CASE("Decoder 3D", "[Decoder] [3D]")
         CATCH_CHECK(hoa_compare(outputs[19], 0.06249989569187164);
          */
     }
-    
+
     CATCH_SECTION("Regular2")
     {
         std::cout.precision(16);
@@ -140,30 +156,30 @@ CATCH_TEST_CASE("Decoder 3D", "[Decoder] [3D]")
          decoder.setPlanewaveElevation(4, 0.);
          decoder.prepare();
          *
-        
+
         encoder.setAzimuth(hoa_float_t(0.));
         encoder.setElevation(hoa_float_t(0.));
         encoder.process(&input, harmonics.data());
-        
-         
-         
+
+
+
          for(size_t i = 0; i < harmonics.size(); ++i) {
          harmonics[i] = hoa_float_t(0.);
          }
          harmonics[0] = 1.;
          *
         decoder.process(harmonics.data(), outputs.data());
-        
-        
+
+
         for(size_t i = 0; i < outputs.size() && i < decoder.getNumberOfPlanewaves(); ++i)
         {
             std::cout << decoder.getPlanewaveName(i) << ": " << outputs[i] << "\n";
         }
         std::cout << "ratio 1 : " << (outputs[0] / outputs[1]) << "\n";
         std::cout << "ratio 2 : " << (outputs[1] / outputs[2]) << "\n";
-        
-         
-         
+
+
+
          CATCH_CHECK(hoa_compare(outputs[0], 0.93750000000000000);
          CATCH_CHECK(hoa_compare(outputs[1], 0.06249989569187164);
          CATCH_CHECK(hoa_compare(outputs[2], -0.06249989569187164);
@@ -186,5 +202,20 @@ CATCH_TEST_CASE("Decoder 3D", "[Decoder] [3D]")
          CATCH_CHECK(hoa_compare(outputs[19], 0.06249989569187164);
          */
     }
-}
 
+    CATCH_SECTION("Binaural: Sadie_D2_3D")
+    {
+        // just compile check at this moment
+        DecoderBinaural<Hoa3d, hoa_float_t, hrir::Sadie_D2_3D> decoder(7);
+        encoder.process(&input, harmonics.data());
+        decoder.process(harmonics.data(), outputs.data());
+    }
+
+    CATCH_SECTION("Binaural: Listen_1002C_3D")
+    {
+        // just compile check at this moment
+        DecoderBinaural<Hoa3d, hoa_float_t, hrir::Listen_1002C_3D> decoder(7);
+        encoder.process(&input, harmonics.data());
+        decoder.process(harmonics.data(), outputs.data());
+    }
+}
