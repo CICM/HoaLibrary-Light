@@ -172,13 +172,11 @@ namespace hoa
             
             for(size_t i = 1; i < nencoders; i++)
             {
-                if(m_encoders[i].getMute())
+                if(!getMute(i))
                 {
-                    continue;
+                    m_encoders[i].process(input[i], m_temp);
+                    sigadd(nharmos, m_temp, outputs);
                 }
-
-                m_encoders[i].process(++input, m_temp);
-                sigadd(nharmos, m_temp, outputs);
             }
         }
         
